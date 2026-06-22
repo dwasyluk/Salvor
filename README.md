@@ -115,6 +115,18 @@ enforcement protocol · a versioned audit trail of the *why* · and the
 Serena + GitNexus MCP substrate. Full write-up in
 **[`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)**.
 
+## Is this another AI second brain?
+
+No. Salvor is the **codebase/team wedge** of the persistent-agent-memory trend:
+code-grounded, git-shared, governed, and engineering-specific. It borrows the
+good idea from LLM Wiki / GBrain-style systems: durable knowledge should
+compound instead of evaporating. Salvor applies it to software teams, where the
+canonical memory has to live in git and stay tied to code, commits, versions,
+failures, and impact analysis.
+
+For direct comparisons with GBrain, Obsidian + Claude, RAG, `CLAUDE.md`, Cursor,
+Copilot, and vendor memory, see **[`docs/FAQ.md`](./docs/FAQ.md)**.
+
 ## Try it
 
 **[`example-project/`](./example-project/)** is a tiny, real, runnable two-component
@@ -129,6 +141,8 @@ artifact, and real code for Serena + GitNexus to index.
   shared-vs-per-user and Salvor-vs-your-project distinctions
 - [`docs/VENDOR_ADAPTERS.md`](./docs/VENDOR_ADAPTERS.md) — using Salvor on Codex,
   Gemini, and beyond
+- [`docs/FAQ.md`](./docs/FAQ.md) — how Salvor differs from second brains, GBrain,
+  Obsidian, RAG, vendor memory, Cursor/Copilot, and plain `CLAUDE.md`
 
 ## Roadmap — help wanted
 
@@ -144,6 +158,12 @@ and [`good first issue`](https://github.com/dwasyluk/salvor/labels/good%20first%
   agents across worktrees don't clobber the shared brain.
 - **🧠 Sub-brains → master brain** — scoped per-agent ledgers that roll their
   durable learnings up to the project's shared L1/L2 (gated by the same triggers).
+- **🩺 Salvor health checks** — lint the shared brain for stale L1 lines, unresolved
+  LF# entries, broken links, aging deferred TODOs, drifted GitNexus blocks, and
+  component spokes that fell behind the code.
+- **📥 Existing-repo adoption/import** — scan ADRs, READMEs, docs, postmortems, and
+  existing agent instruction files, then propose the initial Salvor structure
+  instead of making teams start from a blank context layer.
 - **🔌 More vendor adapters** — harden Codex & Gemini, add Cursor / OpenCode / others.
 
 Have a different idea? [Open a discussion](https://github.com/dwasyluk/salvor/discussions).
