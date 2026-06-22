@@ -1,0 +1,7 @@
+# Notebook Active State — API:01 WEB:01 (2026-06-22)
+## Architecture: api (Node TS, built-in `http`, port 8787) + web (static TS + DOM, API_BASE→:8787). In-memory Map store, no framework, no DB.
+## Pipeline: web GET/POST /notes → api router (server.ts) → store.ts Map → JSON back. Note id = monotonic string.
+## DEPLOYED: local only. No deployment target. api: `npm run dev` (tsx); web: typecheck-only, serve index.html statically.
+## Current Delta to Published Logic: none — initial scaffold matches code as written.
+## LEARNED FAILURES: LF-1 (store returned live Note ref; callers mutated stored state → getNote/listNotes return shallow copies). FIXED. See DOMAIN_REF + postmortem 2026-06-20-stale-note-reference.
+## Open: DEFERRED #1 (no persistence — Map resets on api restart, Medium). No tests yet.

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notebook</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 40rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      h1 { margin-bottom: 0.25rem; }
+      form { display: grid; gap: 0.5rem; margin: 1rem 0; }
+      input, textarea { padding: 0.5rem; font: inherit; }
+      ul { list-style: none; padding: 0; }
+      li {
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+      li h3 { margin: 0 0 0.25rem; }
+      li time { color: #777; font-size: 0.8rem; }
+      .empty { color: #777; }
+    </style>
+  </head>
+  <body>
+    <h1>Notebook</h1>
+    <p class="empty">A worked Salvor example — notes live in memory and reset on API restart.</p>
+
+    <form id="note-form">
+      <input id="title" name="title" placeholder="Title" required />
+      <textarea id="body" name="body" placeholder="Body" rows="3" required></textarea>
+      <button type="submit">Add note</button>
+    </form>
+
+    <ul id="note-list"></ul>
+
+    <!-- Compiled output of src/main.ts. Run `npm run typecheck` to validate it. -->
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

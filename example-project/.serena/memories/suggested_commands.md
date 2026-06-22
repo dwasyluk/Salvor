@@ -1,0 +1,22 @@
+# Suggested commands — Notebook
+
+## api (cd api)
+- `npm install` — install deps (`typescript`, `tsx`, `@types/node`).
+- `npm run dev` — start the REST API on `http://localhost:8787` (`tsx src/server.ts`). Override port with `PORT=…`.
+- `npm run typecheck` — `tsc --noEmit` (required green before "done", RULES §0).
+
+## web (cd web)
+- `npm install` — install deps (`typescript`).
+- `npm run typecheck` — `tsc --noEmit`.
+- Serve the page: `npx serve .` or `python3 -m http.server`, then open `index.html` (start the api first).
+
+## Quick API smoke (api running)
+- `curl localhost:8787/notes` — list (starts empty `[]`).
+- `curl -X POST localhost:8787/notes -H 'content-type: application/json' -d '{"title":"hi","body":"there"}'` — create.
+- `curl localhost:8787/notes/1` — fetch by id.
+- `curl -X DELETE localhost:8787/notes/1` — delete (204) / 404 if missing.
+
+## Discipline (RULES.md)
+- Before editing a symbol: GitNexus impact analysis; before committing: change-detection.
+- On "done": bump `VERSION.md` (API/WEB), sync L1 (`docs/active_state.md`) + L2, sync the touched spoke. No live/mirror
+  parity step — N/A here.

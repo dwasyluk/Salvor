@@ -1,0 +1,5 @@
+.tmp/
+.gitnexus/
+.serena/cache/
+node_modules/
+dist/
