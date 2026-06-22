@@ -124,8 +124,16 @@ compound instead of evaporating. Salvor applies it to software teams, where the
 canonical memory has to live in git and stay tied to code, commits, versions,
 failures, and impact analysis.
 
-For direct comparisons with GBrain, Obsidian + Claude, RAG, `CLAUDE.md`, Cursor,
-Copilot, and vendor memory, see **[`docs/FAQ.md`](./docs/FAQ.md)**.
+| | Built for | Lives in | Code-aware? |
+|---|---|---|---|
+| **Salvor** | a **team's codebase** | **git, in your repo** | **yes** |
+| Obsidian + Claude | personal notes | a local vault | no |
+| GBrain | personal / company knowledge | a local database | no |
+
+And it stays **local by default** — files in your repo plus two local MCP servers,
+no SaaS and no calendar/email/vault scopes. For the full comparison — plus RAG,
+`CLAUDE.md`, Cline Memory Bank, Cursor/Copilot, and vendor memory — see
+**[`docs/FAQ.md`](./docs/FAQ.md)**.
 
 ## Try it
 

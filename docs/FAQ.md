@@ -14,6 +14,19 @@ The four-way intersection is Salvor:
 That is the wedge. Salvor is not trying to be your personal memory palace. It is
 the durable engineering memory layer for a repo.
 
+## At a glance: where Salvor sits
+
+| Tool | Built for | Storage | Code-aware? | Capture | Governance |
+|---|---|---|---|---|---|
+| **Salvor** | a **team's codebase** memory | Markdown in **git (in-repo)** | **Yes** — Serena + GitNexus | **User-gated triggers** | **RULES + versioning** |
+| Obsidian + Claude | personal notes / PKM | local vault | No | passive / auto | none |
+| GBrain | personal/company knowledge runtime | Postgres + pgvector | No | auto + cron | health / lint |
+| Vendor memory (Claude/Cursor) | per-user continuity & prefs | vendor cloud | session-only | automatic, opaque | none |
+| RAG / vector DB | retrieval over your docs | vector store | No | ingest pipeline | none |
+| Cline/Roo Memory Bank | per-project agent notes | Markdown in repo | No | agent-maintained | light |
+
+Only Salvor sits at **code-grounded + team-shared/git-versioned + governed + engineering-specific** all at once.
+
 ## How is Salvor different from GBrain?
 
 [GBrain](https://github.com/garrytan/gbrain) is a full knowledge runtime:
@@ -71,6 +84,65 @@ Code search answers "where is this?"
 
 Salvor answers "what did we learn, why did we decide this, and what should the
 next agent not repeat?"
+
+## Does my code leave my machine? What access does Salvor need?
+
+Salvor is files in your git repo plus two **local** MCP servers (Serena, GitNexus)
+that run on your machine over stdio. No SaaS, no account, no cloud sync — nothing
+is uploaded. It doesn't request calendar, email, or vault-wide scopes the way
+"wire your whole life into an agent" setups do. Your code and reasoning stay in
+your repo, under your version control and your keys. As the security rule goes:
+control access with scoped, read-where-possible keys — not by telling an agent
+"don't."
+
+## Isn't this just Cline/Roo's "Memory Bank"?
+
+Memory Bank is the closest cousin — markdown files an agent maintains per project,
+same good instinct. Salvor goes further: a governance protocol (Task Termination
+Protocol, per-component versioning, full-code-path discipline), code-grounding via
+Serena + GitNexus, and **three user-gated capture triggers** (learnings / failures
+/ deferred TODOs) instead of freeform notes — and it's vendor-agnostic, not tied to
+one extension. Memory Bank remembers; Salvor remembers *with discipline, the why,
+and the code graph.*
+
+## Doesn't Mem0 / Letta / Zep / an MCP memory server already do agent memory?
+
+Those are memory *runtimes* — APIs and stores you wire into an agent you're
+building (vector DBs, key-value/graph recall, memory endpoints). Salvor isn't a
+service you run; it's a repo-native discipline for the coding agent you already
+use, with the canonical memory living in git so the whole team inherits it. They
+operate at a different layer — you could even back Salvor's retrieval with one
+someday (that's the embeddings roadmap).
+
+## Isn't this just Serena + GitNexus with extra steps?
+
+Serena and GitNexus are the substrate: they tell the agent about your code *as it
+is right now* — symbols, call graph, impact. Salvor is the discipline and the
+memory *on top*: why decisions were made, what was tried and failed, what's
+deferred, what changed and when. Code intelligence answers "what is this?"; Salvor
+answers "what did we learn, and why." Salvor uses them — it isn't them.
+
+## Isn't this just a folder of markdown files?
+
+Yes — on purpose. Plain markdown in git is reviewable, diffable, branchable,
+portable, and locked to no vendor. The value isn't a binary or a database; it's the
+**protocol** around those files — what gets captured, when, with what reasoning,
+and how it stays in sync with the code. The simplicity is the feature.
+
+## Doesn't Claude or Cursor already have built-in memory?
+
+Vendor memory is per-user, cloud-stored, opaque, and tied to one tool — great for
+personal preferences and light continuity, useless as a team's canonical
+engineering record. Salvor's memory lives in your repo: every teammate's agent
+reads it, you can diff it in a PR, it travels across branches and vendors, and it
+survives you switching models next year. Different jobs — use both.
+
+## What does it cost, and is it only for teams?
+
+Free and MIT. You pay only for the LLM you already use; the two MCP servers are
+free and local. It shines for teams (one shared brain), but it compounds for solo
+devs too — it's your memory across your own sessions, machines, and the models
+you'll switch to next.
 
 ## Is the graph useful, or is it just visual hype?
 
@@ -149,38 +221,19 @@ No. These layers can coexist:
 The boundary matters. Canonical project truth belongs somewhere the team can
 review, diff, branch, and merge. For Salvor, that place is git.
 
-## What should Salvor add next?
+## Won't the memory go stale or drift from the code?
 
-The strongest next addition is a health check:
+That's the failure mode Salvor is built to *surface*, not hide. A core doctrine:
+preserve not just what's **known**, but what's **stale, contradicted, or missing**.
+`DEFERRED_TODOS.md` parks open risks instead of dropping them, the `LF#` registry
+records what *didn't* work, and L1 carries a "current delta vs. published behavior."
+The Task Termination Protocol (RULES §0) makes updating L1/L2 + spokes + versioning
+part of *finishing* work, so the memory stays tied to the code.
 
-```bash
-salvor health
-```
-
-or an equivalent documented health pass that flags:
-
-- stale L1 lines
-- unresolved LF# entries
-- broken links
-- deferred TODOs aging into risk
-- `docs/active_state.md` growing past its line budget
-- component spokes that fell behind code changes
-- drifted GitNexus index blocks
-- missing version/rationale updates
-- contradictions between `DOMAIN_REF.md`, L1, and L2
-
-Other high-value roadmap items:
-
-- **Embeddings as a derived index:** semantic retrieval over the git-tracked
-  memory files, while Markdown remains canonical.
-- **First-class worktree support:** merge-friendly conventions so parallel agents
-  do not clobber the shared brain.
-- **Sub-brains to master brain:** scoped per-agent ledgers that roll durable
-  learnings up to the shared project memory.
-- **Existing-repo import:** scan ADRs, READMEs, docs, postmortems, and existing
-  agent instructions to propose an initial Salvor structure.
-- **More vendor adapters:** harden Codex, Gemini, Cursor, OpenCode, and other
-  MCP-capable environments.
+A first-class **`salvor health`** pass — flagging stale L1 lines, unresolved `LF#`s,
+aging deferred TODOs, drifted GitNexus blocks, and `DOMAIN_REF` ↔ L1 ↔ L2
+contradictions — is the top roadmap item. See the
+[Roadmap](../README.md#roadmap--help-wanted) for the full list.
 
 ## What is the simplest one-line answer?
 
