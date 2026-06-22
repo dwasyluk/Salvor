@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🛟 Salvor
+<img src="assets/salvor-logo.svg" width="120" alt="Salvor — the Prime Radiant"/>
+
+# Salvor
 
 ### Give your codebase a memory — a version-controlled brain your whole team's AI shares.
 
@@ -128,6 +130,24 @@ artifact, and real code for Serena + GitNexus to index.
 - [`docs/VENDOR_ADAPTERS.md`](./docs/VENDOR_ADAPTERS.md) — using Salvor on Codex,
   Gemini, and beyond
 
+## Roadmap — help wanted
+
+Salvor v1 is the foundation, not the finish line. The whole point of open-sourcing
+it is to build the harder pieces *together*. If any of these resonate, come build
+it — issues tagged [`help wanted`](https://github.com/dwasyluk/salvor/labels/help%20wanted)
+and [`good first issue`](https://github.com/dwasyluk/salvor/labels/good%20first%20issue):
+
+- **🧬 L1/L2 as embeddings** — a pluggable vector-DB backend so the agent retrieves
+  the *most relevant* prior reasoning by similarity, with Markdown still the
+  git-shared source of truth.
+- **🌲 First-class git-worktree support** — merge-friendly conventions so parallel
+  agents across worktrees don't clobber the shared brain.
+- **🧠 Sub-brains → master brain** — scoped per-agent ledgers that roll their
+  durable learnings up to the project's shared L1/L2 (gated by the same triggers).
+- **🔌 More vendor adapters** — harden Codex & Gemini, add Cursor / OpenCode / others.
+
+Have a different idea? [Open a discussion](https://github.com/dwasyluk/salvor/discussions).
+
 ## Contributing & community
 
 Salvor gets better when more people use it on more kinds of projects.
@@ -137,10 +157,30 @@ Salvor gets better when more people use it on more kinds of projects.
 - 🔧 **PRs welcome** — especially new **vendor adapters** and **example projects**
   in other stacks. See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
+## Why "Salvor"?
+
+Two readings, one idea.
+
+**Plainly:** a *salvor* is one who salvages — someone who recovers what would
+otherwise be lost. That's the job: salvage your project's knowledge before the next
+session, the next dev, or the next model erases it.
+
+**For the [Foundation](https://en.wikipedia.org/wiki/Foundation_(TV_series)) fans:**
+Isaac Asimov's *psychohistory* is the science of preserving a civilization's
+accumulated knowledge so a coming dark age can't wipe it out — encoding the *why*
+behind everything into a device that guides the future. **Salvor Hardin** kept the
+Foundation alive through its first crisis with knowledge and wits, not force. And
+the **Prime Radiant** — the glowing faceted gem in our logo — is the object that
+holds the entire plan and carries it across the centuries. A version-controlled
+brain that preserves a codebase's reasoning across resets is the same idea, scaled
+down to your repo. 🔷
+
 ## License
 
 [MIT](./LICENSE) © 2026 dwasyluk and Salvor contributors.
 
 <div align="center">
-<sub>Named for Salvor Hardin — who preserved a civilization with knowledge, not force.</sub>
+<img src="assets/salvor-logo.svg" width="56" alt=""/>
+<br/>
+<sub>Salvage your knowledge before it's lost to the next session.</sub>
 </div>

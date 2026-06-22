@@ -1,0 +1,50 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Salvor — the Prime Radiant">
+  <defs>
+    <linearGradient id="gem" x1="100" y1="28" x2="100" y2="172" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7dd3fc"/>
+      <stop offset="0.5" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#4338ca"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="100" cy="100" r="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#818cf8" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#818cf8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.2"/>
+    </filter>
+  </defs>
+
+  <!-- ambient glow -->
+  <circle cx="100" cy="100" r="80" fill="url(#glow)"/>
+
+  <!-- radiating knowledge rays -->
+  <g stroke="#a5b4fc" stroke-width="2" stroke-linecap="round" opacity="0.55">
+    <line x1="100" y1="20" x2="100" y2="6"/>
+    <line x1="100" y1="180" x2="100" y2="194"/>
+    <line x1="20" y1="100" x2="6" y2="100"/>
+    <line x1="180" y1="100" x2="194" y2="100"/>
+    <line x1="48" y1="48" x2="34" y2="34"/>
+    <line x1="152" y1="48" x2="166" y2="34"/>
+    <line x1="48" y1="152" x2="34" y2="166"/>
+    <line x1="152" y1="152" x2="166" y2="166"/>
+  </g>
+
+  <!-- Prime Radiant: faceted octahedron (diamond) -->
+  <g>
+    <!-- facets, varied opacity to fake gem lighting -->
+    <polygon points="100,30 100,100 40,100" fill="url(#gem)" opacity="0.78"/>
+    <polygon points="100,30 160,100 100,100" fill="url(#gem)" opacity="1"/>
+    <polygon points="100,170 40,100 100,100" fill="url(#gem)" opacity="0.62"/>
+    <polygon points="100,170 160,100 100,100" fill="url(#gem)" opacity="0.84"/>
+    <!-- edges -->
+    <g stroke="#c7d2fe" stroke-width="2.4" stroke-linejoin="round" fill="none" opacity="0.9">
+      <polygon points="100,30 160,100 100,170 40,100"/>
+      <line x1="100" y1="30" x2="100" y2="170"/>
+      <line x1="40" y1="100" x2="160" y2="100"/>
+    </g>
+  </g>
+
+  <!-- bright core -->
+  <circle cx="100" cy="100" r="7" fill="#f8fafc" filter="url(#soft)"/>
+  <circle cx="100" cy="100" r="3.4" fill="#ffffff"/>
+</svg>

@@ -24,3 +24,10 @@ build/
 
 # Serena: memories ARE committed (shared brain); cache is not
 .serena/cache/
+# ...except this framework repo's own auto-generated root memories (session cruft)
+/.serena/memories/
+
+# Local-only handoff docs — kept on disk, NOT published
+docs/PLAN.md
+docs/roadmap-issues.md
+assets/hero-prompt.md
