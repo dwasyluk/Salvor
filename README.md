@@ -33,6 +33,26 @@ the whole team's agents share one compounding brain.
 
 No SaaS. No lock-in. No account. Just files + two open-source MCP servers.
 
+## Is this another AI second brain?
+
+No. Salvor is the **codebase/team wedge** of the persistent-agent-memory trend:
+code-grounded, git-shared, governed, and engineering-specific. It borrows the
+good idea from LLM Wiki / GBrain-style systems: durable knowledge should
+compound instead of evaporating. Salvor applies it to software teams, where the
+canonical memory has to live in git and stay tied to code, commits, versions,
+failures, and impact analysis.
+
+| | Built for | Lives in | Code-aware? |
+|---|---|---|---|
+| **Salvor** | a **team's codebase** | **git, in your repo** | **yes** |
+| Obsidian + Claude | personal notes | a local vault | no |
+| GBrain | personal / company knowledge | a local database | no |
+
+And it stays **local by default** — files in your repo plus two local MCP servers,
+no SaaS and no calendar/email/vault scopes. For the full comparison — plus RAG,
+`CLAUDE.md`, Cline Memory Bank, Cursor/Copilot, and vendor memory — see
+**[`docs/FAQ.md`](./docs/FAQ.md)**.
+
 ## Prerequisites — two MCP servers (and why)
 
 Salvor stands on two free, open-source [MCP](https://modelcontextprotocol.io)
@@ -114,26 +134,6 @@ Five pillars: hub-and-spoke context · two-tier persisted memory · a `RULES.md`
 enforcement protocol · a versioned audit trail of the *why* · and the
 Serena + GitNexus MCP substrate. Full write-up in
 **[`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)**.
-
-## Is this another AI second brain?
-
-No. Salvor is the **codebase/team wedge** of the persistent-agent-memory trend:
-code-grounded, git-shared, governed, and engineering-specific. It borrows the
-good idea from LLM Wiki / GBrain-style systems: durable knowledge should
-compound instead of evaporating. Salvor applies it to software teams, where the
-canonical memory has to live in git and stay tied to code, commits, versions,
-failures, and impact analysis.
-
-| | Built for | Lives in | Code-aware? |
-|---|---|---|---|
-| **Salvor** | a **team's codebase** | **git, in your repo** | **yes** |
-| Obsidian + Claude | personal notes | a local vault | no |
-| GBrain | personal / company knowledge | a local database | no |
-
-And it stays **local by default** — files in your repo plus two local MCP servers,
-no SaaS and no calendar/email/vault scopes. For the full comparison — plus RAG,
-`CLAUDE.md`, Cline Memory Bank, Cursor/Copilot, and vendor memory — see
-**[`docs/FAQ.md`](./docs/FAQ.md)**.
 
 ## Try it
 
