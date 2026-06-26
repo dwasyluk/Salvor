@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/salvor-logo.svg" width="120" alt="Salvor — the Prime Radiant"/>
+<img src="assets/salvor-logo-badge.png" width="120" alt="Salvor — the Prime Radiant"/>
 
 # Salvor
 
@@ -173,6 +173,11 @@ and [`good first issue`](https://github.com/dwasyluk/salvor/labels/good%20first%
   existing agent instruction files, then propose the initial Salvor structure
   instead of making teams start from a blank context layer.
 - **🔌 More vendor adapters** — harden Codex & Gemini, add Cursor / OpenCode / others.
+- **🧩 Skill / plugin layer** — optional one-command install (`/salvor-init`) plus
+  ongoing commands (`/salvor-health`, `/salvor-capture`) as thin wrappers over the
+  universal `SETUP_PROMPT.md`. A Claude Code plugin could bundle the MCP setup +
+  commands, with Codex/Gemini equivalents — slicker per-vendor ergonomics *without*
+  giving up the paste-anywhere floor that keeps Salvor vendor-agnostic.
 
 Have a different idea? [Open a discussion](https://github.com/dwasyluk/salvor/discussions).
 
