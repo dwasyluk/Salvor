@@ -1,0 +1,13 @@
+{
+  "name": "salvor",
+  "displayName": "Salvor — repo memory for coding agents",
+  "version": "0.1.0",
+  "description": "Optional Claude Code layer over Salvor: one-command scaffold (/salvor:init) plus status/capture/health, and bundled Serena + GitNexus MCP. A thin wrapper over the universal SETUP_PROMPT.md — never a replacement.",
+  "author": { "name": "dwasyluk", "url": "https://github.com/dwasyluk/salvor" },
+  "repository": "https://github.com/dwasyluk/salvor",
+  "homepage": "https://github.com/dwasyluk/salvor",
+  "license": "MIT",
+  "keywords": ["salvor", "memory", "claude-code", "codebase", "mcp", "serena", "gitnexus"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

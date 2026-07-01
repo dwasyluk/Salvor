@@ -1,0 +1,15 @@
+{
+  "name": "salvor",
+  "owner": { "name": "dwasyluk", "url": "https://github.com/dwasyluk" },
+  "metadata": {
+    "description": "Salvor's own plugin marketplace — the optional Claude Code layer over the universal, vendor-agnostic prompt.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "salvor",
+      "source": "./claude-plugin",
+      "description": "Optional Claude Code layer over Salvor: /salvor:init, status, capture, health + bundled Serena & GitNexus MCP."
+    }
+  ]
+}

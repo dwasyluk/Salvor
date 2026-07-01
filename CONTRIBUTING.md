@@ -25,6 +25,11 @@ Issues and PRs are both encouraged — no need to ask first for small changes.
      `example-project/` so it still reflects what the prompt produces. It doesn't need
      to be byte-identical — just an accurate, representative rendering (the runnable
      app + the `.salvor/` structure). It's a teaching reference, not a strict fixture.
+   - **Plugin prompt synced (the one hard rule).** `SETUP_PROMPT.md` is the single
+     source of truth. If you edit it, run `scripts/sync-plugin-prompt.sh` so the Claude
+     Code plugin's bundled copy stays byte-identical (`scripts/sync-plugin-prompt.sh
+     --check` fails CI on drift). Drift between the prompt and the plugin's copy is the
+     bug we most want to avoid.
    - **Docs updated** — if behavior or structure changed, update `README.md` /
      `docs/ARCHITECTURE.md` / `docs/VENDOR_ADAPTERS.md`.
    - **CHANGELOG** — add a line under `[Unreleased]` for anything user-visible.
@@ -45,6 +50,8 @@ what actually worked end-to-end — real-world confirmation is valuable.
 
 - `SETUP_PROMPT.md` — the canonical, self-contained installer (single source of truth).
 - `example-project/` — the rendered, runnable demonstration (keep in sync with the prompt).
+- `claude-plugin/` — the **optional** Claude Code plugin (slash commands + bundled MCP);
+  a thin wrapper over the prompt, never a replacement. Kept in sync via `scripts/sync-plugin-prompt.sh`.
 - `docs/` — architecture, vendor adapters, the plan of record.
 - `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `LICENSE`, `.github/` — the usual.
 

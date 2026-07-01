@@ -99,6 +99,12 @@ stop shipping blind changes to code you have to assume is untested.
 
 👉 The whole installer is one file: **[`SETUP_PROMPT.md`](./SETUP_PROMPT.md)**.
 
+> **Claude Code users:** an optional plugin wraps this in slash commands and
+> bundles the MCP servers — `/plugin marketplace add dwasyluk/salvor`,
+> `/plugin install salvor`, then `/salvor:init` (also `/salvor:status`,
+> `/salvor:capture`, `/salvor:health`). It's sugar over the same prompt — the
+> paste-anywhere path above always works. See [`claude-plugin/`](./claude-plugin/).
+
 ## Features
 
 - **🎯 Hub-and-spoke context** — load only the component you're touching; pay for
