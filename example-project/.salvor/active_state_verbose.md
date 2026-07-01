@@ -23,8 +23,8 @@ No live/mirror pair exists in this project, so the RULES §0.5 / §6.3 parity ru
 section numbering stays faithful to the template).
 
 ## 2026-06-20 — LF-1 detail (stale note reference)
-Expanded reasoning behind the Learned Failure registered in `docs/DOMAIN_REF.md` (LF-1) and written up in
-`docs/postmortems/2026-06-20-stale-note-reference.md`.
+Expanded reasoning behind the Learned Failure registered in `.salvor/DOMAIN_REF.md` (LF-1) and written up in
+`.salvor/postmortems/2026-06-20-stale-note-reference.md`.
 
 Original `store.ts` returned the canonical `Note` objects held inside the `Map` directly from `getNote()` and
 `listNotes()`. Because JavaScript objects are passed by reference, any caller that mutated a returned note (the `web`
@@ -43,4 +43,4 @@ DEFERRED #1: the store is a process-local `Map` with a module-level `nextId` cou
 and resets ids to `1`. Acceptable for a demo / local use; flagged Medium ("impact if left ~6 months") because anyone
 treating this as more than a toy would lose data on any redeploy. Suggested fix: persist to SQLite or a JSON file behind
 the same `store.ts` function signatures (the signatures were deliberately kept storage-agnostic so a backing swap is a
-single-file change). Captured in `docs/DEFERRED_TODOS.md` #1.
+single-file change). Captured in `.salvor/DEFERRED_TODOS.md` #1.

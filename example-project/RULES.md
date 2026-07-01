@@ -10,17 +10,17 @@ VERSION.md is bumped, spokes are synced, and L1/L2 caches are updated.**
 
 1. **Version Check:** If any logic in a component changed, increment its build ID in `VERSION.md` and update the "Last
    Updated" date. No hardcoded versions in source — they derive from VERSION.md at build time.
-2. **L1 Sync (`docs/active_state.md`):** Dense technical shorthand. Keep under 50 lines.
-3. **L2 Sync (`docs/active_state_verbose.md`):** Offload full reasoning, logs, and nuance here.
-4. **Spoke Sync:** Update the changed component's spoke `CLAUDE.md`. Update `docs/DOMAIN_REF.md` if domain logic changed;
-   `docs/INFRA.md` if infra changed. Do NOT edit root CLAUDE.md for component-specific changes.
+2. **L1 Sync (`.salvor/active_state.md`):** Dense technical shorthand. Keep under 50 lines.
+3. **L2 Sync (`.salvor/active_state_verbose.md`):** Offload full reasoning, logs, and nuance here.
+4. **Spoke Sync:** Update the changed component's spoke `CLAUDE.md`. Update `.salvor/DOMAIN_REF.md` if domain logic changed;
+   `.salvor/INFRA.md` if infra changed. Do NOT edit root CLAUDE.md for component-specific changes.
 5. **Production/Mirror Parity:** N/A — no live/mirror pair in this project.
 
 ## 1. Dementia Recovery Procedure
 If I mention "Dementia" or you find yourself in a logic loop:
 1. **Stop** all code generation.
-2. **Re-read** `docs/active_state_verbose.md` from the beginning.
-3. **Compare** current logic against "Learned Failures" in `docs/DOMAIN_REF.md` and L1/L2.
+2. **Re-read** `.salvor/active_state_verbose.md` from the beginning.
+3. **Compare** current logic against "Learned Failures" in `.salvor/DOMAIN_REF.md` and L1/L2.
 4. **Summarize** the source of the confusion before proceeding.
 
 ## 2. Continued Learning Protocol
@@ -39,13 +39,13 @@ Non-negotiable — it is the signal that the rule is working. Do not infer the a
 into one prompt, do not defer.
 
 **On `yes` — execute the full stack update:**
-1. **Dated artifact:** create `docs/domain-tuning/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` per `docs/domain-tuning/README.md`.
+1. **Dated artifact:** create `.salvor/domain-tuning/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` per `.salvor/domain-tuning/README.md`.
    Include hypothesis, evidence, dataset(s), verdict, cross-links.
-2. **TOC update:** add a row to the chronological index in `docs/domain-tuning/README.md`.
+2. **TOC update:** add a row to the chronological index in `.salvor/domain-tuning/README.md`.
 3. **DOMAIN_REF.md:** update to reflect new authoritative state — new/updated LF# entry, parameter rationale, finding
    status. DOMAIN_REF is current truth; the artifact is the frozen audit trail.
 4. **Stack evaluation — update if affected:** `CLAUDE.md` hub (only if project-wide context shifts); spoke `CLAUDE.md`;
-   L1 (`docs/active_state.md`); L2 (`docs/active_state_verbose.md`); Serena memories (`.serena/memories/`); per-user
+   L1 (`.salvor/active_state.md`); L2 (`.salvor/active_state_verbose.md`); Serena memories (`.serena/memories/`); per-user
    auto-memory (if enabled — see §8).
 5. **Confirmation report:** list which files were touched so I can verify end-to-end.
 
@@ -112,10 +112,10 @@ never silently log one (I own prioritization).
 
 **Mandatory prompt:**
 
-> "Log this to docs/DEFERRED_TODOS.md? (yes/no)"
+> "Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"
 
 Bundle multiple findings that emerge together into one prompt. **On `yes`:**
-1. Read `docs/DEFERRED_TODOS.md` first and **deduplicate** — if the finding (or a close relative) already exists, surface
+1. Read `.salvor/DEFERRED_TODOS.md` first and **deduplicate** — if the finding (or a close relative) already exists, surface
    it and ask whether to augment rather than add a duplicate.
 2. If new, append an entry with: title, **Where** (file/location), **What**, **Severity** (Low / Medium / High — judged
    as "impact if left ~6 months," not "broken today"), and **Suggested fix**.

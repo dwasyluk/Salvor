@@ -123,7 +123,7 @@ never automatic (so your docs don't bloat without your say):
 |---|---|---|---|
 | **Continued Learning** | a discovery + its *why* | `"Save this as a domain-tuning artifact? (yes/no)"` | dated artifact + `DOMAIN_REF.md` + L1/L2 |
 | **Learned Failure (LF#)** | a recurring failure mode + root cause | *(via the same flow)* | `DOMAIN_REF.md` LF# registry |
-| **Deferred TODO** | an out-of-scope finding, parked not dropped | `"Log this to docs/DEFERRED_TODOS.md? (yes/no)"` | `docs/DEFERRED_TODOS.md` |
+| **Deferred TODO** | an out-of-scope finding, parked not dropped | `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"` | `.salvor/DEFERRED_TODOS.md` |
 
 "What we learned," "how we failed," and "what we noticed but parked" are different
 kinds of knowledge — Salvor gives each its own home.

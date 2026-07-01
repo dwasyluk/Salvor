@@ -24,8 +24,8 @@ added, `copy` must become a structured clone — this is the registered **v2 tri
 site under the LF# together).
 
 ## Cross-links
-- **LF registry:** `docs/DOMAIN_REF.md` → LF-1.
-- **Postmortem:** `docs/postmortems/2026-06-20-stale-note-reference.md`.
+- **LF registry:** `.salvor/DOMAIN_REF.md` → LF-1.
+- **Postmortem:** `.salvor/postmortems/2026-06-20-stale-note-reference.md`.
 - **Code:** `api/src/store.ts` (`copy` helper; `getNote` / `listNotes` / `createNote`).
-- **State caches:** L1 `docs/active_state.md` (LEARNED FAILURES line); L2 `docs/active_state_verbose.md`
+- **State caches:** L1 `.salvor/active_state.md` (LEARNED FAILURES line); L2 `.salvor/active_state_verbose.md`
   (2026-06-20 LF-1 detail entry).

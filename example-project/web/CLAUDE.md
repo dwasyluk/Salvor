@@ -25,4 +25,4 @@ component over HTTP at `API_BASE` (`http://localhost:8787`).
 - Version constant: `WEB_BUILD`, derived from `VERSION.md` key `web` (`WEB:XX`) at build time.
 
 For codebase tree: use Serena MCP `get_symbols_overview`.
-For domain logic: see `docs/DOMAIN_REF.md`. For infra/ops: see `docs/INFRA.md`.
+For domain logic: see `.salvor/DOMAIN_REF.md`. For infra/ops: see `.salvor/INFRA.md`.

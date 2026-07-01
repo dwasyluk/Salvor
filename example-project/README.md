@@ -58,5 +58,5 @@ curl localhost:8787/notes/1
 curl -X DELETE localhost:8787/notes/1
 ```
 
-See `docs/INFRA.md` for env vars and ports, and `docs/DOMAIN_REF.md` for the domain rules (including the LF-1 copy
+See `.salvor/INFRA.md` for env vars and ports, and `.salvor/DOMAIN_REF.md` for the domain rules (including the LF-1 copy
 invariant that the store enforces).

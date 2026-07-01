@@ -27,4 +27,4 @@ HTTP for the static `web` client.
 - Version constant: `API_BUILD`, derived from `VERSION.md` key `api` (`API:XX`) at build time.
 
 For codebase tree: use Serena MCP `get_symbols_overview`.
-For domain logic: see `docs/DOMAIN_REF.md`. For infra/ops: see `docs/INFRA.md`.
+For domain logic: see `.salvor/DOMAIN_REF.md`. For infra/ops: see `.salvor/INFRA.md`.

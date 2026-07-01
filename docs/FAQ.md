@@ -191,10 +191,10 @@ Salvor borrows that pattern, then narrows it to software engineering:
 
 Salvor splits memory into two complementary layers:
 
-- **Compiled truth:** `docs/active_state.md` and `docs/DOMAIN_REF.md` hold the
+- **Compiled truth:** `.salvor/active_state.md` and `.salvor/DOMAIN_REF.md` hold the
   current, compressed state an agent should rely on.
-- **Append-only timeline:** `docs/active_state_verbose.md`, dated
-  `docs/domain-tuning/` artifacts, and postmortems preserve the reasoning,
+- **Append-only timeline:** `.salvor/active_state_verbose.md`, dated
+  `.salvor/domain-tuning/` artifacts, and postmortems preserve the reasoning,
   evidence, rejected hypotheses, and history behind that truth.
 
 That split keeps day-to-day context cheap while preserving the deeper audit trail

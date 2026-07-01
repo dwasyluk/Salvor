@@ -1,7 +1,7 @@
 # Postmortems
 
 Structured write-ups of incidents and significant failures. Each becomes durable knowledge: findings here feed the LF#
-registry in `docs/DOMAIN_REF.md` and/or new entries in `docs/DEFERRED_TODOS.md`.
+registry in `.salvor/DOMAIN_REF.md` and/or new entries in `.salvor/DEFERRED_TODOS.md`.
 
 ## Naming
 `YYYY-MM-DD-[SHORT-SLUG].md`

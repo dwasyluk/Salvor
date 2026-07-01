@@ -1,6 +1,6 @@
 # Notebook Domain Reference
 
-Authoritative current-truth for domain logic. Artifacts in `docs/domain-tuning/` are frozen audit trails; this file is
+Authoritative current-truth for domain logic. Artifacts in `.salvor/domain-tuning/` are frozen audit trails; this file is
 what's currently true.
 
 ## Sections
@@ -34,5 +34,5 @@ valid only while `Note` stays flat; a nested field would require a structured co
   `listNotes`, and `createNote`'s return.
 - **Status:** FIXED. v2 trigger: if `Note` gains a nested/array field, upgrade `copy` to a structured clone and update
   every site listed here together (RULES §6.9).
-- **Cross-link:** `docs/domain-tuning/2026-06-20-LF01-STALE_NOTE_REFERENCE.md`;
-  postmortem `docs/postmortems/2026-06-20-stale-note-reference.md`.
+- **Cross-link:** `.salvor/domain-tuning/2026-06-20-LF01-STALE_NOTE_REFERENCE.md`;
+  postmortem `.salvor/postmortems/2026-06-20-stale-note-reference.md`.

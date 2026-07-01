@@ -21,7 +21,7 @@ JavaScript objects are passed by reference. `getNote()` and `listNotes()` return
 therefore no audit trail. The store believed its state was unchanged.
 
 ## Findings → follow-ups
-- **`LF-1`** — Store must return copies, never live references. Registered in `docs/DOMAIN_REF.md` (LF-1) with fix sites.
+- **`LF-1`** — Store must return copies, never live references. Registered in `.salvor/DOMAIN_REF.md` (LF-1) with fix sites.
 - **`FIXED`** — `api/src/store.ts`: private `copy(note)` helper (shallow `{ ...note }`); applied to `getNote`,
   `listNotes`, and `createNote`'s return value. (Landed with this postmortem.)
 - **`DEFERRED`** — Lack of persistence (the reason a restart masked the bug) is tracked separately as DEFERRED #1; not

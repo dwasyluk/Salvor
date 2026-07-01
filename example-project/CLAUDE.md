@@ -1,8 +1,8 @@
 # Notebook
 ### CURRENT STATE (L1 Cache)
-@docs/active_state.md
+@.salvor/active_state.md
 
-> For deep historical context, architecture logs, or dementia recovery: `docs/active_state_verbose.md`
+> For deep historical context, architecture logs, or dementia recovery: `.salvor/active_state_verbose.md`
 
 ## Project Overview
 Notebook is a tiny notes service: a TypeScript `api` (Node built-in `http`, no framework) exposing a small REST surface (`GET/POST/DELETE /notes`) backed by an in-memory `Map`, plus a static `web` page (plain DOM, no framework) that fetches and posts notes against the API base. The dominant non-obvious constraint: **the store is purely in-memory — all notes are lost on API restart, there is no persistence.** This is a worked Salvor example, deliberately minimal so Serena + GitNexus have real code to index.
@@ -18,9 +18,9 @@ Notebook is a tiny notes service: a TypeScript `api` (Node built-in `http`, no f
 
 | Document | Purpose | When to Read |
 |----------|---------|-------------|
-| `docs/DOMAIN_REF.md` | Domain logic, business rules, learned failures | Changing core logic |
-| `docs/INFRA.md` | Running, env vars, deployment, external APIs | Changing infra/deployment/APIs |
-| `docs/DEFERRED_TODOS.md` | Known out-of-scope issues deferred (not yet fixed) | Before starting related work |
+| `.salvor/DOMAIN_REF.md` | Domain logic, business rules, learned failures | Changing core logic |
+| `.salvor/INFRA.md` | Running, env vars, deployment, external APIs | Changing infra/deployment/APIs |
+| `.salvor/DEFERRED_TODOS.md` | Known out-of-scope issues deferred (not yet fixed) | Before starting related work |
 | `api/CLAUDE.md` | api architecture and key files | Working in api/ |
 | `web/CLAUDE.md` | web architecture and key files | Working in web/ |
 | `.serena/memories/` | Codebase structure, execution logic, domain findings | Use Serena MCP tools to query |
@@ -30,7 +30,7 @@ Configurable via `APP_NAME` env var. Default: `Notebook`. Never hardcode — ref
 language-specific constant your build wires up.
 
 ### SYSTEM DIRECTIVE: TWO-TIER MEMORY MANAGEMENT
-You maintain two memory ledgers: `docs/active_state.md` (L1 Cache — Concise) and `docs/active_state_verbose.md`
+You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise) and `.salvor/active_state_verbose.md`
 (L2 Cache — Deep Memory).
 
 **L1 — active_state.md (Concise)**
@@ -52,8 +52,8 @@ You maintain two memory ledgers: `docs/active_state.md` (L1 Cache — Concise) a
 You self-identify knowledge worth persisting and ask me, verbatim, before persisting it. Three distinct triggers (see
 `RULES.md` §2 and §7):
 1. **Continued Learning** (a discovery + its *why*) → `"Save this as a domain-tuning artifact? (yes/no)"`
-2. **Learned Failure (LF#)** (a structural failure mode) → registered in `docs/DOMAIN_REF.md` as part of the above.
-3. **Deferred TODO** (an out-of-scope finding surfaced mid-task) → `"Log this to docs/DEFERRED_TODOS.md? (yes/no)"`
+2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
+3. **Deferred TODO** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence

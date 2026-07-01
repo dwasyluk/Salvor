@@ -18,5 +18,5 @@
 
 ## Discipline (RULES.md)
 - Before editing a symbol: GitNexus impact analysis; before committing: change-detection.
-- On "done": bump `VERSION.md` (API/WEB), sync L1 (`docs/active_state.md`) + L2, sync the touched spoke. No live/mirror
+- On "done": bump `VERSION.md` (API/WEB), sync L1 (`.salvor/active_state.md`) + L2, sync the touched spoke. No live/mirror
   parity step — N/A here.

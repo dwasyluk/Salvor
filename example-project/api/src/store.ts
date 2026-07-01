@@ -1,6 +1,6 @@
 // In-memory notes store.
 //
-// IMPORTANT (see docs/DOMAIN_REF.md LF-1): getNote/listNotes return SHALLOW
+// IMPORTANT (see .salvor/DOMAIN_REF.md LF-1): getNote/listNotes return SHALLOW
 // COPIES of the stored Note objects. The Map holds the canonical instances;
 // handing out the live reference let callers mutate stored state by accident.
 // The store resets on process restart — there is no durability (DEFERRED #1).

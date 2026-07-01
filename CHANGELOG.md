@@ -23,6 +23,11 @@ Initial public release.
 - **Three user-gated capture triggers** — Continued Learning (decision
   rationale), Learned Failures (`LF#`), and Deferred TODOs (out-of-scope
   findings), each with a verbatim user prompt and a defined propagation path.
+- **`.salvor/` layout** — the git-tracked "brain" (L1/L2, `DOMAIN_REF`, `INFRA`,
+  `DEFERRED_TODOS`, `domain-tuning/`, `postmortems/`, and a `README` index) lives
+  under one namespaced folder, so Salvor never squats in your project's `docs/`.
+  Governance (`RULES.md`, `VERSION.md`) + entrypoints (`CLAUDE.md` hub/spokes) stay
+  at the repo root.
 - **`docs/ARCHITECTURE.md`** — the five pillars, plus the shared (in-repo) vs
   per-user (auto-memory) distinction.
 - **`docs/VENDOR_ADAPTERS.md`** — neutral-core + thin per-vendor adapter model;

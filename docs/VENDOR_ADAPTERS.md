@@ -31,7 +31,7 @@ which points the agent at the shared in-repo core.
 The pointer file says, in effect:
 
 > Before any work, read `CLAUDE.md` (hub) + the relevant component spoke +
-> `RULES.md` + `docs/active_state.md` (L1). Follow `RULES.md` exactly, including
+> `RULES.md` + `.salvor/active_state.md` (L1). Follow `RULES.md` exactly, including
 > the Task Termination Protocol and the three capture triggers.
 
 That's the whole adapter. The core files it points at are identical across vendors.
