@@ -13,12 +13,12 @@ modify any files. Skip any file that doesn't exist (and say so — if none exist
 tell the user to run `/salvor:init`).
 
 Read:
-- `docs/active_state.md` (L1) — current architecture line, the "Current Delta to
+- `.salvor/active_state.md` (L1) — current architecture line, the "Current Delta to
   Published Logic", open items, and any LEARNED FAILURES shorthand. Note its line
   count.
 - `VERSION.md` — current build IDs + Last Updated date.
-- `docs/DEFERRED_TODOS.md` — count open entries, grouped by Severity.
-- `docs/DOMAIN_REF.md` — the most recent `LF#` entries (id + one-line).
+- `.salvor/DEFERRED_TODOS.md` — count open entries, grouped by Severity.
+- `.salvor/DOMAIN_REF.md` — the most recent `LF#` entries (id + one-line).
 
 Then print a compact summary:
 - **State:** <one line from L1>

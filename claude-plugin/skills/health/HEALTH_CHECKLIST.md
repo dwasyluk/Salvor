@@ -6,21 +6,21 @@ single source of truth for the health rubric (the README FAQ's "won't it go stal
 answer describes the same doctrine).
 
 ## L1 / L2
-- **L1 budget** — `docs/active_state.md` is ≤ 50 lines. (FAIL if over; fix: prune
+- **L1 budget** — `.salvor/active_state.md` is ≤ 50 lines. (FAIL if over; fix: prune
   detail down to L2 `active_state_verbose.md`.)
 - **L1 freshness** — L1's dated header isn't far behind the latest commit that
   touched code. (WARN if stale.)
 - **L1 ↔ L2 ↔ DOMAIN_REF consistency** — no claim in L1 contradicts L2 or
-  `docs/DOMAIN_REF.md`. (WARN/FAIL on contradiction.)
+  `.salvor/DOMAIN_REF.md`. (WARN/FAIL on contradiction.)
 
 ## Learned Failures
-- **Open LF#** — every `LF#` in `docs/DOMAIN_REF.md` has a resolution or is clearly
+- **Open LF#** — every `LF#` in `.salvor/DOMAIN_REF.md` has a resolution or is clearly
   still-open by design. (WARN on silently-open items.)
-- **LF# cross-links** — each references its dated artifact in `docs/domain-tuning/`.
+- **LF# cross-links** — each references its dated artifact in `.salvor/domain-tuning/`.
   (WARN on missing link.)
 
 ## Deferred TODOs
-- **Aging** — no High-severity entry in `docs/DEFERRED_TODOS.md` has lingered past
+- **Aging** — no High-severity entry in `.salvor/DEFERRED_TODOS.md` has lingered past
   reason. (WARN.)
 - **Schema** — each entry has Where / What / Severity / Suggested fix. (WARN.)
 

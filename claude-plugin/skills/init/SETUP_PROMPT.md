@@ -77,14 +77,20 @@ proceed to Step 2.
 
 ## Step 2 — Create the file tree
 
+> **Layout:** vendor entrypoints (`CLAUDE.md` hub + component spokes,
+> `AGENTS.md`/`GEMINI.md`) and governance (`RULES.md`, `VERSION.md`) live at the repo
+> **root** (the CLIs/build tooling auto-discover them there). Everything else — the
+> memory/audit **brain** — lives under **`.salvor/`**. Create that folder; it is
+> git-committed (the shared brain), never ignored.
+
 ### `CLAUDE.md` (hub, ~60 lines max)
 
 ```markdown
 # <PROJECT_NAME>
 ### CURRENT STATE (L1 Cache)
-@docs/active_state.md
+@.salvor/active_state.md
 
-> For deep historical context, architecture logs, or dementia recovery: `docs/active_state_verbose.md`
+> For deep historical context, architecture logs, or dementia recovery: `.salvor/active_state_verbose.md`
 
 ## Project Overview
 [ONE PARAGRAPH: what the project does, the primary external systems it integrates with, and the dominant
@@ -101,9 +107,9 @@ non-obvious constraint contributors must remember.]
 
 | Document | Purpose | When to Read |
 |----------|---------|-------------|
-| `docs/DOMAIN_REF.md` | Domain logic, business rules, learned failures | Changing core logic |
-| `docs/INFRA.md` | Running, env vars, deployment, external APIs | Changing infra/deployment/APIs |
-| `docs/DEFERRED_TODOS.md` | Known out-of-scope issues deferred (not yet fixed) | Before starting related work |
+| `.salvor/DOMAIN_REF.md` | Domain logic, business rules, learned failures | Changing core logic |
+| `.salvor/INFRA.md` | Running, env vars, deployment, external APIs | Changing infra/deployment/APIs |
+| `.salvor/DEFERRED_TODOS.md` | Known out-of-scope issues deferred (not yet fixed) | Before starting related work |
 | `<COMPONENT_A>/CLAUDE.md` | <COMPONENT_A> architecture and key files | Working in <COMPONENT_A>/ |
 | `<COMPONENT_B>/CLAUDE.md` | <COMPONENT_B> architecture and key files | Working in <COMPONENT_B>/ |
 | `.serena/memories/` | Codebase structure, execution logic, domain findings | Use Serena MCP tools to query |
@@ -113,7 +119,7 @@ Configurable via `APP_NAME` env var. Default: `<PROJECT_NAME>`. Never hardcode �
 language-specific constant your build wires up.
 
 ### SYSTEM DIRECTIVE: TWO-TIER MEMORY MANAGEMENT
-You maintain two memory ledgers: `docs/active_state.md` (L1 Cache — Concise) and `docs/active_state_verbose.md`
+You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise) and `.salvor/active_state_verbose.md`
 (L2 Cache — Deep Memory).
 
 **L1 — active_state.md (Concise)**
@@ -135,8 +141,8 @@ You maintain two memory ledgers: `docs/active_state.md` (L1 Cache — Concise) a
 You self-identify knowledge worth persisting and ask me, verbatim, before persisting it. Three distinct triggers (see
 `RULES.md` §2 and §7):
 1. **Continued Learning** (a discovery + its *why*) → `"Save this as a domain-tuning artifact? (yes/no)"`
-2. **Learned Failure (LF#)** (a structural failure mode) → registered in `docs/DOMAIN_REF.md` as part of the above.
-3. **Deferred TODO** (an out-of-scope finding surfaced mid-task) → `"Log this to docs/DEFERRED_TODOS.md? (yes/no)"`
+2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
+3. **Deferred TODO** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
 # GitNexus — Code Intelligence
 
@@ -159,18 +165,18 @@ VERSION.md is bumped, spokes are synced, and L1/L2 caches are updated.**
 
 1. **Version Check:** If any logic in a component changed, increment its build ID in `VERSION.md` and update the "Last
    Updated" date. No hardcoded versions in source — they derive from VERSION.md at build time.
-2. **L1 Sync (`docs/active_state.md`):** Dense technical shorthand. Keep under 50 lines.
-3. **L2 Sync (`docs/active_state_verbose.md`):** Offload full reasoning, logs, and nuance here.
-4. **Spoke Sync:** Update the changed component's spoke `CLAUDE.md`. Update `docs/DOMAIN_REF.md` if domain logic changed;
-   `docs/INFRA.md` if infra changed. Do NOT edit root CLAUDE.md for component-specific changes.
+2. **L1 Sync (`.salvor/active_state.md`):** Dense technical shorthand. Keep under 50 lines.
+3. **L2 Sync (`.salvor/active_state_verbose.md`):** Offload full reasoning, logs, and nuance here.
+4. **Spoke Sync:** Update the changed component's spoke `CLAUDE.md`. Update `.salvor/DOMAIN_REF.md` if domain logic changed;
+   `.salvor/INFRA.md` if infra changed. Do NOT edit root CLAUDE.md for component-specific changes.
 5. **Production/Mirror Parity (if applicable):** Keep `<MIRROR_FILE>` bit-for-bit aligned with `<LIVE_FILE>`. Both paths
    land in the SAME commit. See §6.3.
 
 ## 1. Dementia Recovery Procedure
 If I mention "Dementia" or you find yourself in a logic loop:
 1. **Stop** all code generation.
-2. **Re-read** `docs/active_state_verbose.md` from the beginning.
-3. **Compare** current logic against "Learned Failures" in `docs/DOMAIN_REF.md` and L1/L2.
+2. **Re-read** `.salvor/active_state_verbose.md` from the beginning.
+3. **Compare** current logic against "Learned Failures" in `.salvor/DOMAIN_REF.md` and L1/L2.
 4. **Summarize** the source of the confusion before proceeding.
 
 ## 2. Continued Learning Protocol
@@ -189,13 +195,13 @@ Non-negotiable — it is the signal that the rule is working. Do not infer the a
 into one prompt, do not defer.
 
 **On `yes` — execute the full stack update:**
-1. **Dated artifact:** create `docs/domain-tuning/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` per `docs/domain-tuning/README.md`.
+1. **Dated artifact:** create `.salvor/domain-tuning/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` per `.salvor/domain-tuning/README.md`.
    Include hypothesis, evidence, dataset(s), verdict, cross-links.
-2. **TOC update:** add a row to the chronological index in `docs/domain-tuning/README.md`.
+2. **TOC update:** add a row to the chronological index in `.salvor/domain-tuning/README.md`.
 3. **DOMAIN_REF.md:** update to reflect new authoritative state — new/updated LF# entry, parameter rationale, finding
    status. DOMAIN_REF is current truth; the artifact is the frozen audit trail.
 4. **Stack evaluation — update if affected:** `CLAUDE.md` hub (only if project-wide context shifts); spoke `CLAUDE.md`;
-   L1 (`docs/active_state.md`); L2 (`docs/active_state_verbose.md`); Serena memories (`.serena/memories/`); per-user
+   L1 (`.salvor/active_state.md`); L2 (`.salvor/active_state_verbose.md`); Serena memories (`.serena/memories/`); per-user
    auto-memory (if enabled — see §8).
 5. **Confirmation report:** list which files were touched so I can verify end-to-end.
 
@@ -263,10 +269,10 @@ never silently log one (I own prioritization).
 
 **Mandatory prompt:**
 
-> "Log this to docs/DEFERRED_TODOS.md? (yes/no)"
+> "Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"
 
 Bundle multiple findings that emerge together into one prompt. **On `yes`:**
-1. Read `docs/DEFERRED_TODOS.md` first and **deduplicate** — if the finding (or a close relative) already exists, surface
+1. Read `.salvor/DEFERRED_TODOS.md` first and **deduplicate** — if the finding (or a close relative) already exists, surface
    it and ask whether to augment rather than add a duplicate.
 2. If new, append an entry with: title, **Where** (file/location), **What**, **Severity** (Low / Medium / High — judged
    as "impact if left ~6 months," not "broken today"), and **Suggested fix**.
@@ -276,7 +282,7 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 
 ## 8. Memory layers (what's shared vs per-user)
 - **Shared, canonical, git-tracked (the team brain):** everything in-repo — `CLAUDE.md` hub + spokes, `RULES.md`,
-  `VERSION.md`, `docs/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, postmortems, domain-tuning), `.serena/memories/`,
+  `VERSION.md`, `.salvor/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, postmortems, domain-tuning), `.serena/memories/`,
   and the GitNexus index blocks. This is what every contributor's agent reads.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
   personal/operator preferences, but it is not version-controlled and does not reach teammates. Never put shared truth
@@ -302,7 +308,30 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 | [DATE] | <COMP_ID_A>:01 <COMP_ID_B>:01 | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§7, VERSION.md, per-component spokes, DEFERRED_TODOS, domain-tuning + postmortems scaffolds. |
 ```
 
-### `docs/active_state.md` (L1, ≤50 lines)
+### `.salvor/README.md` (folder index)
+
+```markdown
+# .salvor/ — <PROJECT_NAME>'s brain
+
+This folder is <PROJECT_NAME>'s **git-tracked memory**, maintained by Salvor — the
+shared, canonical knowledge every contributor's coding agent reads. (Governance and
+entrypoints live at the repo root: `CLAUDE.md` hub + spokes, `RULES.md`, `VERSION.md`.)
+
+| File | What it is |
+|------|-----------|
+| `active_state.md` | **L1** — ≤50-line dense current state + Learned Failures (auto-loaded) |
+| `active_state_verbose.md` | **L2** — unbounded deep archive: reasoning, rejected hypotheses |
+| `DOMAIN_REF.md` | Authoritative current truth + the `LF#` learned-failure registry |
+| `INFRA.md` | Running, env vars, deployment, external APIs |
+| `DEFERRED_TODOS.md` | Out-of-scope findings parked (not yet fixed) |
+| `domain-tuning/` | Dated, frozen decision/learning artifacts (the receipts) |
+| `postmortems/` | Incident write-ups feeding `LF#` + deferred TODOs |
+
+Everything here is meant to be **read by humans and agents alike** — it's the *why*
+behind the code.
+```
+
+### `.salvor/active_state.md` (L1, ≤50 lines)
 
 ```markdown
 # <PROJECT_NAME> Active State — <COMP_ID_A>:01 <COMP_ID_B>:01 ([DATE])
@@ -314,7 +343,7 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 ## Open: [active todos / pending decisions]
 ```
 
-### `docs/active_state_verbose.md` (L2, unlimited)
+### `.salvor/active_state_verbose.md` (L2, unlimited)
 
 ```markdown
 # <PROJECT_NAME> Active State — VERBOSE ARCHIVE
@@ -328,23 +357,23 @@ from L1. Update trigger: immediately after every L1 update.
 Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§7, VERSION.md, three capture triggers.
 ```
 
-### `docs/DOMAIN_REF.md`
+### `.salvor/DOMAIN_REF.md`
 
 ```markdown
 # <PROJECT_NAME> Domain Reference
 
-Authoritative current-truth for domain logic. Artifacts in `docs/domain-tuning/` are frozen audit trails; this file is
+Authoritative current-truth for domain logic. Artifacts in `.salvor/domain-tuning/` are frozen audit trails; this file is
 what's currently true.
 
 ## Sections
 - [empty — populate as the project takes shape]
 
 ## Learned Failures (LF#)
-[LF# entries: number, date, root cause, fix sites, cross-link to the dated artifact in `docs/domain-tuning/`. Update
+[LF# entries: number, date, root cause, fix sites, cross-link to the dated artifact in `.salvor/domain-tuning/`. Update
 existing entries when a v1 fix is upgraded to v2 (RULES §6.9).]
 ```
 
-### `docs/INFRA.md`
+### `.salvor/INFRA.md`
 
 ```markdown
 # <PROJECT_NAME> Infrastructure
@@ -367,7 +396,7 @@ Operational reference: running locally, deployment, env vars, external APIs, obs
 [logs, metrics, dashboards]
 ```
 
-### `docs/DEFERRED_TODOS.md`
+### `.salvor/DEFERRED_TODOS.md`
 
 ```markdown
 # Deferred TODOs
@@ -393,13 +422,13 @@ were found in. Captured here so they don't slip into "I'll remember." Severity r
 3. When something here becomes urgent (impact observed): promote it to a real ticket and link back.
 ```
 
-### `docs/postmortems/README.md`
+### `.salvor/postmortems/README.md`
 
 ```markdown
 # Postmortems
 
 Structured write-ups of incidents and significant failures. Each becomes durable knowledge: findings here feed the LF#
-registry in `docs/DOMAIN_REF.md` and/or new entries in `docs/DEFERRED_TODOS.md`.
+registry in `.salvor/DOMAIN_REF.md` and/or new entries in `.salvor/DEFERRED_TODOS.md`.
 
 ## Naming
 `YYYY-MM-DD-[SHORT-SLUG].md`
@@ -419,7 +448,7 @@ registry in `docs/DOMAIN_REF.md` and/or new entries in `docs/DEFERRED_TODOS.md`.
 | [DATE] | [link] | [takeaway] |
 ```
 
-### `docs/domain-tuning/README.md`
+### `.salvor/domain-tuning/README.md`
 
 ```markdown
 # Domain-Tuning Artifacts
@@ -472,7 +501,7 @@ Categories (extend as needed):
 - [where the version constant comes from — VERSION.md key + build step]
 
 For codebase tree: use Serena MCP `get_symbols_overview`.
-For domain logic: see `docs/DOMAIN_REF.md`. For infra/ops: see `docs/INFRA.md`.
+For domain logic: see `.salvor/DOMAIN_REF.md`. For infra/ops: see `.salvor/INFRA.md`.
 ```
 
 ### `.gitignore` additions
@@ -490,7 +519,7 @@ Append (don't replace) — note `.serena/memories/` is **committed** (it's share
 - **Claude Code:** the `CLAUDE.md` hub above (with `@`-imports) is the entrypoint. Optionally add
   `.claude/settings.json` `custom_instructions` reinforcing RULES §0. (Ask before writing settings files.)
 - **Codex:** create `AGENTS.md` at repo root that says: "Before any work, read `CLAUDE.md` (hub) + the relevant spoke +
-  `RULES.md` + `docs/active_state.md` (L1). Follow RULES.md exactly." Codex reads `AGENTS.md` natively.
+  `RULES.md` + `.salvor/active_state.md` (L1). Follow RULES.md exactly." Codex reads `AGENTS.md` natively.
 - **Gemini CLI:** create `GEMINI.md` with the same pointer text.
 - See `docs/VENDOR_ADAPTERS.md` in the Salvor repo for the full pattern. The core files are identical across vendors.
 
@@ -524,7 +553,7 @@ git commit -m "chore(gitnexus): commit auto-generated code-intelligence blocks"
 State that you understand these at the end of the scaffold confirmation message.
 
 1. **Three capture triggers, user-gated.** Continued Learning → `"Save this as a domain-tuning artifact? (yes/no)"`;
-   Learned Failure → registered via the same flow; Deferred TODO → `"Log this to docs/DEFERRED_TODOS.md? (yes/no)"`.
+   Learned Failure → registered via the same flow; Deferred TODO → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`.
    Prompt verbatim; never infer; never batch unrelated items; on yes, run the full propagation and report the file list.
 2. **L1/L2 update silently** after every confirmed resolution (CLAUDE.md SYSTEM DIRECTIVE). L1 stays under 50 lines.
 3. **RULES.md §0 Task Termination Protocol is mandatory.** VERSION bump → L1 sync → L2 sync → spoke sync → mirror parity
