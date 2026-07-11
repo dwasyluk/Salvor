@@ -49,8 +49,12 @@ Setup generates **all three entrypoints** — no vendor choice: `CLAUDE.md` (the
 hub) plus thin `AGENTS.md` and `GEMINI.md` pointer files. Any teammate's CLI works out of
 the box; the core files they point at are identical.
 
-- **Claude Code — built and dogfooded.** The `CLAUDE.md` hub uses `@`-imports; the
-  `example-project/` demonstrates the full setup, and Salvor's own repo runs on it.
+- **Claude Code — built and dogfooded, plus an optional plugin.** The `CLAUDE.md` hub uses
+  `@`-imports; the `example-project/` demonstrates the full setup, and Salvor's own repo runs
+  on it. As of **v1.1.0** there's also a **Claude Code plugin** (`claude-plugin/`):
+  `/plugin marketplace add dwasyluk/salvor` → `/plugin install salvor` → `/salvor:init`
+  (plus `/salvor:status`, `/salvor:capture`, `/salvor:health`), with bundled Serena +
+  GitNexus MCP — a thin wrapper over the same prompt, never a replacement.
 - **Codex / Gemini — wired by default, less exercised.** The `AGENTS.md` / `GEMINI.md`
   pointers are trivial and correct, but Claude Code is the most battle-tested path. Hit a
   rough edge on Codex or Gemini? Open a

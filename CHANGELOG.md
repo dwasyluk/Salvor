@@ -11,6 +11,24 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-07-12
+
+Optional **Claude Code plugin** — a thin wrapper over the universal prompt, never a
+replacement. The paste-anywhere `SETUP_PROMPT.md` remains the vendor-agnostic floor;
+no Salvor capability is Claude-Code-only.
+
+### Added
+- **Claude Code plugin** (`claude-plugin/`), installable via
+  `/plugin marketplace add dwasyluk/salvor` → `/plugin install salvor`:
+  - `/salvor:init` — scaffold Salvor (runs the byte-identical bundled `SETUP_PROMPT.md`)
+  - `/salvor:status` — read-only snapshot of the brain (L1 / versions / deferred / `LF#`)
+  - `/salvor:capture` — user-initiated entry to the `RULES.md` capture protocol
+  - `/salvor:health` — lint the brain against `HEALTH_CHECKLIST.md`
+- **Bundled Serena + GitNexus MCP** (`.mcp.json`) so installing the plugin ≈ prerequisites done.
+- `.claude-plugin/marketplace.json` (the repo is its own marketplace) and
+  `scripts/sync-plugin-prompt.sh`, which keeps the bundled prompt byte-identical to the
+  canonical `SETUP_PROMPT.md` (`--check` fails CI on drift).
+
 ## [1.0.0] — 2026-06-22
 
 Initial public release.
@@ -37,5 +55,6 @@ Initial public release.
   fully applied (so Serena + GitNexus have real code to index).
 - Contribution scaffolding: `CONTRIBUTING.md`, GitHub issue/PR templates.
 
-[Unreleased]: https://github.com/dwasyluk/salvor/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/dwasyluk/salvor/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/dwasyluk/salvor/releases/tag/v1.1.0
 [1.0.0]: https://github.com/dwasyluk/salvor/releases/tag/v1.0.0

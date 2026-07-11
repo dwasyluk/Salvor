@@ -6,7 +6,7 @@
 
 ### Give your codebase a memory — a version-controlled brain your whole team's AI shares.
 
-[![release](https://img.shields.io/badge/release-v1.0.0-blue)](https://github.com/dwasyluk/salvor/releases)
+[![release](https://img.shields.io/badge/release-v1.1.0-blue)](https://github.com/dwasyluk/salvor/releases)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![works with](https://img.shields.io/badge/works%20with-Claude%20Code%20·%20Codex%20·%20Gemini-8A2BE2)](./docs/VENDOR_ADAPTERS.md)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](./CONTRIBUTING.md)
@@ -180,11 +180,10 @@ and [`good first issue`](https://github.com/dwasyluk/salvor/labels/good%20first%
   existing agent instruction files, then propose the initial Salvor structure
   instead of making teams start from a blank context layer.
 - **🔌 More vendor adapters** — harden the default Codex & Gemini entrypoints; add Cursor / OpenCode / others.
-- **🧩 Skill / plugin layer** — optional one-command install (`/salvor-init`) plus
-  ongoing commands (`/salvor-health`, `/salvor-capture`) as thin wrappers over the
-  universal `SETUP_PROMPT.md`. A Claude Code plugin could bundle the MCP setup +
-  commands, with Codex/Gemini equivalents — slicker per-vendor ergonomics *without*
-  giving up the paste-anywhere floor that keeps Salvor vendor-agnostic.
+- **🧩 Codex / Gemini plugin equivalents** — the Claude Code plugin ships in v1.1.0
+  (`claude-plugin/`); bring the same one-command ergonomics (`/salvor:init`, `/salvor:health`,
+  `/salvor:capture`) to Codex and Gemini as thin wrappers over the universal
+  `SETUP_PROMPT.md` — without giving up the paste-anywhere floor that keeps Salvor vendor-agnostic.
 
 Have a different idea? [Open a discussion](https://github.com/dwasyluk/salvor/discussions).
 
