@@ -30,8 +30,9 @@ Initial public release.
   at the repo root.
 - **`docs/ARCHITECTURE.md`** — the five pillars, plus the shared (in-repo) vs
   per-user (auto-memory) distinction.
-- **`docs/VENDOR_ADAPTERS.md`** — neutral-core + thin per-vendor adapter model;
-  Claude Code adapter built, Codex/Gemini adaptation documented.
+- **Multivendor out of the box** — setup generates all three entrypoints by default:
+  `CLAUDE.md` (canonical hub) + thin `AGENTS.md` (Codex) + `GEMINI.md` (Gemini) pointers,
+  so any teammate's CLI works with no vendor to choose. See `docs/VENDOR_ADAPTERS.md`.
 - **`example-project/`** — a tiny, real, runnable two-component app with Salvor
   fully applied (so Serena + GitNexus have real code to index).
 - Contribution scaffolding: `CONTRIBUTING.md`, GitHub issue/PR templates.

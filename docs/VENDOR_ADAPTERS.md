@@ -13,8 +13,10 @@
 - **The glue is vendor-specific.** *How* project instructions auto-load, where
   per-session memory lives, and how per-turn rules are enforced differ per tool.
 
-So Salvor is built as a **neutral core + a thin per-vendor entrypoint adapter.**
-The adapter is small — usually one pointer file.
+So Salvor ships a **neutral core + all three thin entrypoint adapters by default** —
+`CLAUDE.md` (canonical hub) plus `AGENTS.md` and `GEMINI.md` pointer files. Each adapter is
+tiny (one pointer file), and there's no vendor to choose: any teammate's CLI works out of
+the box.
 
 ## The adapter pattern
 
