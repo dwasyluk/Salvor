@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/salvor-logo-badge.png" width="120" alt="Salvor — the Prime Radiant"/>
+<img src="site/assets/brand/salvor-v10-node-sigil-black-128.png" width="120" alt="Salvor node sigil"/>
 
 # Salvor
 
@@ -213,7 +213,7 @@ down to your repo. 🔷
 [MIT](./LICENSE) © 2026 dwasyluk and Salvor contributors.
 
 <div align="center">
-<img src="assets/salvor-logo.svg" width="56" alt=""/>
+<img src="site/assets/brand/salvor-v10-node-sigil-black-64.png" width="56" alt=""/>
 <br/>
 <sub>Salvage your knowledge before it's lost to the next session.</sub>
 </div>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img">
+  <title>Salvor 10-node-sigil white</title>
+  <polygon points="32.000,6.080 48.960,15.680 54.720,31.040 45.760,41.920 32.000,48.960 18.240,41.920 9.280,31.040 15.040,15.680" fill="none" stroke="white" stroke-width="1.550" stroke-linejoin="round" stroke-linecap="round"/>
+  <line x1="32.000" y1="6.080" x2="9.280" y2="31.040" stroke="white" stroke-width="0.820" stroke-linecap="round"/>
+  <line x1="32.000" y1="6.080" x2="54.720" y2="31.040" stroke="white" stroke-width="0.820" stroke-linecap="round"/>
+  <line x1="32.000" y1="48.960" x2="9.280" y2="31.040" stroke="white" stroke-width="0.820" stroke-linecap="round"/>
+  <line x1="32.000" y1="48.960" x2="54.720" y2="31.040" stroke="white" stroke-width="0.820" stroke-linecap="round"/>
+  <line x1="15.040" y1="15.680" x2="45.760" y2="41.920" stroke="white" stroke-width="0.820" stroke-linecap="round"/>
+  <line x1="48.960" y1="15.680" x2="18.240" y2="41.920" stroke="white" stroke-width="0.820" stroke-linecap="round"/>
+  <line x1="9.280" y1="31.040" x2="54.720" y2="31.040" stroke="white" stroke-width="0.820" stroke-linecap="round"/>
+  <line x1="32.000" y1="6.080" x2="32.000" y2="48.960" stroke="white" stroke-width="0.820" stroke-linecap="round"/>
+  <circle cx="32.000" cy="6.080" r="1.152" fill="white"/>
+  <circle cx="15.040" cy="15.680" r="1.152" fill="white"/>
+  <circle cx="48.960" cy="15.680" r="1.152" fill="white"/>
+  <circle cx="9.280" cy="31.040" r="1.152" fill="white"/>
+  <circle cx="54.720" cy="31.040" r="1.152" fill="white"/>
+  <circle cx="32.000" cy="48.960" r="1.152" fill="white"/>
+  <polygon points="32.000,17.600 20.160,35.520 43.840,35.520" fill="none" stroke="white" stroke-width="1.000" stroke-linejoin="round" stroke-linecap="round"/>
+  <line x1="32.000" y1="17.600" x2="32.000" y2="27.200" stroke="white" stroke-width="0.550" stroke-linecap="round"/>
+  <line x1="20.160" y1="35.520" x2="32.000" y2="27.200" stroke="white" stroke-width="0.550" stroke-linecap="round"/>
+  <line x1="43.840" y1="35.520" x2="32.000" y2="27.200" stroke="white" stroke-width="0.550" stroke-linecap="round"/>
+  <ellipse cx="32.000" cy="27.200" rx="6.080" ry="3.200" fill="none" stroke="white" stroke-width="0.550"/>
+  <line x1="27.200" y1="27.200" x2="36.800" y2="27.200" stroke="white" stroke-width="0.550" stroke-linecap="round"/>
+  <circle cx="32.000" cy="27.200" r="1.664" fill="white"/>
+  <circle cx="32.000" cy="17.600" r="0.832" fill="white"/>
+  <circle cx="20.160" cy="35.520" r="0.832" fill="white"/>
+  <circle cx="43.840" cy="35.520" r="0.832" fill="white"/>
+  <circle cx="27.200" cy="27.200" r="0.832" fill="white"/>
+  <circle cx="36.800" cy="27.200" r="0.832" fill="white"/>
+  <line x1="32.000" y1="48.960" x2="32.000" y2="54.080" stroke="white" stroke-width="0.750" stroke-linecap="round"/>
+  <ellipse cx="32.000" cy="54.880" rx="16.000" ry="4.320" fill="none" stroke="white" stroke-width="0.800"/>
+  <ellipse cx="32.000" cy="55.200" rx="10.240" ry="2.400" fill="none" stroke="white" stroke-width="0.650"/>
+</svg>

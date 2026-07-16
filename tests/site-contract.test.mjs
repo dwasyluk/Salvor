@@ -47,3 +47,17 @@ test("production JavaScript has focused module boundaries", async () => {
     access(path.join(root, "site/scripts/burn-reveal.js")),
   ]);
 });
+
+test("repository surfaces use V10 and deploy only this versioned site", async () => {
+  const [readme, workflow, ignore] = await Promise.all([
+    read("README.md"),
+    read(".github/workflows/pages.yml"),
+    read(".gitignore"),
+  ]);
+  assert.match(readme, /site\/assets\/brand\/salvor-v10-node-sigil-black-128\.png/);
+  assert.doesNotMatch(readme, /salvor-logo-badge/);
+  assert.match(workflow, /branches:\s*\["ghpages\/v1\.0\.0"\]/);
+  assert.match(workflow, /path:\s*\.\/site/);
+  assert.match(ignore, /playwright-report\//);
+  assert.match(ignore, /test-results\//);
+});

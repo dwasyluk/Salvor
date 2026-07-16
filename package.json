@@ -5,8 +5,9 @@
   "scripts": {
     "serve": "python3 -m http.server 4173 -d site",
     "test:contract": "node --test tests/site-contract.test.mjs",
+    "test:unit": "node --test tests/site-contract.test.mjs tests/site-interactions.test.mjs tests/burn-field.test.mjs",
     "test:browser": "playwright test",
-    "test": "npm run test:contract && npm run test:browser"
+    "test": "npm run test:unit && npm run test:browser"
   },
   "devDependencies": {
     "@playwright/test": "1.61.1"

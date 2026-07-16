@@ -31,3 +31,7 @@ build/
 docs/PLAN.md
 docs/roadmap-issues.md
 assets/hero-prompt.md
+
+# Local browser-test artifacts
+playwright-report/
+test-results/

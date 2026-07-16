@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="description"
+      content="Salvor gives every coding agent the same version-controlled memory: prompt-first, vendor-neutral, and local by default."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Salvor v1.0.0 — Your repo remembers" />
+    <meta
+      property="og:description"
+      content="A shared, git-tracked memory layer for coding agents. No SaaS. No lock-in."
+    />
+    <meta property="og:url" content="https://dwasyluk.github.io/salvor/" />
+    <meta property="og:image" content="https://dwasyluk.github.io/salvor/assets/hero/salvor-mystic.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Salvor v1.0.0 — Your repo remembers" />
+    <meta
+      name="twitter:description"
+      content="A shared, git-tracked memory layer for coding agents. No SaaS. No lock-in."
+    />
+    <meta name="twitter:image" content="https://dwasyluk.github.io/salvor/assets/hero/salvor-mystic.png" />
+    <title>Salvor v1.0.0 — Your repo remembers</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/brand/salvor-v10-node-sigil-black-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/brand/salvor-v10-node-sigil-black-32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="./assets/brand/salvor-v10-node-sigil-black-48.png" />
+    <link rel="preload" as="image" href="./assets/hero/salvor-wireframe.png" fetchpriority="high" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareSourceCode",
+        "name": "Salvor",
+        "version": "1.0.0",
+        "codeRepository": "https://github.com/dwasyluk/salvor",
+        "license": "https://opensource.org/licenses/MIT",
+        "image": "https://dwasyluk.github.io/salvor/assets/brand/salvor-v10-node-sigil-black-128.png"
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#why">Skip to content</a>
+
+    <main>
+      <section class="hero" id="top" data-burn-hero data-burn-state="loading" aria-labelledby="hero-title">
+        <div class="hero-scene" aria-hidden="true">
+          <picture class="hero-mystic" data-mystic-layer>
+            <source srcset="./assets/hero/salvor-mystic.webp" type="image/webp" />
+            <img src="./assets/hero/salvor-mystic.png" width="1672" height="941" alt="" decoding="async" />
+          </picture>
+          <img
+            class="hero-wireframe"
+            data-wireframe-layer
+            src="./assets/hero/salvor-wireframe.png"
+            width="1672"
+            height="941"
+            alt=""
+            decoding="sync"
+            fetchpriority="high"
+          />
+        </div>
+
+        <header class="site-header" data-hero-content>
+          <a class="brand" href="#top" aria-label="Salvor home">
+            <img src="./assets/brand/salvor-v10-node-sigil-black.svg" width="72" height="72" alt="" />
+            <span>SALVOR</span>
+          </a>
+          <nav class="desktop-nav" aria-label="Primary navigation">
+            <a href="#why">WHY</a>
+            <a href="#use">USE</a>
+            <a href="#claude">CLAUDE</a>
+            <a href="https://github.com/dwasyluk/salvor">GITHUB ↗</a>
+          </nav>
+          <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <span></span><span></span><span></span>
+          </button>
+          <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" hidden>
+            <a href="#why">WHY</a>
+            <a href="#use">USE</a>
+            <a href="#claude">CLAUDE</a>
+            <a href="https://github.com/dwasyluk/salvor">GITHUB ↗</a>
+          </nav>
+        </header>
+
+        <div class="hero-copy" data-hero-content>
+          <p class="eyebrow">&gt; SALVOR v1.0.0</p>
+          <h1 id="hero-title">SALVOR</h1>
+          <p class="hero-tagline">Your repo remembers<span>.</span></p>
+          <ul class="hero-points">
+            <li><span aria-hidden="true">&gt;</span> Version-controlled memory for coding agents.</li>
+            <li><span aria-hidden="true">&gt;</span> Prompt-first. Vendor-neutral.</li>
+            <li><span aria-hidden="true">&gt;</span> Claude plugin sugar in v1.1.0+.</li>
+          </ul>
+          <div class="hero-actions">
+            <a
+              class="button button-primary"
+              href="https://github.com/dwasyluk/salvor/blob/v1.0.0/SETUP_PROMPT.md"
+              data-copy-prompt="https://raw.githubusercontent.com/dwasyluk/salvor/v1.0.0/SETUP_PROMPT.md"
+            >
+              <span aria-hidden="true">&gt;</span> <span data-copy-label>COPY SETUP_PROMPT.md</span>
+            </a>
+            <a class="button button-link" href="https://github.com/dwasyluk/salvor">
+              <span aria-hidden="true">&gt;</span> VIEW ON GITHUB ↗
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div class="content-shell">
+        <section class="section reasons" id="why" aria-labelledby="why-title">
+          <p class="section-label" id="why-title">// THREE REASONS</p>
+          <div class="reason-grid">
+            <article class="reason-card">
+              <div class="reason-heading">
+                <span class="reason-number">1</span>
+                <svg class="line-icon" viewBox="0 0 64 64" aria-hidden="true">
+                  <circle cx="32" cy="10" r="5"/><circle cx="12" cy="50" r="5"/><circle cx="52" cy="50" r="5"/>
+                  <path d="M29 15 15 45m20-30 14 30M18 50h28"/>
+                </svg>
+              </div>
+              <h2>The repo remembers why.</h2>
+              <p>Capture learnings, failures, decisions, and deferred work — with the reasoning behind them.</p>
+            </article>
+            <article class="reason-card">
+              <div class="reason-heading">
+                <span class="reason-number">2</span>
+                <svg class="line-icon" viewBox="0 0 64 64" aria-hidden="true">
+                  <circle cx="23" cy="22" r="9"/><circle cx="43" cy="22" r="9"/>
+                  <path d="M7 55c0-12 7-18 16-18s16 6 16 18M29 55c0-10 6-16 14-16s14 6 14 16"/>
+                </svg>
+              </div>
+              <h2>Every agent reads the same truth.</h2>
+              <p>A shared, version-controlled brain across sessions, teammates, and even different vendors.</p>
+            </article>
+            <article class="reason-card">
+              <div class="reason-heading">
+                <span class="reason-number">3</span>
+                <svg class="line-icon" viewBox="0 0 64 64" aria-hidden="true">
+                  <path d="M32 7 52 15v15c0 13-7 22-20 28C19 52 12 43 12 30V15Z"/>
+                </svg>
+              </div>
+              <h2>No SaaS, no lock-in.</h2>
+              <p>Local by default. Just files + two open-source MCP servers. Yours, in your repo, in your control.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section process" id="how" aria-labelledby="how-title">
+          <p class="section-label" id="how-title">// HOW SALVOR WORKS</p>
+          <div class="process-grid">
+            <article>
+              <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="4"/><circle cx="28" cy="7" r="3"/><circle cx="49" cy="28" r="3"/><circle cx="28" cy="49" r="3"/><circle cx="7" cy="28" r="3"/><path d="M28 10v14m18 4H32m-4 4v14M10 28h14M13 13l12 12m18-12L31 25m12 18L31 31M13 43l12-12"/></svg>
+              <h2>Hub &amp; Spoke</h2><p>Load only what you're working on.</p>
+            </article>
+            <article>
+              <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="m28 5 18 10-18 10L10 15Zm-18 19 18 10 18-10M10 34l18 10 18-10"/></svg>
+              <h2>Two-Tier Memory</h2><p>L1 (concise) for now. L2 (deep) for later.</p>
+            </article>
+            <article>
+              <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="M17 42h22M20 36V23a8 8 0 0 1 16 0v13l5 6H15Zm5 12c2 3 6 3 8 0"/></svg>
+              <h2>3 Capture Triggers</h2><p>Learnings, failures, deferred TODOs.</p>
+            </article>
+            <article>
+              <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="M7 30 29 8h20v20L27 50Z"/><circle cx="39" cy="18" r="3"/></svg>
+              <h2>Versioned Why</h2><p>Every change ships with its rationale.</p>
+            </article>
+            <article>
+              <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="m28 5 18 10v26L28 51 10 41V15Zm0 20 18-10M28 25 10 15m18 10v26"/></svg>
+              <h2>Serena + GitNexus</h2><p>Understand code. Analyze impact.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section use" id="use" aria-labelledby="use-title">
+          <p class="section-label" id="use-title">// USE SALVOR</p>
+          <div class="terminal-grid">
+            <article class="terminal-card">
+              <header>
+                <span class="terminal-glyph" aria-hidden="true">&gt;_</span>
+                <div><h2>Any vendor: paste the prompt</h2><p class="status">PRIMARY PATH</p></div>
+              </header>
+              <p>Works with Claude Code, Codex, Gemini, Cursor, and other MCP-capable CLIs.</p>
+              <ol>
+                <li>Install Serena and GitNexus (see README).</li>
+                <li>Open your LLM CLI in the project.</li>
+                <li>Paste <code>SETUP_PROMPT.md</code> and answer 4 questions.</li>
+                <li>Commit the scaffold. Run <code>gitnexus analyze</code>.</li>
+                <li>You're done — your repo now has a memory.</li>
+              </ol>
+              <pre><code>$ cat SETUP_PROMPT.md
+$ # copy the output; paste into your CLI
+$ # answer 4 questions
+$ # Salvor scaffolds the rest</code></pre>
+              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0/SETUP_PROMPT.md">View SETUP_PROMPT.md <span>→</span></a>
+            </article>
+
+            <article class="terminal-card future-card" id="claude">
+              <header>
+                <svg class="terminal-cube" viewBox="0 0 48 48" aria-hidden="true"><path d="m24 3 18 10v22L24 45 6 35V13Zm0 20 18-10M24 23 6 13m18 10v22"/></svg>
+                <div><h2>Claude: plugin convenience (v1.1.0+)</h2><p class="status">SMOOTHER PATH · FUTURE</p></div>
+              </header>
+              <p>The v1.0.0 release does not ship this plugin. The universal prompt remains the supported path.</p>
+              <ol>
+                <li>Install the official Salvor plugin when v1.1.0 ships.</li>
+                <li>Run the interactive initializer in Claude Code.</li>
+                <li>Answer the same four setup questions.</li>
+                <li>The plugin scaffolds Salvor from the canonical prompt.</li>
+                <li>Use health and capture commands to maintain it.</li>
+              </ol>
+              <pre aria-label="Planned v1.1.0 commands"><code>$ /salvor:init        # planned interactive setup
+$ /salvor:capture     # planned knowledge capture
+$ /salvor:health      # planned system check
+$ /salvor:status      # planned repo memory</code></pre>
+              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0/README.md#roadmap--help-wanted">Plugin roadmap <span>→</span></a>
+            </article>
+          </div>
+        </section>
+
+        <section class="section foundations" id="foundations" aria-labelledby="foundations-title">
+          <p class="section-label" id="foundations-title">// BUILT ON OPEN FOUNDATIONS</p>
+          <div class="foundation-grid">
+            <article>
+              <svg class="foundation-mark" viewBox="0 0 72 72" aria-hidden="true"><path d="m36 4 28 16v32L36 68 8 52V20Zm0 0v64M8 20l28 16 28-16"/><circle cx="36" cy="36" r="5"/></svg>
+              <div><h2>Serena <span>CODE INTELLIGENCE</span></h2><p>Semantic code navigation and targeted edits by symbol. Understand before you change.</p><a href="https://github.com/oraios/serena">github.com/oraios/serena →</a></div>
+            </article>
+            <article>
+              <svg class="foundation-mark" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="28"/><circle cx="36" cy="36" r="5"/><path d="M36 8v23m0 10v23M8 36h23m10 0h23M16 16l16 16m8 8 16 16M56 16 40 32m-8 8L16 56"/></svg>
+              <div><h2>GitNexus <span>IMPACT ANALYSIS</span></h2><p>Code knowledge graph. See what breaks before you ship.</p><a href="https://github.com/abhigyanpatwari/GitNexus">github.com/abhigyanpatwari/GitNexus →</a></div>
+            </article>
+          </div>
+        </section>
+
+        <p class="closing-line"><span aria-hidden="true">✦</span> Salvage your knowledge before it's lost to the next session. <span aria-hidden="true">✦</span></p>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="footer-brand" href="#top" aria-label="Salvor home">
+          <img src="./assets/brand/salvor-v10-node-sigil-white.svg" width="72" height="72" alt="" />
+          <span>SALVOR</span>
+        </a>
+        <div class="footer-copy"><p>Open source. Community powered.<br />Make your project's knowledge compound.</p><p>v1.0.0 &nbsp;·&nbsp; MIT License</p></div>
+        <nav aria-label="Footer navigation">
+          <a href="https://github.com/dwasyluk/salvor">GitHub ↗</a>
+          <a href="https://github.com/dwasyluk/salvor/tree/v1.0.0/docs">Docs</a>
+          <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0/SETUP_PROMPT.md">SETUP_PROMPT.md</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script type="module" src="./scripts/site.js"></script>
+    <script type="module" src="./scripts/burn-reveal.js"></script>
+  </body>
+</html>
