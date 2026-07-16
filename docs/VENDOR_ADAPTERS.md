@@ -36,15 +36,19 @@ The pointer file says, in effect:
 
 That's the whole adapter. The core files it points at are identical across vendors.
 
-## What v1 ships
+## What ships (all three by default)
 
-- **Claude Code adapter — built and dogfooded.** The `CLAUDE.md` hub uses
-  `@`-imports; the `example-project/` demonstrates the full setup.
-- **Codex / Gemini adapters — documented, not yet hardened.** The pattern above is
-  correct and small, but hasn't been end-to-end battle-tested in this repo. If you
-  run Salvor on Codex or Gemini, please open a
-  [vendor adapter issue](https://github.com/dwasyluk/salvor/issues) or PR with what
-  worked — that's exactly the kind of contribution Salvor wants.
+Setup generates **all three entrypoints** — no vendor choice: `CLAUDE.md` (the canonical
+hub) plus thin `AGENTS.md` and `GEMINI.md` pointer files. Any teammate's CLI works out of
+the box; the core files they point at are identical.
+
+- **Claude Code — built and dogfooded.** The `CLAUDE.md` hub uses `@`-imports; the
+  `example-project/` demonstrates the full setup, and Salvor's own repo runs on it.
+- **Codex / Gemini — wired by default, less exercised.** The `AGENTS.md` / `GEMINI.md`
+  pointers are trivial and correct, but Claude Code is the most battle-tested path. Hit a
+  rough edge on Codex or Gemini? Open a
+  [vendor adapter issue](https://github.com/dwasyluk/salvor/issues) or PR — exactly the
+  kind of contribution Salvor wants.
 
 ## Claude-Code-only conveniences (safe to skip elsewhere)
 

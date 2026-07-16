@@ -39,7 +39,7 @@ either is missing, point me to the repo README's Prerequisites section.
 
 ## Step 1 — Confirm scope before writing files
 
-Ask me these **four** questions in a single question call (or inline if your CLI
+Ask me these **three** questions in a single question call (or inline if your CLI
 has no structured-question tool) BEFORE creating anything:
 
 1. **Project name** — the top-level identifier (e.g. "Atlas", "Helix"). Don't
@@ -56,16 +56,10 @@ has no structured-question tool) BEFORE creating anything:
    a live path and a simulator/replay used in tests; a client and a hand-written
    mock of it. If yes, name both files and they get a parity rule in `RULES.md`.
    If not, answer `none` and the parity rule is omitted from §0 / §6.
-4. **Primary LLM CLI / vendor** — Claude Code, Codex, Gemini CLI, or other. This
-   decides which **entrypoint adapter** is wired:
-   - **Claude Code** → `CLAUDE.md` hub with `@`-imports, optional
-     `.claude/settings.json` `custom_instructions`, optional per-user
-     auto-memory, Skills.
-   - **Codex** → `AGENTS.md` is the native entrypoint; it points at the same
-     in-repo core.
-   - **Gemini CLI** → `GEMINI.md` is the entrypoint.
-   - The **core files below are vendor-neutral**; only the entrypoint glue
-     differs. See `docs/VENDOR_ADAPTERS.md` in the Salvor repo.
+> **Vendor entrypoints are automatic — no need to choose.** Every project gets all three
+> by default: `CLAUDE.md` (the canonical hub) plus thin `AGENTS.md` (Codex) and `GEMINI.md`
+> (Gemini) pointer files, so any teammate's CLI works out of the box. The core is
+> vendor-neutral; only the entrypoint glue differs (see `docs/VENDOR_ADAPTERS.md`).
 
 Wait for answers. Do not invent components or assume a stack. Once I respond,
 proceed to Step 2.
@@ -553,14 +547,22 @@ Append (don't replace) — note `.serena/memories/` is **committed** (it's share
 .serena/cache/
 ```
 
-### Entrypoint adapter (from Step 1, question 4)
+### Entrypoint adapters (generate all three by default)
 
-- **Claude Code:** the `CLAUDE.md` hub above (with `@`-imports) is the entrypoint. Optionally add
-  `.claude/settings.json` `custom_instructions` reinforcing RULES §0. (Ask before writing settings files.)
-- **Codex:** create `AGENTS.md` at repo root that says: "Before any work, read `CLAUDE.md` (hub) + the relevant spoke +
-  `RULES.md` + `.salvor/active_state.md` (L1). Follow RULES.md exactly." Codex reads `AGENTS.md` natively.
-- **Gemini CLI:** create `GEMINI.md` with the same pointer text.
-- See `docs/VENDOR_ADAPTERS.md` in the Salvor repo for the full pattern. The core files are identical across vendors.
+`CLAUDE.md` is the **canonical hub** (created above). Always also create the two thin pointer
+files so any teammate's CLI works out of the box — no vendor choice needed:
+
+- **`AGENTS.md`** (Codex and other AGENTS-aware CLIs) — at repo root, containing:
+  > Before any work, read `CLAUDE.md` (the hub) + the relevant component spoke + `RULES.md` +
+  > `.salvor/active_state.md` (L1). Follow `RULES.md` exactly — including the Task Termination
+  > Protocol and the capture triggers. The canonical context lives in `CLAUDE.md`; this file
+  > just points there.
+- **`GEMINI.md`** (Gemini CLI) — the same pointer text.
+- **Claude Code** needs nothing extra: it auto-loads `CLAUDE.md` (with `@`-imports). Optionally add
+  `.claude/settings.json` `custom_instructions` reinforcing RULES §0 (ask before writing settings files).
+
+The core files are identical across vendors; only these thin entrypoints differ. See
+`docs/VENDOR_ADAPTERS.md`.
 
 ## Step 3 — Initial commit, then index
 
@@ -614,7 +616,7 @@ After Steps 2–4, return a short report:
 - Confirmation that root `CLAUDE.md`, `RULES.md` (§0–§7), `VERSION.md`, L1, L2, `DOMAIN_REF`, `INFRA`,
   `DEFERRED_TODOS`, `decisions/README`, `postmortems/README`, `domain-tuning/README`, and each spoke `CLAUDE.md` exist and have
   project-specific placeholders filled in.
-- The entrypoint adapter wired for my chosen vendor.
+- All three entrypoints created: `CLAUDE.md` (canonical hub) + `AGENTS.md` + `GEMINI.md` pointers.
 - Initial commit hash.
 - GitNexus index counts (symbols / relationships / execution flows).
 - Acknowledge the 8 operating rules from Step 4.

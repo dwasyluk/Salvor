@@ -92,7 +92,7 @@ stop shipping blind changes to code you have to assume is untested.
 1. Install the two MCP servers above (Serena + GitNexus).
 2. Open your LLM CLI in the project you want to give a memory to (new or existing).
 3. Paste the contents of SETUP_PROMPT.md.
-4. Answer 4 questions: project name · components+stacks · live/mirror pair? · which CLI.
+4. Answer a couple of questions: project name · components + stacks · (optional) paired-path parity.
 5. The agent scaffolds Salvor, makes the initial commit, and runs `gitnexus analyze`.
 6. Done — your repo now has a shared, version-controlled brain.
 ```
