@@ -1,0 +1,14 @@
+{
+  "name": "salvor-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "python3 -m http.server 4173 -d site",
+    "test:contract": "node --test tests/site-contract.test.mjs",
+    "test:browser": "playwright test",
+    "test": "npm run test:contract && npm run test:browser"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1"
+  }
+}
