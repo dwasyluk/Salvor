@@ -50,12 +50,12 @@ has no structured-question tool) BEFORE creating anything:
    its own spoke `CLAUDE.md` and a per-component build counter in `VERSION.md`.
    The **counter letters are derived from the component name** (e.g. `api` →
    `API:01`, `web` → `WEB:01`) — configurable, not hardcoded.
-3. **Production / mirror pair?** — does any component have a "live" execution
-   path AND a "simulator / replay / test mirror" that must stay bit-for-bit
-   aligned (e.g. a live execution engine next to a deterministic simulator/replay
-   used in tests)? If yes, name both
-   files — they get a parity rule. If no, omit the parity rule from `RULES.md`
-   §0 / §6.
+3. **Paired paths that must stay in sync? (optional — most projects: `none`)** —
+   do you have two code paths that must change together, where editing one without
+   the other is a bug? Examples: an implementation and a separate reimplementation;
+   a live path and a simulator/replay used in tests; a client and a hand-written
+   mock of it. If yes, name both files and they get a parity rule in `RULES.md`.
+   If not, answer `none` and the parity rule is omitted from §0 / §6.
 4. **Primary LLM CLI / vendor** — Claude Code, Codex, Gemini CLI, or other. This
    decides which **entrypoint adapter** is wired:
    - **Claude Code** → `CLAUDE.md` hub with `@`-imports, optional
@@ -246,9 +246,9 @@ fail.
 4. **Full code-path traversal.** When you change one area, follow every related code path and update it. Example: a new
    config parameter must be added to the config UI, audit/report output, import/export, and everywhere it's read — never a
    half-wired value. Never work on assumptions; if uncertain, STOP AND ASK.
-5. **Smoke-test before declaring a numerically-sensitive fix done.** Math changes (sizing, thresholds, gates, allocation,
-   guards) require an explicit smoke run before "done," or a stated reason it can't be smoke-tested. "Compiles, ship it" is
-   not acceptable.
+5. **Smoke-test before declaring a numerically-sensitive fix done.** Math changes (numeric constants, thresholds, limits,
+   allocation, rounding, guards) require an explicit smoke run before "done," or a stated reason it can't be smoke-tested.
+   "Compiles, ship it" is not acceptable.
 6. **Verify long-running / observability processes are alive before trusting output.** Liveness check (`ps`, `kill -0`,
    `wc -l`) before relying on a background tool's output; mid-run checkpoints for multi-hour runs.
 7. **Identifier hygiene at external API boundaries.** Pass the domain-correct identifier at every external call site
@@ -337,7 +337,7 @@ behind the code.
 # <PROJECT_NAME> Active State — <COMP_ID_A>:01 <COMP_ID_B>:01 ([DATE])
 ## Architecture: [ONE-LINE: top-level stack + ports]
 ## Pipeline: [ONE-LINE: request/data flow, if applicable]
-## DEPLOYED: [environment, ingress, latency profile — or "local only"]
+## DEPLOYED: [environment, ingress, deploy/perf notes — or "local only"]
 ## Current Delta to Published Logic: [empty initially — populate as work lands]
 ## LEARNED FAILURES: [empty initially — LF# entries land here in shorthand]
 ## Open: [active todos / pending decisions]
