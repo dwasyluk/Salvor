@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-16  
 **Target:** `main` at the Salvor v1.0.0 repository state  
-**Primary vendor:** Claude Code
+**Canonical instructions:** Claude Code `CLAUDE.md`, with thin Codex and Gemini CLI adapters
 
 ## Goal
 
@@ -54,9 +54,11 @@ When website code is later merged onto `main`, its build/deploy pipeline must ge
 
 This is semantic/generated parity rather than byte-for-byte file identity because Markdown source documentation and rendered website markup have intentionally different structures. Until the website lands on `main`, the contract is recorded in `RULES.md` and `site/CLAUDE.md` only.
 
-## Vendor adapter
+## Vendor adapters
 
-Claude Code is the only entrypoint adapter added by this scaffold. Root `CLAUDE.md` uses native `@` imports. No root `AGENTS.md`, `GEMINI.md`, `.claude/settings.json`, or per-user Claude auto-memory is created. Canonical shared knowledge remains in git-tracked repository files.
+Root `CLAUDE.md` is the canonical instruction hub and uses native `@` imports. Root `AGENTS.md` and `GEMINI.md` are lightweight adapters that direct Codex and Gemini CLI to the same canonical hub, relevant component spoke, `RULES.md`, and `.salvor/active_state.md`. They do not duplicate the hub's substantive guidance, keeping multi-vendor maintenance lightweight while preserving one shared body of project knowledge.
+
+No `.claude/settings.json` or per-user Claude auto-memory is created. Canonical shared knowledge remains in git-tracked repository files and is identical for Claude Code, Codex, and Gemini CLI.
 
 ## Safety and repository isolation
 
