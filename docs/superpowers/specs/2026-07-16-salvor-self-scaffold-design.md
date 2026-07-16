@@ -43,6 +43,9 @@ The remaining durable layers are:
 - `.salvor/DEFERRED_TODOS.md` for user-approved out-of-scope findings.
 - `.salvor/domain-tuning/` for immutable, dated evidence artifacts.
 - `.salvor/postmortems/` for incident learning that feeds LF# and deferred findings.
+- `.serena/memories/` for shared codebase structure, conventions, commands, and completion guidance queried through Serena MCP.
+
+The current root-level `.serena/memories/` ignore rule is removed so these five existing Salvor project memories become part of the canonical, git-tracked team brain. `.serena/cache/` remains ignored.
 
 Continued learning and learned failures use the exact prompt `Save this as a domain-tuning artifact? (yes/no)`. Deferred findings use the exact prompt `Log this to .salvor/DEFERRED_TODOS.md? (yes/no)`. These prompts are user-gated and cannot be inferred or silently batched.
 
