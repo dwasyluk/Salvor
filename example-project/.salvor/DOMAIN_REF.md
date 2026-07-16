@@ -22,6 +22,7 @@ The store (`api/src/store.ts`) is a single in-memory `Map<string, Note>`:
 ### Copy invariant (LF-1)
 `getNote` and `listNotes` MUST return shallow copies, never the live `Map` instances. This is a shallow `{ ...note }`,
 valid only while `Note` stays flat; a nested field would require a structured copy (the v2 trigger for LF-1).
+Full rationale + coupling: [`decisions/2026-06-20-store-returns-copies.md`](./decisions/2026-06-20-store-returns-copies.md).
 
 ## Learned Failures (LF#)
 
