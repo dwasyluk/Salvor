@@ -105,8 +105,8 @@ stop shipping blind changes to code you have to assume is untested.
   the context you use.
 - **🧊 Two-tier memory** — L1 (≤50-line dense current state) + L2 (unbounded deep
   archive). Cheap to read, complete to recover.
-- **🔔 Three user-gated capture triggers** — learnings, failures, and deferred
-  TODOs each get captured *with their reasoning*, only when you say so.
+- **🔔 Three user-gated capture triggers** — learnings & design decisions, failures,
+  and deferred TODOs, each captured *with their reasoning*, only when you say so.
 - **🧠 Serena** symbol intelligence + **🕸️ GitNexus** impact analysis, baked into
   the workflow.
 - **🏷️ Per-component versioning** — `VERSION.md` as single source of truth, every
@@ -121,7 +121,7 @@ never automatic (so your docs don't bloat without your say):
 
 | Trigger | Captures | The agent asks… | Lands in |
 |---|---|---|---|
-| **Continued Learning** | a discovery + its *why* | `"Save this as a domain-tuning artifact? (yes/no)"` | dated artifact + `DOMAIN_REF.md` + L1/L2 |
+| **Continued Learning** | a discovery, decision, or **design invariant** + its *why* | `"…domain-tuning artifact?"` (finding) · `"Record this as a design decision?"` (decision) | `.salvor/domain-tuning/` or `.salvor/decisions/` + `DOMAIN_REF.md` + L1/L2 |
 | **Learned Failure (LF#)** | a recurring failure mode + root cause | *(via the same flow)* | `DOMAIN_REF.md` LF# registry |
 | **Deferred TODO** | an out-of-scope finding, parked not dropped | `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"` | `.salvor/DEFERRED_TODOS.md` |
 
