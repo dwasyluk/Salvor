@@ -21,10 +21,10 @@ Issues and PRs are both encouraged — no need to ask first for small changes.
 3. Fill in the PR checklist. The four things we care about:
    - **Anonymized.** Templates stay generic — no project-, company-, or
      domain-specific names baked in.
-   - **Example synced (the one hard rule).** If you edit `SETUP_PROMPT.md`, you must
-     re-render `example-project/` so the worked example still matches what the
-     prompt produces. The example is our regression test for the prompt — drift
-     between them is the bug we most want to avoid.
+   - **Keep the example representative.** If you change `SETUP_PROMPT.md`, refresh
+     `example-project/` so it still reflects what the prompt produces. It doesn't need
+     to be byte-identical — just an accurate, representative rendering (the runnable
+     app + the `.salvor/` structure). It's a teaching reference, not a strict fixture.
    - **Docs updated** — if behavior or structure changed, update `README.md` /
      `docs/ARCHITECTURE.md` / `docs/VENDOR_ADAPTERS.md`.
    - **CHANGELOG** — add a line under `[Unreleased]` for anything user-visible.
