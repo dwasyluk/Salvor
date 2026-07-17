@@ -34,9 +34,14 @@ The pointer file says, in effect:
 
 > Before any work, read `CLAUDE.md` (hub) + the relevant component spoke +
 > `RULES.md` + `.salvor/active_state.md` (L1). Follow `RULES.md` exactly, including
-> the Task Termination Protocol and the three capture triggers.
+> the Task Termination Protocol and the three capture triggers. Do not duplicate or
+> fork project knowledge into this adapter — shared truth lives in `CLAUDE.md`, the
+> spokes, `.salvor/`, and `.serena/memories/`.
 
-That's the whole adapter. The core files it points at are identical across vendors.
+That's the whole adapter. The core files it points at are identical across vendors —
+including the GitNexus code-intelligence block, which lands **only** in the canonical
+`CLAUDE.md` hub (strip it back out of `AGENTS.md` if `gitnexus analyze` mirrors it there,
+so the pointers stay thin).
 
 ## What ships (all three by default)
 

@@ -49,7 +49,10 @@ has no structured-question tool) BEFORE creating anything:
    stack hint (e.g. `api` Rust/tokio, `web` Next.js, `worker` Python). Each gets
    its own spoke `CLAUDE.md` and a per-component build counter in `VERSION.md`.
    The **counter letters are derived from the component name** (e.g. `api` →
-   `API:01`, `web` → `WEB:01`) — configurable, not hardcoded.
+   `API:01`, `web` → `WEB:01`) — configurable, not hardcoded. If the repo has no
+   natural split (a single library, a docs/prompt project), a lone `root` component
+   is fine — one spoke, one counter. Prefer components only where the parts are
+   genuinely isolated and versioned independently.
 3. **Paired paths that must stay in sync? (optional — most projects: `none`)** —
    do you have two code paths that must change together, where editing one without
    the other is a bug? Examples: an implementation and a separate reimplementation;
@@ -142,10 +145,10 @@ You self-identify knowledge worth persisting and ask me, verbatim, before persis
 2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
 3. **Deferred TODO** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
-# GitNexus — Code Intelligence
-
-[Run `gitnexus analyze` after the initial commit. It appends a
-`<!-- gitnexus:start --> … <!-- gitnexus:end -->` block here with symbol/relationship counts and tool routing.]
+[GitNexus anchor — run `gitnexus analyze` after the initial commit. It appends a
+`gitnexus:start … gitnexus:end` block below, carrying its OWN `# GitNexus — Code Intelligence`
+heading plus symbol/relationship counts and tool routing. Do NOT add a heading here —
+gitnexus supplies one, and a second would duplicate it.]
 ```
 
 ### `RULES.md` (mandatory; §0–§7)
@@ -556,7 +559,8 @@ files so any teammate's CLI works out of the box — no vendor choice needed:
   > Before any work, read `CLAUDE.md` (the hub) + the relevant component spoke + `RULES.md` +
   > `.salvor/active_state.md` (L1). Follow `RULES.md` exactly — including the Task Termination
   > Protocol and the capture triggers. The canonical context lives in `CLAUDE.md`; this file
-  > just points there.
+  > just points there. **Do not duplicate or fork project knowledge into this adapter** — shared
+  > truth belongs in `CLAUDE.md`, the component spokes, `.salvor/`, and `.serena/memories/`.
 - **`GEMINI.md`** (Gemini CLI) — the same pointer text.
 - **Claude Code** needs nothing extra: it auto-loads `CLAUDE.md` (with `@`-imports). Optionally add
   `.claude/settings.json` `custom_instructions` reinforcing RULES §0 (ask before writing settings files).
@@ -581,12 +585,16 @@ Then index with GitNexus to populate the code-intelligence block:
 gitnexus analyze
 ```
 
-This appends a `<!-- gitnexus:start --> … <!-- gitnexus:end -->` block to root `CLAUDE.md` (and `AGENTS.md` if present)
-with symbol/relationship counts and tool routing. Commit the result:
+This appends a `<!-- gitnexus:start --> … <!-- gitnexus:end -->` block to root `CLAUDE.md` with symbol/relationship
+counts and tool routing. GitNexus mirrors the same block into `AGENTS.md` when it exists — but that block is project
+knowledge, so it belongs only in the canonical hub. **Keep the adapters thin:** delete the injected
+`gitnexus:start … gitnexus:end` block from `AGENTS.md` (and never let it into `GEMINI.md`) — the pointers stay one
+paragraph. (This is the same "don't fork knowledge into the adapter" rule the pointer text states.) Then commit just
+the hub:
 
 ```bash
-git add CLAUDE.md AGENTS.md
-git commit -m "chore(gitnexus): commit auto-generated code-intelligence blocks"
+git add CLAUDE.md   # AGENTS.md is left as the thin pointer; only the hub carries the block
+git commit -m "chore(gitnexus): commit auto-generated code-intelligence block (hub only)"
 ```
 
 ## Step 4 — Operating ground rules going forward
