@@ -5,10 +5,11 @@ so that an LLM coding agent — any agent, any session, any contributor — work
 against the same accumulated, version-controlled knowledge instead of starting
 cold every time.
 
-Out of the box, an LLM CLI forgets everything between sessions. The rationale a
-teammate captured two months ago (in another session, maybe another vendor) is
-gone — re-derived, or re-litigated, or lost. Salvor's job is to make that
-knowledge **persist, propagate, and compound**, all inside git.
+Out of the box, an LLM CLI carries little context from one session to the next.
+The rationale a teammate captured two months ago (in another session, maybe
+another vendor) is often re-derived, re-litigated, or lost. Salvor's job is to
+reduce that repeated context reconstruction by making the knowledge **persist,
+propagate, and compound**, all inside git.
 
 ## The five pillars
 
@@ -23,8 +24,11 @@ of the box, no vendor to choose.
 ### 2. Two-tier persisted memory (L1 / L2)
 - **L1 — `.salvor/active_state.md`:** ≤50 lines of dense shorthand. Current truth,
   active deltas, and "Learned Failures." Auto-loaded every session.
-- **L2 — `.salvor/active_state_verbose.md`:** unbounded archive. Full reasoning, raw
-  outputs, *rejected* hypotheses. Read only when recovering from confusion.
+- **L2 — `.salvor/active_state_verbose.md`:** detailed but curated archive. Full
+  reasoning, evidence, *rejected* hypotheses. Read only when recovering from
+  confusion. Rotation rule: when L2 exceeds ~1,500 lines or at release milestones,
+  condense the oldest resolved sections — keep durable conclusions, evidence
+  references, and commit/test/issue IDs; drop raw noise.
 
 L1 is what the agent reads constantly; L2 is where the nuance lives so L1 can stay
 cheap. Both are git-tracked.
@@ -34,9 +38,9 @@ The documents above are inert without discipline. `RULES.md` is what makes the
 knowledge compound rather than decay:
 - **§0 Task Termination Protocol** — nothing is "done" until VERSION is bumped and
   L1/L2 + spokes are synced.
-- **§1 Dementia Recovery** — a loop-breaker.
+- **§1 Context Recovery Procedure** — a loop-breaker.
 - **§2 Continued Learning Protocol** and **§7 Out-of-scope finding capture** — the
-  user-gated capture triggers (below).
+  user-gated capture classes (below).
 - **§3–§6, §8** — versioning, search-before-read, safety, full-code-path
   discipline, and the shared-vs-per-user memory rule.
 
@@ -50,13 +54,22 @@ knowledge compound rather than decay:
 
 ### 5. MCP substrate: Serena + GitNexus
 - **Serena** — semantic/symbolic code intelligence, so the agent navigates by
-  symbol (token-thrifty) instead of re-reading whole files. IDE-agnostic.
-- **GitNexus** — a knowledge graph of the codebase (symbols, relationships,
-  execution flows) for *impact analysis before edits* — "know your code," not just
-  keyword search. Especially valuable when you must assume code is untested.
+  symbol (token-thrifty) instead of re-reading whole files. IDE-agnostic. Serena
+  also has its own optional memory folder, `.serena/memories/` — Salvor treats it
+  as a retrieval aid holding pointers and structural notes; `.salvor/` remains the
+  canonical engineering record.
+- **GitNexus** — indexing, impact analysis, and execution-flow tracing over a
+  knowledge graph of the codebase (symbols, relationships, flows), plus generated
+  skills/hooks and context-file generation — *impact analysis before edits*,
+  "know your code," not just keyword search. Especially valuable when you must
+  assume code is untested. GitNexus owns its index, its generated skills/hooks,
+  and its marked `gitnexus:start`/`gitnexus:end` block in the canonical
+  `CLAUDE.md` hub only; vendor adapters stay thin.
 
 Both are standard MCP servers, so they work across Claude Code, Codex, Gemini,
-Cursor, and others.
+Cursor, and others. The division of labor: **GitNexus remembers how the code is
+connected. Salvor preserves why the team made it that way.** (Setup details and
+the ownership contract: `VENDOR_ADAPTERS.md`.)
 
 ## Where the brain lives: the `.salvor/` folder
 
@@ -74,18 +87,19 @@ at the root; everything else Salvor owns lives in `.salvor/`.* Tooling gets one
 predictable root, your own `docs/` stays uncluttered, and `.serena/` / `.gitnexus/`
 remain their own tools' homes (Salvor orchestrates them, it doesn't absorb them).
 
-## The three capture triggers (the keystone)
+## The three capture classes (the keystone)
 
 Salvor's defining mechanism: the agent **self-identifies** knowledge worth keeping
-and **asks you, verbatim, before persisting** — so capture is never silent (which
-would let it fail unnoticed) and never automatic (which would let the agent bloat
-your docs without your say). Three distinct flavors:
+and **asks you, verbatim, before persisting** — so durable capture is never silent
+(which would let it fail unnoticed) and never automatic (which would let the agent
+bloat your docs without your say). Routine L1/L2 state maintenance stays automatic;
+promotion into the durable shared record is user-approved. Three distinct classes:
 
-| Trigger | Captures | Verbatim prompt | Lands in |
+| Capture class | Captures | Verbatim prompt | Lands in |
 |---|---|---|---|
-| **Continued Learning** | A discovery, decision, or **design invariant** + its *why* | `"Save this as a domain learning? (yes/no)"` (a finding) · `"Record this as a design decision? (yes/no)"` (a decision) | `.salvor/domain-learnings/` (findings) or `.salvor/decisions/` (decisions + **Invariant/Coupling**) + `DOMAIN_REF.md` + L1/L2 |
+| **Decision / Domain Learning** | A discovery, decision, or **design invariant** + its *why* | `"Save this as a domain learning? (yes/no)"` (a **Domain Learning**) · `"Record this as a design decision? (yes/no)"` (a **Design Decision**) | `.salvor/domain-learnings/` (learnings) or `.salvor/decisions/` (decisions + **Invariant/Coupling**) + `DOMAIN_REF.md` + L1/L2 |
 | **Learned Failure (LF#)** | A recurring/structural failure mode + root cause + fix sites | (registered through the same flow when the discovery *is* a failure) | `DOMAIN_REF.md` LF# registry + L1 shorthand |
-| **Deferred TODO** | An out-of-scope finding surfaced mid-task — real, but must not derail current work | `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"` | `.salvor/DEFERRED_TODOS.md` (dedupe-first; Severity + Suggested-fix) |
+| **Deferred Finding** | An out-of-scope finding surfaced mid-task — real, but must not derail current work | `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"` | `.salvor/DEFERRED_TODOS.md` (dedupe-first; Severity + Suggested-fix) |
 
 Keeping these three *distinct* is the legibility upgrade at the heart of Salvor:
 "what we learned," "how we failed," and "what we noticed but parked" are different

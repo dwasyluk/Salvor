@@ -9,9 +9,9 @@ Salvor gives a repository a version-controlled institutional brain shared across
 ## Product Pillars
 
 1. Concise canonical hub with component spokes.
-2. Two-tier persisted memory: ≤50-line L1 plus unbounded L2.
+2. Two-tier persisted memory: ≤50-line L1 plus a detailed-but-curated L2 (rotated at ~1,500 lines or release milestones).
 3. Mandatory `RULES.md` enforcement and termination protocol.
-4. User-gated continued-learning, Learned Failure, and deferred-finding capture.
+4. Three user-gated capture classes: Decision / Domain Learning, Learned Failure (LF#), and Deferred Finding.
 5. Per-component version counters and an auditable history of why.
 6. Serena semantic/symbolic code intelligence and GitNexus relationship/impact intelligence.
 

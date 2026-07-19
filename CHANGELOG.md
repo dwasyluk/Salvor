@@ -11,7 +11,7 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [1.0.0] — 2026-06-22
+## [1.0.0] — 2026-07-19
 
 Initial public release.
 
@@ -20,9 +20,26 @@ Initial public release.
   into any LLM CLI; it interviews your project and generates the full Salvor
   structure (hub-and-spoke `CLAUDE.md`, L1/L2 cache, `RULES.md`, `VERSION.md`
   with configurable per-component build IDs, component spokes).
-- **Three user-gated capture triggers** — Continued Learning (decision
-  rationale), Learned Failures (`LF#`), and Deferred TODOs (out-of-scope
-  findings), each with a verbatim user prompt and a defined propagation path.
+- **Installer safety** — the setup prompt runs a preflight check before writing
+  anything, never auto-commits (you review and commit the scaffold yourself),
+  and is idempotent: re-running it on an already-scaffolded repo detects
+  existing Salvor files and updates rather than clobbers.
+- **Core vs Enhanced modes** — Core mode works with files and prompts alone (no
+  extra tooling); Enhanced mode layers in the Serena and GitNexus MCP servers
+  for symbol-level memory and code-graph navigation. Same protocol either way.
+- **Three capture classes** (user-gated, verbatim-prompted, with defined
+  propagation paths) — **Decision/Domain Learning** (rationale behind choices),
+  **Learned Failure** (`LF#`, what didn't work and why), and **Deferred
+  Finding** (out-of-scope findings, filed to `.salvor/DEFERRED_TODOS.md`).
+- **Canonical ownership** — every piece of knowledge has exactly one canonical
+  home (`CLAUDE.md` hub, spokes, or `.salvor/`); vendor adapters stay thin
+  pointers and never duplicate content.
+- **L2 curation + security rules** — explicit rules for what belongs in the L2
+  deep archive vs L1, and a hard rule that secrets, credentials, and unredacted
+  logs never land in captured artifacts (see `SECURITY.md`).
+- **Spec Kit coexistence** — Salvor scopes itself to memory + governance and
+  coexists cleanly with spec-driven workflows (e.g. GitHub Spec Kit) rather
+  than competing for the same files.
 - **`.salvor/` layout** — the git-tracked "brain" (L1/L2, `DOMAIN_REF`, `INFRA`,
   `DEFERRED_TODOS`, `domain-learnings/`, `postmortems/`, and a `README` index) lives
   under one namespaced folder, so Salvor never squats in your project's `docs/`.
@@ -36,6 +53,11 @@ Initial public release.
 - **`example-project/`** — a tiny, real, runnable two-component app with Salvor
   fully applied (so Serena + GitNexus have real code to index).
 - Contribution scaffolding: `CONTRIBUTING.md`, GitHub issue/PR templates.
+- **`SECURITY.md`** — secret-handling expectations for `.salvor/` artifacts,
+  trust boundaries (MCP servers, agent/model providers), repository
+  prompt-injection guidance, and private vulnerability reporting.
+- **CI** — GitHub Actions workflow running the unit (node --test) and browser
+  (Playwright) suites on pushes and PRs to `main`.
 
 [Unreleased]: https://github.com/dwasyluk/salvor/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/dwasyluk/salvor/releases/tag/v1.0.0

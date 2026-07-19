@@ -5,7 +5,7 @@ This folder is salvor's git-tracked memory: the shared, canonical knowledge ever
 | File | What it is |
 |------|------------|
 | `active_state.md` | **L1** — ≤50-line dense current state and Learned Failures |
-| `active_state_verbose.md` | **L2** — unbounded deep archive of reasoning and rejected hypotheses |
+| `active_state_verbose.md` | **L2** — detailed but curated archive of reasoning and rejected hypotheses (rotated per `RULES.md` §0.3) |
 | `DOMAIN_REF.md` | Authoritative current truth and the LF# registry |
 | `INFRA.md` | Running, environment variables, deployment, external tools, and observability |
 | `DEFERRED_TODOS.md` | User-approved out-of-scope findings not yet fixed |

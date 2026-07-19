@@ -2,7 +2,8 @@
 
 This directory is a **filled-in example** of the structure that `SETUP_PROMPT.md` scaffolds. It's a real, runnable,
 two-component TypeScript app with the full Salvor brain applied on top — so you can see what a populated repo looks like
-(and so Serena + GitNexus have real code to index).
+(and so Serena + GitNexus have real code to index). It demonstrates the **optional strict profile**: every Optional
+Strict Engineering Default in `RULES.md` is enabled on top of the Core Protocol.
 
 The app itself is deliberately tiny: an in-memory **Notes** service.
 
@@ -19,11 +20,12 @@ The app itself is deliberately tiny: an in-memory **Notes** service.
 ## Layout
 - `CLAUDE.md` — hub (project overview, architecture table, memory + capture directives).
 - `AGENTS.md` — entrypoint adapter for `AGENTS.md`-native CLIs (Claude Code uses the `CLAUDE.md` hub).
-- `RULES.md` — §0–§8 development rules.
+- `RULES.md` — §0–§8 development rules (Core Protocol + the strict profile this example demonstrates).
 - `VERSION.md` — per-component build IDs (`API:01 | WEB:01`).
 - `api/`, `web/` — the two components, each with its own spoke `CLAUDE.md`.
-- `docs/` — L1 (`active_state.md`) + L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
-  and the `postmortems/` + `domain-learnings/` knowledge archives (with one worked LF-1 entry threaded through all of them).
+- `.salvor/` — L1 (`active_state.md`) + L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
+  and the `decisions/` + `postmortems/` + `domain-learnings/` knowledge archives (with one worked LF-1 entry threaded
+  through all of them).
 - `.serena/memories/` — committed shared-brain notes (codebase structure, suggested commands).
 
 ## Run it

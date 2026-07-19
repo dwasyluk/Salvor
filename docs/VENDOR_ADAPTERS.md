@@ -34,7 +34,7 @@ The pointer file says, in effect:
 
 > Before any work, read `CLAUDE.md` (hub) + the relevant component spoke +
 > `RULES.md` + `.salvor/active_state.md` (L1). Follow `RULES.md` exactly, including
-> the Task Termination Protocol and the three capture triggers. Do not duplicate or
+> the Task Termination Protocol and the three capture classes. Do not duplicate or
 > fork project knowledge into this adapter — shared truth lives in `CLAUDE.md`, the
 > spokes, `.salvor/`, and `.serena/memories/`.
 
@@ -56,6 +56,40 @@ the box; the core files they point at are identical.
   rough edge on Codex or Gemini? Open a
   [vendor adapter issue](https://github.com/dwasyluk/salvor/issues) or PR — exactly the
   kind of contribution Salvor wants.
+
+## The MCP substrate: Serena + GitNexus setup and ownership
+
+**Serena.** Current install:
+
+```bash
+uv tool install -p 3.13 serena-agent
+serena init
+```
+
+Then configure your MCP client per the official guide at
+<https://github.com/oraios/serena>. Serena also maintains its own optional memory
+folder, `.serena/memories/`. Salvor's stance: Serena memories are a **retrieval
+aid** — pointers and structural notes that help the agent find things — while
+`.salvor/` is the **canonical** engineering record. If the two ever disagree,
+`.salvor/` wins.
+
+**GitNexus.** Provides indexing, impact analysis, execution-flow tracing,
+generated skills/hooks, and context-file generation. The ownership contract:
+
+- GitNexus owns its index, its generated skills/hooks, and its marked
+  `<!-- gitnexus:start -->` / `<!-- gitnexus:end -->` block — which lives in the
+  **canonical `CLAUDE.md` hub only**. Vendor adapters (`AGENTS.md`, `GEMINI.md`)
+  stay thin; if `gitnexus analyze` mirrors the block into an adapter, strip it
+  back out.
+- A repo can opt out of GitNexus context blocks entirely via a `.gitnexusrc`
+  containing `{"skipContextFiles": true}` — **merge** this key into an existing
+  `.gitnexusrc`, never overwrite the file.
+- `.claude/skills/gitnexus/` is **generated locally** by `gitnexus analyze` and
+  is gitignored — which is why it's absent from the Salvor package: each machine
+  regenerates it against its own index.
+
+The division of labor in one line: **GitNexus remembers how the code is
+connected. Salvor preserves why the team made it that way.**
 
 ## Claude-Code-only conveniences (safe to skip elsewhere)
 

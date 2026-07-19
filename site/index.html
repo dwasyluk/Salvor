@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#ffffff" />
     <meta
       name="description"
-      content="Salvor gives every coding agent the same version-controlled memory: prompt-first, vendor-neutral, and local by default."
+      content="Salvor gives every coding agent the same version-controlled memory: prompt-first, vendor-neutral, no hosted service."
     />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Salvor v1.0.0 — Your repo remembers" />
@@ -91,8 +91,8 @@
           <p class="hero-tagline">Your repo remembers<span>.</span></p>
           <ul class="hero-points">
             <li><span aria-hidden="true">&gt;</span> Version-controlled memory for coding agents.</li>
+            <li><span aria-hidden="true">&gt;</span> Decisions, learned failures, domain knowledge, and deferred findings — reviewed in Git, available to the next session.</li>
             <li><span aria-hidden="true">&gt;</span> Prompt-first. Vendor-neutral.</li>
-            <li><span aria-hidden="true">&gt;</span> Claude Code plugin coming soon with v1.1.0.</li>
           </ul>
           <div class="hero-actions">
             <a
@@ -122,7 +122,7 @@
                 </svg>
               </div>
               <h2>The repo remembers why.</h2>
-              <p>Capture Domain Learnings, Learned Failures, decisions, and deferred work — with the reasoning behind them.</p>
+              <p>Preserves decisions, learned failures, domain knowledge, and deferred findings — with the reasoning behind them.</p>
             </article>
             <article class="reason-card">
               <div class="reason-heading">
@@ -143,7 +143,7 @@
                 </svg>
               </div>
               <h2>No SaaS, no lock-in.</h2>
-              <p>Local by default. Just files + two open-source MCP servers. Yours, in your repo, in your control.</p>
+              <p>No hosted service, no account. Serena and GitNexus run locally for their core workflows; your coding agent and model provider still process repository content per their own policies.</p>
             </article>
           </div>
         </section>
@@ -161,7 +161,7 @@
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="M17 42h22M20 36V23a8 8 0 0 1 16 0v13l5 6H15Zm5 12c2 3 6 3 8 0"/></svg>
-              <h2>3 User-Gated Triggers</h2><p>Continued Learning → Domain Learning or Decision; Learned Failure; Deferred TODO.</p>
+              <h2>3 Capture Classes</h2><p>User-gated Continued Learning: Decision / Domain Learning · Learned Failure · Deferred Finding.</p>
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="M7 30 29 8h20v20L27 50Z"/><circle cx="39" cy="18" r="3"/></svg>
@@ -173,8 +173,8 @@
             </article>
           </div>
           <div class="brain-summary">
-            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred work, postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale.</p>
-            <p>Every save is explicit. For a finding, the agent asks: <q>Save this as a domain learning? (yes/no)</q></p>
+            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred findings (<code>DEFERRED_TODOS.md</code>), postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale.</p>
+            <p>Every capture class is user-gated — durable saves need your explicit approval. For a finding, the agent asks: <q>Save this as a domain learning? (yes/no)</q></p>
           </div>
         </section>
 
@@ -182,7 +182,7 @@
           <div class="loop-heading">
             <p class="section-label">// THE SALVOR LOOP</p>
             <h2 id="loop-title">Every request makes the next one smarter.</h2>
-            <p>The shared brain supplies context before the work, then receives user-approved knowledge and rationale after it.</p>
+            <p>The shared brain supplies context before the work, then receives user-approved knowledge and rationale after it — so a fresh session starts from reviewed knowledge instead of reconstruction.</p>
           </div>
           <div class="loop-panels">
             <img
@@ -199,6 +199,21 @@
               loading="lazy"
               alt="Without Salvor: an isolated agent starts cold each session and covers the same ground again."
             />
+          </div>
+          <div class="loop-example">
+            <pre aria-label="The .salvor directory tree of a populated project"><code>.salvor/
+├── active_state.md
+├── active_state_verbose.md
+├── DOMAIN_REF.md
+├── INFRA.md
+├── DEFERRED_TODOS.md
+├── decisions/
+├── domain-learnings/
+└── postmortems/</code></pre>
+            <p>
+              This is what the brain looks like after real work — every file reviewed in Git.<br />
+              <a href="https://github.com/dwasyluk/salvor/tree/main/example-project">View a populated example <span aria-hidden="true">→</span></a>
+            </p>
           </div>
         </section>
 
@@ -219,6 +234,7 @@
                 <li>Commit the scaffold. Run <code>gitnexus analyze</code>.</li>
                 <li>You're done — your repo now has a memory.</li>
               </ol>
+              <p>Core works with repository files alone; Serena + GitNexus add semantic navigation and impact analysis (Enhanced). Setup doesn't fail without them.</p>
               <pre><code>$ cat SETUP_PROMPT.md
 $ # copy the output; paste into your CLI
 $ # answer the setup questions

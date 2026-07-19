@@ -4,7 +4,7 @@
 
 # Salvor
 
-### Give your codebase a memory — a version-controlled brain your whole team's AI shares.
+### A repo-native engineering memory and governance protocol for coding agents.
 
 [![release](https://img.shields.io/badge/release-v1.0.0-blue)](https://github.com/dwasyluk/salvor/releases)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -17,207 +17,280 @@
 
 ---
 
-## What is this?
+## The problem
 
-Out of the box, an LLM coding CLI **forgets everything between sessions.** The
-*why* behind a decision a teammate made two months ago — in another session, maybe
-on another model — is gone. Re-derived. Re-litigated. Or quietly lost.
+Code shows an agent what exists. It rarely preserves *why*.
 
-**Salvor is a disciplined structure you add to any repo** so that any AI agent —
-any session, any contributor, even a different vendor — works against the same
-accumulated, git-tracked knowledge. It is **prompt-first**: paste one prompt,
-answer a few questions, and your project gains a hub-and-spoke context layer, a
-two-tier persisted memory, a strict rules protocol, and three user-gated triggers
-that capture knowledge *and the reasoning behind it* as you work. All in git, so
-the whole team's agents share one compounding brain.
+A fresh coding-agent session can rediscover functions and dependencies. It
+cannot reliably recover why an architecture was chosen, which plausible
+approaches already failed, what a teammate validated earlier, or what was
+intentionally deferred. Every session starts without your project's
+accumulated reasoning — and re-derives, re-litigates, or quietly loses it.
 
-No SaaS. No lock-in. No account. Just files + two open-source MCP servers.
+Salvor gives that engineering knowledge a durable, reviewable home in the
+repository.
 
-## Is this another AI second brain?
+## Salvor's answer
 
-No. Salvor is the **codebase/team wedge** of the persistent-agent-memory trend:
-code-grounded, git-shared, governed, and engineering-specific. It borrows the
-good idea from LLM Wiki / GBrain-style systems: durable knowledge should
-compound instead of evaporating. Salvor applies it to software teams, where the
-canonical memory has to live in git and stay tied to code, commits, versions,
-failures, and impact analysis.
+Salvor is a **repo-native engineering memory and governance protocol for
+coding agents**. It preserves human-approved decisions, domain learnings,
+failed approaches, and deferred findings in Git — so fresh sessions and
+distributed teammates can continue from reviewed knowledge instead of
+reconstructing it.
 
-| | Built for | Lives in | Code-aware? |
+It is **prompt-first**: paste one setup prompt, answer four setup questions, and
+your project gains a hub-and-spoke context layer, a two-tier persisted memory,
+a rules protocol, and user-approved capture gates that record knowledge *and
+the reasoning behind it* as you work. Everything lives as plain Markdown in
+your repo — reviewable in PRs, diffable, branchable, vendor-neutral. No hosted
+service, no additional account.
+
+## The three capture classes
+
+Salvor's defining move: the agent **notices** knowledge worth keeping and
+**asks you, verbatim, before saving it**. Durable capture is user-approved —
+never silent, never automatic. (Routine L1/L2 operational state updates the
+agent maintains automatically; those are working memory, not durable capture.)
+
+| Capture class | What it preserves | The agent asks… | Lands in |
 |---|---|---|---|
-| **Salvor** | a **team's codebase** | **git, in your repo** | **yes** |
-| Obsidian + Claude | personal notes | a local vault | no |
-| GBrain | personal / company knowledge | a local database | no |
+| **Decision / Domain Learning** | **Design Decision** — an architecture or design choice + its rationale. **Domain Learning** — a validated discovery about your domain or system. | `"Record this as a design decision? (yes/no)"` · `"Save this as a domain learning? (yes/no)"` | `.salvor/decisions/` · `.salvor/domain-learnings/` |
+| **Learned Failure (LF#)** | A disproven approach or recurring failure mode + root cause — so no future session retries it. | *(via the same capture flow)* | `DOMAIN_REF.md` LF# registry + `.salvor/postmortems/` |
+| **Deferred Finding** | An out-of-scope observation or risk — parked, not dropped. | `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"` | `.salvor/DEFERRED_TODOS.md` |
 
-And it stays **local by default** — files in your repo plus two local MCP servers,
-no SaaS and no calendar/email/vault scopes. For the full comparison — plus RAG,
-`CLAUDE.md`, Cline Memory Bank, Cursor/Copilot, and vendor memory — see
-**[`docs/FAQ.md`](./docs/FAQ.md)**.
+"What we decided," "how we failed," and "what we noticed but parked" are
+different kinds of knowledge — Salvor gives each its own home.
 
-## Prerequisites — two MCP servers (and why)
+## What gets generated: the `.salvor/` tree
 
-Salvor stands on two free, open-source [MCP](https://modelcontextprotocol.io)
-servers. Install them once; they work across Claude Code, Codex, Gemini CLI, and
-Cursor.
+The scaffold Salvor creates in your repo:
 
-### 🧠 Serena — *semantic code intelligence*
-Lets your agent navigate code **by symbol** (find definitions, callers, references)
-and make targeted edits, instead of re-reading whole files into context. It's the
-IDE-agnostic way to get Cursor-like understanding in any CLI.
+```text
+.salvor/
+├── active_state.md            # L1 — concise current state (auto-maintained working memory)
+├── active_state_verbose.md    # L2 — deep archive: reasoning, history, rejected hypotheses
+├── DOMAIN_REF.md              # domain reference + Learned Failure (LF#) registry
+├── INFRA.md                   # infrastructure & operations notes
+├── DEFERRED_TODOS.md          # deferred findings, parked not dropped
+├── README.md                  # explains this directory to humans
+├── decisions/                 # user-approved design decisions
+├── domain-learnings/          # user-approved domain learnings
+└── postmortems/               # learned-failure postmortems
+```
 
-- **Install (Claude Code):**
-  ```bash
-  claude mcp add serena -- uvx --from git+https://github.com/oraios/serena \
-    serena start-mcp-server --context ide-assistant --project "$(pwd)"
-  ```
-  (Requires [`uv`](https://docs.astral.sh/uv/). Other CLIs: see the
-  [Serena README](https://github.com/oraios/serena).)
-- **Account / API key?** ❌ None. Fully local and free.
-
-### 🕸️ GitNexus — *codebase knowledge graph*
-Builds a graph of your code (symbols, relationships, execution flows) so the agent
-can run **impact analysis before it edits** — "what breaks if I change this?" — and
-stop shipping blind changes to code you have to assume is untested.
-
-- **Install:**
-  ```bash
-  npm i -g gitnexus && gitnexus setup
-  ```
-- **Account / API key?** ❌ None for core indexing/querying. *(Only the optional
-  `gitnexus wiki` doc generator wants an LLM API key.)*
-- **Docs:** [github.com/abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus)
+Plus vendor entrypoints at the repo root — `CLAUDE.md` (canonical hub) with
+thin `AGENTS.md` (Codex) and `GEMINI.md` pointer files — and `RULES.md` +
+`VERSION.md` for the governance protocol.
 
 ## Quickstart
 
 ```text
-1. Install the two MCP servers above (Serena + GitNexus).
-2. Open your LLM CLI in the project you want to give a memory to (new or existing).
-3. Paste the contents of SETUP_PROMPT.md.
-4. Answer a couple of questions: project name · components + stacks · (optional) paired-path parity.
-5. The agent scaffolds Salvor, makes the initial commit, and runs `gitnexus analyze`.
-6. Done — your repo now has a shared, version-controlled brain.
+1. Open your coding agent in the project you want to give a memory to (new or existing).
+2. Paste the contents of SETUP_PROMPT.md.
+3. The agent inspects your existing files first, then asks its four setup questions
+   (project name · components + stacks · optional paired-path parity).
+4. It scaffolds the Salvor structure, then OFFERS a reviewed commit — it never
+   auto-commits and never runs a blanket `git add -A`. You review, you approve.
+5. Done — your repo now carries its own reviewed engineering memory.
 ```
 
-👉 The whole installer is one file: **[`SETUP_PROMPT.md`](./SETUP_PROMPT.md)**.
+Setup works in **Core mode** even if no MCP tools are present — see
+[Core vs Enhanced](#core-vs-enhanced-mode) below. The whole installer is one
+file: **[`SETUP_PROMPT.md`](./SETUP_PROMPT.md)**.
 
-## Features
+## See it populated
 
-- **🎯 Hub-and-spoke context** — load only the component you're touching; pay for
-  the context you use.
-- **🧊 Two-tier memory** — L1 (≤50-line dense current state) + L2 (unbounded deep
-  archive). Cheap to read, complete to recover.
-- **🔔 Three user-gated capture triggers** — learnings & design decisions, failures,
-  and deferred TODOs, each captured *with their reasoning*, only when you say so.
-- **🧠 Serena** symbol intelligence + **🕸️ GitNexus** impact analysis, baked into
-  the workflow.
-- **🏷️ Per-component versioning** — `VERSION.md` as single source of truth, every
-  bump carrying its *why*.
-- **🔌 Multivendor out of the box** — `CLAUDE.md` + `AGENTS.md` + `GEMINI.md` entrypoints
-  generated by default; the core is vendor-neutral, no lock-in, no vendor to pick.
+**[View a populated example → `example-project/`](./example-project/)** — a
+tiny, real, runnable two-component app with Salvor fully applied: the hub +
+spokes, L1/L2, `VERSION.md`, a populated `.salvor/` tree with real decisions,
+a domain-learning artifact, a postmortem, and deferred findings, plus real
+code for the Enhanced-mode tools to index.
 
-## The core idea: three capture triggers
+## Core vs Enhanced mode
 
-Salvor's defining move — the agent **notices** knowledge worth keeping and **asks
-you, verbatim, before saving it.** Never silent (so capture can't fail unnoticed),
-never automatic (so your docs don't bloat without your say):
+| | What it is | What you get |
+|---|---|---|
+| **Salvor Core** | Repository files + vendor entrypoints only. No MCP servers required. | Persistent, Git-reviewed engineering memory: capture classes, L1/L2 state, hub-and-spoke context, rules protocol, per-component versioning. |
+| **Salvor Enhanced** | Core **plus** [Serena](https://github.com/oraios/serena) and [GitNexus](https://github.com/abhigyanpatwari/GitNexus). | Adds semantic symbol navigation (Serena) and graph impact analysis before edits (GitNexus). |
 
-| Trigger | Captures | The agent asks… | Lands in |
-|---|---|---|---|
-| **Continued Learning** | a discovery, decision, or **design invariant** + its *why* | `"…domain learning?"` (finding) · `"Record this as a design decision?"` (decision) | `.salvor/domain-learnings/` or `.salvor/decisions/` + `DOMAIN_REF.md` + L1/L2 |
-| **Learned Failure (LF#)** | a recurring failure mode + root cause | *(via the same flow)* | `DOMAIN_REF.md` LF# registry |
-| **Deferred TODO** | an out-of-scope finding, parked not dropped | `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"` | `.salvor/DEFERRED_TODOS.md` |
+Every memory and governance claim in this README holds in **Core** mode.
+Claims about symbol-level navigation, "what breaks if I change this?" impact
+analysis, and code-graph awareness require **Enhanced** mode.
 
-"What we learned," "how we failed," and "what we noticed but parked" are different
-kinds of knowledge — Salvor gives each its own home.
+## Lifecycle: the Salvor Loop
 
-## How it works
-
-Five pillars: hub-and-spoke context · two-tier persisted memory · a `RULES.md`
-enforcement protocol · a versioned audit trail of the *why* · and the
-Serena + GitNexus MCP substrate. Full write-up in
-**[`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)**.
-
-## The Salvor Loop
-
-Every request runs through the shared brain, then feeds what it learns back into the next session.
+Each session starts by loading the hub and L1 state — the compressed,
+reviewed "now" of the project. As work proceeds, the agent navigates code
+(Enhanced mode adds symbol- and graph-level intelligence), and when it
+surfaces something durable, a capture gate asks you before anything is saved.
+Finishing a task means updating L1/L2, the affected component spoke, and the
+version record — so the memory stays tied to the code it describes. Salvor is
+designed so the next session starts from reviewed knowledge instead of
+reconstruction.
 
 <p align="center">
   <img src="assets/salvor-loop.svg" width="900" alt="The Salvor Loop: nine phases build context, act, and feed durable knowledge back into the repository brain, contrasted with an agent that starts cold without Salvor."/>
 </p>
 
-*Every phase reads from and writes back to the brain. Every request makes the next one smarter.*
+*Every request makes the next one smarter.*
 
-## Try it
+Full write-up of the five pillars in
+**[`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)**.
 
-**[`example-project/`](./example-project/)** is a tiny, real, runnable two-component
-app with Salvor fully applied — so you can see the populated `CLAUDE.md` hub +
-spokes, L1/L2, `VERSION.md`, `DEFERRED_TODOS`, a sample postmortem and domain-learning
-artifact, and real code for Serena + GitNexus to index.
+## Enhanced mode: Serena + GitNexus
+
+Two free, local tools give the agent code intelligence to pair with Salvor's
+memory. Neither is affiliated with Salvor; both run locally for their
+documented core workflows.
+
+### 🧠 Serena — semantic symbol navigation
+
+Lets your agent navigate code **by symbol** (definitions, callers,
+references) and make targeted edits instead of re-reading whole files.
+
+```bash
+uv tool install -p 3.13 serena-agent
+serena init
+```
+
+Then follow the [Serena README](https://github.com/oraios/serena) for your
+client's MCP configuration. Serena also has its own optional memory feature:
+in a Salvor project, `.serena/memories/` holds **retrieval pointers** into the
+codebase, while `.salvor/` stays the **canonical** engineering record.
+
+### 🕸️ GitNexus — graph impact analysis
+
+Builds a knowledge graph of your code (symbols, relationships, execution
+flows) so the agent can ask **"what breaks if I change this?"** before
+editing.
+
+```bash
+npm install -g gitnexus
+```
+
+No account is needed for core indexing and impact analysis. (The optional
+`gitnexus wiki` doc generator wants an LLM API key.) Docs:
+[github.com/abhigyanpatwari/GitNexus](https://github.com/abhigyanpatwari/GitNexus).
+
+## Multi-agent & distributed teams
+
+Salvor's memory travels the same way your code does: through Git.
+
+- **Distributed teammates** — a colleague's agent in another timezone reads
+  the same reviewed decisions, learned failures, and deferred findings you
+  approved, because they're in the repo, not in someone's local tool state.
+- **Mixed vendors** — `CLAUDE.md` / `AGENTS.md` / `GEMINI.md` entrypoints are
+  generated by default, so Claude Code, Codex, and Gemini CLI teammates all
+  inherit one canonical hub. Switch vendors next year; the memory stays.
+- **Parallel agents** — capture gates keep concurrent sessions from silently
+  overwriting each other's knowledge: durable writes are explicit, reviewed,
+  and land as ordinary diffs you can merge like any other change.
+- **Review as governance** — because capture artifacts are files, a PR review
+  of the memory *is* the team's approval process. Bad captures get caught the
+  same way bad code does.
+
+## Spec Kit coexistence
+
+[GitHub Spec Kit](https://github.com/github/spec-kit) and Salvor solve
+adjacent problems and work well together: Spec Kit governs the future-facing
+spec → plan → tasks → implement workflow for *what should be built*; Salvor
+preserves the longitudinal engineering memory accumulated while the system
+evolves. Use Spec Kit to drive a feature forward; use Salvor so the reasoning,
+failures, and validated learnings from building it survive into every later
+session. More in **[`docs/FAQ.md`](./docs/FAQ.md)**.
+
+## How Salvor relates to other tools
+
+Not "another AI second brain" — a different job. Most memory tools serve a
+person or a runtime; Salvor serves a repository. By job-to-be-done:
+
+| Tool | Primary job | Relationship to Salvor |
+|---|---|---|
+| [GitHub Spec Kit](https://github.com/github/spec-kit) | Future-facing spec → plan → tasks → implement workflow | Complementary: Spec Kit governs what should be built; Salvor preserves the longitudinal engineering memory accumulated while the system evolves. |
+| [Serena](https://github.com/oraios/serena) | Semantic code intelligence, with an optional memory substrate | Salvor decides *what gets promoted* to durable memory and owns the canonical artifacts; Serena's memories serve as retrieval pointers. |
+| [GitNexus](https://github.com/abhigyanpatwari/GitNexus) | Code knowledge graph + impact analysis | GitNexus remembers how the code is connected. Salvor preserves why the team made it that way. |
+| Vendor memory (Claude Code / Codex / Gemini project instructions & memories) | Personal, tool-specific continuity and preferences | Salvor is the repository's reviewed, shared record — it survives vendor switches and is diffable in PRs. Use both. |
+| [Cline Memory Bank](https://docs.cline.bot/prompting/cline-memory-bank) | Structured repo-memory methodology for an agent | Closest cousin. Salvor adds explicit capture approval, distinct knowledge classes, learned-failure retention, canonical ownership, and team governance. |
+| [Obsidian](https://obsidian.md) | General knowledge vault shaped around a person or team | Salvor is a repo-local protocol with capture gates and code-intelligence integration, not a general vault. |
+| [Google ADK](https://google.github.io/adk-docs/) | Runtime framework for *building* agents | Orthogonal: Salvor helps teams retain repo reasoning while building software — including ADK software. |
+
+Deeper comparisons (RAG, plain `CLAUDE.md`, memory runtimes, and more) in
+**[`docs/FAQ.md`](./docs/FAQ.md)**.
+
+## Who it's for — honestly
+
+Salvor pays off where knowledge compounds:
+
+- **Repeated agent use in the same repo** — the memory grows with every session.
+- **Long-lived, multi-component codebases** — where "why is it like this?" is a
+  daily question.
+- **Distributed teams** — reviewed knowledge instead of tribal knowledge.
+- **Vendor switchers** — the record outlives any one tool.
+
+It is honestly unnecessary for disposable prototypes, one-off scripts, or
+repos you'll only ever open in a single session. If there's no second session,
+there's nothing to salvage.
+
+## Security & privacy
+
+Salvor introduces no hosted service or additional account. Serena and GitNexus
+operate locally for their documented core workflows. Your selected coding
+agent and model provider may still process repository content according to
+their configuration and data-handling policies.
+
+Never store secrets, credentials, or keys in `.salvor/` — it is committed,
+shared project memory. See [`SECURITY.md`](./SECURITY.md) for reporting and
+details.
+
+## Contributing & roadmap
+
+Salvor v1 is the foundation, not the finish line. The point of open-sourcing
+it is to build the harder pieces together — issues tagged
+[`help wanted`](https://github.com/dwasyluk/salvor/labels/help%20wanted) and
+[`good first issue`](https://github.com/dwasyluk/salvor/labels/good%20first%20issue):
+
+- **🧬 L1/L2 as embeddings** — a pluggable vector-DB backend for
+  similarity-based retrieval of prior reasoning, with Markdown remaining the
+  git-shared source of truth.
+- **🌲 First-class git-worktree support** — merge-friendly conventions so
+  parallel agents across worktrees don't clobber the shared memory.
+- **🧠 Sub-brains → master brain** — scoped per-agent ledgers that roll durable
+  learnings up to the project's shared L1/L2, gated by the same capture classes.
+- **🩺 Salvor health checks** — lint the memory for stale L1 lines, unresolved
+  LF# entries, broken links, aging deferred findings, drifted GitNexus blocks,
+  and component spokes that fell behind the code.
+- **📥 Existing-repo adoption/import** — scan ADRs, READMEs, postmortems, and
+  existing agent instruction files, then propose the initial Salvor structure.
+- **🔌 More vendor adapters** — harden the Codex & Gemini entrypoints; add
+  Cursor / OpenCode / others.
+- **🧩 Vendor plugins** — a Claude Code plugin (a convenience wrapper over the
+  same universal `SETUP_PROMPT.md`) is coming soon. Always a wrapper, never a
+  replacement for the paste-anywhere floor that keeps Salvor vendor-agnostic.
+  Codex and Gemini equivalents are open for contributors.
+
+Contributions welcome beyond the roadmap too:
+
+- 🐛 **Issues** and 💡 **feature requests** — [open one](https://github.com/dwasyluk/salvor/issues).
+- 💬 **Questions / ideas** — [Discussions](https://github.com/dwasyluk/salvor/discussions).
+- 🔧 **PRs** — especially new **vendor adapters** and **example projects** in
+  other stacks. See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
+
+## Why "Salvor"?
+
+A *salvor* is one who salvages — someone who recovers what would otherwise be
+lost. For the [Foundation](https://en.wikipedia.org/wiki/Foundation_(TV_series))
+fans: Salvor Hardin kept the Foundation alive through its first crisis with
+knowledge rather than force, and the Prime Radiant — the faceted gem in our
+logo — is the device that carries the accumulated plan across generations. A
+version-controlled record that preserves a codebase's reasoning across resets
+is the same idea, scaled down to your repo. 🔷
 
 ## Docs
 
 - [`SETUP_PROMPT.md`](./SETUP_PROMPT.md) — the one-shot installer
-- [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — the five pillars + the
-  shared-vs-per-user and Salvor-vs-your-project distinctions
-- [`docs/VENDOR_ADAPTERS.md`](./docs/VENDOR_ADAPTERS.md) — using Salvor on Codex,
-  Gemini, and beyond
-- [`docs/FAQ.md`](./docs/FAQ.md) — how Salvor differs from second brains, GBrain,
-  Obsidian, RAG, vendor memory, Cursor/Copilot, and plain `CLAUDE.md`
-
-## Roadmap — help wanted
-
-Salvor v1 is the foundation, not the finish line. The whole point of open-sourcing
-it is to build the harder pieces *together*. If any of these resonate, come build
-it — issues tagged [`help wanted`](https://github.com/dwasyluk/salvor/labels/help%20wanted)
-and [`good first issue`](https://github.com/dwasyluk/salvor/labels/good%20first%20issue):
-
-- **🧬 L1/L2 as embeddings** — a pluggable vector-DB backend so the agent retrieves
-  the *most relevant* prior reasoning by similarity, with Markdown still the
-  git-shared source of truth.
-- **🌲 First-class git-worktree support** — merge-friendly conventions so parallel
-  agents across worktrees don't clobber the shared brain.
-- **🧠 Sub-brains → master brain** — scoped per-agent ledgers that roll their
-  durable learnings up to the project's shared L1/L2 (gated by the same triggers).
-- **🩺 Salvor health checks** — lint the shared brain for stale L1 lines, unresolved
-  LF# entries, broken links, aging deferred TODOs, drifted GitNexus blocks, and
-  component spokes that fell behind the code.
-- **📥 Existing-repo adoption/import** — scan ADRs, READMEs, docs, postmortems, and
-  existing agent instruction files, then propose the initial Salvor structure
-  instead of making teams start from a blank context layer.
-- **🔌 More vendor adapters** — harden the default Codex & Gemini entrypoints; add Cursor / OpenCode / others.
-- **🧩 Vendor plugins (a convenience layer over the prompt)** — a **Claude Code plugin is
-  in active development and ships with v1.1.0**: a one-command install that bundles the MCP
-  setup on top of the same universal `SETUP_PROMPT.md` — always a wrapper, never a
-  replacement for the paste-anywhere floor that keeps Salvor vendor-agnostic. Equivalents
-  for Codex and Gemini are open for contributors.
-
-Have a different idea? [Open a discussion](https://github.com/dwasyluk/salvor/discussions).
-
-## Contributing & community
-
-Salvor gets better when more people use it on more kinds of projects.
-
-- 🐛 **Issues** and 💡 **feature requests** — [open one](https://github.com/dwasyluk/salvor/issues).
-- 💬 **Questions / ideas** — [Discussions](https://github.com/dwasyluk/salvor/discussions).
-- 🔧 **PRs welcome** — especially new **vendor adapters** and **example projects**
-  in other stacks. See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
-
-## Why "Salvor"?
-
-Two readings, one idea.
-
-**Plainly:** a *salvor* is one who salvages — someone who recovers what would
-otherwise be lost. That's the job: salvage your project's knowledge before the next
-session, the next dev, or the next model erases it.
-
-**For the [Foundation](https://en.wikipedia.org/wiki/Foundation_(TV_series)) fans:**
-Isaac Asimov's *psychohistory* is the science of preserving a civilization's
-accumulated knowledge so a coming dark age can't wipe it out — encoding the *why*
-behind everything into a device that guides the future. **Salvor Hardin** kept the
-Foundation alive through its first crisis with knowledge and wits, not force. And
-the **Prime Radiant** — the glowing faceted gem in our logo — is the object that
-holds the entire plan and carries it across the centuries. A version-controlled
-brain that preserves a codebase's reasoning across resets is the same idea, scaled
-down to your repo. 🔷
+- [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — the five pillars
+- [`docs/VENDOR_ADAPTERS.md`](./docs/VENDOR_ADAPTERS.md) — Codex, Gemini, and beyond
+- [`docs/FAQ.md`](./docs/FAQ.md) — full comparisons and common questions
 
 ## License
 

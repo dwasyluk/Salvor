@@ -7,11 +7,10 @@ Markdown documentation comprising root `README.md` and the complete `docs/` dire
 - `ARCHITECTURE.md` — Salvor's design and memory model
 - `VENDOR_ADAPTERS.md` — cross-vendor adapter support and constraints
 - `FAQ.md` — positioning, trust, and operational questions
-- `superpowers/specs/` and `superpowers/plans/` — approved design and execution records
 
 ## Architecture Notes
 - Keep public claims consistent with `../SETUP_PROMPT.md` and current implementation status.
-- Documentation is canonical source material for the future generated website mirror.
+- Documentation is canonical source material for the GitHub Pages presentation mirror on `ghpages/v1.0.0`.
 - New website presentation elements require operator design approval; documentation changes do not silently invent page structure.
 
 ## Validation

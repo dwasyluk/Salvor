@@ -8,7 +8,7 @@ entrypoints live at the repo root: `CLAUDE.md` hub + `api`/`web` spokes, `RULES.
 | File | What it is |
 |------|-----------|
 | `active_state.md` | **L1** — ≤50-line dense current state + Learned Failures (auto-loaded) |
-| `active_state_verbose.md` | **L2** — unbounded deep archive: reasoning, rejected hypotheses |
+| `active_state_verbose.md` | **L2** — detailed but curated archive: reasoning, rejected hypotheses (rotated per `RULES.md` §0.3) |
 | `DOMAIN_REF.md` | Authoritative current truth + the `LF#` learned-failure registry |
 | `INFRA.md` | Running, env vars, deployment, external APIs |
 | `DEFERRED_TODOS.md` | Out-of-scope findings parked (not yet fixed) |

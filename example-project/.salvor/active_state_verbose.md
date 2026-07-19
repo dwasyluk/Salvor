@@ -1,12 +1,13 @@
 # Notebook Active State — VERBOSE ARCHIVE
 
-L2 cache. No line limit. Append-only deep history of reasoning, rejected hypotheses, raw tool outputs, and detail pruned
-from L1. Update trigger: immediately after every L1 update.
+L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at release milestones, condense the oldest
+resolved sections — keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise. Deep
+history of reasoning, rejected hypotheses, and detail pruned from L1. Update trigger: immediately after every L1 update.
 
 ---
 
 ## 2026-06-22 — Project initialized
-Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§8, VERSION.md, three capture triggers.
+Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§8, VERSION.md, three capture classes.
 
 The project is a worked Salvor example named **Notebook** — a tiny notes service split into two components:
 - `api` — Node + TypeScript on the built-in `http` module (no framework). In-memory `Map<string, Note>` store. Routes:

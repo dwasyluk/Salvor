@@ -30,7 +30,7 @@ test("the site mirrors the canonical framework taxonomy and governance", async (
     /Save this as a domain learning\? \(yes\/no\)/i,
     /Continued Learning/i,
     /Learned Failure/i,
-    /Deferred TODO/i,
+    /Deferred Finding/i,
     /RULES\.md\s+§0/i,
     /per-component\s+VERSION\.md/i,
     /Serena \+ GitNexus/i,
@@ -118,7 +118,7 @@ test("repository surfaces include the canonical loop and deploy only this versio
     read(".gitignore"),
   ]);
   assert.match(readme, /assets\/salvor-loop\.svg/);
-  assert.match(workflow, /branches:\s*\["ghpages\/v1\.0\.0"\]/);
+  assert.match(workflow, /branches:\s*\["main"\]/);
   assert.match(workflow, /path:\s*\.\/site/);
   assert.match(ignore, /playwright-report\//);
   assert.match(ignore, /test-results\//);

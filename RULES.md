@@ -2,6 +2,11 @@
 
 These rules are MANDATORY. They supplement `CLAUDE.md` and take precedence over default behavior.
 
+## Protocol Tiers
+
+- **Core Protocol (always on):** context loading and hub/spoke reading (§6.1), L1/L2 memory maintenance (§0.2–0.3), user-gated capture approval (§2, §7), context recovery (§1), security and git-safe operation (§5.2, §5.3), canonical ownership and memory layers (§8), and vendor portability via thin adapters. Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
+- **Optional Strict Engineering Defaults:** these defaults are optional, editable, and project-specific; disabling them does not break Salvor Core. They cover component build counters (§0.1, §3), env-var conventions (§4.4, §6.2), the branch-deletion rule (§6.11), container permission rules (§5.1), impact analysis before every edit (§4.3), the >100-line search-before-read limit (§4.1), and mirror parity (§0.5, §6.3).
+
 ---
 
 ## 0. CRITICAL: Task Termination Protocol
@@ -10,13 +15,13 @@ Before declaring any task complete, verify and execute this checklist. No task i
 
 1. **Version Check:** If logic or owned content in a component changed, increment its build ID in `VERSION.md`, update the date, and add a component-specific history entry. Versions derive from `VERSION.md`; do not hardcode them in source.
 2. **L1 Sync:** Update `.salvor/active_state.md` in dense shorthand and keep it under 50 lines.
-3. **L2 Sync:** Update `.salvor/active_state_verbose.md` immediately after L1 with full reasoning, logs, and nuance.
+3. **L2 Sync:** Update `.salvor/active_state_verbose.md` immediately after L1 with full reasoning, logs, and nuance. L2 is detailed but curated, not unbounded: when it exceeds ~1,500 lines or at release milestones, condense the oldest resolved sections — keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise. Never persist material listed in §5.3.
 4. **Spoke Sync:** Update the changed component's `CLAUDE.md`; update `.salvor/DOMAIN_REF.md` for domain logic and `.salvor/INFRA.md` for infrastructure. Do not put component-specific detail in root `CLAUDE.md`.
 5. **Repository ↔ Website Parity:** Canonical public claims live in `README.md`, `SETUP_PROMPT.md`, and `docs/VENDOR_ADAPTERS.md`; `ghpages/v1.0.0` is their presentation mirror. Every source-of-truth sync must run direct Playwright checks at desktop, tablet, small-phone, and 320px narrow sizes. New page sections, interactions, or visual elements require explicit operator design approval. See §6.3.
 
-## 1. Dementia Recovery Procedure
+## 1. Context Recovery Procedure
 
-If the operator mentions “Dementia” or a logic loop occurs:
+If the operator requests context recovery or a logic loop occurs:
 
 1. Stop all code generation.
 2. Re-read `.salvor/active_state_verbose.md` from the beginning.
@@ -25,17 +30,21 @@ If the operator mentions “Dementia” or a logic loop occurs:
 
 ## 2. Continued Learning Protocol
 
-Every domain discovery, hypothesis falsification, validation, vendor/model verdict, parameter learning, evidence-backed bakeoff, dependency probe, technique validation, Learned Failure, or durable taxonomy clarification is a mandatory save checkpoint.
+This protocol covers the first two capture classes: **Decision / Domain Learning** and **Learned Failure (LF#)**. (The third class, **Deferred Finding**, is covered by §7.)
 
-At each trigger, pause and ask verbatim:
+Every domain discovery, hypothesis falsification, validation, vendor/model verdict, parameter learning, evidence-backed bakeoff, dependency probe, technique validation, Learned Failure, deliberate design decision or load-bearing invariant, or durable taxonomy clarification is a mandatory save checkpoint.
 
-> "Save this as a domain learning? (yes/no)"
+At each trigger, pause and ask verbatim — the phrasing that matches the subtype:
+
+> "Save this as a domain learning? (yes/no)" — an empirical finding (**Domain Learning** → `.salvor/domain-learnings/`)
+>
+> "Record this as a design decision? (yes/no)" — a design decision / invariant (**Design Decision** → `.salvor/decisions/`)
 
 Do not infer the answer, batch unrelated discoveries, or defer the prompt.
 
 On `yes`:
 
-1. Create `.salvor/domain-learnings/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` following its README, including hypothesis, evidence, datasets, verdict, and cross-links.
+1. Create `.salvor/domain-learnings/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` following its README, including hypothesis, evidence, datasets, verdict, and cross-links — or, for a design decision, `.salvor/decisions/YYYY-MM-DD-[slug].md` (Context, Decision, Rationale, Invariant, Coupling, Alternatives).
 2. Add it to the chronological index in `.salvor/domain-learnings/README.md`.
 3. Update `.salvor/DOMAIN_REF.md` as current truth, including any new or revised LF#.
 4. Update affected root context, component spoke, L1, L2, and `.serena/memories/`.
@@ -66,6 +75,7 @@ On `no`, acknowledge and continue without saving any partial artifact.
 
 1. Docker/container build, up/down, or restart requires explicit operator permission because parallel sessions may be active.
 2. Calls that mutate production or external state, cost money, or touch shared infrastructure require explicit operator permission.
+3. **Never-persist list.** Never write any of the following into L1, L2, or any `.salvor/` or context file: API keys, passwords, tokens, private keys, `.env` contents, credential-bearing URLs, customer PII, unredacted production logs, large raw dumps, or hidden model reasoning. Other sections reference this list rather than restating it.
 
 ## 6. Coding Required Practices
 
@@ -81,9 +91,9 @@ On `no`, acknowledge and continue without saving any partial artifact.
 10. Production-affecting changes involving money, customer data, external mutations, or shared infrastructure require operator diff acknowledgement before deployment.
 11. Delete merged branches locally and remotely in the same task after merge and push; long-lived integration branches require operator confirmation.
 
-## 7. Out-of-Scope Finding Capture
+## 7. Out-of-Scope Finding Capture (Deferred Finding)
 
-When work surfaces an unrelated bug, risk, or debt item, pause and ask verbatim:
+This is the third capture class: **Deferred Finding**. When work surfaces an unrelated bug, risk, or debt item, pause and ask verbatim:
 
 > "Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"
 

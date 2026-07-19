@@ -2,9 +2,11 @@
 
 > **How to use this file:** copy everything below the line into your LLM coding
 > CLI (Claude Code, Codex, Gemini CLI, …) from the root of the project you want
-> to give a memory to — new or existing. The agent will interview your project,
-> then scaffold the full Salvor structure. Prerequisites (Serena + GitNexus MCP
-> servers) are covered in the repo `README.md`; install them first.
+> to give a memory to — new or existing. The agent runs a safety preflight, asks
+> **four setup questions**, then scaffolds the full Salvor structure. Setup
+> never blanket-stages files and never commits without asking you first. Serena +
+> GitNexus MCP servers are **optional** (Enhanced mode — see Step 0); Salvor
+> Core works with repository files alone.
 
 ---
 
@@ -14,32 +16,90 @@ compound across sessions, developers, and even different LLM vendors, instead of
 evaporating on context rotation.
 
 Salvor gives this repo: a **hub-and-spoke** `CLAUDE.md` (token-thrifty context),
-a **two-tier persisted memory** (L1 concise + L2 deep), a strict **`RULES.md`**,
-**three user-gated knowledge-capture triggers**, **per-component versioning**,
-and **Serena + GitNexus** discipline. Set it up exactly as specified below.
+a **two-tier persisted memory** (L1 concise + L2 curated deep archive), a
+**`RULES.md`** split into a Core Protocol plus optional strict defaults, **three
+user-gated capture classes** (Decision / Domain Learning, Learned Failure,
+Deferred Finding), **per-component versioning**, and optional **Serena +
+GitNexus** discipline (Enhanced mode). Set it up exactly as specified below.
 
 Everything Salvor writes is **in-repo and git-tracked** — that is the *shared*
 brain every contributor's agent reads. (A per-user auto-memory layer is an
 optional, vendor-specific enhancement; see Step 4.)
 
+The capture contract in one line: Salvor may update concise operational state as
+work progresses. It must ask before promoting a decision, domain learning,
+learned failure, or deferred finding into the repository's durable shared
+engineering record.
+
 ---
 
-## Step 0 — Confirm prerequisites
+## Step 0 — Preflight: inspect before touching anything
 
-Before scaffolding, verify (and tell me if any are missing):
+Run this ENTIRE step before creating or modifying any file. The prime directive
+for all of setup: **never overwrite anything silently**.
 
-- **Serena** MCP server is available (semantic/symbolic code intelligence).
-- **GitNexus** CLI/MCP is available (`gitnexus --version`) for the code
-  knowledge graph.
-- This directory is a git repository (`git rev-parse --git-dir`). If not, ask me
-  before running `git init`.
+### 0.1 Repo & working-tree check
+- Confirm the intended repo root (`git rev-parse --show-toplevel`) and state it.
+  The directory must be a git repository (`git rev-parse --git-dir`); if not,
+  ask me before running `git init`.
+- Run `git status --short` and report any uncommitted work. Setup must never
+  stage, revert, or entangle unrelated in-flight changes.
 
-Neither Serena nor GitNexus core features require an account or API key. If
-either is missing, point me to the repo README's Prerequisites section.
+### 0.2 Existing-installation & conflict scan
+Detect and report which of these already exist:
+- `.salvor/`, `.serena/`, `.gitnexusrc`, `.gitnexus/`, `.specify/`, `specs/`
+- `CLAUDE.md`, `CLAUDE.local.md`, `AGENTS.md`, `GEMINI.md`, `RULES.md`, `VERSION.md`
+- `.claude/`, `.codex/`, `.gemini/`, and any MCP configuration (`.mcp.json`,
+  client config files)
+- GitNexus-managed blocks (`<!-- gitnexus:start --> … <!-- gitnexus:end -->`)
+  inside instruction files
+- Third-party instruction sections in `CLAUDE.md` / `AGENTS.md` / `GEMINI.md`
+  (other tools' managed blocks, hand-written project guidance)
+
+**If `.salvor/` already exists, this is an update, not an install.** Identify
+the installed version (`VERSION.md` header + `.salvor/README.md`), report it,
+and propose a **repair/update plan** (add missing files, refresh Salvor-managed
+sections) instead of reinstalling. Never overwrite accumulated project knowledge
+(`active_state*.md`, `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
+`decisions/`, `domain-learnings/`, `postmortems/`) and never re-seed sample or
+template content over real content.
+
+**If Spec Kit is present (`.specify/` or `specs/`):** its artifacts —
+constitution, specs, plans, tasks — remain canonical *in place*. Salvor links to
+them and never duplicates them; preserve Spec Kit's agent files and merge
+instructions rather than replacing them. Spec Kit governs what should be built
+and how a feature moves from specification to implementation. Salvor preserves
+the longitudinal engineering memory accumulated while the system evolves.
+
+### 0.3 Tooling check — Core vs Enhanced mode
+Salvor runs in one of two modes:
+- **Salvor Core** — works with repository files + vendor entrypoints alone:
+  `.salvor/` artifacts, user-gated capture approval, canonical ownership, L1/L2
+  state, context recovery, and Git-based sharing. No MCP servers required.
+- **Enhanced mode** — Core plus **Serena** (semantic/symbolic code navigation)
+  and **GitNexus** (code knowledge graph + impact analysis).
+
+Check availability: Serena (`serena --version`, or its MCP server responding)
+and GitNexus (`gitnexus --version`). Neither's core feature set requires an
+account or API key. If either is missing, offer me exactly these options and
+wait for my choice:
+
+  1. **Show official install instructions.** Serena:
+     `uv tool install -p 3.13 serena-agent`, then `serena init`; client-specific
+     MCP wiring per the official docs — https://github.com/oraios/serena (link
+     there rather than per-client commands, which change). GitNexus: per its
+     official README.
+  2. **Continue in Core mode** — everything works except semantic navigation and
+     impact analysis; the generated files mark Enhanced-only rules inactive.
+  3. **Cancel setup.**
+
+NEVER silently install packages or modify global MCP configuration. Setup must
+not fail when MCP tooling is missing — and must never report an Enhanced
+install as complete when it actually proceeded in Core mode.
 
 ## Step 1 — Confirm scope before writing files
 
-Ask me these **three** questions in a single question call (or inline if your CLI
+Ask me these **four** questions in a single question call (or inline if your CLI
 has no structured-question tool) BEFORE creating anything:
 
 1. **Project name** — the top-level identifier (e.g. "Atlas", "Helix"). Don't
@@ -59,6 +119,14 @@ has no structured-question tool) BEFORE creating anything:
    a live path and a simulator/replay used in tests; a client and a hand-written
    mock of it. If yes, name both files and they get a parity rule in `RULES.md`.
    If not, answer `none` and the parity rule is omitted from §0 / §6.
+4. **Enable Optional Strict Engineering Defaults? (yes/no)** — beyond the Core
+   Protocol, `RULES.md` ships opinionated strict defaults (build counters,
+   mirror parity, impact-analysis-before-every-edit, whole-file-read limits,
+   env-var conventions, container permission gates, branch-deletion hygiene).
+   They are optional, editable, and project-specific; disabling them never
+   breaks Core. For an existing repo they apply only with your explicit
+   consent — answer `no` and the generated `RULES.md` marks the `[STRICT]`
+   sections disabled until your team opts in.
 > **Vendor entrypoints are automatic — no need to choose.** Every project gets all three
 > by default: `CLAUDE.md` (the canonical hub) plus thin `AGENTS.md` (Codex) and `GEMINI.md`
 > (Gemini) pointer files, so any teammate's CLI works out of the box. The core is
@@ -72,7 +140,23 @@ proceed to Step 2.
 > `<MIRROR_FILE>` from my answers. The examples use components `api`/`web`/`worker`
 > with IDs `API`/`WEB`/`WKR` — replace with mine.
 
-## Step 2 — Create the file tree
+## Step 2 — Present the setup plan, then create the file tree
+
+**Approval gate — before writing anything**, present in one message, based on
+the Step 0 scan and my Step 1 answers:
+- **Files to create** (new, no conflict)
+- **Files to modify** (existing files gaining or updating a Salvor-managed section)
+- **Files unchanged**
+- **Conflicts** (existing content overlapping Salvor's role) and the **merge
+  strategy** for each.
+
+Merge rule for existing instruction files (`CLAUDE.md`, `AGENTS.md`,
+`GEMINI.md`, `RULES.md`, …): Salvor content goes into a clearly delimited
+managed section — `<!-- salvor:start --> … <!-- salvor:end -->`. Update an
+existing managed block in place; never duplicate a managed block; preserve ALL
+existing project and third-party guidance verbatim. Wait for my approval of the
+plan, then scaffold. When scaffolding is done, show me the completed diff of
+every file created or modified.
 
 > **Layout:** vendor entrypoints (`CLAUDE.md` hub + component spokes,
 > `AGENTS.md`/`GEMINI.md`) and governance (`RULES.md`, `VERSION.md`) live at the repo
@@ -87,7 +171,7 @@ proceed to Step 2.
 ### CURRENT STATE (L1 Cache)
 @.salvor/active_state.md
 
-> For deep historical context, architecture logs, or dementia recovery: `.salvor/active_state_verbose.md`
+> For deep historical context, architecture logs, or context recovery: `.salvor/active_state_verbose.md`
 
 ## Project Overview
 [ONE PARAGRAPH: what the project does, the primary external systems it integrates with, and the dominant
@@ -106,11 +190,11 @@ non-obvious constraint contributors must remember.]
 |----------|---------|-------------|
 | `.salvor/DOMAIN_REF.md` | Domain logic, business rules, learned failures | Changing core logic |
 | `.salvor/INFRA.md` | Running, env vars, deployment, external APIs | Changing infra/deployment/APIs |
-| `.salvor/DEFERRED_TODOS.md` | Known out-of-scope issues deferred (not yet fixed) | Before starting related work |
+| `.salvor/DEFERRED_TODOS.md` | Deferred findings (out-of-scope, not yet fixed) | Before starting related work |
 | `.salvor/decisions/` | Design decisions + load-bearing invariants (why it's this way, what must stay) | Before changing/refactoring anything non-trivial |
 | `<COMPONENT_A>/CLAUDE.md` | <COMPONENT_A> architecture and key files | Working in <COMPONENT_A>/ |
 | `<COMPONENT_B>/CLAUDE.md` | <COMPONENT_B> architecture and key files | Working in <COMPONENT_B>/ |
-| `.serena/memories/` | Codebase structure, execution logic, domain findings | Use Serena MCP tools to query |
+| `.serena/memories/` | Enhanced mode: retrieval pointers into `.salvor/` (concise summaries only) | Use Serena MCP tools to query |
 
 ## APP_NAME
 Configurable via `APP_NAME` env var. Default: `<PROJECT_NAME>`. Never hardcode — reference the env var or the
@@ -127,60 +211,75 @@ You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise
 - **Update Trigger:** After every confirmed resolution, milestone, or architectural shift.
 
 **L2 — active_state_verbose.md (Deep Archive)**
-- **Role:** Permanent repository for reasoning, historical logs, raw tool outputs, and rejected hypotheses.
+- **Role:** Curated repository for reasoning, condensed logs, evidence, and rejected hypotheses.
 - **Update Trigger:** Immediately after updating L1 — offload the nuance pruned from L1.
-- **Constraint:** NO LINE LIMIT. Do NOT read unless explicitly instructed or when "dementia" (memory loops) occurs.
+- **Constraint:** Detailed but CURATED, never a raw dump — summarize command output; keep evidence, conclusions, and
+  commit/test/issue IDs. Rotate: past ~1,500 lines, or at each release milestone, condense the oldest resolved sections
+  into brief summaries (keep durable conclusions, drop noise). Do NOT read unless explicitly instructed or during
+  Context Recovery (RULES §1).
 
 **Execution Rules:**
-- Update both files autonomously and silently. Do not ask permission for L1/L2 writes.
+- Routine L1/L2 operational-state maintenance is automatic — do not ask permission for these writes. Salvor may update
+  concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned
+  failure, or deferred finding into the repository's durable shared engineering record.
 - On any major learning or infra nuance: update L1 instantly with shorthand and L2 with detail.
+- NEVER persist secrets, credentials, PII, or unredacted logs to any memory file (RULES §9). Redact before writing.
 
-### SYSTEM DIRECTIVE: THREE KNOWLEDGE-CAPTURE TRIGGERS
-You self-identify knowledge worth persisting and ask me, verbatim, before persisting it. Three distinct triggers (see
-`RULES.md` §2 and §7):
-1. **Continued Learning** — a discovery, decision, or design invariant + its *why*. For an empirical **finding**, ask
-   `"Save this as a domain learning? (yes/no)"` → `.salvor/domain-learnings/`. For a deliberate **design decision or
-   load-bearing invariant**, ask `"Record this as a design decision? (yes/no)"` → `.salvor/decisions/` (with its Invariant
-   & Coupling).
+### SYSTEM DIRECTIVE: THREE CAPTURE CLASSES (user-gated)
+You self-identify knowledge worth persisting durably and ask me, verbatim, before persisting it. Three capture classes
+(see `RULES.md` §2 and §7):
+1. **Decision / Domain Learning** — a discovery, decision, or design invariant + its *why*. Two subtypes: for a
+   deliberate **Design Decision or load-bearing invariant**, ask `"Record this as a design decision? (yes/no)"` →
+   `.salvor/decisions/` (with its Invariant & Coupling); for an empirical **Domain Learning**, ask
+   `"Save this as a domain learning? (yes/no)"` → `.salvor/domain-learnings/`.
 2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
-3. **Deferred TODO** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
+3. **Deferred Finding** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
-[GitNexus anchor — run `gitnexus analyze` after the initial commit. It appends a
+[GitNexus anchor — Enhanced mode only: run `gitnexus analyze` per Step 3. It appends a
 `gitnexus:start … gitnexus:end` block below, carrying its OWN `# GitNexus — Code Intelligence`
 heading plus symbol/relationship counts and tool routing. Do NOT add a heading here —
 gitnexus supplies one, and a second would duplicate it.]
 ```
 
-### `RULES.md` (mandatory; §0–§7)
+### `RULES.md` (mandatory; §0–§9, tiered)
 
 ```markdown
 # <PROJECT_NAME> Development Rules
 
 These rules are MANDATORY. They supplement CLAUDE.md and take precedence over default behavior.
 
+## Rule tiers
+- **[CORE] Core Protocol** — the vendor-portable substrate: context loading, L1/L2 state maintenance, capture approval,
+  canonical ownership, context recovery, security, and git-safe operation. Always on; removing these breaks Salvor.
+- **[STRICT] Optional Strict Engineering Defaults** — opinionated, project-specific, fully editable: build counters
+  (§0.1, §3), mirror parity (§0.5, §6.3), whole-file-read limits (§4.1), impact-analysis-before-every-edit (§4.3),
+  env-var conventions (§4.4, §6.2), container permission gates (§5.1), branch-deletion hygiene (§6.11). Tune, replace,
+  or disable per project — disabling them must NOT break the Core Protocol. Status (from setup Q4): **[ENABLED |
+  DISABLED — [STRICT] items inactive until the team opts in]**.
+
 ---
 
-## 0. CRITICAL: Task Termination Protocol
+## 0. CRITICAL: Task Termination Protocol [CORE; items 1 & 5 STRICT]
 Before declaring any task "Complete" or "Done," you MUST verify and execute this checklist. **No task is complete until
-VERSION.md is bumped, spokes are synced, and L1/L2 caches are updated.**
+spokes are synced and L1/L2 caches are updated** — plus, when strict defaults are enabled, the [STRICT] items below.
 
-1. **Version Check:** If any logic in a component changed, increment its build ID in `VERSION.md` and update the "Last
-   Updated" date. No hardcoded versions in source — they derive from VERSION.md at build time.
+1. **[STRICT] Version Check:** If any logic in a component changed, increment its build ID in `VERSION.md` and update
+   the "Last Updated" date. No hardcoded versions in source — they derive from VERSION.md at build time.
 2. **L1 Sync (`.salvor/active_state.md`):** Dense technical shorthand. Keep under 50 lines.
 3. **L2 Sync (`.salvor/active_state_verbose.md`):** Offload full reasoning, logs, and nuance here.
 4. **Spoke Sync:** Update the changed component's spoke `CLAUDE.md`. Update `.salvor/DOMAIN_REF.md` if domain logic changed;
    `.salvor/INFRA.md` if infra changed. Do NOT edit root CLAUDE.md for component-specific changes.
-5. **Production/Mirror Parity (if applicable):** Keep `<MIRROR_FILE>` bit-for-bit aligned with `<LIVE_FILE>`. Both paths
-   land in the SAME commit. See §6.3.
+5. **[STRICT] Production/Mirror Parity (if applicable):** Keep `<MIRROR_FILE>` bit-for-bit aligned with `<LIVE_FILE>`.
+   Both paths land in the SAME commit. See §6.3.
 
-## 1. Dementia Recovery Procedure
-If I mention "Dementia" or you find yourself in a logic loop:
+## 1. Context Recovery Procedure [CORE]
+If I ask for "context recovery" — or you find yourself in a logic loop, repeating already-falsified reasoning:
 1. **Stop** all code generation.
 2. **Re-read** `.salvor/active_state_verbose.md` from the beginning.
 3. **Compare** current logic against "Learned Failures" in `.salvor/DOMAIN_REF.md` and L1/L2.
 4. **Summarize** the source of the confusion before proceeding.
 
-## 2. Continued Learning Protocol
+## 2. Continued Learning Protocol [CORE] — capture class: Decision / Domain Learning
 Every domain discovery, hypothesis falsification, validation, vendor/model verdict, or parameter learning is a **mandatory
 save checkpoint**. The discovery is not the end — persisting it across the stack is.
 
@@ -207,17 +306,18 @@ into one prompt, do not defer.
 3. **DOMAIN_REF.md:** update to reflect new authoritative state — new/updated LF# entry, parameter rationale, finding
    status. DOMAIN_REF is current truth; the artifact is the frozen audit trail.
 4. **Stack evaluation — update if affected:** `CLAUDE.md` hub (only if project-wide context shifts); spoke `CLAUDE.md`;
-   L1 (`.salvor/active_state.md`); L2 (`.salvor/active_state_verbose.md`); Serena memories (`.serena/memories/`); per-user
-   auto-memory (if enabled — see §8).
+   L1 (`.salvor/active_state.md`); L2 (`.salvor/active_state_verbose.md`); Serena memories (`.serena/memories/`,
+   Enhanced mode — concise pointers only, per §8); per-user auto-memory (if enabled — see §8).
 5. **Confirmation report:** list which files were touched so I can verify end-to-end.
 
 **On `no`:** acknowledge and continue. Do not silently save a partial version.
 
 **Rationale:** analytical context is lost to chat rotation, compaction, and tool drift. A discovery not written to git +
 propagated will be re-litigated next session. This rule makes propagation visible and user-gated so it cannot silently
-fail.
+fail. The contract: Salvor may update concise operational state as work progresses. It must ask before promoting a
+decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
 
-## 3. Version Increment Rules
+## 3. Version Increment Rules [STRICT]
 | Component | Source of Truth | Derived Constant |
 |-----------|-----------------|------------------|
 | <COMPONENT_A> | `VERSION.md` -> `<COMP_ID_A>:XX` | `<COMPONENT_A_BUILD>` (build-time env / generated constant) |
@@ -229,22 +329,23 @@ fail.
 
 **ALL version bumps MUST be logged in VERSION.md first. No hardcoded versions in source code.**
 
-## 4. Search & Tools
-1. **Search-Before-Read:** do not `read_file` on any file >100 lines without first using `grep`, `find_symbol`, or
-   `get_symbols_overview` to find specific line ranges. Targeted reads only.
-2. **Priority:** Serena MCP symbolic tools first (`find_symbol`, `get_symbols_overview`). Fall back to `grep`/`glob` only
-   if Serena can't resolve.
-3. **Impact before edits:** before modifying a function/class/method, run GitNexus impact analysis and report the blast
-   radius. Run change-detection before committing.
-4. **App Name:** never hardcode the project name — use `APP_NAME` or the build constant.
+## 4. Search & Tools [STRICT / Enhanced]
+1. **[STRICT] Search-Before-Read:** do not `read_file` on any file >100 lines without first using `grep`, `find_symbol`,
+   or `get_symbols_overview` to find specific line ranges. Targeted reads only.
+2. **[Enhanced mode] Priority:** Serena MCP symbolic tools first (`find_symbol`, `get_symbols_overview`). Fall back to
+   `grep`/`glob` only if Serena can't resolve. (Core mode: `grep`/`glob` are the primary tools.)
+3. **[STRICT, Enhanced mode] Impact before edits:** before modifying a function/class/method, run GitNexus impact
+   analysis and report the blast radius. Run change-detection before committing. (Core mode: state that impact analysis
+   is unavailable rather than pretending it ran.)
+4. **[STRICT] App Name:** never hardcode the project name — use `APP_NAME` or the build constant.
 
 ## 5. Infrastructure & Safety
-1. **Docker / containers:** explicit permission required for `build`, `up/down`, or `restart`. Treat as destructive — the
-   operator may run parallel sessions.
-2. **Production endpoints / external APIs:** explicit permission required for any call that mutates external state, costs
-   money, or touches shared infrastructure.
+1. **[STRICT] Docker / containers:** explicit permission required for `build`, `up/down`, or `restart`. Treat as
+   destructive — the operator may run parallel sessions.
+2. **[CORE] Production endpoints / external APIs:** explicit permission required for any call that mutates external
+   state, costs money, or touches shared infrastructure.
 
-## 6. Coding required practices
+## 6. Coding required practices [STRICT] (§6.1, §6.4, §6.10 are Core-grade — keep them even if the rest is disabled)
 1. Read root `CLAUDE.md`, the relevant spoke `CLAUDE.md`(s), and referenced L1/L2 state before coding any component.
 2. Do NOT hardcode values that change often — versions, run modes, environment endpoints. Wire them to variables.
 3. **Live ↔ Mirror parity changes land in the same commit.** If a live path AND a mirror/simulator/replay path exist,
@@ -268,7 +369,7 @@ fail.
 11. **Delete merged branches in the same step as the merge.** After merge + push: `git branch -d <name>` AND
     `git push origin --delete <name>` in one task. Exception: long-lived integration branches need operator confirmation.
 
-## 7. Out-of-scope finding capture (Deferred TODOs)
+## 7. Out-of-scope finding capture [CORE] — capture class: Deferred Finding
 When in-progress work surfaces a bug, risk, tech-debt item, or other finding **not directly related to the current task**,
 you MUST prompt me before doing anything else with it. Never silently ignore an unrelated finding (it gets lost), and
 never silently log one (I own prioritization).
@@ -286,13 +387,43 @@ Bundle multiple findings that emerge together into one prompt. **On `yes`:**
 
 When one is later fixed: delete its entry, and reference it in the fixing commit (`closes deferred #N` if numbered).
 
-## 8. Memory layers (what's shared vs per-user)
+## 8. Memory layers & canonical ownership [CORE]
 - **Shared, canonical, git-tracked (the team brain):** everything in-repo — `CLAUDE.md` hub + spokes, `RULES.md`,
-  `VERSION.md`, `.salvor/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, postmortems, domain-learnings), `.serena/memories/`,
-  and the GitNexus index blocks. This is what every contributor's agent reads.
+  `VERSION.md`, `.salvor/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, decisions, domain-learnings, postmortems),
+  `.serena/memories/` (Enhanced mode), and the GitNexus block in the hub. This is what every contributor's agent reads.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
   personal/operator preferences, but it is not version-controlled and does not reach teammates. Never put shared truth
   there — that belongs in-repo.
+- **ONE-OWNER RULE:** each durable fact has exactly ONE canonical artifact. Every other location links or summarizes —
+  never a copied full narrative:
+
+  | Durable fact | Canonical owner |
+  |--------------|-----------------|
+  | Concise current state | `.salvor/active_state.md` (L1) |
+  | Curated history / reasoning | `.salvor/active_state_verbose.md` (L2) |
+  | Current domain facts + LF# registry | `.salvor/DOMAIN_REF.md` |
+  | Design rationale / invariants | `.salvor/decisions/` |
+  | Validated empirical discoveries | `.salvor/domain-learnings/` |
+  | Incident evidence | `.salvor/postmortems/` |
+  | Deferred findings | `.salvor/DEFERRED_TODOS.md` |
+  | Code structure / call graph | GitNexus index (Enhanced mode) |
+  | Symbol navigation | Serena (Enhanced mode) |
+  | Specs / plans / constitution | Spec Kit files (`.specify/`, `specs/`), where present |
+  | Vendor entrypoints (`AGENTS.md`, `GEMINI.md`) | Thin routing only — never a knowledge fork |
+
+- **Serena memories are retrieval assistance only:** `.serena/memories/` holds concise pointers and summaries that help
+  Serena route to `.salvor/` — canonical content lives in `.salvor/`, never as a competing full copy in Serena.
+
+## 9. Security & Git-safe operation [CORE]
+1. **NEVER persist** to any memory/knowledge file: API keys, passwords, tokens, private keys, cookies, `.env` contents,
+   credential-bearing URLs, customer PII, production datasets, unredacted logs, dependency dumps, large build output, or
+   hidden model reasoning. **Redact before writing.** Summarize command output — keep evidence, conclusions, and
+   commit/test/issue IDs; drop the noise.
+2. `.gitignore` does not remove already-committed data. If credentials were ever committed: revoke them AND remediate
+   git history — ignoring the file afterward is not a fix.
+3. **Git-safe operation:** never blanket-stage (no catch-all add flags, no staging `.`), never commit without explicit
+   approval, never silently overwrite files or another tool's managed sections. Stage explicit path lists; show
+   `git diff --cached` before any commit you were asked to make.
 ```
 
 ### `VERSION.md`
@@ -311,7 +442,7 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 
 | Date | Build IDs | Summary |
 |------|-----------|---------|
-| [DATE] | <COMP_ID_A>:01 <COMP_ID_B>:01 | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§7, VERSION.md, per-component spokes, DEFERRED_TODOS, domain-learnings + postmortems scaffolds. |
+| [DATE] | <COMP_ID_A>:01 <COMP_ID_B>:01 | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9, VERSION.md, per-component spokes, DEFERRED_TODOS, domain-learnings + postmortems scaffolds. |
 ```
 
 ### `.salvor/README.md` (folder index)
@@ -326,13 +457,13 @@ entrypoints live at the repo root: `CLAUDE.md` hub + spokes, `RULES.md`, `VERSIO
 | File | What it is |
 |------|-----------|
 | `active_state.md` | **L1** — ≤50-line dense current state + Learned Failures (auto-loaded) |
-| `active_state_verbose.md` | **L2** — unbounded deep archive: reasoning, rejected hypotheses |
+| `active_state_verbose.md` | **L2** — curated deep archive (rotated past ~1,500 lines): reasoning, rejected hypotheses |
 | `DOMAIN_REF.md` | Authoritative current truth + the `LF#` learned-failure registry |
 | `INFRA.md` | Running, env vars, deployment, external APIs |
-| `DEFERRED_TODOS.md` | Out-of-scope findings parked (not yet fixed) |
+| `DEFERRED_TODOS.md` | Deferred findings parked (out-of-scope, not yet fixed) |
 | `domain-learnings/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
 | `decisions/` | Design decisions + load-bearing invariants (why it's this way; what must stay; what depends on it) |
-| `postmortems/` | Incident write-ups feeding `LF#` + deferred TODOs |
+| `postmortems/` | Incident write-ups feeding `LF#` + deferred findings |
 
 Everything here is meant to be **read by humans and agents alike** — it's the *why*
 behind the code.
@@ -350,18 +481,21 @@ behind the code.
 ## Open: [active todos / pending decisions]
 ```
 
-### `.salvor/active_state_verbose.md` (L2, unlimited)
+### `.salvor/active_state_verbose.md` (L2, curated)
 
 ```markdown
 # <PROJECT_NAME> Active State — VERBOSE ARCHIVE
 
-L2 cache. No line limit. Append-only deep history of reasoning, rejected hypotheses, raw tool outputs, and detail pruned
-from L1. Update trigger: immediately after every L1 update.
+L2 cache. Detailed but CURATED deep history of reasoning, rejected hypotheses, and condensed evidence pruned from L1.
+Update trigger: immediately after every L1 update. Summarize command output — keep evidence, conclusions, and
+commit/test/issue IDs, not raw dumps. Rotation: when this file exceeds ~1,500 lines, or at each release milestone,
+condense the oldest resolved sections into brief summaries (keep durable conclusions, drop noise). Never persist
+secrets, credentials, PII, or unredacted logs here (RULES §9) — redact before writing.
 
 ---
 
 ## [DATE] — Project initialized
-Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§7, VERSION.md, three capture triggers.
+Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9, VERSION.md, three capture classes.
 ```
 
 ### `.salvor/DOMAIN_REF.md`
@@ -406,7 +540,7 @@ Operational reference: running locally, deployment, env vars, external APIs, obs
 ### `.salvor/DEFERRED_TODOS.md`
 
 ```markdown
-# Deferred TODOs
+# Deferred Findings
 
 Out-of-scope findings intentionally **not** addressed when they surfaced — real, but not worth derailing the task they
 were found in. Captured here so they don't slip into "I'll remember." Severity reflects "impact if left ~6 months," not
@@ -542,13 +676,18 @@ For domain logic: see `.salvor/DOMAIN_REF.md`. For infra/ops: see `.salvor/INFRA
 
 ### `.gitignore` additions
 
-Append (don't replace) — note `.serena/memories/` is **committed** (it's shared brain); only cache is ignored:
+Append (don't replace) — note `.serena/memories/` is **committed** (retrieval pointers into the shared brain, per
+RULES §8); only caches and locally-generated tooling are ignored:
 
 ```
 .tmp/
 .gitnexus/
 .serena/cache/
+.claude/skills/gitnexus/
 ```
+
+`.claude/skills/gitnexus/` is generated locally by `gitnexus analyze`/setup and is gitignored — which is also why those
+skill files never ship in a release package.
 
 ### Entrypoint adapters (generate all three by default)
 
@@ -558,28 +697,56 @@ files so any teammate's CLI works out of the box — no vendor choice needed:
 - **`AGENTS.md`** (Codex and other AGENTS-aware CLIs) — at repo root, containing:
   > Before any work, read `CLAUDE.md` (the hub) + the relevant component spoke + `RULES.md` +
   > `.salvor/active_state.md` (L1). Follow `RULES.md` exactly — including the Task Termination
-  > Protocol and the capture triggers. The canonical context lives in `CLAUDE.md`; this file
+  > Protocol and the capture classes. The canonical context lives in `CLAUDE.md`; this file
   > just points there. **Do not duplicate or fork project knowledge into this adapter** — shared
   > truth belongs in `CLAUDE.md`, the component spokes, `.salvor/`, and `.serena/memories/`.
 - **`GEMINI.md`** (Gemini CLI) — the same pointer text.
 - **Claude Code** needs nothing extra: it auto-loads `CLAUDE.md` (with `@`-imports). Optionally add
   `.claude/settings.json` `custom_instructions` reinforcing RULES §0 (ask before writing settings files).
 
+**If any entrypoint file already exists** (Step 0 scan), do not replace it: merge the Salvor pointer text into it as a
+`<!-- salvor:start --> … <!-- salvor:end -->` managed section, preserving all existing content and other tools'
+sections. Update an existing salvor-managed section in place — never duplicate it.
+
 The core files are identical across vendors; only these thin entrypoints differ. See
 `docs/VENDOR_ADAPTERS.md`.
 
-## Step 3 — Initial commit, then index
+## Step 3 — Show the diff, offer a commit, then index (Enhanced mode)
 
-After creating all files:
+After creating all files, show me the completed diff of everything created or
+modified (Step 0's no-silent-overwrite rule). Setup NEVER stages unrelated work
+and NEVER auto-commits. Ask me:
+
+> "Salvor setup is complete. Would you like me to stage only the Salvor-related
+> files, show the staged diff, and create an initialization commit?"
+
+**If yes:** stage the explicit list of paths this setup created or modified —
+named one by one, never a blanket add — then run `git diff --cached`, show me
+the output, and only after I approve what's staged, commit:
 
 ```bash
-git add -A
 git commit -m "chore: scaffold Salvor — hub-and-spoke + L1/L2 + RULES + per-component spokes"
 ```
 
 (If your repo enforces commit signing and you're running unattended, add `--no-gpg-sign` only with operator approval.)
 
-Then index with GitNexus to populate the code-intelligence block:
+**If I decline:** setup still succeeds — leave the files uncommitted for me to
+review and commit myself.
+
+### GitNexus indexing (Enhanced mode only — skip entirely in Core mode)
+
+Ownership contract, before you run anything:
+
+- **Salvor owns** `.salvor/` and the `<!-- salvor:start --> … <!-- salvor:end -->` managed sections. **User content
+  stays user-owned.**
+- **GitNexus owns** its index (`.gitnexus/`), graph data, generated skills (`.claude/skills/gitnexus/`), hooks, and its
+  clearly-marked `<!-- gitnexus:start --> … <!-- gitnexus:end -->` block in the canonical `CLAUDE.md` hub ONLY.
+- Repos that don't want GitNexus writing any instruction blocks can set `{"skipContextFiles": true}` in `.gitnexusrc`.
+  If a `.gitnexusrc` already exists, **MERGE that key into it** — show me the proposed change first; never overwrite
+  the file wholesale.
+- Never run a global `gitnexus setup` (or any other global config change) without my approval.
+
+Then index to populate the code-intelligence block:
 
 ```bash
 gitnexus analyze
@@ -589,11 +756,11 @@ This appends a `<!-- gitnexus:start --> … <!-- gitnexus:end -->` block to root
 counts and tool routing. GitNexus mirrors the same block into `AGENTS.md` when it exists — but that block is project
 knowledge, so it belongs only in the canonical hub. **Keep the adapters thin:** delete the injected
 `gitnexus:start … gitnexus:end` block from `AGENTS.md` (and never let it into `GEMINI.md`) — the pointers stay one
-paragraph. (This is the same "don't fork knowledge into the adapter" rule the pointer text states.) Then commit just
-the hub:
+paragraph. (This is the same "don't fork knowledge into the adapter" rule the pointer text states.) Then OFFER — never
+auto-run — the follow-up commit exactly as above: stage only `CLAUDE.md` (plus `AGENTS.md` if you stripped a mirrored
+block from it), show me `git diff --cached`, and commit only after I approve:
 
 ```bash
-git add CLAUDE.md   # AGENTS.md is left as the thin pointer; only the hub carries the block
 git commit -m "chore(gitnexus): commit auto-generated code-intelligence block (hub only)"
 ```
 
@@ -601,32 +768,41 @@ git commit -m "chore(gitnexus): commit auto-generated code-intelligence block (h
 
 State that you understand these at the end of the scaffold confirmation message.
 
-1. **Three capture triggers, user-gated.** Continued Learning → `"Save this as a domain learning? (yes/no)"` for a
-   finding, or `"Record this as a design decision? (yes/no)"` for a design decision/invariant (→ `.salvor/decisions/`);
-   Learned Failure → registered via the same flow; Deferred TODO → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`.
-   Prompt verbatim; never infer; never batch unrelated items; on yes, run the full propagation and report the file list.
-2. **L1/L2 update silently** after every confirmed resolution (CLAUDE.md SYSTEM DIRECTIVE). L1 stays under 50 lines.
-3. **RULES.md §0 Task Termination Protocol is mandatory.** VERSION bump → L1 sync → L2 sync → spoke sync → mirror parity
-   (if applicable) before "done."
-4. **Serena MCP is the primary search tool.** `find_symbol` / `get_symbols_overview` before any read of a file >100 lines.
-5. **GitNexus impact analysis before edits.** Run impact analysis on a symbol before modifying it; run change-detection
-   before committing; re-run `gitnexus analyze` after structural changes.
-6. **Branch hygiene (RULES §6.11).** Merge → push → delete local + remote branch in one step.
+1. **Three capture classes, user-gated.** Decision / Domain Learning → `"Record this as a design decision? (yes/no)"`
+   for a design decision/invariant (→ `.salvor/decisions/`), or `"Save this as a domain learning? (yes/no)"` for an
+   empirical finding (→ `.salvor/domain-learnings/`); Learned Failure (LF#) → registered via the same flow; Deferred
+   Finding → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`. Prompt verbatim; never infer; never batch unrelated
+   items; on yes, run the full propagation and report the file list.
+2. **L1/L2 update silently** after every confirmed resolution (CLAUDE.md SYSTEM DIRECTIVE). L1 stays under 50 lines;
+   L2 stays curated and secret-free (RULES §9). Routine operational state is automatic; promoting anything into the
+   durable shared engineering record always asks first (rule 1).
+3. **RULES.md §0 Task Termination Protocol is mandatory.** L1 sync → L2 sync → spoke sync before "done" — plus VERSION
+   bump and mirror parity when strict defaults are enabled.
+4. **[Enhanced mode] Serena MCP is the primary search tool.** `find_symbol` / `get_symbols_overview` before any read of
+   a file >100 lines. Serena memories stay concise pointers — canonical content lives in `.salvor/` (RULES §8).
+5. **[Enhanced mode] GitNexus impact analysis before edits.** Run impact analysis on a symbol before modifying it; run
+   change-detection before committing; re-run `gitnexus analyze` after structural changes.
+6. **[STRICT] Branch hygiene (RULES §6.11).** Merge → push → delete local + remote branch in one step.
 7. **Containers / production (RULES §5).** Ask before `build`/`up`/`down`/`restart` and before any production-affecting
    or outward-facing action (push, release, deploy).
-8. **Shared vs per-user memory (RULES §8).** Shared truth goes in-repo. Per-user auto-memory (Claude Code only) is
-   optional and non-shared — never the home of canonical knowledge.
+8. **Shared vs per-user memory + one-owner rule (RULES §8).** Shared truth goes in-repo; each durable fact has exactly
+   one canonical artifact — everywhere else links or summarizes. Per-user auto-memory (Claude Code only) is optional
+   and non-shared — never the home of canonical knowledge.
+9. **Git-safe operation + security (RULES §9).** No blanket staging, no commits without explicit approval, no silent
+   overwrites of files or managed sections; never persist secrets, credentials, or PII — redact before writing.
 
 ## Step 5 — Confirmation report
 
 After Steps 2–4, return a short report:
-- File list created (with byte counts or LOC).
-- Confirmation that root `CLAUDE.md`, `RULES.md` (§0–§7), `VERSION.md`, L1, L2, `DOMAIN_REF`, `INFRA`,
-  `DEFERRED_TODOS`, `decisions/README`, `postmortems/README`, `domain-learnings/README`, and each spoke `CLAUDE.md` exist and have
-  project-specific placeholders filled in.
-- All three entrypoints created: `CLAUDE.md` (canonical hub) + `AGENTS.md` + `GEMINI.md` pointers.
-- Initial commit hash.
-- GitNexus index counts (symbols / relationships / execution flows).
-- Acknowledge the 8 operating rules from Step 4.
+- Mode: **Core** or **Enhanced** (and, if Core, which tools were unavailable).
+- File list created/modified (with byte counts or LOC), plus confirmation that the completed diff was shown.
+- Confirmation that root `CLAUDE.md`, `RULES.md` (§0–§9, with strict defaults marked enabled/disabled per Step 1 Q4),
+  `VERSION.md`, L1, L2, `DOMAIN_REF`, `INFRA`, `DEFERRED_TODOS`, `decisions/README`, `postmortems/README`,
+  `domain-learnings/README`, and each spoke `CLAUDE.md` exist and have project-specific placeholders filled in.
+- All three entrypoints present: `CLAUDE.md` (canonical hub) + `AGENTS.md` + `GEMINI.md` pointers (merged as
+  salvor-managed sections where the files pre-existed).
+- Initialization commit hash **if I approved the commit** — otherwise note that the files are left uncommitted by design.
+- GitNexus index counts (symbols / relationships / execution flows) — Enhanced mode only.
+- Acknowledge the 9 operating rules from Step 4.
 
 After confirmation, I'll brief you on the first real task.

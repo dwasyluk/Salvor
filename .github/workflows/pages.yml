@@ -2,7 +2,8 @@ name: Deploy GitHub Pages
 
 on:
   push:
-    branches: ["ghpages/v1.0.0"]
+    branches: ["main"]
+    paths: ["site/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:

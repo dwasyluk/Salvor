@@ -2,7 +2,7 @@
 ### CURRENT STATE (L1 Cache)
 @.salvor/active_state.md
 
-> For deep historical context, architecture logs, or dementia recovery: `.salvor/active_state_verbose.md`
+> For deep historical context, architecture logs, or context recovery: `.salvor/active_state_verbose.md`
 
 ## Project Overview
 Notebook is a tiny notes service: a TypeScript `api` (Node built-in `http`, no framework) exposing a small REST surface (`GET/POST/DELETE /notes`) backed by an in-memory `Map`, plus a static `web` page (plain DOM, no framework) that fetches and posts notes against the API base. The dominant non-obvious constraint: **the store is purely in-memory — all notes are lost on API restart, there is no persistence.** This is a worked Salvor example, deliberately minimal so Serena + GitNexus have real code to index.
@@ -43,18 +43,22 @@ You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise
 **L2 — active_state_verbose.md (Deep Archive)**
 - **Role:** Permanent repository for reasoning, historical logs, raw tool outputs, and rejected hypotheses.
 - **Update Trigger:** Immediately after updating L1 — offload the nuance pruned from L1.
-- **Constraint:** NO LINE LIMIT. Do NOT read unless explicitly instructed or when "dementia" (memory loops) occurs.
+- **Constraint:** Detailed but curated. When L2 exceeds ~1,500 lines or at release milestones, condense the oldest
+  resolved sections — keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise (never
+  persist material on the `RULES.md` §5.3 never-persist list). Do NOT read unless explicitly instructed or during
+  context recovery (memory loops).
 
 **Execution Rules:**
 - Update both files autonomously and silently. Do not ask permission for L1/L2 writes.
 - On any major learning or infra nuance: update L1 instantly with shorthand and L2 with detail.
 
-### SYSTEM DIRECTIVE: THREE KNOWLEDGE-CAPTURE TRIGGERS
-You self-identify knowledge worth persisting and ask me, verbatim, before persisting it. Three distinct triggers (see
-`RULES.md` §2 and §7):
-1. **Continued Learning** — a discovery, decision, or design invariant + its *why*. `"Save this as a domain learning? (yes/no)"` (a finding → `.salvor/domain-learnings/`) or `"Record this as a design decision? (yes/no)"` (a decision → `.salvor/decisions/`)
+### SYSTEM DIRECTIVE: THREE CAPTURE CLASSES
+Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning,
+learned failure, or deferred finding into the repository's durable shared engineering record. You self-identify knowledge
+worth persisting and ask me, verbatim, before persisting it. Three distinct capture classes (see `RULES.md` §2 and §7):
+1. **Decision / Domain Learning** — a discovery, decision, or design invariant + its *why*. `"Save this as a domain learning? (yes/no)"` (a **Domain Learning** → `.salvor/domain-learnings/`) or `"Record this as a design decision? (yes/no)"` (a **Design Decision** → `.salvor/decisions/`)
 2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
-3. **Deferred TODO** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
+3. **Deferred Finding** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence

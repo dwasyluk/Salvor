@@ -5,7 +5,8 @@
 No. Most "AI second brain" projects are personal knowledge-management systems:
 notes, life context, meetings, ideas, and retrieval. Salvor is for software
 teams. It preserves the reasoning behind a codebase in git so coding agents,
-across sessions and vendors, stop starting cold.
+across sessions and vendors, spend less time reconstructing context and are
+less likely to retry previously disproven approaches.
 
 The four-way intersection is Salvor:
 
@@ -16,16 +17,26 @@ the durable engineering memory layer for a repo.
 
 ## At a glance: where Salvor sits
 
-| Tool | Built for | Storage | Code-aware? | Capture | Governance |
-|---|---|---|---|---|---|
-| **Salvor** | a **team's codebase** memory | Markdown in **git (in-repo)** | **Yes** — Serena + GitNexus | **User-gated triggers** | **RULES + versioning** |
-| Obsidian + Claude | personal notes / PKM | local vault | No | passive / auto | none |
-| GBrain | personal/company knowledge runtime | Postgres + pgvector | No | auto + cron | health / lint |
-| Vendor memory (Claude/Cursor) | per-user continuity & prefs | vendor cloud | session-only | automatic, opaque | none |
-| RAG / vector DB | retrieval over your docs | vector store | No | ingest pipeline | none |
-| Cline/Roo Memory Bank | per-project agent notes | Markdown in repo | No | agent-maintained | light |
+Each of these tools does a different job well — the question is which job you're
+hiring for:
 
-Only Salvor sits at **code-grounded + team-shared/git-versioned + governed + engineering-specific** all at once.
+- **Salvor** — for keeping a team's repository-specific engineering reasoning in
+  git: user-approved capture, distinct capture classes, RULES governance, and
+  per-component versioning, orchestrating Serena + GitNexus for code grounding.
+- **Obsidian + Claude** — for building and organizing a general knowledge vault:
+  notes, research, and personal or shared knowledge graphs.
+- **GBrain** — for running a full knowledge runtime: ingestion, retrieval,
+  synthesis, and background jobs over a large knowledge base.
+- **Vendor memory (Claude/Cursor/etc.)** — for personal or tool-specific
+  continuity and preferences that follow you across sessions.
+- **RAG / vector DBs** — for retrieval infrastructure over documents you already
+  have.
+- **Cline/Roo Memory Bank** — for structured, agent-maintained per-project notes
+  in the repo.
+
+Salvor is built for the specific intersection of code-grounded, team-shared,
+git-versioned, and governed engineering memory — that's the job it's designed
+around.
 
 ## How is Salvor different from GBrain?
 
@@ -57,11 +68,13 @@ are aimed at AI-first PKM: notes, tasks, calendars, research, and personal
 knowledge graphs.
 
 Salvor gives a software repo a governed memory system: component spokes,
-versioned rationale, learned failures, deferred TODOs, task termination rules,
+versioned rationale, learned failures, deferred findings, task termination rules,
 and code intelligence through Serena and GitNexus.
 
-Obsidian helps organize knowledge. Salvor helps ship software without losing why
-decisions were made.
+Obsidian is a general knowledge vault — flexible enough to hold anything,
+including code notes, for individuals or teams. Salvor's job is narrower: an
+in-repo, reviewable engineering record that lives and merges with the code it
+describes.
 
 ## Doesn't Claude Code already have CLAUDE.md?
 
@@ -87,23 +100,27 @@ next agent not repeat?"
 
 ## Does my code leave my machine? What access does Salvor need?
 
-Salvor is files in your git repo plus two **local** MCP servers (Serena, GitNexus)
-that run on your machine over stdio. No SaaS, no account, no cloud sync — nothing
-is uploaded. It doesn't request calendar, email, or vault-wide scopes the way
-"wire your whole life into an agent" setups do. Your code and reasoning stay in
-your repo, under your version control and your keys. As the security rule goes:
-control access with scoped, read-where-possible keys — not by telling an agent
-"don't."
+Salvor is files in your git repo plus two MCP servers (Serena, GitNexus) that run
+on your machine over stdio. Salvor introduces no hosted service or additional
+account. Serena and GitNexus operate locally for their documented core workflows.
+Your selected coding agent and model provider may still process repository
+content according to their configuration and data-handling policies — Salvor
+doesn't change that boundary, and it doesn't request calendar, email, or
+vault-wide scopes the way "wire your whole life into an agent" setups do. Your
+reasoning stays in your repo, under your version control.
 
 ## Isn't this just Cline/Roo's "Memory Bank"?
 
-Memory Bank is the closest cousin — markdown files an agent maintains per project,
-same good instinct. Salvor goes further: a governance protocol (Task Termination
-Protocol, per-component versioning, full-code-path discipline), code-grounding via
-Serena + GitNexus, and **three user-gated capture triggers** (learnings / failures
-/ deferred TODOs) instead of freeform notes — and it's vendor-agnostic, not tied to
-one extension. Memory Bank remembers; Salvor remembers *with discipline, the why,
-and the code graph.*
+Memory Bank is the closest cousin, and a genuinely good one: an existing,
+structured repo-memory methodology — markdown files an agent maintains per
+project, same sound instinct that project knowledge belongs in the repo. Salvor
+differentiates on governance and structure: user-approved capture (the agent
+asks before persisting durable knowledge), **three distinct capture classes**
+(decisions & domain learnings / learned failures / deferred findings), a
+learned-failure registry, deferred-finding capture, canonical-ownership rules,
+team governance (Task Termination Protocol, per-component versioning), and
+orchestration of Serena + GitNexus for code grounding — and it's
+vendor-agnostic, not tied to one extension.
 
 ## Doesn't Mem0 / Letta / Zep / an MCP memory server already do agent memory?
 
@@ -122,6 +139,27 @@ memory *on top*: why decisions were made, what was tried and failed, what's
 deferred, what changed and when. Code intelligence answers "what is this?"; Salvor
 answers "what did we learn, and why." Salvor uses them — it isn't them.
 
+**GitNexus remembers how the code is connected. Salvor preserves why the team
+made it that way.**
+
+## How does Salvor relate to GitHub Spec Kit?
+
+They're complementary. Spec Kit governs what should be built and how a feature
+moves from specification to implementation. Salvor preserves the longitudinal
+engineering memory accumulated while the system evolves: decisions, validated
+domain knowledge, failed approaches, operational lessons, and intentionally
+deferred findings. They coexist cleanly: `.specify/` and `specs/` stay canonical
+for spec-driven work, and Salvor links to those artifacts rather than
+duplicating them.
+
+## What about Google ADK?
+
+Orthogonal — ADK is an agent runtime, not a repo-memory discipline. Google ADK
+helps developers build and run agents with sessions, state, memory, artifacts,
+and tools. Salvor helps coding agents and engineering teams retain
+repository-specific reasoning while developing software — including software
+built with ADK.
+
 ## Isn't this just a folder of markdown files?
 
 Yes — on purpose. Plain markdown in git is reviewable, diffable, branchable,
@@ -131,11 +169,11 @@ and how it stays in sync with the code. The simplicity is the feature.
 
 ## Doesn't Claude or Cursor already have built-in memory?
 
-Vendor memory is per-user, cloud-stored, opaque, and tied to one tool — great for
-personal preferences and light continuity, useless as a team's canonical
-engineering record. Salvor's memory lives in your repo: every teammate's agent
-reads it, you can diff it in a PR, it travels across branches and vendors, and it
-survives you switching models next year. Different jobs — use both.
+Vendor memory is useful for personal or tool-specific continuity — preferences,
+working style, light context that follows you. Salvor is intended for engineering
+knowledge that should become part of the repository's reviewed, shared team
+record: it lives in your repo, every teammate's agent reads it, you can diff it
+in a PR, and it travels across branches and vendors. Different jobs — use both.
 
 ## What does it cost, and is it only for teams?
 
@@ -234,7 +272,7 @@ part of *finishing* work, so the memory stays tied to the code.
 A first-class **`salvor health`** pass — flagging stale L1 lines, unresolved `LF#`s,
 aging deferred TODOs, drifted GitNexus blocks, and `DOMAIN_REF` ↔ L1 ↔ L2
 contradictions — is the top roadmap item. See the
-[Roadmap](../README.md#roadmap--help-wanted) for the full list.
+[Roadmap](../README.md#contributing--roadmap) for the full list.
 
 ## What is the simplest one-line answer?
 

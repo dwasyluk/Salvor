@@ -2,6 +2,13 @@
 
 These rules are MANDATORY. They supplement CLAUDE.md and take precedence over default behavior.
 
+## Protocol Tiers
+
+This example project demonstrates the **optional strict profile** — every strict default enabled on top of the core.
+
+- **Core Protocol (always on):** context loading and hub/spoke reading (§6.1), L1/L2 memory maintenance (§0.2–0.3), user-gated capture approval (§2, §7), context recovery (§1), security and git-safe operation (§5.2, §5.3), canonical ownership and memory layers (§8), and vendor portability via thin adapters. Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
+- **Optional Strict Engineering Defaults:** these defaults are optional, editable, and project-specific; disabling them does not break Salvor Core. They cover component build counters (§0.1, §3), env-var conventions (§4.4, §6.2), the branch-deletion rule (§6.11), container permission rules (§5.1), impact analysis before every edit (§4.3), the >100-line search-before-read limit (§4.1), and mirror parity (§0.5, §6.3).
+
 ---
 
 ## 0. CRITICAL: Task Termination Protocol
@@ -11,21 +18,26 @@ VERSION.md is bumped, spokes are synced, and L1/L2 caches are updated.**
 1. **Version Check:** If any logic in a component changed, increment its build ID in `VERSION.md` and update the "Last
    Updated" date. No hardcoded versions in source — they derive from VERSION.md at build time.
 2. **L1 Sync (`.salvor/active_state.md`):** Dense technical shorthand. Keep under 50 lines.
-3. **L2 Sync (`.salvor/active_state_verbose.md`):** Offload full reasoning, logs, and nuance here.
+3. **L2 Sync (`.salvor/active_state_verbose.md`):** Offload full reasoning, logs, and nuance here. L2 is detailed but
+   curated, not unbounded: when it exceeds ~1,500 lines or at release milestones, condense the oldest resolved sections —
+   keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise. Never persist material
+   listed in §5.3.
 4. **Spoke Sync:** Update the changed component's spoke `CLAUDE.md`. Update `.salvor/DOMAIN_REF.md` if domain logic changed;
    `.salvor/INFRA.md` if infra changed. Do NOT edit root CLAUDE.md for component-specific changes.
 5. **Production/Mirror Parity:** N/A — no live/mirror pair in this project.
 
-## 1. Dementia Recovery Procedure
-If I mention "Dementia" or you find yourself in a logic loop:
+## 1. Context Recovery Procedure
+If I ask for context recovery or you find yourself in a logic loop:
 1. **Stop** all code generation.
 2. **Re-read** `.salvor/active_state_verbose.md` from the beginning.
 3. **Compare** current logic against "Learned Failures" in `.salvor/DOMAIN_REF.md` and L1/L2.
 4. **Summarize** the source of the confusion before proceeding.
 
 ## 2. Continued Learning Protocol
-Every domain discovery, hypothesis falsification, validation, vendor/model verdict, or parameter learning is a **mandatory
-save checkpoint**. The discovery is not the end — persisting it across the stack is.
+This protocol covers the first two capture classes: **Decision / Domain Learning** and **Learned Failure (LF#)**. (The
+third class, **Deferred Finding**, is covered by §7.) Every domain discovery, hypothesis falsification, validation,
+vendor/model verdict, or parameter learning is a **mandatory save checkpoint**. The discovery is not the end — persisting
+it across the stack is.
 
 **Trigger:** any of — hypothesis tested with evidence (accepted OR falsified); multi-dataset matrix / bakeoff result;
 vendor / dependency probe with a verdict; new technique validated; Learned Failure (LF#) registered or updated; a
@@ -33,9 +45,9 @@ vendor / dependency probe with a verdict; new technique validated; Learned Failu
 
 **Mandatory prompt:** at the trigger moment, pause and ask me verbatim — the phrasing that matches the kind:
 
-> "Save this as a domain learning? (yes/no)"  — an empirical **finding**
+> "Save this as a domain learning? (yes/no)"  — an empirical finding (**Domain Learning**)
 >
-> "Record this as a design decision? (yes/no)"  — a **design decision / invariant**
+> "Record this as a design decision? (yes/no)"  — a design decision / invariant (**Design Decision**)
 
 Non-negotiable — it is the signal that the rule is working. Do not infer the answer, do not batch multiple discoveries
 into one prompt, do not defer.
@@ -85,6 +97,9 @@ fail.
    operator may run parallel sessions.
 2. **Production endpoints / external APIs:** explicit permission required for any call that mutates external state, costs
    money, or touches shared infrastructure.
+3. **Never-persist list.** Never write any of the following into L1, L2, or any `.salvor/` or context file: API keys,
+   passwords, tokens, private keys, `.env` contents, credential-bearing URLs, customer PII, unredacted production logs,
+   large raw dumps, or hidden model reasoning. Other sections reference this list rather than restating it.
 
 ## 6. Coding required practices
 1. Read root `CLAUDE.md`, the relevant spoke `CLAUDE.md`(s), and referenced L1/L2 state before coding any component.
@@ -109,7 +124,8 @@ fail.
 11. **Delete merged branches in the same step as the merge.** After merge + push: `git branch -d <name>` AND
     `git push origin --delete <name>` in one task. Exception: long-lived integration branches need operator confirmation.
 
-## 7. Out-of-scope finding capture (Deferred TODOs)
+## 7. Out-of-scope finding capture (Deferred Findings)
+This is the third capture class: **Deferred Finding**.
 When in-progress work surfaces a bug, risk, tech-debt item, or other finding **not directly related to the current task**,
 you MUST prompt me before doing anything else with it. Never silently ignore an unrelated finding (it gets lost), and
 never silently log one (I own prioritization).
@@ -129,8 +145,8 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 
 ## 8. Memory layers (what's shared vs per-user)
 - **Shared, canonical, git-tracked (the team brain):** everything in-repo — `CLAUDE.md` hub + spokes, `RULES.md`,
-  `VERSION.md`, `docs/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, postmortems, domain-learnings), `.serena/memories/`,
-  and the GitNexus index blocks. This is what every contributor's agent reads.
+  `VERSION.md`, `.salvor/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, decisions, postmortems, domain-learnings),
+  `.serena/memories/`, and the GitNexus index blocks. This is what every contributor's agent reads.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
   personal/operator preferences, but it is not version-controlled and does not reach teammates. Never put shared truth
   there — that belongs in-repo.
