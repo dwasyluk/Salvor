@@ -29,3 +29,6 @@ build/
 docs/PLAN.md
 docs/roadmap-issues.md
 assets/hero-prompt.md
+
+# Internal self-scaffold planning/spec docs (Codex working notes) — kept on disk, NOT published
+docs/superpowers/
