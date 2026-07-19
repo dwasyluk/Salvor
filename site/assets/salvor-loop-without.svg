@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="960" viewBox="0 0 800 960" role="img" aria-labelledby="without-title without-desc">
+  <title id="without-title">Without Salvor</title>
+  <desc id="without-desc">An isolated agent starts empty every session while prior discoveries fade away.</desc>
+  <rect width="800" height="960" fill="#f6f6f4"/>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="64" y="62" fill="#686b70" font-size="22" font-weight="800" letter-spacing="3">WITHOUT SALVOR</text>
+    <text x="64" y="96" fill="#a0a2a5" font-size="16" font-weight="600" letter-spacing="1">SESSION N · NOTHING CARRIES FORWARD</text>
+  </g>
+
+  <rect x="54" y="142" width="692" height="636" rx="32" fill="#fff" stroke="#e5e5e1" stroke-width="2"/>
+  <circle cx="400" cy="420" r="168" fill="#fafafa" stroke="#efefec"/>
+  <circle cx="400" cy="420" r="118" fill="none" stroke="#e6e6e2" stroke-width="2" stroke-dasharray="5 12"/>
+
+  <g fill="#8d9095" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15">
+    <text x="118" y="220" opacity=".37" transform="rotate(-2 118 220)">why did we…?</text>
+    <text x="692" y="248" text-anchor="end" opacity=".24" transform="rotate(2 692 248)">that decision</text>
+    <text x="118" y="332" opacity=".50" transform="rotate(1.5 118 332)">didn't we try this?</text>
+    <text x="690" y="370" text-anchor="end" opacity=".30" transform="rotate(-1.5 690 370)">was that on purpose?</text>
+    <text x="116" y="470" opacity=".42" transform="rotate(-1 116 470)">re-deriving it all</text>
+    <text x="692" y="476" text-anchor="end" opacity=".27" transform="rotate(1 692 476)">which approach won?</text>
+    <text x="116" y="642" opacity=".48" transform="rotate(-1.5 116 642)">safe to change?</text>
+    <text x="692" y="654" text-anchor="end" opacity=".33" transform="rotate(1.5 692 654)">that TODO we parked</text>
+    <text x="120" y="718" opacity=".45" transform="rotate(1 120 718)">this bug again</text>
+    <text x="688" y="734" text-anchor="end" opacity=".39" transform="rotate(-1 688 734)">starting from zero</text>
+  </g>
+
+  <g transform="translate(400 416)" fill="none" stroke="#a6a8ab" stroke-width="4">
+    <circle cx="0" cy="-66" r="68" fill="#fff"/>
+    <path d="M-92 104q8-104 92-104t92 104" fill="#fff"/>
+    <rect x="-42" y="-91" width="84" height="52" rx="9"/>
+    <path d="m-26-75 15 11-15 11M-1-53h27" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="400" y="586" fill="#a0a2a5" font-size="15" font-weight="800" letter-spacing="1.3">NO MEMORY · NO PROCESS · NO WHY</text>
+    <line x1="64" y1="810" x2="736" y2="810" stroke="#deded9" stroke-width="2"/>
+    <text x="400" y="854" fill="#66696e" font-size="20" font-weight="800">EMPTY VESSEL — COLD START EVERY SESSION</text>
+    <text x="400" y="891" fill="#97999d" font-size="16">Discoveries evaporate between sessions.</text>
+    <text x="400" y="925" fill="#797c81" font-size="20" font-weight="800">The same ground is covered again.</text>
+  </g>
+</svg>

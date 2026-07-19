@@ -129,6 +129,9 @@ svg {
 .hero-copy {
   position: relative;
   z-index: 8;
+}
+
+.hero > .site-header {
   user-select: text;
   -webkit-user-select: text;
 }
@@ -228,6 +231,12 @@ svg {
   border-bottom: 0;
 }
 
+.hero > .hero-copy {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .hero-copy {
   width: min(720px, 55vw);
   margin-left: var(--gutter);
@@ -270,6 +279,12 @@ h1,
   line-height: 1.05;
 }
 
+.hero > .hero-copy > .hero-tagline {
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
 .hero-tagline span,
 .hero-points span {
   color: var(--gold);
@@ -294,6 +309,10 @@ h1,
   align-items: center;
   flex-wrap: wrap;
   gap: clamp(22px, 3.5vw, 48px);
+}
+
+.hero > .hero-copy > .hero-actions {
+  pointer-events: auto;
 }
 
 .button {
@@ -532,8 +551,18 @@ h1,
   font-size: clamp(13px, 1.08vw, 16px);
 }
 
-.loop > img {
+.loop-panels {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: clamp(16px, 2vw, 28px);
+}
+
+.loop-panels > img {
   display: block;
+  flex: 1 1 420px;
+  min-width: 0;
+  max-width: 100%;
   width: 100%;
   height: auto;
   border: 1px solid var(--line);

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 import path from "node:path";
 
@@ -39,12 +39,42 @@ test("the site mirrors the canonical framework taxonomy and governance", async (
   }
 });
 
-test("the production site prominently embeds the Salvor Loop asset", async () => {
-  const html = await read("site/index.html");
+test("the production site embeds two standalone Salvor Loop panels", async () => {
+  const [html, css, withSalvor, withoutSalvor] = await Promise.all([
+    read("site/index.html"),
+    read("site/styles.css"),
+    read("site/assets/salvor-loop-with.svg"),
+    read("site/assets/salvor-loop-without.svg"),
+  ]);
   assert.match(html, /<section[^>]+id=["']loop["']/i);
-  assert.match(html, /src=["']\.\/assets\/salvor-loop\.svg["']/i);
-  assert.match(html, /alt=["'][^"']*The Salvor Loop/i);
-  await access(path.join(root, "site/assets/salvor-loop.svg"));
+  assert.match(html, /class=["']loop-panels["']/i);
+  assert.match(html, /src=["']\.\/assets\/salvor-loop-with\.svg["']/i);
+  assert.match(html, /src=["']\.\/assets\/salvor-loop-without\.svg["']/i);
+  assert.doesNotMatch(html, /src=["']\.\/assets\/salvor-loop\.svg["']/i);
+
+  assert.match(css, /\.loop-panels\s*\{[^}]*display:\s*flex;/s);
+  assert.match(css, /\.loop-panels\s*\{[^}]*flex-wrap:\s*wrap;/s);
+  assert.match(css, /\.loop-panels\s*\{[^}]*align-items:\s*flex-start;/s);
+  assert.match(css, /\.loop-panels\s*>\s*img\s*\{[^}]*flex:\s*1 1 420px;/s);
+  assert.match(css, /\.loop-panels\s*>\s*img\s*\{[^}]*max-width:\s*100%;/s);
+  assert.match(css, /\.loop-panels\s*>\s*img\s*\{[^}]*width:\s*100%;/s);
+  assert.match(css, /\.loop-panels\s*>\s*img\s*\{[^}]*height:\s*auto;/s);
+
+  assert.match(withSalvor, /viewBox=["']0 0 800 960["']/);
+  assert.match(withSalvor, /FULL CONTEXT, COMPOUNDING/);
+  assert.match(withSalvor, /Every request makes the next one smarter\./);
+  assert.doesNotMatch(withSalvor, /EMPTY VESSEL|WITHOUT SALVOR/);
+
+  assert.match(withoutSalvor, /viewBox=["']0 0 800 960["']/);
+  assert.match(withoutSalvor, /EMPTY VESSEL — COLD START EVERY SESSION/);
+  assert.match(withoutSalvor, /The same ground is covered again\./);
+  assert.doesNotMatch(withoutSalvor, /FULL CONTEXT|THE SALVOR LOOP/);
+  assert.doesNotMatch(`${withSalvor}${withoutSalvor}`, /x1=["']800["'][^>]*x2=["']800["']/);
+});
+
+test("unpublished burn-hero experiment pages are absent", async () => {
+  const files = await readdir(path.join(root, "site"));
+  assert.deepEqual(files.filter((file) => /^burn-hero-.*\.html$/.test(file)), []);
 });
 
 test("the production page exposes the approved sections and canonical actions", async () => {
@@ -103,10 +133,10 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     read(".salvor/INFRA.md"),
     read(".serena/memories/task_completion.md"),
   ]);
-  assert.match(version, /"ghpage"\s*:\s*1/);
-  assert.match(version, /GHPAGE:01/);
+  assert.match(version, /"ghpage"\s*:\s*2/);
+  assert.match(version, /GHPAGE:02/);
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
-  assert.match(l1, /GHPAGE:01/);
+  assert.match(l1, /GHPAGE:02/);
   for (const memory of [spoke, l2, infra, completion]) {
     assert.match(memory, /source-of-truth sync/i);
     assert.match(memory, /Playwright/i);
