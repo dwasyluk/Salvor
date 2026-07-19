@@ -17,8 +17,8 @@ to run `/salvor:init` first.
 
 1. **Pick the flavor** (ask if unclear):
    - **Continued Learning** — a discovery/decision + its *why*. → RULES §2: ask me
-     verbatim `"Save this as a domain-tuning artifact? (yes/no)"`, then on yes run
-     the full stack propagation (dated artifact in `.salvor/domain-tuning/` +
+     verbatim `"Save this as a domain learning? (yes/no)"`, then on yes run
+     the full stack propagation (dated artifact in `.salvor/domain-learnings/` +
      README/TOC + `DOMAIN_REF.md` + L1/L2, and memories if used).
    - **Learned Failure (LF#)** — a recurring/structural failure + root cause + fix
      sites. → register/update the `LF#` entry in `.salvor/DOMAIN_REF.md` plus the L1

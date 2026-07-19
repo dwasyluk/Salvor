@@ -16,7 +16,7 @@ answer describes the same doctrine).
 ## Learned Failures
 - **Open LF#** — every `LF#` in `.salvor/DOMAIN_REF.md` has a resolution or is clearly
   still-open by design. (WARN on silently-open items.)
-- **LF# cross-links** — each references its dated artifact in `.salvor/domain-tuning/`.
+- **LF# cross-links** — each references its dated artifact in `.salvor/domain-learnings/`.
   (WARN on missing link.)
 
 ## Deferred TODOs

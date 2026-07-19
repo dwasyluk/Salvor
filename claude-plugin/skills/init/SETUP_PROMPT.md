@@ -139,7 +139,7 @@ You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise
 You self-identify knowledge worth persisting and ask me, verbatim, before persisting it. Three distinct triggers (see
 `RULES.md` §2 and §7):
 1. **Continued Learning** — a discovery, decision, or design invariant + its *why*. For an empirical **finding**, ask
-   `"Save this as a domain-tuning artifact? (yes/no)"` → `.salvor/domain-tuning/`. For a deliberate **design decision or
+   `"Save this as a domain learning? (yes/no)"` → `.salvor/domain-learnings/`. For a deliberate **design decision or
    load-bearing invariant**, ask `"Record this as a design decision? (yes/no)"` → `.salvor/decisions/` (with its Invariant
    & Coupling).
 2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
@@ -191,7 +191,7 @@ taxonomy clarification that will outlive the refactor.
 
 **Mandatory prompt:** at the trigger moment, pause and ask me verbatim — the phrasing that matches the kind:
 
-> "Save this as a domain-tuning artifact? (yes/no)"  — an empirical **finding**
+> "Save this as a domain learning? (yes/no)"  — an empirical **finding**
 >
 > "Record this as a design decision? (yes/no)"  — a **design decision / invariant**
 
@@ -200,10 +200,10 @@ into one prompt, do not defer.
 
 **On `yes` — execute the full stack update:**
 1. **Dated artifact:** create the frozen record — a **finding** in
-   `.salvor/domain-tuning/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` (hypothesis, evidence, verdict, cross-links) per
-   `.salvor/domain-tuning/README.md`, **or** a **design decision** in `.salvor/decisions/YYYY-MM-DD-[slug].md` (Context,
+   `.salvor/domain-learnings/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` (hypothesis, evidence, verdict, cross-links) per
+   `.salvor/domain-learnings/README.md`, **or** a **design decision** in `.salvor/decisions/YYYY-MM-DD-[slug].md` (Context,
    Decision, Rationale, **Invariant**, **Coupling/blast-radius**, Alternatives) per `.salvor/decisions/README.md`.
-2. **TOC update:** add a row to the chronological index in `.salvor/domain-tuning/README.md`.
+2. **TOC update:** add a row to the chronological index in `.salvor/domain-learnings/README.md`.
 3. **DOMAIN_REF.md:** update to reflect new authoritative state — new/updated LF# entry, parameter rationale, finding
    status. DOMAIN_REF is current truth; the artifact is the frozen audit trail.
 4. **Stack evaluation — update if affected:** `CLAUDE.md` hub (only if project-wide context shifts); spoke `CLAUDE.md`;
@@ -288,7 +288,7 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 
 ## 8. Memory layers (what's shared vs per-user)
 - **Shared, canonical, git-tracked (the team brain):** everything in-repo — `CLAUDE.md` hub + spokes, `RULES.md`,
-  `VERSION.md`, `.salvor/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, postmortems, domain-tuning), `.serena/memories/`,
+  `VERSION.md`, `.salvor/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, postmortems, domain-learnings), `.serena/memories/`,
   and the GitNexus index blocks. This is what every contributor's agent reads.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
   personal/operator preferences, but it is not version-controlled and does not reach teammates. Never put shared truth
@@ -311,7 +311,7 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 
 | Date | Build IDs | Summary |
 |------|-----------|---------|
-| [DATE] | <COMP_ID_A>:01 <COMP_ID_B>:01 | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§7, VERSION.md, per-component spokes, DEFERRED_TODOS, domain-tuning + postmortems scaffolds. |
+| [DATE] | <COMP_ID_A>:01 <COMP_ID_B>:01 | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§7, VERSION.md, per-component spokes, DEFERRED_TODOS, domain-learnings + postmortems scaffolds. |
 ```
 
 ### `.salvor/README.md` (folder index)
@@ -330,7 +330,7 @@ entrypoints live at the repo root: `CLAUDE.md` hub + spokes, `RULES.md`, `VERSIO
 | `DOMAIN_REF.md` | Authoritative current truth + the `LF#` learned-failure registry |
 | `INFRA.md` | Running, env vars, deployment, external APIs |
 | `DEFERRED_TODOS.md` | Out-of-scope findings parked (not yet fixed) |
-| `domain-tuning/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
+| `domain-learnings/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
 | `decisions/` | Design decisions + load-bearing invariants (why it's this way; what must stay; what depends on it) |
 | `postmortems/` | Incident write-ups feeding `LF#` + deferred TODOs |
 
@@ -369,14 +369,14 @@ Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§
 ```markdown
 # <PROJECT_NAME> Domain Reference
 
-Authoritative current-truth for domain logic. Artifacts in `.salvor/domain-tuning/` are frozen audit trails; this file is
+Authoritative current-truth for domain logic. Artifacts in `.salvor/domain-learnings/` are frozen audit trails; this file is
 what's currently true.
 
 ## Sections
 - [empty — populate as the project takes shape]
 
 ## Learned Failures (LF#)
-[LF# entries: number, date, root cause, fix sites, cross-link to the dated artifact in `.salvor/domain-tuning/`. Update
+[LF# entries: number, date, root cause, fix sites, cross-link to the dated artifact in `.salvor/domain-learnings/`. Update
 existing entries when a v1 fix is upgraded to v2 (RULES §6.9).]
 ```
 
@@ -455,10 +455,10 @@ registry in `.salvor/DOMAIN_REF.md` and/or new entries in `.salvor/DEFERRED_TODO
 | [DATE] | [link] | [takeaway] |
 ```
 
-### `.salvor/domain-tuning/README.md`
+### `.salvor/domain-learnings/README.md`
 
 ```markdown
-# Domain-Tuning Artifacts
+# Domain Learnings
 
 Frozen audit trail of every domain discovery, hypothesis test, vendor probe, and learned failure. Each artifact is dated,
 categorized, and never edited after creation (DOMAIN_REF.md carries the living truth; these are the receipts).
@@ -491,7 +491,7 @@ Categories (extend as needed):
 # Design Decisions & Invariants
 
 Dated, frozen records of **why the code is shaped the way it is — and what must stay true.**
-Where `domain-tuning/` holds empirical findings and `postmortems/` hold incidents,
+Where `domain-learnings/` holds empirical findings and `postmortems/` hold incidents,
 `decisions/` holds deliberate **design decisions and load-bearing invariants** — so a
 fresh session understands the rationale *before* it changes something, including when it
 touches an adjacent component that quietly depends on this one.
@@ -601,7 +601,7 @@ git commit -m "chore(gitnexus): commit auto-generated code-intelligence block (h
 
 State that you understand these at the end of the scaffold confirmation message.
 
-1. **Three capture triggers, user-gated.** Continued Learning → `"Save this as a domain-tuning artifact? (yes/no)"` for a
+1. **Three capture triggers, user-gated.** Continued Learning → `"Save this as a domain learning? (yes/no)"` for a
    finding, or `"Record this as a design decision? (yes/no)"` for a design decision/invariant (→ `.salvor/decisions/`);
    Learned Failure → registered via the same flow; Deferred TODO → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`.
    Prompt verbatim; never infer; never batch unrelated items; on yes, run the full propagation and report the file list.
@@ -622,7 +622,7 @@ State that you understand these at the end of the scaffold confirmation message.
 After Steps 2–4, return a short report:
 - File list created (with byte counts or LOC).
 - Confirmation that root `CLAUDE.md`, `RULES.md` (§0–§7), `VERSION.md`, L1, L2, `DOMAIN_REF`, `INFRA`,
-  `DEFERRED_TODOS`, `decisions/README`, `postmortems/README`, `domain-tuning/README`, and each spoke `CLAUDE.md` exist and have
+  `DEFERRED_TODOS`, `decisions/README`, `postmortems/README`, `domain-learnings/README`, and each spoke `CLAUDE.md` exist and have
   project-specific placeholders filled in.
 - All three entrypoints created: `CLAUDE.md` (canonical hub) + `AGENTS.md` + `GEMINI.md` pointers.
 - Initial commit hash.

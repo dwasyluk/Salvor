@@ -128,7 +128,7 @@ never automatic (so your docs don't bloat without your say):
 
 | Trigger | Captures | The agent asks… | Lands in |
 |---|---|---|---|
-| **Continued Learning** | a discovery, decision, or **design invariant** + its *why* | `"…domain-tuning artifact?"` (finding) · `"Record this as a design decision?"` (decision) | `.salvor/domain-tuning/` or `.salvor/decisions/` + `DOMAIN_REF.md` + L1/L2 |
+| **Continued Learning** | a discovery, decision, or **design invariant** + its *why* | `"…domain learning?"` (finding) · `"Record this as a design decision?"` (decision) | `.salvor/domain-learnings/` or `.salvor/decisions/` + `DOMAIN_REF.md` + L1/L2 |
 | **Learned Failure (LF#)** | a recurring failure mode + root cause | *(via the same flow)* | `DOMAIN_REF.md` LF# registry |
 | **Deferred TODO** | an out-of-scope finding, parked not dropped | `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"` | `.salvor/DEFERRED_TODOS.md` |
 
@@ -146,7 +146,7 @@ Serena + GitNexus MCP substrate. Full write-up in
 
 **[`example-project/`](./example-project/)** is a tiny, real, runnable two-component
 app with Salvor fully applied — so you can see the populated `CLAUDE.md` hub +
-spokes, L1/L2, `VERSION.md`, `DEFERRED_TODOS`, a sample postmortem and tuning
+spokes, L1/L2, `VERSION.md`, `DEFERRED_TODOS`, a sample postmortem and domain-learning
 artifact, and real code for Serena + GitNexus to index.
 
 ## Docs

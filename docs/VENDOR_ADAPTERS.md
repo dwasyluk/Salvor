@@ -6,7 +6,7 @@
 
 - **~90% of Salvor is vendor-neutral.** All the substance — `RULES.md`,
   `VERSION.md`, everything in `docs/` (L1/L2, DOMAIN_REF, DEFERRED_TODOS,
-  postmortems, domain-tuning), `.serena/memories/`, and the GitNexus index — is
+  postmortems, domain-learnings), `.serena/memories/`, and the GitNexus index — is
   just git-tracked files plus two **MCP** servers. MCP is a cross-vendor standard;
   Serena and GitNexus already work in Claude Code, Codex, Gemini CLI, Cursor, and
   others. Any capable agent told to read `RULES.md` can follow the protocols.

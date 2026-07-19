@@ -1,4 +1,4 @@
-# Domain-Tuning Artifacts
+# Domain Learnings
 
 Frozen audit trail of every domain discovery, hypothesis test, vendor probe, and learned failure. `.salvor/DOMAIN_REF.md` carries living truth; these artifacts are immutable receipts.
 
