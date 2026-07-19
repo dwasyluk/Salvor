@@ -6,15 +6,17 @@
 
 - **~90% of Salvor is vendor-neutral.** All the substance — `RULES.md`,
   `VERSION.md`, everything in `docs/` (L1/L2, DOMAIN_REF, DEFERRED_TODOS,
-  postmortems, domain-tuning), `.serena/memories/`, and the GitNexus index — is
+  postmortems, domain-learnings), `.serena/memories/`, and the GitNexus index — is
   just git-tracked files plus two **MCP** servers. MCP is a cross-vendor standard;
   Serena and GitNexus already work in Claude Code, Codex, Gemini CLI, Cursor, and
   others. Any capable agent told to read `RULES.md` can follow the protocols.
 - **The glue is vendor-specific.** *How* project instructions auto-load, where
   per-session memory lives, and how per-turn rules are enforced differ per tool.
 
-So Salvor is built as a **neutral core + a thin per-vendor entrypoint adapter.**
-The adapter is small — usually one pointer file.
+So Salvor ships a **neutral core + all three thin entrypoint adapters by default** —
+`CLAUDE.md` (canonical hub) plus `AGENTS.md` and `GEMINI.md` pointer files. Each adapter is
+tiny (one pointer file), and there's no vendor to choose: any teammate's CLI works out of
+the box.
 
 ## The adapter pattern
 
@@ -32,19 +34,28 @@ The pointer file says, in effect:
 
 > Before any work, read `CLAUDE.md` (hub) + the relevant component spoke +
 > `RULES.md` + `.salvor/active_state.md` (L1). Follow `RULES.md` exactly, including
-> the Task Termination Protocol and the three capture triggers.
+> the Task Termination Protocol and the three capture triggers. Do not duplicate or
+> fork project knowledge into this adapter — shared truth lives in `CLAUDE.md`, the
+> spokes, `.salvor/`, and `.serena/memories/`.
 
-That's the whole adapter. The core files it points at are identical across vendors.
+That's the whole adapter. The core files it points at are identical across vendors —
+including the GitNexus code-intelligence block, which lands **only** in the canonical
+`CLAUDE.md` hub (strip it back out of `AGENTS.md` if `gitnexus analyze` mirrors it there,
+so the pointers stay thin).
 
-## What v1 ships
+## What ships (all three by default)
 
-- **Claude Code adapter — built and dogfooded.** The `CLAUDE.md` hub uses
-  `@`-imports; the `example-project/` demonstrates the full setup.
-- **Codex / Gemini adapters — documented, not yet hardened.** The pattern above is
-  correct and small, but hasn't been end-to-end battle-tested in this repo. If you
-  run Salvor on Codex or Gemini, please open a
-  [vendor adapter issue](https://github.com/dwasyluk/salvor/issues) or PR with what
-  worked — that's exactly the kind of contribution Salvor wants.
+Setup generates **all three entrypoints** — no vendor choice: `CLAUDE.md` (the canonical
+hub) plus thin `AGENTS.md` and `GEMINI.md` pointer files. Any teammate's CLI works out of
+the box; the core files they point at are identical.
+
+- **Claude Code — built and dogfooded.** The `CLAUDE.md` hub uses `@`-imports; the
+  `example-project/` demonstrates the full setup, and Salvor's own repo runs on it.
+- **Codex / Gemini — wired by default, less exercised.** The `AGENTS.md` / `GEMINI.md`
+  pointers are trivial and correct, but Claude Code is the most battle-tested path. Hit a
+  rough edge on Codex or Gemini? Open a
+  [vendor adapter issue](https://github.com/dwasyluk/salvor/issues) or PR — exactly the
+  kind of contribution Salvor wants.
 
 ## Claude-Code-only conveniences (safe to skip elsewhere)
 

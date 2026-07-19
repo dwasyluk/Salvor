@@ -16,7 +16,9 @@ knowledge **persist, propagate, and compound**, all inside git.
 A small root `CLAUDE.md` **hub** (<~60 lines) holds project-wide invariants and a
 documentation map. Each component has its own **spoke** `CLAUDE.md`. An agent
 working in `api/` loads the hub + the `api` spoke — not the entire repo's
-context. You pay for the context you use.
+context. You pay for the context you use. Thin `AGENTS.md` and `GEMINI.md` pointers ship
+alongside the hub by default, so Codex and Gemini load the same context — multivendor out
+of the box, no vendor to choose.
 
 ### 2. Two-tier persisted memory (L1 / L2)
 - **L1 — `.salvor/active_state.md`:** ≤50 lines of dense shorthand. Current truth,
@@ -42,7 +44,7 @@ knowledge compound rather than decay:
 - **`VERSION.md`** — single source of truth for per-component build IDs, each bump
   carrying a detailed *why* row. Source reads versions at build time; nothing is
   hardcoded.
-- **`.salvor/domain-tuning/`** — dated, frozen artifacts (hypothesis → evidence →
+- **`.salvor/domain-learnings/`** — dated, frozen artifacts (hypothesis → evidence →
   verdict), indexed in a TOC. `DOMAIN_REF.md` holds the living truth; the artifacts
   are the receipts.
 
@@ -65,7 +67,7 @@ Salvor keeps a clean split so it never squats in your project's own `docs/`:
   tooling auto-discover them.
 - **`.salvor/` — the brain (git-committed, shared):** L1 (`active_state.md`),
   L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
-  `domain-tuning/`, `postmortems/`, and a `README.md` index.
+  `domain-learnings/`, `decisions/`, `postmortems/`, and a `README.md` index.
 
 The rule: *if a CLI or build tool auto-discovers the file at a fixed path, it stays
 at the root; everything else Salvor owns lives in `.salvor/`.* Tooling gets one
@@ -81,7 +83,7 @@ your docs without your say). Three distinct flavors:
 
 | Trigger | Captures | Verbatim prompt | Lands in |
 |---|---|---|---|
-| **Continued Learning** | A discovery + its *why* (hypothesis tested, verdict, rationale that outlives the refactor) | `"Save this as a domain-tuning artifact? (yes/no)"` | dated artifact + TOC + `DOMAIN_REF.md` + L1/L2 + memories |
+| **Continued Learning** | A discovery, decision, or **design invariant** + its *why* | `"Save this as a domain learning? (yes/no)"` (a finding) · `"Record this as a design decision? (yes/no)"` (a decision) | `.salvor/domain-learnings/` (findings) or `.salvor/decisions/` (decisions + **Invariant/Coupling**) + `DOMAIN_REF.md` + L1/L2 |
 | **Learned Failure (LF#)** | A recurring/structural failure mode + root cause + fix sites | (registered through the same flow when the discovery *is* a failure) | `DOMAIN_REF.md` LF# registry + L1 shorthand |
 | **Deferred TODO** | An out-of-scope finding surfaced mid-task — real, but must not derail current work | `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"` | `.salvor/DEFERRED_TODOS.md` (dedupe-first; Severity + Suggested-fix) |
 

@@ -24,8 +24,6 @@ build/
 
 # Serena: memories ARE committed (shared brain); cache is not
 .serena/cache/
-# ...except this framework repo's own auto-generated root memories (session cruft)
-/.serena/memories/
 
 # Local-only handoff docs — kept on disk, NOT published
 docs/PLAN.md
@@ -35,3 +33,6 @@ assets/hero-prompt.md
 # Local browser-test artifacts
 playwright-report/
 test-results/
+
+# Internal self-scaffold planning/spec docs (Codex working notes) — kept on disk, NOT published
+docs/superpowers/

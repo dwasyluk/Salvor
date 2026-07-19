@@ -163,7 +163,7 @@ governance. Salvor's source of truth is Markdown in git: reviewable, diffable,
 branchable, and shared by the team.
 
 Embeddings belong on the roadmap as a derived index over L1/L2,
-`DOMAIN_REF.md`, postmortems, and domain-tuning artifacts. They should make the
+`DOMAIN_REF.md`, postmortems, and domain learnings. They should make the
 right prior reasoning easier to retrieve, but they should not replace the
 canonical project memory.
 
@@ -194,8 +194,9 @@ Salvor splits memory into two complementary layers:
 - **Compiled truth:** `.salvor/active_state.md` and `.salvor/DOMAIN_REF.md` hold the
   current, compressed state an agent should rely on.
 - **Append-only timeline:** `.salvor/active_state_verbose.md`, dated
-  `.salvor/domain-tuning/` artifacts, and postmortems preserve the reasoning,
-  evidence, rejected hypotheses, and history behind that truth.
+  `.salvor/domain-learnings/` artifacts, `.salvor/decisions/` (design rationale +
+  invariants), and postmortems preserve the reasoning, evidence, rejected
+  hypotheses, and history behind that truth.
 
 That split keeps day-to-day context cheap while preserving the deeper audit trail
 needed when an agent gets confused or a team needs to revisit a decision.

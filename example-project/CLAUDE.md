@@ -21,6 +21,7 @@ Notebook is a tiny notes service: a TypeScript `api` (Node built-in `http`, no f
 | `.salvor/DOMAIN_REF.md` | Domain logic, business rules, learned failures | Changing core logic |
 | `.salvor/INFRA.md` | Running, env vars, deployment, external APIs | Changing infra/deployment/APIs |
 | `.salvor/DEFERRED_TODOS.md` | Known out-of-scope issues deferred (not yet fixed) | Before starting related work |
+| `.salvor/decisions/` | Design decisions + load-bearing invariants (why it's this way, what must stay) | Before changing/refactoring anything non-trivial |
 | `api/CLAUDE.md` | api architecture and key files | Working in api/ |
 | `web/CLAUDE.md` | web architecture and key files | Working in web/ |
 | `.serena/memories/` | Codebase structure, execution logic, domain findings | Use Serena MCP tools to query |
@@ -51,7 +52,7 @@ You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise
 ### SYSTEM DIRECTIVE: THREE KNOWLEDGE-CAPTURE TRIGGERS
 You self-identify knowledge worth persisting and ask me, verbatim, before persisting it. Three distinct triggers (see
 `RULES.md` §2 and §7):
-1. **Continued Learning** (a discovery + its *why*) → `"Save this as a domain-tuning artifact? (yes/no)"`
+1. **Continued Learning** — a discovery, decision, or design invariant + its *why*. `"Save this as a domain learning? (yes/no)"` (a finding → `.salvor/domain-learnings/`) or `"Record this as a design decision? (yes/no)"` (a decision → `.salvor/decisions/`)
 2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
 3. **Deferred TODO** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 

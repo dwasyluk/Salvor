@@ -1,11 +1,11 @@
-# Notebook — agent entrypoint
+# Notebook — agent entrypoint (Gemini)
 
 Before any work: read `CLAUDE.md` (the hub) + the relevant spoke (`api/CLAUDE.md` or
 `web/CLAUDE.md`) + `RULES.md` + `.salvor/active_state.md` (L1). Follow `RULES.md` exactly —
 especially §0 (Task Termination Protocol) and the three capture triggers.
 
 The core Salvor files are vendor-neutral; this file is just the entrypoint adapter for
-CLIs that read `AGENTS.md` natively (e.g. Codex). Claude Code uses the `CLAUDE.md` hub.
+Gemini CLI. The canonical context lives in `CLAUDE.md` (Codex uses `AGENTS.md`).
 
 **Do not duplicate or fork project knowledge into this adapter** — shared truth (including
 the GitNexus code-intelligence block) belongs only in `CLAUDE.md`, the component spokes,

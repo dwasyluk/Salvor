@@ -1,6 +1,6 @@
 # Notebook Domain Reference
 
-Authoritative current-truth for domain logic. Artifacts in `.salvor/domain-tuning/` are frozen audit trails; this file is
+Authoritative current-truth for domain logic. Artifacts in `.salvor/domain-learnings/` are frozen audit trails; this file is
 what's currently true.
 
 ## Sections
@@ -22,6 +22,7 @@ The store (`api/src/store.ts`) is a single in-memory `Map<string, Note>`:
 ### Copy invariant (LF-1)
 `getNote` and `listNotes` MUST return shallow copies, never the live `Map` instances. This is a shallow `{ ...note }`,
 valid only while `Note` stays flat; a nested field would require a structured copy (the v2 trigger for LF-1).
+Full rationale + coupling: [`decisions/2026-06-20-store-returns-copies.md`](./decisions/2026-06-20-store-returns-copies.md).
 
 ## Learned Failures (LF#)
 
@@ -34,5 +35,5 @@ valid only while `Note` stays flat; a nested field would require a structured co
   `listNotes`, and `createNote`'s return.
 - **Status:** FIXED. v2 trigger: if `Note` gains a nested/array field, upgrade `copy` to a structured clone and update
   every site listed here together (RULES §6.9).
-- **Cross-link:** `.salvor/domain-tuning/2026-06-20-LF01-STALE_NOTE_REFERENCE.md`;
+- **Cross-link:** `.salvor/domain-learnings/2026-06-20-LF01-STALE_NOTE_REFERENCE.md`;
   postmortem `.salvor/postmortems/2026-06-20-stale-note-reference.md`.

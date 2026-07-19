@@ -39,7 +39,7 @@ either is missing, point me to the repo README's Prerequisites section.
 
 ## Step 1 — Confirm scope before writing files
 
-Ask me these **four** questions in a single question call (or inline if your CLI
+Ask me these **three** questions in a single question call (or inline if your CLI
 has no structured-question tool) BEFORE creating anything:
 
 1. **Project name** — the top-level identifier (e.g. "Atlas", "Helix"). Don't
@@ -49,23 +49,20 @@ has no structured-question tool) BEFORE creating anything:
    stack hint (e.g. `api` Rust/tokio, `web` Next.js, `worker` Python). Each gets
    its own spoke `CLAUDE.md` and a per-component build counter in `VERSION.md`.
    The **counter letters are derived from the component name** (e.g. `api` →
-   `API:01`, `web` → `WEB:01`) — configurable, not hardcoded.
-3. **Production / mirror pair?** — does any component have a "live" execution
-   path AND a "simulator / replay / test mirror" that must stay bit-for-bit
-   aligned (e.g. a live execution engine next to a deterministic simulator/replay
-   used in tests)? If yes, name both
-   files — they get a parity rule. If no, omit the parity rule from `RULES.md`
-   §0 / §6.
-4. **Primary LLM CLI / vendor** — Claude Code, Codex, Gemini CLI, or other. This
-   decides which **entrypoint adapter** is wired:
-   - **Claude Code** → `CLAUDE.md` hub with `@`-imports, optional
-     `.claude/settings.json` `custom_instructions`, optional per-user
-     auto-memory, Skills.
-   - **Codex** → `AGENTS.md` is the native entrypoint; it points at the same
-     in-repo core.
-   - **Gemini CLI** → `GEMINI.md` is the entrypoint.
-   - The **core files below are vendor-neutral**; only the entrypoint glue
-     differs. See `docs/VENDOR_ADAPTERS.md` in the Salvor repo.
+   `API:01`, `web` → `WEB:01`) — configurable, not hardcoded. If the repo has no
+   natural split (a single library, a docs/prompt project), a lone `root` component
+   is fine — one spoke, one counter. Prefer components only where the parts are
+   genuinely isolated and versioned independently.
+3. **Paired paths that must stay in sync? (optional — most projects: `none`)** —
+   do you have two code paths that must change together, where editing one without
+   the other is a bug? Examples: an implementation and a separate reimplementation;
+   a live path and a simulator/replay used in tests; a client and a hand-written
+   mock of it. If yes, name both files and they get a parity rule in `RULES.md`.
+   If not, answer `none` and the parity rule is omitted from §0 / §6.
+> **Vendor entrypoints are automatic — no need to choose.** Every project gets all three
+> by default: `CLAUDE.md` (the canonical hub) plus thin `AGENTS.md` (Codex) and `GEMINI.md`
+> (Gemini) pointer files, so any teammate's CLI works out of the box. The core is
+> vendor-neutral; only the entrypoint glue differs (see `docs/VENDOR_ADAPTERS.md`).
 
 Wait for answers. Do not invent components or assume a stack. Once I respond,
 proceed to Step 2.
@@ -110,6 +107,7 @@ non-obvious constraint contributors must remember.]
 | `.salvor/DOMAIN_REF.md` | Domain logic, business rules, learned failures | Changing core logic |
 | `.salvor/INFRA.md` | Running, env vars, deployment, external APIs | Changing infra/deployment/APIs |
 | `.salvor/DEFERRED_TODOS.md` | Known out-of-scope issues deferred (not yet fixed) | Before starting related work |
+| `.salvor/decisions/` | Design decisions + load-bearing invariants (why it's this way, what must stay) | Before changing/refactoring anything non-trivial |
 | `<COMPONENT_A>/CLAUDE.md` | <COMPONENT_A> architecture and key files | Working in <COMPONENT_A>/ |
 | `<COMPONENT_B>/CLAUDE.md` | <COMPONENT_B> architecture and key files | Working in <COMPONENT_B>/ |
 | `.serena/memories/` | Codebase structure, execution logic, domain findings | Use Serena MCP tools to query |
@@ -140,14 +138,17 @@ You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise
 ### SYSTEM DIRECTIVE: THREE KNOWLEDGE-CAPTURE TRIGGERS
 You self-identify knowledge worth persisting and ask me, verbatim, before persisting it. Three distinct triggers (see
 `RULES.md` §2 and §7):
-1. **Continued Learning** (a discovery + its *why*) → `"Save this as a domain-tuning artifact? (yes/no)"`
+1. **Continued Learning** — a discovery, decision, or design invariant + its *why*. For an empirical **finding**, ask
+   `"Save this as a domain learning? (yes/no)"` → `.salvor/domain-learnings/`. For a deliberate **design decision or
+   load-bearing invariant**, ask `"Record this as a design decision? (yes/no)"` → `.salvor/decisions/` (with its Invariant
+   & Coupling).
 2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
 3. **Deferred TODO** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
-# GitNexus — Code Intelligence
-
-[Run `gitnexus analyze` after the initial commit. It appends a
-`<!-- gitnexus:start --> … <!-- gitnexus:end -->` block here with symbol/relationship counts and tool routing.]
+[GitNexus anchor — run `gitnexus analyze` after the initial commit. It appends a
+`gitnexus:start … gitnexus:end` block below, carrying its OWN `# GitNexus — Code Intelligence`
+heading plus symbol/relationship counts and tool routing. Do NOT add a heading here —
+gitnexus supplies one, and a second would duplicate it.]
 ```
 
 ### `RULES.md` (mandatory; §0–§7)
@@ -184,20 +185,25 @@ Every domain discovery, hypothesis falsification, validation, vendor/model verdi
 save checkpoint**. The discovery is not the end — persisting it across the stack is.
 
 **Trigger:** any of — hypothesis tested with evidence (accepted OR falsified); multi-dataset matrix / bakeoff result;
-vendor / dependency probe with a verdict; new technique validated; Learned Failure (LF#) registered or updated; taxonomy
-clarification that will outlive the refactor.
+vendor / dependency probe with a verdict; new technique validated; Learned Failure (LF#) registered or updated; a
+**deliberate design decision or load-bearing invariant** (why the code is shaped this way and what must stay true); or a
+taxonomy clarification that will outlive the refactor.
 
-**Mandatory prompt:** at the trigger moment, pause and ask me verbatim:
+**Mandatory prompt:** at the trigger moment, pause and ask me verbatim — the phrasing that matches the kind:
 
-> "Save this as a domain-tuning artifact? (yes/no)"
+> "Save this as a domain learning? (yes/no)"  — an empirical **finding**
+>
+> "Record this as a design decision? (yes/no)"  — a **design decision / invariant**
 
 Non-negotiable — it is the signal that the rule is working. Do not infer the answer, do not batch multiple discoveries
 into one prompt, do not defer.
 
 **On `yes` — execute the full stack update:**
-1. **Dated artifact:** create `.salvor/domain-tuning/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` per `.salvor/domain-tuning/README.md`.
-   Include hypothesis, evidence, dataset(s), verdict, cross-links.
-2. **TOC update:** add a row to the chronological index in `.salvor/domain-tuning/README.md`.
+1. **Dated artifact:** create the frozen record — a **finding** in
+   `.salvor/domain-learnings/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` (hypothesis, evidence, verdict, cross-links) per
+   `.salvor/domain-learnings/README.md`, **or** a **design decision** in `.salvor/decisions/YYYY-MM-DD-[slug].md` (Context,
+   Decision, Rationale, **Invariant**, **Coupling/blast-radius**, Alternatives) per `.salvor/decisions/README.md`.
+2. **TOC update:** add a row to the chronological index in `.salvor/domain-learnings/README.md`.
 3. **DOMAIN_REF.md:** update to reflect new authoritative state — new/updated LF# entry, parameter rationale, finding
    status. DOMAIN_REF is current truth; the artifact is the frozen audit trail.
 4. **Stack evaluation — update if affected:** `CLAUDE.md` hub (only if project-wide context shifts); spoke `CLAUDE.md`;
@@ -246,9 +252,9 @@ fail.
 4. **Full code-path traversal.** When you change one area, follow every related code path and update it. Example: a new
    config parameter must be added to the config UI, audit/report output, import/export, and everywhere it's read — never a
    half-wired value. Never work on assumptions; if uncertain, STOP AND ASK.
-5. **Smoke-test before declaring a numerically-sensitive fix done.** Math changes (sizing, thresholds, gates, allocation,
-   guards) require an explicit smoke run before "done," or a stated reason it can't be smoke-tested. "Compiles, ship it" is
-   not acceptable.
+5. **Smoke-test before declaring a numerically-sensitive fix done.** Math changes (numeric constants, thresholds, limits,
+   allocation, rounding, guards) require an explicit smoke run before "done," or a stated reason it can't be smoke-tested.
+   "Compiles, ship it" is not acceptable.
 6. **Verify long-running / observability processes are alive before trusting output.** Liveness check (`ps`, `kill -0`,
    `wc -l`) before relying on a background tool's output; mid-run checkpoints for multi-hour runs.
 7. **Identifier hygiene at external API boundaries.** Pass the domain-correct identifier at every external call site
@@ -282,7 +288,7 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 
 ## 8. Memory layers (what's shared vs per-user)
 - **Shared, canonical, git-tracked (the team brain):** everything in-repo — `CLAUDE.md` hub + spokes, `RULES.md`,
-  `VERSION.md`, `.salvor/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, postmortems, domain-tuning), `.serena/memories/`,
+  `VERSION.md`, `.salvor/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, postmortems, domain-learnings), `.serena/memories/`,
   and the GitNexus index blocks. This is what every contributor's agent reads.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
   personal/operator preferences, but it is not version-controlled and does not reach teammates. Never put shared truth
@@ -305,7 +311,7 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 
 | Date | Build IDs | Summary |
 |------|-----------|---------|
-| [DATE] | <COMP_ID_A>:01 <COMP_ID_B>:01 | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§7, VERSION.md, per-component spokes, DEFERRED_TODOS, domain-tuning + postmortems scaffolds. |
+| [DATE] | <COMP_ID_A>:01 <COMP_ID_B>:01 | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§7, VERSION.md, per-component spokes, DEFERRED_TODOS, domain-learnings + postmortems scaffolds. |
 ```
 
 ### `.salvor/README.md` (folder index)
@@ -324,7 +330,8 @@ entrypoints live at the repo root: `CLAUDE.md` hub + spokes, `RULES.md`, `VERSIO
 | `DOMAIN_REF.md` | Authoritative current truth + the `LF#` learned-failure registry |
 | `INFRA.md` | Running, env vars, deployment, external APIs |
 | `DEFERRED_TODOS.md` | Out-of-scope findings parked (not yet fixed) |
-| `domain-tuning/` | Dated, frozen decision/learning artifacts (the receipts) |
+| `domain-learnings/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
+| `decisions/` | Design decisions + load-bearing invariants (why it's this way; what must stay; what depends on it) |
 | `postmortems/` | Incident write-ups feeding `LF#` + deferred TODOs |
 
 Everything here is meant to be **read by humans and agents alike** — it's the *why*
@@ -337,7 +344,7 @@ behind the code.
 # <PROJECT_NAME> Active State — <COMP_ID_A>:01 <COMP_ID_B>:01 ([DATE])
 ## Architecture: [ONE-LINE: top-level stack + ports]
 ## Pipeline: [ONE-LINE: request/data flow, if applicable]
-## DEPLOYED: [environment, ingress, latency profile — or "local only"]
+## DEPLOYED: [environment, ingress, deploy/perf notes — or "local only"]
 ## Current Delta to Published Logic: [empty initially — populate as work lands]
 ## LEARNED FAILURES: [empty initially — LF# entries land here in shorthand]
 ## Open: [active todos / pending decisions]
@@ -362,14 +369,14 @@ Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§
 ```markdown
 # <PROJECT_NAME> Domain Reference
 
-Authoritative current-truth for domain logic. Artifacts in `.salvor/domain-tuning/` are frozen audit trails; this file is
+Authoritative current-truth for domain logic. Artifacts in `.salvor/domain-learnings/` are frozen audit trails; this file is
 what's currently true.
 
 ## Sections
 - [empty — populate as the project takes shape]
 
 ## Learned Failures (LF#)
-[LF# entries: number, date, root cause, fix sites, cross-link to the dated artifact in `.salvor/domain-tuning/`. Update
+[LF# entries: number, date, root cause, fix sites, cross-link to the dated artifact in `.salvor/domain-learnings/`. Update
 existing entries when a v1 fix is upgraded to v2 (RULES §6.9).]
 ```
 
@@ -448,10 +455,10 @@ registry in `.salvor/DOMAIN_REF.md` and/or new entries in `.salvor/DEFERRED_TODO
 | [DATE] | [link] | [takeaway] |
 ```
 
-### `.salvor/domain-tuning/README.md`
+### `.salvor/domain-learnings/README.md`
 
 ```markdown
-# Domain-Tuning Artifacts
+# Domain Learnings
 
 Frozen audit trail of every domain discovery, hypothesis test, vendor probe, and learned failure. Each artifact is dated,
 categorized, and never edited after creation (DOMAIN_REF.md carries the living truth; these are the receipts).
@@ -476,6 +483,35 @@ Categories (extend as needed):
 | Date | File | Category | One-line takeaway |
 |------|------|----------|-------------------|
 | [DATE] | [link] | [cat] | [takeaway] |
+```
+
+### `.salvor/decisions/README.md`
+
+```markdown
+# Design Decisions & Invariants
+
+Dated, frozen records of **why the code is shaped the way it is — and what must stay true.**
+Where `domain-learnings/` holds empirical findings and `postmortems/` hold incidents,
+`decisions/` holds deliberate **design decisions and load-bearing invariants** — so a
+fresh session understands the rationale *before* it changes something, including when it
+touches an adjacent component that quietly depends on this one.
+
+## Naming
+`YYYY-MM-DD-[short-slug].md`
+
+## Entry template
+- **Context** — the situation/forces that led to the decision.
+- **Decision** — what was chosen.
+- **Rationale** — the *why* that must outlive the refactor.
+- **Invariant** — what must stay true; what NOT to "fix" without first understanding this.
+- **Coupling / blast radius** — which components/files depend on this; touch with care
+  (pair with a GitNexus impact check before editing them).
+- **Alternatives rejected** — and why.
+
+## Index
+| Date | Decision | Invariant (one-line) | Touches |
+|------|----------|----------------------|---------|
+| [DATE] | [link] | [what must stay true] | [components] |
 ```
 
 ### `<COMPONENT_*>/CLAUDE.md` (one per component)
@@ -514,14 +550,23 @@ Append (don't replace) — note `.serena/memories/` is **committed** (it's share
 .serena/cache/
 ```
 
-### Entrypoint adapter (from Step 1, question 4)
+### Entrypoint adapters (generate all three by default)
 
-- **Claude Code:** the `CLAUDE.md` hub above (with `@`-imports) is the entrypoint. Optionally add
-  `.claude/settings.json` `custom_instructions` reinforcing RULES §0. (Ask before writing settings files.)
-- **Codex:** create `AGENTS.md` at repo root that says: "Before any work, read `CLAUDE.md` (hub) + the relevant spoke +
-  `RULES.md` + `.salvor/active_state.md` (L1). Follow RULES.md exactly." Codex reads `AGENTS.md` natively.
-- **Gemini CLI:** create `GEMINI.md` with the same pointer text.
-- See `docs/VENDOR_ADAPTERS.md` in the Salvor repo for the full pattern. The core files are identical across vendors.
+`CLAUDE.md` is the **canonical hub** (created above). Always also create the two thin pointer
+files so any teammate's CLI works out of the box — no vendor choice needed:
+
+- **`AGENTS.md`** (Codex and other AGENTS-aware CLIs) — at repo root, containing:
+  > Before any work, read `CLAUDE.md` (the hub) + the relevant component spoke + `RULES.md` +
+  > `.salvor/active_state.md` (L1). Follow `RULES.md` exactly — including the Task Termination
+  > Protocol and the capture triggers. The canonical context lives in `CLAUDE.md`; this file
+  > just points there. **Do not duplicate or fork project knowledge into this adapter** — shared
+  > truth belongs in `CLAUDE.md`, the component spokes, `.salvor/`, and `.serena/memories/`.
+- **`GEMINI.md`** (Gemini CLI) — the same pointer text.
+- **Claude Code** needs nothing extra: it auto-loads `CLAUDE.md` (with `@`-imports). Optionally add
+  `.claude/settings.json` `custom_instructions` reinforcing RULES §0 (ask before writing settings files).
+
+The core files are identical across vendors; only these thin entrypoints differ. See
+`docs/VENDOR_ADAPTERS.md`.
 
 ## Step 3 — Initial commit, then index
 
@@ -540,19 +585,24 @@ Then index with GitNexus to populate the code-intelligence block:
 gitnexus analyze
 ```
 
-This appends a `<!-- gitnexus:start --> … <!-- gitnexus:end -->` block to root `CLAUDE.md` (and `AGENTS.md` if present)
-with symbol/relationship counts and tool routing. Commit the result:
+This appends a `<!-- gitnexus:start --> … <!-- gitnexus:end -->` block to root `CLAUDE.md` with symbol/relationship
+counts and tool routing. GitNexus mirrors the same block into `AGENTS.md` when it exists — but that block is project
+knowledge, so it belongs only in the canonical hub. **Keep the adapters thin:** delete the injected
+`gitnexus:start … gitnexus:end` block from `AGENTS.md` (and never let it into `GEMINI.md`) — the pointers stay one
+paragraph. (This is the same "don't fork knowledge into the adapter" rule the pointer text states.) Then commit just
+the hub:
 
 ```bash
-git add CLAUDE.md AGENTS.md
-git commit -m "chore(gitnexus): commit auto-generated code-intelligence blocks"
+git add CLAUDE.md   # AGENTS.md is left as the thin pointer; only the hub carries the block
+git commit -m "chore(gitnexus): commit auto-generated code-intelligence block (hub only)"
 ```
 
 ## Step 4 — Operating ground rules going forward
 
 State that you understand these at the end of the scaffold confirmation message.
 
-1. **Three capture triggers, user-gated.** Continued Learning → `"Save this as a domain-tuning artifact? (yes/no)"`;
+1. **Three capture triggers, user-gated.** Continued Learning → `"Save this as a domain learning? (yes/no)"` for a
+   finding, or `"Record this as a design decision? (yes/no)"` for a design decision/invariant (→ `.salvor/decisions/`);
    Learned Failure → registered via the same flow; Deferred TODO → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`.
    Prompt verbatim; never infer; never batch unrelated items; on yes, run the full propagation and report the file list.
 2. **L1/L2 update silently** after every confirmed resolution (CLAUDE.md SYSTEM DIRECTIVE). L1 stays under 50 lines.
@@ -572,9 +622,9 @@ State that you understand these at the end of the scaffold confirmation message.
 After Steps 2–4, return a short report:
 - File list created (with byte counts or LOC).
 - Confirmation that root `CLAUDE.md`, `RULES.md` (§0–§7), `VERSION.md`, L1, L2, `DOMAIN_REF`, `INFRA`,
-  `DEFERRED_TODOS`, `postmortems/README`, `domain-tuning/README`, and each spoke `CLAUDE.md` exist and have
+  `DEFERRED_TODOS`, `decisions/README`, `postmortems/README`, `domain-learnings/README`, and each spoke `CLAUDE.md` exist and have
   project-specific placeholders filled in.
-- The entrypoint adapter wired for my chosen vendor.
+- All three entrypoints created: `CLAUDE.md` (canonical hub) + `AGENTS.md` + `GEMINI.md` pointers.
 - Initial commit hash.
 - GitNexus index counts (symbols / relationships / execution flows).
 - Acknowledge the 8 operating rules from Step 4.
