@@ -71,7 +71,7 @@
           <nav class="desktop-nav" aria-label="Primary navigation">
             <a href="#why">WHY</a>
             <a href="#use">USE</a>
-            <a href="#claude">CLAUDE</a>
+            <a href="#claude">PLUGINS</a>
             <a href="https://github.com/dwasyluk/salvor">GITHUB ↗</a>
           </nav>
           <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
@@ -80,7 +80,7 @@
           <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" hidden>
             <a href="#why">WHY</a>
             <a href="#use">USE</a>
-            <a href="#claude">CLAUDE</a>
+            <a href="#claude">PLUGINS</a>
             <a href="https://github.com/dwasyluk/salvor">GITHUB ↗</a>
           </nav>
         </header>
@@ -92,7 +92,7 @@
           <ul class="hero-points">
             <li><span aria-hidden="true">&gt;</span> Version-controlled memory for coding agents.</li>
             <li><span aria-hidden="true">&gt;</span> Prompt-first. Vendor-neutral.</li>
-            <li><span aria-hidden="true">&gt;</span> Claude plugin sugar in v1.1.0+.</li>
+            <li><span aria-hidden="true">&gt;</span> Claude Code plugin coming soon with v1.1.0.</li>
           </ul>
           <div class="hero-actions">
             <a
@@ -122,7 +122,7 @@
                 </svg>
               </div>
               <h2>The repo remembers why.</h2>
-              <p>Capture learnings, failures, decisions, and deferred work — with the reasoning behind them.</p>
+              <p>Capture Domain Learnings, Learned Failures, decisions, and deferred work — with the reasoning behind them.</p>
             </article>
             <article class="reason-card">
               <div class="reason-heading">
@@ -153,25 +153,44 @@
           <div class="process-grid">
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="4"/><circle cx="28" cy="7" r="3"/><circle cx="49" cy="28" r="3"/><circle cx="28" cy="49" r="3"/><circle cx="7" cy="28" r="3"/><path d="M28 10v14m18 4H32m-4 4v14M10 28h14M13 13l12 12m18-12L31 25m12 18L31 31M13 43l12-12"/></svg>
-              <h2>Hub &amp; Spoke</h2><p>Load only what you're working on.</p>
+              <h2>Hub &amp; Spoke</h2><p><code>CLAUDE.md</code> is the canonical hub; component spokes load only what you're working on.</p>
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="m28 5 18 10-18 10L10 15Zm-18 19 18 10 18-10M10 34l18 10 18-10"/></svg>
-              <h2>Two-Tier Memory</h2><p>L1 (concise) for now. L2 (deep) for later.</p>
+              <h2>Two-Tier Memory</h2><p>L1 is a concise current-state cache. L2 preserves deep reasoning and recovery history.</p>
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="M17 42h22M20 36V23a8 8 0 0 1 16 0v13l5 6H15Zm5 12c2 3 6 3 8 0"/></svg>
-              <h2>3 Capture Triggers</h2><p>Learnings, failures, deferred TODOs.</p>
+              <h2>3 User-Gated Triggers</h2><p>Continued Learning → Domain Learning or Decision; Learned Failure; Deferred TODO.</p>
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="M7 30 29 8h20v20L27 50Z"/><circle cx="39" cy="18" r="3"/></svg>
-              <h2>Versioned Why</h2><p>Every change ships with its rationale.</p>
+              <h2>Governed, Versioned Why</h2><p><code>RULES.md</code> §0 requires per-component <code>VERSION.md</code> history, memory, and spokes to stay synced.</p>
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="m28 5 18 10v26L28 51 10 41V15Zm0 20 18-10M28 25 10 15m18 10v26"/></svg>
               <h2>Serena + GitNexus</h2><p>Understand code. Analyze impact.</p>
             </article>
           </div>
+          <div class="brain-summary">
+            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred work, postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale.</p>
+            <p>Every save is explicit. For a finding, the agent asks: <q>Save this as a domain learning? (yes/no)</q></p>
+          </div>
+        </section>
+
+        <section class="section loop" id="loop" aria-labelledby="loop-title">
+          <div class="loop-heading">
+            <p class="section-label">// THE SALVOR LOOP</p>
+            <h2 id="loop-title">Every request makes the next one smarter.</h2>
+            <p>The shared brain supplies context before the work, then receives user-approved knowledge and rationale after it.</p>
+          </div>
+          <img
+            src="./assets/salvor-loop.svg"
+            width="1600"
+            height="1000"
+            loading="lazy"
+            alt="The Salvor Loop: nine phases build context, act, and feed durable knowledge back into the repository brain, contrasted with an agent that starts cold without Salvor."
+          />
         </section>
 
         <section class="section use" id="use" aria-labelledby="use-title">
@@ -182,17 +201,18 @@
                 <span class="terminal-glyph" aria-hidden="true">&gt;_</span>
                 <div><h2>Any vendor: paste the prompt</h2><p class="status">PRIMARY PATH</p></div>
               </header>
-              <p>Works with Claude Code, Codex, Gemini, Cursor, and other MCP-capable CLIs.</p>
+              <p>Multivendor out of the box: <code>CLAUDE.md</code> is the canonical hub, with thin <code>AGENTS.md</code> and <code>GEMINI.md</code> entrypoints generated by default. There is no vendor to choose.</p>
               <ol>
                 <li>Install Serena and GitNexus (see README).</li>
                 <li>Open your LLM CLI in the project.</li>
-                <li>Paste <code>SETUP_PROMPT.md</code> and answer 4 questions.</li>
+                <li>Paste <code>SETUP_PROMPT.md</code> and answer the setup questions.</li>
+                <li>Salvor creates the canonical hub, both vendor pointers, and the <code>.salvor/</code> brain.</li>
                 <li>Commit the scaffold. Run <code>gitnexus analyze</code>.</li>
                 <li>You're done — your repo now has a memory.</li>
               </ol>
               <pre><code>$ cat SETUP_PROMPT.md
 $ # copy the output; paste into your CLI
-$ # answer 4 questions
+$ # answer the setup questions
 $ # Salvor scaffolds the rest</code></pre>
               <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0/SETUP_PROMPT.md">View SETUP_PROMPT.md <span>→</span></a>
             </article>
@@ -200,20 +220,11 @@ $ # Salvor scaffolds the rest</code></pre>
             <article class="terminal-card future-card" id="claude">
               <header>
                 <svg class="terminal-cube" viewBox="0 0 48 48" aria-hidden="true"><path d="m24 3 18 10v22L24 45 6 35V13Zm0 20 18-10M24 23 6 13m18 10v22"/></svg>
-                <div><h2>Claude: plugin convenience (v1.1.0+)</h2><p class="status">SMOOTHER PATH · FUTURE</p></div>
+                <div><h2>Claude Code plugin: coming soon</h2><p class="status">ACTIVE DEVELOPMENT · SHIPS WITH v1.1.0</p></div>
               </header>
-              <p>The v1.0.0 release does not ship this plugin. The universal prompt remains the supported path.</p>
-              <ol>
-                <li>Install the official Salvor plugin when v1.1.0 ships.</li>
-                <li>Run the interactive initializer in Claude Code.</li>
-                <li>Answer the same four setup questions.</li>
-                <li>The plugin scaffolds Salvor from the canonical prompt.</li>
-                <li>Use health and capture commands to maintain it.</li>
-              </ol>
-              <pre aria-label="Planned v1.1.0 commands"><code>$ /salvor:init        # planned interactive setup
-$ /salvor:capture     # planned knowledge capture
-$ /salvor:health      # planned system check
-$ /salvor:status      # planned repo memory</code></pre>
+              <p>The Claude Code plugin is in active development, ships with v1.1.0. It is not part of the v1.0.0 release; the universal prompt above is the supported path today.</p>
+              <p>The future plugin is a convenience wrapper over the same canonical prompt and shared files, never a replacement for the vendor-neutral foundation.</p>
+              <p>Codex and Gemini plugin equivalents are open for contributors.</p>
               <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0/README.md#roadmap--help-wanted">Plugin roadmap <span>→</span></a>
             </article>
           </div>

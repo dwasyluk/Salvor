@@ -5,13 +5,13 @@
 > Deep history and dementia recovery: `.salvor/active_state_verbose.md`
 
 ## Project Overview
-Salvor is a prompt-and-documentation framework that gives repositories a version-controlled institutional brain shared across sessions, contributors, and LLM vendors. Its universal installer is `SETUP_PROMPT.md`; public guidance lives in `README.md` and `docs/`; the planned GitHub Pages site is a generated presentation mirror. The non-obvious invariant is that repository knowledge and rationale are canonical, while vendor entrypoints and public surfaces stay thin and synchronized.
+Salvor is a prompt-and-documentation framework that gives repositories a version-controlled institutional brain shared across sessions, contributors, and LLM vendors. Its universal installer is `SETUP_PROMPT.md`; public guidance lives in `README.md` and `docs/`; the GitHub Pages site on `ghpages/v1.0.0` is their presentation mirror. The non-obvious invariant is that repository knowledge and rationale are canonical, while vendor entrypoints and public surfaces stay thin and synchronized.
 
 ## Architecture
 | Component | Stack | Spoke |
 |-----------|-------|-------|
 | core | Markdown prompt protocol | @core/CLAUDE.md |
-| web | Static GitHub Pages (planned; metadata-only) | @site/CLAUDE.md |
+| ghpage | Static GitHub Pages v1.0.0 presentation mirror | @site/CLAUDE.md |
 | docs | Markdown | @docs/CLAUDE.md |
 
 ## Documentation Map
@@ -21,7 +21,7 @@ Salvor is a prompt-and-documentation framework that gives repositories a version
 | `.salvor/INFRA.md` | Local, release, GitHub Pages, external tooling | Changing infra/deployment/APIs |
 | `.salvor/DEFERRED_TODOS.md` | User-approved out-of-scope findings | Before related work |
 | `core/CLAUDE.md` | Universal setup protocol | Changing `SETUP_PROMPT.md` |
-| `site/CLAUDE.md` | Planned public site and sync contract | Changing future `site/` |
+| `site/CLAUDE.md` | Public ghpage and source-of-truth sync contract | Changing `site/` or Pages delivery |
 | `docs/CLAUDE.md` | README and documentation architecture | Changing `README.md` or `docs/` |
 | `.serena/memories/` | Shared structure, conventions, commands | Query through Serena MCP |
 

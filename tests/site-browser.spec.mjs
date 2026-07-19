@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 const viewports = [
   ["desktop", { width: 1440, height: 1000 }],
   ["tablet", { width: 768, height: 1024 }],
-  ["phone", { width: 390, height: 844 }],
+  ["galaxy-s25-edge-small-phone", { width: 360, height: 780 }],
   ["narrow", { width: 320, height: 568 }],
 ];
 
@@ -29,6 +29,33 @@ for (const [name, viewport] of viewports) {
     await page.setViewportSize(viewport);
     await page.goto("/");
     await expect(page.locator("#hero-title")).toHaveText("SALVOR");
+    await expect(page.locator(".burn-copy .hero-title-visual").first()).toBeVisible();
+    await expect(page.locator(".hero-actions .button-primary").first()).toBeVisible();
+
+    const readability = await page.evaluate(() => {
+      const title = document.querySelector("#hero-title");
+      const primaryAction = document.querySelector(".hero-actions .button-primary");
+      const titleRect = title.getBoundingClientRect();
+      const actionRect = primaryAction.getBoundingClientRect();
+      return {
+        titleFontSize: Number.parseFloat(getComputedStyle(title).fontSize),
+        titleLeft: titleRect.left,
+        titleRight: titleRect.right,
+        actionLeft: actionRect.left,
+        actionRight: actionRect.right,
+      };
+    });
+    expect(readability.titleFontSize).toBeGreaterThanOrEqual(52);
+    expect(readability.titleLeft).toBeGreaterThanOrEqual(0);
+    expect(readability.titleRight).toBeLessThanOrEqual(viewport.width + 1);
+    expect(readability.actionLeft).toBeGreaterThanOrEqual(0);
+    expect(readability.actionRight).toBeLessThanOrEqual(viewport.width + 1);
+
+    const loopImage = page.locator("#loop img");
+    await loopImage.scrollIntoViewIfNeeded();
+    await expect(loopImage).toBeVisible();
+    await expect.poll(() => loopImage.evaluate((image) => image.complete && image.naturalWidth)).toBe(1600);
+
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     expect(overflow, JSON.stringify(await overflowReport(page), null, 2)).toBeLessThanOrEqual(1);
     expect(runtimeErrors).toEqual([]);

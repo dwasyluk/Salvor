@@ -4,20 +4,21 @@ Operational reference for local work, deployment, environment variables, externa
 
 ## Local
 
-- The repository is primarily Markdown and has no root package manager or test runner.
+- The canonical repository is primarily Markdown; this branch also has a root Node test harness for the ghpage.
+- Run `npm test` for site contracts/interactions and `npm run test:browser` for direct Playwright rendering.
 - `example-project/api` and `example-project/web` are separate TypeScript regression fixtures; inspect their package manifests before running fixture commands.
 - Use the narrowest structural, link/path, diff, and Markdown checks appropriate to the change.
 
 ## Deployment
 
-- No website implementation exists on `main` in the initial self-scaffold.
-- GitHub Pages work remains in a separate checkout and is not deployed or merged by scaffold tasks.
-- When approved site code reaches `main`, its pipeline must generate mapped copy from canonical repository sources and stop for design review when new page elements are required.
+- `main` is canonical and does not deploy the site. The presentation mirror lives on `ghpages/v1.0.0`.
+- `.github/workflows/pages.yml` publishes only `site/` when `ghpages/v1.0.0` is pushed; local commits do not deploy.
+- A source-of-truth sync must stop for design review when new page elements are required and must run Playwright directly at desktop, tablet, Galaxy-S25-Edge-like small-phone, and 320px narrow viewports before completion.
 
 ## Environment Variables and Build IDs
 
 - `APP_NAME` — application name; defaults to `salvor`.
-- `CORE_BUILD`, `WEB_BUILD`, `DOCS_BUILD` — derived from `VERSION.md`; never maintained as independent hardcoded versions.
+- `CORE_BUILD`, `GHPAGE_BUILD`, `DOCS_BUILD` — derived from `VERSION.md`; never maintained as independent hardcoded versions.
 
 ## External Tools
 
@@ -29,4 +30,5 @@ Operational reference for local work, deployment, environment variables, externa
 
 - Use `git status`, `git diff`, and `git diff --check` for change state and integrity.
 - Use `gitnexus status` for index freshness and symbol/relationship/flow counts.
+- Treat direct Playwright results—not CSS inspection—as the responsive-health evidence for every ghpage source-of-truth sync; include desktop, tablet, small-phone, and 320px narrow consumers.
 - Verify long-running processes are alive before trusting their output.
