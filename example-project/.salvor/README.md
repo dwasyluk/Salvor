@@ -12,7 +12,7 @@ entrypoints live at the repo root: `CLAUDE.md` hub + `api`/`web` spokes, `RULES.
 | `DOMAIN_REF.md` | Authoritative current truth + the `LF#` learned-failure registry |
 | `INFRA.md` | Running, env vars, deployment, external APIs |
 | `DEFERRED_TODOS.md` | Out-of-scope findings parked (not yet fixed) |
-| `domain-tuning/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
+| `domain-learnings/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
 | `decisions/` | Design decisions + load-bearing invariants (why it's this way; what must stay; what depends on it) |
 | `postmortems/` | Incident write-ups feeding `LF#` + deferred TODOs |
 

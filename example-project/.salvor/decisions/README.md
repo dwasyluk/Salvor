@@ -1,7 +1,7 @@
 # Design Decisions & Invariants
 
 Dated, frozen records of **why Notebook's code is shaped the way it is — and what must
-stay true.** Where `domain-tuning/` holds empirical findings and `postmortems/` hold
+stay true.** Where `domain-learnings/` holds empirical findings and `postmortems/` hold
 incidents, `decisions/` holds deliberate **design decisions and load-bearing invariants**
 — so a fresh session understands the rationale *before* it changes something, including
 when it touches an adjacent component that quietly depends on this one.

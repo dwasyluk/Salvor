@@ -30,7 +30,7 @@ example-project/
 │   ├── INFRA.md                  # local run, env vars, ports
 │   ├── DEFERRED_TODOS.md         # #1 no persistence (Medium)
 │   ├── postmortems/              # README + 2026-06-20 stale-note-reference
-│   └── domain-tuning/            # README + 2026-06-20 LF01 artifact
+│   └── domain-learnings/            # README + 2026-06-20 LF01 artifact
 └── .serena/memories/    # this file + suggested_commands.md (committed shared brain)
 ```
 

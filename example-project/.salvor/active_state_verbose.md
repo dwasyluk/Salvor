@@ -35,7 +35,7 @@ returned the silently-corrupted data, and there was no write path to blame becau
 Fix: a private `copy(note)` helper does a shallow spread `{ ...note }`; `getNote` and `listNotes` both route every
 returned record through it, and `createNote` returns a copy of the stored record too. The `Map` now holds the only
 canonical instances; callers receive disposable copies. A shallow copy is sufficient because `Note` is flat (all
-primitive fields) — if a nested/array field is ever added, the copy must become structured (noted in the domain-tuning
+primitive fields) — if a nested/array field is ever added, the copy must become structured (noted in the domain-learnings
 artifact `2026-06-20-LF01-STALE_NOTE_REFERENCE.md` as the v2 trigger).
 
 ## 2026-06-20 — Deferred item detail (no persistence)

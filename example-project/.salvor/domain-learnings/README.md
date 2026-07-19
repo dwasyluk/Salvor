@@ -1,4 +1,4 @@
-# Domain-Tuning Artifacts
+# Domain Learnings
 
 Frozen audit trail of every domain discovery, hypothesis test, vendor probe, and learned failure. Each artifact is dated,
 categorized, and never edited after creation (DOMAIN_REF.md carries the living truth; these are the receipts).

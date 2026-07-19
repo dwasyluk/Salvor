@@ -24,7 +24,7 @@ Initial public release.
   rationale), Learned Failures (`LF#`), and Deferred TODOs (out-of-scope
   findings), each with a verbatim user prompt and a defined propagation path.
 - **`.salvor/` layout** — the git-tracked "brain" (L1/L2, `DOMAIN_REF`, `INFRA`,
-  `DEFERRED_TODOS`, `domain-tuning/`, `postmortems/`, and a `README` index) lives
+  `DEFERRED_TODOS`, `domain-learnings/`, `postmortems/`, and a `README` index) lives
   under one namespaced folder, so Salvor never squats in your project's `docs/`.
   Governance (`RULES.md`, `VERSION.md`) + entrypoints (`CLAUDE.md` hub/spokes) stay
   at the repo root.

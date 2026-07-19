@@ -23,7 +23,7 @@ The app itself is deliberately tiny: an in-memory **Notes** service.
 - `VERSION.md` — per-component build IDs (`API:01 | WEB:01`).
 - `api/`, `web/` — the two components, each with its own spoke `CLAUDE.md`.
 - `docs/` — L1 (`active_state.md`) + L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
-  and the `postmortems/` + `domain-tuning/` knowledge archives (with one worked LF-1 entry threaded through all of them).
+  and the `postmortems/` + `domain-learnings/` knowledge archives (with one worked LF-1 entry threaded through all of them).
 - `.serena/memories/` — committed shared-brain notes (codebase structure, suggested commands).
 
 ## Run it

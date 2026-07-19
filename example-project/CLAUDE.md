@@ -52,7 +52,7 @@ You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise
 ### SYSTEM DIRECTIVE: THREE KNOWLEDGE-CAPTURE TRIGGERS
 You self-identify knowledge worth persisting and ask me, verbatim, before persisting it. Three distinct triggers (see
 `RULES.md` §2 and §7):
-1. **Continued Learning** — a discovery, decision, or design invariant + its *why*. `"Save this as a domain-tuning artifact? (yes/no)"` (a finding → `.salvor/domain-tuning/`) or `"Record this as a design decision? (yes/no)"` (a decision → `.salvor/decisions/`)
+1. **Continued Learning** — a discovery, decision, or design invariant + its *why*. `"Save this as a domain learning? (yes/no)"` (a finding → `.salvor/domain-learnings/`) or `"Record this as a design decision? (yes/no)"` (a decision → `.salvor/decisions/`)
 2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
 3. **Deferred TODO** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 

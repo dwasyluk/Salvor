@@ -1,6 +1,6 @@
 # salvor Domain Reference
 
-Authoritative current truth for Salvor's product logic. Artifacts in `.salvor/domain-tuning/` are frozen audit trails; this file records what is currently true.
+Authoritative current truth for Salvor's product logic. Artifacts in `.salvor/domain-learnings/` are frozen audit trails; this file records what is currently true.
 
 ## Purpose
 
