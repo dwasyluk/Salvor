@@ -136,6 +136,16 @@ enforcement protocol · a versioned audit trail of the *why* · and the
 Serena + GitNexus MCP substrate. Full write-up in
 **[`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)**.
 
+## The Salvor Loop
+
+Every request runs through the shared brain, then feeds what it learns back into the next session.
+
+<p align="center">
+  <img src="assets/salvor-loop.svg" width="900" alt="The Salvor Loop: nine phases build context, act, and feed durable knowledge back into the repository brain, contrasted with an agent that starts cold without Salvor."/>
+</p>
+
+*Every phase reads from and writes back to the brain. Every request makes the next one smarter.*
+
 ## Try it
 
 **[`example-project/`](./example-project/)** is a tiny, real, runnable two-component
