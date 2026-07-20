@@ -94,10 +94,11 @@ test("all local HTML resources exist", async () => {
   await Promise.all(refs.map((ref) => access(path.join(root, ref))));
 });
 
-test("V10 is the only production logo family and reduced motion is explicit", async () => {
+test("canonical W10 is the only production logo family and reduced motion is explicit", async () => {
   const [html, css] = await Promise.all([read("site/index.html"), read("site/styles.css")]);
-  assert.match(html, /salvor-v10-node-sigil/);
-  assert.doesNotMatch(html, /salvor-08|broad-artifact|logo-badge/);
+  assert.match(html, /salvor-mark-full-(?:black|white)/);
+  assert.match(html, /salvor-wordmark-(?:black|white)/);
+  assert.doesNotMatch(html, /salvor-v10-node-sigil|salvor-08|broad-artifact|logo-badge/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
 });
 
@@ -133,10 +134,10 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     read(".salvor/INFRA.md"),
     read(".serena/memories/task_completion.md"),
   ]);
-  assert.match(version, /"ghpage"\s*:\s*5/);
-  assert.match(version, /GHPAGE:05/);
+  assert.match(version, /"ghpage"\s*:\s*6/);
+  assert.match(version, /GHPAGE:06/);
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
-  assert.match(l1, /GHPAGE:05/);
+  assert.match(l1, /GHPAGE:06/);
   // The responsive-check SOP lives in its canonical homes (L1, INFRA, L2), not
   // duplicated across every Serena memory — post-refresh, Serena memories are
   // concise pointers under the one-owner model.

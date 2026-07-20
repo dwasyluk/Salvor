@@ -150,8 +150,6 @@ svg {
   display: inline-flex;
   align-items: center;
   gap: clamp(13px, 1.5vw, 22px);
-  font-weight: 800;
-  letter-spacing: 0.22em;
   text-decoration: none;
 }
 
@@ -159,9 +157,16 @@ svg {
   font-size: clamp(18px, 1.5vw, 28px);
 }
 
-.brand img {
+.brand .brand-mark {
   width: clamp(48px, 5vw, 72px);
   height: clamp(48px, 5vw, 72px);
+  object-fit: contain;
+}
+
+.brand .brand-wordmark {
+  width: clamp(98px, 10.5vw, 151px);
+  height: auto;
+  object-fit: contain;
 }
 
 .desktop-nav,
@@ -842,9 +847,16 @@ h1,
   font-size: 24px;
 }
 
-.footer-brand img {
+.footer-brand .brand-mark {
   width: 68px;
   height: 68px;
+  object-fit: contain;
+}
+
+.footer-brand .brand-wordmark {
+  width: 151px;
+  height: auto;
+  object-fit: contain;
 }
 
 .footer-copy p {
@@ -910,8 +922,12 @@ h1,
   width: min(720px, 55vw);
 }
 
-.burn-truth .brand img {
-  content: url("./assets/brand/salvor-v10-node-sigil-white.svg");
+.burn-truth .brand .brand-mark {
+  content: url("./assets/brand/salvor-mark-full-white.svg");
+}
+
+.burn-truth .brand .brand-wordmark {
+  content: url("./assets/brand/salvor-wordmark-white.svg");
 }
 
 .burn-truth .button-primary {
@@ -1097,7 +1113,7 @@ h1,
     font-size: 17px;
   }
 
-  .brand img {
+  .brand .brand-mark {
     width: 48px;
     height: 48px;
   }

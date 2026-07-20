@@ -2,7 +2,9 @@ import { expect, test } from "@playwright/test";
 
 const viewports = [
   ["desktop", { width: 1440, height: 1000 }],
+  ["compact-desktop", { width: 1024, height: 900 }],
   ["tablet", { width: 768, height: 1024 }],
+  ["large-phone", { width: 390, height: 844 }],
   ["galaxy-s25-edge-small-phone", { width: 360, height: 780 }],
   ["narrow", { width: 320, height: 568 }],
 ];
@@ -118,7 +120,7 @@ test("hero copy passes mouse drags through to the burn surface while the slogan 
     ["points", [getComputedStyle(document.querySelector(".hero-points")).userSelect, getComputedStyle(document.querySelector(".hero-points")).pointerEvents]],
     ["slogan", [getComputedStyle(document.querySelector("[data-burn-hero] > .hero-copy > .hero-tagline")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .hero-copy > .hero-tagline")).pointerEvents]],
     ["header", [getComputedStyle(document.querySelector("[data-burn-hero] > .site-header")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .site-header")).pointerEvents]],
-    ["brand", [getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .brand span")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .brand span")).pointerEvents]],
+    ["brand", [getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .brand-wordmark")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .brand-wordmark")).pointerEvents]],
     ["nav", [getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .desktop-nav a")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .desktop-nav a")).pointerEvents]],
   ]));
   expect(interaction).toEqual({

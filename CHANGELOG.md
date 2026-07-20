@@ -80,6 +80,12 @@ Initial public release.
   (`site/assets/social/salvor-social-card.png`, 1200×630; GitHub preview
   `assets/social/github-social-preview.png`, 1280×640) plus static Open Graph and
   X/Twitter metadata in the site head.
+- **Canonical W10 brand system** — the operator-approved artifact is reconstructed
+  as square, bilaterally symmetric vector geometry with deterministic generation,
+  full/core and black/white variants, exact-size favicons, one outlined wordmark,
+  README lockup, full-bleed social compositions, canonical loop embedding,
+  machine-readable hashes, drift contracts, and visual contact-sheet auditing.
+  Retired badge, node-sigil, gem, and hand-built W10/WF approximations do not ship.
 
 [Unreleased]: https://github.com/dwasyluk/salvor/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/dwasyluk/salvor/releases/tag/v1.0.0

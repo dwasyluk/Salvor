@@ -6,6 +6,7 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 - `../README.md` — public overview and supported capabilities
 - `../SETUP_PROMPT.md` — universal setup protocol
 - `../docs/VENDOR_ADAPTERS.md` — current vendor-support truth
+- `../assets/brand/BRAND_ASSETS.md` — canonical W10 geometry, generated-asset ownership, and usage rules
 
 ## Architecture Notes
 - The repository sources above are authoritative; the site is their semantic presentation mirror.
@@ -15,10 +16,11 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 - The Salvor Loop uses two site-only 800×960 SVG panels: wide consumers display them side-by-side, while tablet and phone consumers stack them at full available width.
 - Non-slogan hero display copy is pointer-transparent so the existing background burn surface receives mouse and touch drag gestures through the large title. Keep the slogan, CTA controls, and canonical header/navigation pointer-interactive; do not attach burn handlers to text nodes.
 - Silent public-content drift is forbidden.
+- Header, footer, burned-state, favicon, metadata, social, and loop marks must come from the generated W10 family; run `npm run brand:check` and inspect `npm run brand:audit` evidence after brand-affecting changes.
 
 ## Build and deploy
 - Static files live in `site/`; `.github/workflows/pages.yml` deploys that directory from `main`. `main` is the single source of truth.
 - Run the Node contract/interaction tests and Playwright browser suite before commit. A push deploys, so never push without explicit approval.
-- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:05`; derived constant: `GHPAGE_BUILD`.
+- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:06`; derived constant: `GHPAGE_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for deployment details.

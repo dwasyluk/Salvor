@@ -98,3 +98,11 @@ test("scoped vendor-portable language, no unqualified vendor-neutral claims", ()
   }
   assert.match(flat("docs/VENDOR_ADAPTERS.md"), /vendor-portable/i);
 });
+
+test("current governance and lifecycle wording keeps versioning conditional", () => {
+  const domain = read(".salvor/DOMAIN_REF.md");
+  assert.match(flat("README.md"), /RULES\.md[^]{0,180}optional Strict defaults[^]{0,100}VERSION\.md/i);
+  assert.match(flat("README.md"), /configured project-history or version artifact when applicable/i);
+  assert.match(flat(".salvor/DOMAIN_REF.md"), /optional Strict[^]{0,100}per-component version/i);
+  assert.doesNotMatch(domain, /future GitHub Pages site/i);
+});

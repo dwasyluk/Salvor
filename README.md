@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/salvor-logo-badge.png" width="120" alt="Salvor — the Prime Radiant"/>
+<img src="assets/brand/generated/salvor-readme-lockup.png" width="520" alt="SALVOR — canonical W10 mark and wordmark"/>
 
 # Salvor
 
@@ -83,8 +83,10 @@ The scaffold Salvor creates in your repo:
 ```
 
 Plus vendor entrypoints at the repo root — `CLAUDE.md` (canonical hub) with
-thin `AGENTS.md` (Codex) and `GEMINI.md` pointer files — and `RULES.md` +
-`VERSION.md` for the governance protocol.
+thin `AGENTS.md` (Codex) and `GEMINI.md` pointer files — and `RULES.md` for
+the governance protocol. When the optional Strict defaults are enabled,
+Salvor also generates per-component counters in `VERSION.md`; otherwise it
+uses the project's established version source or a minimal history artifact.
 
 ## Quickstart
 
@@ -129,9 +131,9 @@ reviewed "now" of the project. As work proceeds, the agent navigates code
 (Enhanced mode adds symbol- and graph-level intelligence), and when it
 surfaces something durable, a capture gate asks you before anything is saved.
 Finishing a task means updating L1/L2, the affected component spoke, and the
-version record — so the memory stays tied to the code it describes. Salvor is
-designed so the next session starts from reviewed knowledge instead of
-reconstruction.
+configured project-history or version artifact when applicable — so the memory
+stays tied to the code it describes. Salvor is designed so the next session
+starts from reviewed knowledge instead of reconstruction.
 
 <p align="center">
   <img src="assets/salvor-loop.svg" width="900" alt="The Salvor Loop: nine phases build context, act, and feed durable knowledge back into the repository brain, contrasted with an agent that starts cold without Salvor."/>
@@ -293,10 +295,11 @@ Contributions welcome beyond the roadmap too:
 A *salvor* is one who salvages — someone who recovers what would otherwise be
 lost. For the [Foundation](https://en.wikipedia.org/wiki/Foundation_(TV_series))
 fans: Salvor Hardin kept the Foundation alive through its first crisis with
-knowledge rather than force, and the Prime Radiant — the faceted gem in our
-logo — is the device that carries the accumulated plan across generations. A
+knowledge rather than force, and the Prime Radiant — represented here by the
+architectural W10 artifact — is the device that carries the accumulated plan
+across generations. A
 version-controlled record that preserves a codebase's reasoning across resets
-is the same idea, scaled down to your repo. 🔷
+is the same idea, scaled down to your repo.
 
 ## Docs
 
@@ -318,7 +321,7 @@ GitNexus's current community license is PolyForm Noncommercial. Review their
 upstream terms before commercial use.
 
 <div align="center">
-<img src="assets/salvor-logo.svg" width="56" alt=""/>
+<img src="assets/brand/generated/salvor-mark-full-black.svg" width="72" height="72" alt=""/>
 <br/>
 <sub>Salvage your knowledge before it's lost to the next session.</sub>
 </div>

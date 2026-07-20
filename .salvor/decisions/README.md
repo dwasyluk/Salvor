@@ -14,4 +14,4 @@ future sessions honor them instead of re-litigating. Part of the
 
 | Date | Decision |
 |------|----------|
-| _(none yet)_ | |
+| 2026-07-20 | [Canonical W10 brand system](./2026-07-20-canonical-w10-brand-system.md) |

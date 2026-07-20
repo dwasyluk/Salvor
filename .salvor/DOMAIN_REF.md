@@ -12,8 +12,8 @@ Salvor gives a repository a version-controlled institutional brain shared across
 2. Two-tier persisted memory: ≤50-line L1 plus a detailed-but-curated L2 (rotated at ~1,500 lines or release milestones).
 3. Mandatory `RULES.md` enforcement and termination protocol.
 4. Three user-gated capture classes: Decision / Domain Learning, Learned Failure (LF#), and Deferred Finding.
-5. Per-component version counters and an auditable history of why.
-6. Serena semantic/symbolic code intelligence and GitNexus relationship/impact intelligence.
+5. An auditable history of why; optional Strict installations add per-component version counters, while Core/Q4=NO uses the project's established version source or a minimal history artifact.
+6. Optional Enhanced mode adds Serena semantic/symbolic code intelligence and GitNexus relationship/impact intelligence; Core works without either tool.
 
 ## Canonical Public Sources
 
@@ -21,7 +21,7 @@ Salvor gives a repository a version-controlled institutional brain shared across
 - `SETUP_PROMPT.md` — universal installer and scaffold protocol.
 - `docs/VENDOR_ADAPTERS.md` — vendor support and adapter behavior.
 
-The future GitHub Pages site is a generated semantic mirror of these sources, not an independent authority.
+The deployable GitHub Pages site in `site/` is a semantic presentation mirror of these sources, not an independent authority.
 
 ## Learned Failures (LF#)
 

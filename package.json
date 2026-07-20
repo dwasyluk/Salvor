@@ -6,8 +6,12 @@
   "type": "module",
   "scripts": {
     "serve": "python3 -m http.server 4173 -d site",
+    "brand:build": "node scripts/generate-brand-assets.mjs",
+    "brand:check": "node scripts/generate-brand-assets.mjs --check",
+    "brand:audit": "node scripts/generate-brand-assets.mjs --audit",
+    "release:audit": "node scripts/audit-release.mjs",
     "test:contract": "node --test tests/site-contract.test.mjs tests/setup-safety.test.mjs tests/ratification.test.mjs tests/final.test.mjs tests/release-gate.test.mjs tests/consistency.test.mjs",
-    "test:unit": "node --test tests/site-contract.test.mjs tests/site-interactions.test.mjs tests/burn-field.test.mjs tests/setup-safety.test.mjs tests/ratification.test.mjs tests/final.test.mjs tests/release-gate.test.mjs tests/consistency.test.mjs",
+    "test:unit": "node --test tests/brand-assets.test.mjs tests/site-contract.test.mjs tests/site-interactions.test.mjs tests/burn-field.test.mjs tests/setup-safety.test.mjs tests/ratification.test.mjs tests/final.test.mjs tests/release-gate.test.mjs tests/consistency.test.mjs",
     "test:browser": "playwright test",
     "test": "npm run test:unit && npm run test:browser"
   },
