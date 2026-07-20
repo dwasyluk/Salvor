@@ -10,7 +10,7 @@ Markdown documentation comprising root `README.md` and the complete `docs/` dire
 
 ## Architecture Notes
 - Keep public claims consistent with `../SETUP_PROMPT.md` and current implementation status.
-- Documentation is canonical source material for the GitHub Pages presentation mirror on `ghpages/v1.0.0`.
+- Canonical product content, documentation, and site source all live on `main`. The deployable static site is `site/`, and `.github/workflows/pages.yml` deploys it from `main` via GitHub Actions. Pushing and deploying remain operator-controlled actions.
 - New website presentation elements require operator design approval; documentation changes do not silently invent page structure.
 
 ## Validation

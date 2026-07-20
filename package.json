@@ -1,12 +1,13 @@
 {
   "name": "salvor-site",
+  "version": "1.0.0",
   "private": true,
   "license": "MIT",
   "type": "module",
   "scripts": {
     "serve": "python3 -m http.server 4173 -d site",
-    "test:contract": "node --test tests/site-contract.test.mjs tests/setup-safety.test.mjs",
-    "test:unit": "node --test tests/site-contract.test.mjs tests/site-interactions.test.mjs tests/burn-field.test.mjs tests/setup-safety.test.mjs",
+    "test:contract": "node --test tests/site-contract.test.mjs tests/setup-safety.test.mjs tests/ratification.test.mjs",
+    "test:unit": "node --test tests/site-contract.test.mjs tests/site-interactions.test.mjs tests/burn-field.test.mjs tests/setup-safety.test.mjs tests/ratification.test.mjs",
     "test:browser": "playwright test",
     "test": "npm run test:unit && npm run test:browser"
   },

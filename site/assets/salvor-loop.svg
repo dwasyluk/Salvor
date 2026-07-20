@@ -111,7 +111,7 @@
     <line x1="64" y1="810" x2="736" y2="810" stroke="#d3d1ca" stroke-width="2"/>
     <text x="400" y="854" fill="#111316" font-size="20" font-weight="800">FULL CONTEXT, COMPOUNDING</text>
     <text x="400" y="891" fill="#55585d" font-size="16">Every phase reads from and writes back to the brain.</text>
-    <text x="400" y="925" fill="#111316" font-size="20" font-weight="800">Every request makes the next one smarter.</text>
+    <text x="400" y="925" fill="#111316" font-size="16" font-weight="800">Every approved capture gives the next session more context.</text>
   </g>
 
   <!-- Quiet cold-start field: deliberately no grid and no competing detail -->

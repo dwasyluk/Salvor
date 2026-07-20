@@ -15,7 +15,7 @@ A clear description of the bug.
 - [ ] Other:
 
 **LLM CLI / vendor**
-e.g. Claude Code, Codex, Gemini CLI — and version if known.
+e.g. Claude Code, Codex, Gemini CLI / Antigravity CLI — and version if known. (Gemini CLI and Antigravity CLI both use the compatible `GEMINI.md` entrypoint.)
 
 **To reproduce**
 Steps, and the prompt/command you ran.

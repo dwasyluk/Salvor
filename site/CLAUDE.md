@@ -1,6 +1,6 @@
 # ghpage — v1.0.0 GitHub Pages presentation mirror
 
-Concrete static-site consumer on `ghpages/v1.0.0`. `main` remains the single source of truth; this component presents its public claims without inventing product behavior.
+The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.yml`. `main` is the single source of truth; this component presents its public claims without inventing product behavior.
 
 ## Canonical Sources
 - `../README.md` — public overview and supported capabilities
@@ -17,8 +17,8 @@ Concrete static-site consumer on `ghpages/v1.0.0`. `main` remains the single sou
 - Silent public-content drift is forbidden.
 
 ## Build and deploy
-- Static files live in `site/`; `.github/workflows/pages.yml` publishes only that directory from `ghpages/v1.0.0`.
+- Static files live in `site/`; `.github/workflows/pages.yml` deploys that directory from `main`. `main` is the single source of truth.
 - Run the Node contract/interaction tests and Playwright browser suite before commit. A push deploys, so never push without explicit approval.
-- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:02`; derived constant: `GHPAGE_BUILD`.
+- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:03`; derived constant: `GHPAGE_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for deployment details.

@@ -152,6 +152,11 @@ deferred findings. They coexist cleanly: `.specify/` and `specs/` stay canonical
 for spec-driven work, and Salvor links to those artifacts rather than
 duplicating them.
 
+Spec Kit's extension ecosystem includes memory-related extensions. Salvor does not
+depend on Spec Kit lacking memory; Salvor's distinction is that repository-wide
+engineering-memory capture, ownership, failure retention, and governance are its
+core protocol.
+
 ## What about Google ADK?
 
 Orthogonal — ADK is an agent runtime, not a repo-memory discipline. Google ADK
@@ -177,10 +182,14 @@ in a PR, and it travels across branches and vendors. Different jobs — use both
 
 ## What does it cost, and is it only for teams?
 
-Free and MIT. You pay only for the LLM you already use; the two MCP servers are
-free and local. It shines for teams (one shared brain), but it compounds for solo
-devs too — it's your memory across your own sessions, machines, and the models
-you'll switch to next.
+Salvor itself is free and MIT. You pay only for the LLM you already use. The two
+MCP servers are optional local tools that add code intelligence to Salvor Core:
+Serena is open-source, while GitNexus is a third-party project with its own
+license (its current community license is PolyForm Noncommercial — review the
+upstream license or enterprise terms before anticipated commercial use). Salvor
+Core does not require GitNexus. Salvor shines for teams (one shared brain), but it
+compounds for solo devs too — it's your memory across your own sessions, machines,
+and the models you'll switch to next.
 
 ## Is the graph useful, or is it just visual hype?
 

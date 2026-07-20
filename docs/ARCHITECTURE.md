@@ -66,10 +66,10 @@ knowledge compound rather than decay:
   and its marked `gitnexus:start`/`gitnexus:end` block in the canonical
   `CLAUDE.md` hub only; vendor adapters stay thin.
 
-Both are standard MCP servers, so they work across Claude Code, Codex, Gemini,
-Cursor, and others. The division of labor: **GitNexus remembers how the code is
-connected. Salvor preserves why the team made it that way.** (Setup details and
-the ownership contract: `VENDOR_ADAPTERS.md`.)
+Both are standard MCP servers, so they work across Claude Code, Codex, Gemini CLI /
+Antigravity CLI, Cursor, and others. The division of labor: **GitNexus remembers how
+the code is connected. Salvor preserves why the team made it that way.** (Setup details
+and the ownership contract: `VENDOR_ADAPTERS.md`.)
 
 ## Where the brain lives: the `.salvor/` folder
 
@@ -86,6 +86,21 @@ The rule: *if a CLI or build tool auto-discovers the file at a fixed path, it st
 at the root; everything else Salvor owns lives in `.salvor/`.* Tooling gets one
 predictable root, your own `docs/` stays uncluttered, and `.serena/` / `.gitnexus/`
 remain their own tools' homes (Salvor orchestrates them, it doesn't absorb them).
+
+### One owner per durable fact
+
+Salvor is not "everything in-repo is co-canonical." Each durable fact has **one
+canonical owner**; other shared files link to or summarize it rather than forking it:
+
+- **`.salvor/` artifacts own their knowledge.** L1 (`active_state.md`) = concise
+  current state; L2 (`active_state_verbose.md`) = curated recovery history;
+  `DOMAIN_REF.md` = current domain facts + the failure (`LF#`) registry;
+  `decisions/` = design rationale; `domain-learnings/` = validated discoveries;
+  `postmortems/` = incident/failure evidence; `DEFERRED_TODOS.md` = deferred findings.
+- **GitNexus** owns machine-derived structure; **Serena** owns symbol retrieval plus
+  concise pointers; **Spec Kit** owns its specs/plans.
+- **Vendor entrypoints** (`CLAUDE.md` hub, `AGENTS.md`, `GEMINI.md`) route to the
+  canonical records — they are **not** knowledge forks.
 
 ## The three capture classes (the keystone)
 

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="960" viewBox="0 0 800 960" role="img" aria-labelledby="with-title with-desc">
   <title id="with-title">With Salvor</title>
-  <desc id="with-desc">Nine connected phases read from and write to a shared repository brain, so every request makes the next one smarter.</desc>
+  <desc id="with-desc">Nine connected phases read from and write to a shared repository brain, so every approved capture gives the next session more context.</desc>
   <defs>
     <linearGradient id="read" x1="190" y1="170" x2="650" y2="650" gradientUnits="userSpaceOnUse">
       <stop stop-color="#7dd3fc"/><stop offset=".52" stop-color="#6366f1"/><stop offset="1" stop-color="#4338ca"/>
@@ -92,6 +92,6 @@
     <line x1="64" y1="810" x2="736" y2="810" stroke="#d3d1ca" stroke-width="2"/>
     <text x="400" y="854" fill="#111316" font-size="20" font-weight="800">FULL CONTEXT, COMPOUNDING</text>
     <text x="400" y="891" fill="#55585d" font-size="16">Every phase reads from and writes back to the brain.</text>
-    <text x="400" y="925" fill="#111316" font-size="20" font-weight="800">Every request makes the next one smarter.</text>
+    <text x="400" y="925" fill="#111316" font-size="16" font-weight="800">Every approved capture gives the next session more context.</text>
   </g>
 </svg>

@@ -11,8 +11,7 @@ Operational reference for local work, deployment, environment variables, externa
 
 ## Deployment
 
-- `main` is canonical and does not deploy the site. The presentation mirror lives on `ghpages/v1.0.0`.
-- `.github/workflows/pages.yml` publishes only `site/` when `ghpages/v1.0.0` is pushed; local commits do not deploy.
+- The deployable static site is `site/` on `main`. `.github/workflows/pages.yml` deploys `site/` from `main` via GitHub Actions (source = GitHub Actions); pushing/deploying remain operator-controlled.
 - A source-of-truth sync must stop for design review when new page elements are required and must run Playwright directly at desktop, tablet, Galaxy-S25-Edge-like small-phone, and 320px narrow viewports before completion.
 
 ## Environment Variables and Build IDs
@@ -30,5 +29,5 @@ Operational reference for local work, deployment, environment variables, externa
 
 - Use `git status`, `git diff`, and `git diff --check` for change state and integrity.
 - Use `gitnexus status` for index freshness and symbol/relationship/flow counts.
-- Treat direct Playwright results—not CSS inspection—as the responsive-health evidence for every ghpage source-of-truth sync; include desktop, tablet, small-phone, and 320px narrow consumers.
+- Treat direct Playwright results—not CSS inspection—as the responsive-health evidence for every `site/` source-of-truth sync before deploy-from-main; include desktop, tablet, small-phone, and 320px narrow consumers.
 - Verify long-running processes are alive before trusting their output.

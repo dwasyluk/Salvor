@@ -5,7 +5,8 @@ Before any work: read `CLAUDE.md` (the hub) + the relevant spoke (`api/CLAUDE.md
 especially §0 (Task Termination Protocol) and the three capture classes.
 
 The core Salvor files are vendor-neutral; this file is just the entrypoint adapter for
-Gemini CLI. The canonical context lives in `CLAUDE.md` (Codex uses `AGENTS.md`).
+Gemini CLI / Antigravity CLI, which read this compatible `GEMINI.md` project-context file.
+The canonical context lives in `CLAUDE.md` (Codex uses `AGENTS.md`).
 
 **Do not duplicate or fork project knowledge into this adapter** — shared truth (including
 the GitNexus code-intelligence block) belongs only in `CLAUDE.md`, the component spokes,

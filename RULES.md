@@ -17,7 +17,7 @@ Before declaring any task complete, verify and execute this checklist. No task i
 2. **L1 Sync:** Update `.salvor/active_state.md` in dense shorthand and keep it under 50 lines.
 3. **L2 Sync:** Update `.salvor/active_state_verbose.md` immediately after L1 with full reasoning, logs, and nuance. L2 is detailed but curated, not unbounded: when it exceeds ~1,500 lines or at release milestones, condense the oldest resolved sections — keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise. Never persist material listed in §5.3.
 4. **Spoke Sync:** Update the changed component's `CLAUDE.md`; update `.salvor/DOMAIN_REF.md` for domain logic and `.salvor/INFRA.md` for infrastructure. Do not put component-specific detail in root `CLAUDE.md`.
-5. **Repository ↔ Website Parity:** Canonical public claims live in `README.md`, `SETUP_PROMPT.md`, and `docs/VENDOR_ADAPTERS.md`; `ghpages/v1.0.0` is their presentation mirror. Every source-of-truth sync must run direct Playwright checks at desktop, tablet, small-phone, and 320px narrow sizes. New page sections, interactions, or visual elements require explicit operator design approval. See §6.3.
+5. **Repository ↔ Website Parity:** Canonical public claims live in `README.md`, `SETUP_PROMPT.md`, and `docs/VENDOR_ADAPTERS.md`. The deployable static site is `site/` on `main`; `.github/workflows/pages.yml` deploys it from `main` via GitHub Actions. Before deploying site changes, run direct Playwright checks at desktop, tablet, small-phone, and 320px sizes; new page sections/interactions/visual elements require explicit operator design approval. Pushing/deploying remain operator-controlled. See §6.3.
 
 ## 1. Context Recovery Procedure
 
@@ -57,7 +57,7 @@ On `no`, acknowledge and continue without saving any partial artifact.
 | Component | Owned Scope | Source of Truth | Derived Constant |
 |-----------|-------------|-----------------|------------------|
 | core | `SETUP_PROMPT.md` | `VERSION.md` → `CORE:XX` | `CORE_BUILD` |
-| ghpage | `site/` + Pages workflow presentation mirror | `VERSION.md` → `GHPAGE:XX` | `GHPAGE_BUILD` |
+| ghpage | `site/` static site, deployed from `main` via `.github/workflows/pages.yml` | `VERSION.md` → `GHPAGE:XX` | `GHPAGE_BUILD` |
 | docs | `README.md` and `docs/` | `VERSION.md` → `DOCS:XX` | `DOCS_BUILD` |
 
 - A change bumps its owning component and receives its own history entry. Mixed changes bump every affected component independently.
@@ -81,7 +81,7 @@ On `no`, acknowledge and continue without saving any partial artifact.
 
 1. Read root `CLAUDE.md`, the relevant spoke, `RULES.md`, and L1 before changing a component.
 2. Do not hardcode volatile values such as versions, run modes, or endpoints; wire them to variables or canonical manifests.
-3. **Repository ↔ website parity:** repository documentation is authoritative and the ghpage is its semantic presentation mirror. Existing mapped copy updates when main is merged into the Pages branch. If a canonical change needs a new page element, synchronization stops for explicit design approval. Each sync runs direct Playwright checks across desktop, tablet, small-phone, and 320px narrow consumers before completion.
+3. **Repository ↔ website parity:** repository documentation is authoritative and the site is its semantic presentation mirror. The deployable static site is `site/` on `main`; `.github/workflows/pages.yml` deploys it from `main` via GitHub Actions. If a canonical change needs a new page element, synchronization stops for explicit design approval. Before deploying site changes, run direct Playwright checks across desktop, tablet, small-phone, and 320px narrow consumers. Pushing/deploying remain operator-controlled.
 4. Traverse every related code path. A new parameter or behavior must be wired into configuration, UI, reporting, import/export, and all consumers. Stop and ask when uncertain.
 5. Numerically sensitive changes require an explicit smoke run before completion or a stated reason the smoke test cannot run.
 6. Verify long-running and observability processes are alive (`ps`, `kill -0`, `wc -l`) before trusting output; use mid-run checkpoints for long jobs.
@@ -101,5 +101,5 @@ Bundle only findings that emerge together. On `yes`, read the ledger and dedupli
 
 ## 8. Memory Layers
 
-- **Shared and canonical:** root `CLAUDE.md`, thin `AGENTS.md`/`GEMINI.md`, component spokes, `RULES.md`, `VERSION.md`, `.salvor/`, `.serena/memories/`, and GitNexus context blocks. All are git-tracked and available to every contributor and supported vendor.
+- **Shared and Git-tracked does not mean co-canonical.** Every durable fact has one canonical owner; other shared files link or summarize. One-owner model: `.salvor/` artifacts own their engineering knowledge; L1 (`.salvor/active_state.md`) = concise current state; L2 (`.salvor/active_state_verbose.md`) = curated recovery history; `.salvor/DOMAIN_REF.md` = current domain facts + failure registry; decision artifacts (`.salvor/decisions/`) = design rationale; domain-learning artifacts (`.salvor/domain-learnings/`) = validated empirical discoveries; postmortems = incident/failure evidence; `.salvor/DEFERRED_TODOS.md` = deferred findings; GitNexus = machine-derived code structure; Serena = symbol retrieval + concise pointers (not a canonical fork); Spec Kit = its own specs/plans; vendor entrypoints (`CLAUDE.md`/`AGENTS.md`/`GEMINI.md`) route to canonical records and are NOT knowledge forks. This one-owner model is consistent with `SETUP_PROMPT.md` §8.
 - **Per-user and optional:** Claude auto-memory under `~/.claude/projects/.../memory/`. It is not shared or canonical and must never hold team truth.

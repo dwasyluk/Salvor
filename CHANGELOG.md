@@ -48,8 +48,9 @@ Initial public release.
 - **`docs/ARCHITECTURE.md`** — the five pillars, plus the shared (in-repo) vs
   per-user (auto-memory) distinction.
 - **Multivendor out of the box** — setup generates all three entrypoints by default:
-  `CLAUDE.md` (canonical hub) + thin `AGENTS.md` (Codex) + `GEMINI.md` (Gemini) pointers,
-  so any teammate's CLI works with no vendor to choose. See `docs/VENDOR_ADAPTERS.md`.
+  `CLAUDE.md` (canonical hub) + thin `AGENTS.md` (Codex) + `GEMINI.md` (Gemini CLI /
+  Antigravity CLI) pointers, so any teammate's CLI works with no vendor to choose. See
+  `docs/VENDOR_ADAPTERS.md`.
 - **`example-project/`** — a tiny, real, runnable two-component app with Salvor
   fully applied (so Serena + GitNexus have real code to index).
 - Contribution scaffolding: `CONTRIBUTING.md`, GitHub issue/PR templates.
@@ -58,6 +59,13 @@ Initial public release.
   prompt-injection guidance, and private vulnerability reporting.
 - **CI** — GitHub Actions workflow running the unit (node --test) and browser
   (Playwright) suites on pushes and PRs to `main`.
+- **GitHub Pages from `main`** — the site source lives in `site/` on `main`;
+  `.github/workflows/pages.yml` deploys it via GitHub Actions (operator-controlled).
+- **Optional Enhanced tooling, clearly scoped** — Serena (open source) and GitNexus
+  (a third-party project under the PolyForm Noncommercial community license) add code
+  intelligence; neither is required for Salvor Core. Enhanced-mode setup uses a
+  `skipContextFiles`-first `.gitnexusrc` so GitNexus never overwrites Salvor-owned
+  instruction files.
 
 [Unreleased]: https://github.com/dwasyluk/salvor/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/dwasyluk/salvor/releases/tag/v1.0.0

@@ -1,7 +1,7 @@
 # Salvor — one-shot setup prompt
 
 > **How to use this file:** copy everything below the line into your LLM coding
-> CLI (Claude Code, Codex, Gemini CLI, …) from the root of the project you want
+> CLI (Claude Code, Codex, Gemini CLI / Antigravity CLI, …) from the root of the project you want
 > to give a memory to — new or existing. The agent runs a safety preflight, asks
 > **four setup questions**, then scaffolds the full Salvor structure. Setup
 > never blanket-stages files and never commits without asking you first. Serena +
@@ -76,19 +76,22 @@ Salvor runs in one of two modes:
 - **Salvor Core** — works with repository files + vendor entrypoints alone:
   `.salvor/` artifacts, user-gated capture approval, canonical ownership, L1/L2
   state, context recovery, and Git-based sharing. No MCP servers required.
-- **Enhanced mode** — Core plus **Serena** (semantic/symbolic code navigation)
+- **Enhanced mode** — Core plus two optional local tools that add code
+  intelligence to Salvor Core: **Serena** (semantic/symbolic code navigation)
   and **GitNexus** (code knowledge graph + impact analysis).
 
 Check availability: Serena (`serena --version`, or its MCP server responding)
-and GitNexus (`gitnexus --version`). Neither's core feature set requires an
-account or API key. If either is missing, offer me exactly these options and
-wait for my choice:
+and GitNexus (`gitnexus --version`). If either is missing, offer me exactly
+these options and wait for my choice:
 
-  1. **Show official install instructions.** Serena:
+  1. **Show official install instructions.** Serena (free/open):
      `uv tool install -p 3.13 serena-agent`, then `serena init`; client-specific
      MCP wiring per the official docs — https://github.com/oraios/serena (link
      there rather than per-client commands, which change). GitNexus: per its
-     official README.
+     official README. **GitNexus is a third-party project with its own license.
+     Its current community license is PolyForm Noncommercial; review the upstream
+     license or enterprise terms before anticipated commercial use. Salvor Core
+     does not require GitNexus.**
   2. **Continue in Core mode** — everything works except semantic navigation and
      impact analysis; the generated files mark Enhanced-only rules inactive.
   3. **Cancel setup.**
@@ -107,7 +110,8 @@ has no structured-question tool) BEFORE creating anything:
    build-time constant.
 2. **Components** — list each top-level component directory with a one-word
    stack hint (e.g. `api` Rust/tokio, `web` Next.js, `worker` Python). Each gets
-   its own spoke `CLAUDE.md` and a per-component build counter in `VERSION.md`.
+   its own spoke `CLAUDE.md`. With the optional Strict defaults enabled (Q4), each
+   also gets a per-component build counter in `VERSION.md`.
    The **counter letters are derived from the component name** (e.g. `api` →
    `API:01`, `web` → `WEB:01`) — configurable, not hardcoded. If the repo has no
    natural split (a single library, a docs/prompt project), a lone `root` component
@@ -197,8 +201,9 @@ non-obvious constraint contributors must remember.]
 | `.serena/memories/` | Enhanced mode: retrieval pointers into `.salvor/` (concise summaries only) | Use Serena MCP tools to query |
 
 ## APP_NAME
-Configurable via `APP_NAME` env var. Default: `<PROJECT_NAME>`. Never hardcode — reference the env var or the
-language-specific constant your build wires up.
+Configurable via `APP_NAME` env var. Default: `<PROJECT_NAME>`. With the optional Strict defaults enabled (RULES §4.4),
+never hardcode — reference the env var or the language-specific constant your build wires up. (Remove this section in
+Core mode if the strict App-Name convention is disabled.)
 
 ### SYSTEM DIRECTIVE: TWO-TIER MEMORY MANAGEMENT
 You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise) and `.salvor/active_state_verbose.md`
@@ -235,10 +240,11 @@ You self-identify knowledge worth persisting durably and ask me, verbatim, befor
 2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
 3. **Deferred Finding** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
-[GitNexus anchor — Enhanced mode only: run `gitnexus analyze` per Step 3. It appends a
-`gitnexus:start … gitnexus:end` block below, carrying its OWN `# GitNexus — Code Intelligence`
-heading plus symbol/relationship counts and tool routing. Do NOT add a heading here —
-gitnexus supplies one, and a second would duplicate it.]
+### GitNexus — Code Intelligence (Enhanced mode only; hand-authored, thin)
+[Salvor authors this section itself — GitNexus does NOT auto-write it (Step 3 sets `skipContextFiles`
+before `gitnexus analyze`). Keep it to a few lines of routing: run impact analysis before editing a
+symbol; use the knowledge graph to trace callers/execution flows instead of grepping; re-index after
+structural changes. Remove this whole section in Core mode.]
 ```
 
 ### `RULES.md` (mandatory; §0–§9, tiered)
@@ -700,7 +706,10 @@ files so any teammate's CLI works out of the box — no vendor choice needed:
   > Protocol and the capture classes. The canonical context lives in `CLAUDE.md`; this file
   > just points there. **Do not duplicate or fork project knowledge into this adapter** — shared
   > truth belongs in `CLAUDE.md`, the component spokes, `.salvor/`, and `.serena/memories/`.
-- **`GEMINI.md`** (Gemini CLI) — the same pointer text.
+- **`GEMINI.md`** (Gemini CLI / Antigravity CLI — Google coding-agent entrypoint using the
+  compatible `GEMINI.md` project-context file; Google moved consumer terminal usage from Gemini CLI
+  to Antigravity CLI while keeping `GEMINI.md` compatibility, and enterprise Gemini Code Assist /
+  API-key users may still use Gemini CLI) — the same pointer text.
 - **Claude Code** needs nothing extra: it auto-loads `CLAUDE.md` (with `@`-imports). Optionally add
   `.claude/settings.json` `custom_instructions` reinforcing RULES §0 (ask before writing settings files).
 
@@ -739,29 +748,38 @@ Ownership contract, before you run anything:
 
 - **Salvor owns** `.salvor/` and the `<!-- salvor:start --> … <!-- salvor:end -->` managed sections. **User content
   stays user-owned.**
-- **GitNexus owns** its index (`.gitnexus/`), graph data, generated skills (`.claude/skills/gitnexus/`), hooks, and its
-  clearly-marked `<!-- gitnexus:start --> … <!-- gitnexus:end -->` block in the canonical `CLAUDE.md` hub ONLY.
-- Repos that don't want GitNexus writing any instruction blocks can set `{"skipContextFiles": true}` in `.gitnexusrc`.
-  If a `.gitnexusrc` already exists, **MERGE that key into it** — show me the proposed change first; never overwrite
-  the file wholesale.
+- **GitNexus owns** its index (`.gitnexus/`), graph data, generated skills (`.claude/skills/gitnexus/`), and hooks.
+- Salvor's OWN concise GitNexus routing instructions live in the canonical `CLAUDE.md` hub as a **hand-authored, thin**
+  section (see the hub template above) — GitNexus does NOT auto-write instruction blocks into `CLAUDE.md`/`AGENTS.md`.
 - Never run a global `gitnexus setup` (or any other global config change) without my approval.
 
-Then index to populate the code-intelligence block:
+**`gitnexus analyze` is not read-only.** It may create/update `AGENTS.md` + `CLAUDE.md`, install agent skills, register
+hooks, and build a local index. The DEFAULT flow keeps it from writing instruction blocks:
+
+1. **Preview before running.** Show me the expected files, skills, hooks, and config changes `gitnexus analyze` will
+   make, and get my approval before running it.
+2. **`.gitnexusrc` first — suppress instruction-block writes BEFORE analyze.** Create or merge a repo-level
+   `.gitnexusrc` containing `{"skipContextFiles": true}` (verified current option name) BEFORE running `gitnexus
+   analyze`, so GitNexus does NOT write instruction blocks into `CLAUDE.md`/`AGENTS.md`. If a `.gitnexusrc` already
+   exists, **MERGE that key into it** — never replace unrelated options; show me the proposed change first.
+3. **Salvor's GitNexus routing stays hand-authored + thin** in the canonical `CLAUDE.md` hub. There is no
+   "gitnexus will append its block here" placeholder — Salvor authors the routing instructions itself.
+4. **Ask before installing generated skills/hooks** that affect user-level or tool-specific config.
+5. **NEVER run global `gitnexus setup`** without explicit operator approval.
+6. **Core mode remains fully functional without GitNexus.**
+
+Then index to populate the local code-intelligence graph:
 
 ```bash
 gitnexus analyze
 ```
 
-This appends a `<!-- gitnexus:start --> … <!-- gitnexus:end -->` block to root `CLAUDE.md` with symbol/relationship
-counts and tool routing. GitNexus mirrors the same block into `AGENTS.md` when it exists — but that block is project
-knowledge, so it belongs only in the canonical hub. **Keep the adapters thin:** delete the injected
-`gitnexus:start … gitnexus:end` block from `AGENTS.md` (and never let it into `GEMINI.md`) — the pointers stay one
-paragraph. (This is the same "don't fork knowledge into the adapter" rule the pointer text states.) Then OFFER — never
-auto-run — the follow-up commit exactly as above: stage only `CLAUDE.md` (plus `AGENTS.md` if you stripped a mirrored
-block from it), show me `git diff --cached`, and commit only after I approve:
+With `skipContextFiles` set first, GitNexus builds its index without mutating your instruction files. Salvor's own thin
+GitNexus routing already lives in the hub. Then OFFER — never auto-run — the follow-up commit: stage only the
+`.gitnexusrc` change (and any hand-authored hub edit), show me `git diff --cached`, and commit only after I approve:
 
 ```bash
-git commit -m "chore(gitnexus): commit auto-generated code-intelligence block (hub only)"
+git commit -m "chore(gitnexus): enable local code-intelligence index (skipContextFiles)"
 ```
 
 ## Step 4 — Operating ground rules going forward

@@ -27,7 +27,7 @@ which points the agent at the shared in-repo core.
 |---|---|---|---|---|
 | **Claude Code** | `CLAUDE.md` (+ `@`-imports) | `~/.claude/.../memory/` (per-user, optional) | `.claude/settings.json` `custom_instructions` + hooks | ✅ native |
 | **Codex** | `AGENTS.md` | — | instruction-driven | ✅ via MCP config |
-| **Gemini CLI** | `GEMINI.md` | — | instruction-driven | ✅ via MCP config |
+| **Gemini CLI / Antigravity CLI** | `GEMINI.md` | — | instruction-driven | ✅ via MCP config |
 | **Cursor / others** | tool-specific rules file | varies | varies | ✅ if MCP-capable |
 
 The pointer file says, in effect:
@@ -38,10 +38,21 @@ The pointer file says, in effect:
 > fork project knowledge into this adapter — shared truth lives in `CLAUDE.md`, the
 > spokes, `.salvor/`, and `.serena/memories/`.
 
+Each durable fact has **one canonical owner**; every other shared file (including
+vendor entrypoints) links to or summarizes it rather than forking it. Vendor
+entrypoints route to the canonical records — they are not knowledge forks. See
+`ARCHITECTURE.md` ("One owner per durable fact") for the full ownership map.
+
 That's the whole adapter. The core files it points at are identical across vendors —
 including the GitNexus code-intelligence block, which lands **only** in the canonical
-`CLAUDE.md` hub (strip it back out of `AGENTS.md` if `gitnexus analyze` mirrors it there,
-so the pointers stay thin).
+`CLAUDE.md` hub.
+
+**Gemini CLI / Antigravity CLI.** Google's coding-agent entrypoint reads the compatible
+`GEMINI.md` project-context file. Google moved consumer terminal usage from Gemini CLI to
+Antigravity CLI while keeping `GEMINI.md` compatibility; enterprise Gemini Code Assist /
+API-key users may still use Gemini CLI. Either way the `GEMINI.md` pointer is the same, so
+Salvor doesn't remove it — and it doesn't assume native Antigravity behavior beyond
+`GEMINI.md`.
 
 ## What ships (all three by default)
 
@@ -74,16 +85,21 @@ aid** — pointers and structural notes that help the agent find things — whil
 `.salvor/` wins.
 
 **GitNexus.** Provides indexing, impact analysis, execution-flow tracing,
-generated skills/hooks, and context-file generation. The ownership contract:
+generated skills/hooks, and context-file generation. GitNexus is a third-party
+project with its own license. Its current community license is PolyForm
+Noncommercial; review the upstream license or enterprise terms before anticipated
+commercial use. Salvor Core does not require GitNexus. The ownership contract:
 
-- GitNexus owns its index, its generated skills/hooks, and its marked
-  `<!-- gitnexus:start -->` / `<!-- gitnexus:end -->` block — which lives in the
-  **canonical `CLAUDE.md` hub only**. Vendor adapters (`AGENTS.md`, `GEMINI.md`)
-  stay thin; if `gitnexus analyze` mirrors the block into an adapter, strip it
-  back out.
-- A repo can opt out of GitNexus context blocks entirely via a `.gitnexusrc`
-  containing `{"skipContextFiles": true}` — **merge** this key into an existing
-  `.gitnexusrc`, never overwrite the file.
+- **`skipContextFiles` first.** Before running `gitnexus analyze`, merge
+  `{"skipContextFiles": true}` into `.gitnexusrc` (**merge** into any existing
+  file, never replace it) so GitNexus does **not** write its own instruction
+  blocks. Salvor keeps its own concise GitNexus routing note in the canonical
+  `CLAUDE.md` hub; vendor adapters (`AGENTS.md`, `GEMINI.md`) stay thin.
+- **`gitnexus analyze` is invasive — plan and approve first.** It may create or
+  update `AGENTS.md` and `CLAUDE.md`, install skills, register hooks, and build the
+  index. Ask before installing generated skills/hooks, never run a global
+  `gitnexus setup` without approval, and keep in mind Salvor Core works without
+  GitNexus.
 - `.claude/skills/gitnexus/` is **generated locally** by `gitnexus analyze` and
   is gitignored — which is why it's absent from the Salvor package: each machine
   regenerates it against its own index.

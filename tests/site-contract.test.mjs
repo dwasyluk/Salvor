@@ -62,7 +62,7 @@ test("the production site embeds two standalone Salvor Loop panels", async () =>
 
   assert.match(withSalvor, /viewBox=["']0 0 800 960["']/);
   assert.match(withSalvor, /FULL CONTEXT, COMPOUNDING/);
-  assert.match(withSalvor, /Every request makes the next one smarter\./);
+  assert.match(withSalvor, /Every approved capture gives the next session more context\./);
   assert.doesNotMatch(withSalvor, /EMPTY VESSEL|WITHOUT SALVOR/);
 
   assert.match(withoutSalvor, /viewBox=["']0 0 800 960["']/);
@@ -133,10 +133,10 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     read(".salvor/INFRA.md"),
     read(".serena/memories/task_completion.md"),
   ]);
-  assert.match(version, /"ghpage"\s*:\s*2/);
-  assert.match(version, /GHPAGE:02/);
+  assert.match(version, /"ghpage"\s*:\s*3/);
+  assert.match(version, /GHPAGE:03/);
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
-  assert.match(l1, /GHPAGE:02/);
+  assert.match(l1, /GHPAGE:03/);
   for (const memory of [spoke, l2, infra, completion]) {
     assert.match(memory, /source-of-truth sync/i);
     assert.match(memory, /Playwright/i);

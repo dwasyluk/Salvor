@@ -144,9 +144,19 @@ Bundle multiple findings that emerge together into one prompt. **On `yes`:**
 When one is later fixed: delete its entry, and reference it in the fixing commit (`closes deferred #N` if numbered).
 
 ## 8. Memory layers (what's shared vs per-user)
-- **Shared, canonical, git-tracked (the team brain):** everything in-repo — `CLAUDE.md` hub + spokes, `RULES.md`,
-  `VERSION.md`, `.salvor/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, decisions, postmortems, domain-learnings),
-  `.serena/memories/`, and the GitNexus index blocks. This is what every contributor's agent reads.
+- **Shared and Git-tracked does not mean co-canonical.** Every durable fact has one canonical owner; other shared files
+  link or summarize rather than fork a second copy. The `.salvor/` artifacts own their knowledge:
+  - **L1 (`.salvor/active_state.md`)** — concise current state.
+  - **L2 (`.salvor/active_state_verbose.md`)** — curated recovery history.
+  - **`.salvor/DOMAIN_REF.md`** — current domain facts + failure registry (LF#).
+  - **`.salvor/decisions/`** — design rationale + load-bearing invariants.
+  - **`.salvor/domain-learnings/`** — validated empirical discoveries.
+  - **`.salvor/postmortems/`** — incident / failure evidence.
+  - **`.salvor/DEFERRED_TODOS.md`** — deferred, out-of-scope findings.
+  - **GitNexus** — machine-derived code structure (index blocks).
+  - **Serena (`.serena/memories/`)** — symbol retrieval + concise pointers into the canonical records above.
+  - **Vendor entrypoints** (`CLAUDE.md` hub + spokes, `AGENTS.md`, `GEMINI.md`) route to those canonical records; they
+    do not fork or duplicate the knowledge.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
   personal/operator preferences, but it is not version-controlled and does not reach teammates. Never put shared truth
   there — that belongs in-repo.
