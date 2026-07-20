@@ -241,13 +241,14 @@ You self-identify knowledge worth persisting durably and ask me, verbatim, befor
 3. **Deferred Finding** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
 ### GitNexus — Code Intelligence (Enhanced mode only; hand-authored, thin)
-[Salvor authors this section itself — GitNexus does NOT write it when Enhanced setup runs
-`gitnexus analyze --skip-agents-md` (Step 3's Option A), which prevents GitNexus writing its block into
-`CLAUDE.md`/`AGENTS.md`. Keep it to a few lines of routing: run impact analysis before editing a
-symbol; use the knowledge graph to trace callers/execution flows instead of grepping; re-index after
-structural changes. GitNexus may generate agent-specific skills under tool-specific directories; paths and
-available integrations can vary by GitNexus and coding-agent version — inspect proposed changes before approving.
-Remove this whole section in Core mode.]
+[Salvor authors this section itself — GitNexus does NOT write it when Enhanced setup uses pure index mode
+(Step 3's recommended Option A: `gitnexus analyze --index-only` where supported, else the legacy
+`--skip-agents-md` fallback), which prevents GitNexus writing its block into `CLAUDE.md`/`AGENTS.md`.
+Keep it to a few lines of routing: run impact analysis before editing a symbol; use the knowledge graph to
+trace callers/execution flows instead of grepping; re-index after structural changes. GitNexus may generate
+agent-specific skills under tool-specific directories such as `.claude/skills/gitnexus-*`. Exact paths and
+available skills can vary by GitNexus and coding-agent version. Inspect the proposed changes before approving
+them. Remove this whole section in Core mode.]
 ```
 
 ### `RULES.md` (mandatory; §0–§9, tiered)
@@ -705,10 +706,11 @@ RULES §8); only caches and locally-generated tooling are ignored:
 **/.claude/skills/gitnexus*/
 ```
 
-`gitnexus analyze` ALWAYS installs local static skill dirs under `.claude/skills/gitnexus-*/` (gitnexus-cli, -exploring,
--guide, -debugging, -impact-analysis, -refactoring), regardless of flags or config — these are local, regenerable
-artifacts. The `**/.claude/skills/gitnexus*/` pattern gitignores them, which is why those skill files never ship in a
-release package. (The `--skills` flag generates ADDITIONAL repo-specific community skills; opt-in only — see Step 3.)
+Older `gitnexus analyze` invocations (and the `--skip-agents-md` fallback path) drop local static skill dirs under
+`.claude/skills/gitnexus-*/` — these are local, regenerable artifacts. The `**/.claude/skills/gitnexus*/` pattern
+gitignores them, so those skill files never ship in a release package. Pure index mode (`--index-only` where supported)
+generates NO skills at all; the pattern stays in `.gitignore` as a harmless safety net for the fallback path. (The
+`--skills` flag generates repo-specific community skills; opt-in only — see Step 3.)
 
 ### Entrypoint adapters (generate all three by default)
 
@@ -763,60 +765,79 @@ Ownership contract, before you run anything:
 
 - **Salvor owns** `.salvor/` and the `<!-- salvor:start --> … <!-- salvor:end -->` managed sections. **User content
   stays user-owned.**
-- **GitNexus owns** its index (`.gitnexus/`), graph data, generated skills (`.claude/skills/gitnexus-*/`), and hooks.
+- **GitNexus owns** its index (`.gitnexus/`), graph data, any generated skills (under tool-specific directories such as
+  `.claude/skills/gitnexus-*`), and hooks.
 - Salvor's OWN concise GitNexus routing instructions live in the canonical `CLAUDE.md` hub as a **hand-authored, thin**
   section (see the hub template above) — GitNexus does NOT auto-write instruction blocks into `CLAUDE.md`/`AGENTS.md`.
 - Never run a global `gitnexus setup` (or any other global config change) without my approval.
 
-**`gitnexus analyze` is not read-only.** By default it writes a GitNexus block into `CLAUDE.md`/`AGENTS.md`, and it
-ALWAYS installs local static skill dirs under `.claude/skills/gitnexus-*/` (regenerable, gitignored) regardless of
-flags or config; hooks are installed only by the separate `gitnexus setup` (never by `analyze`). Empirically verified
-against GitNexus 1.6.3: the `.gitnexusrc` config keys `indexOnly` / `skipContextFiles` / `skipSkills` (flat and nested)
-are NOT honored — they do NOT prevent GitNexus from injecting its block into `CLAUDE.md`/`AGENTS.md` or from installing
-skills. The reliable control is the **`--skip-agents-md` FLAG** on `gitnexus analyze`. Behavior and paths vary by
-GitNexus version — inspect proposed changes before approving. Present me an **explicit choice** and wait — do not pick
-for me:
+**`gitnexus analyze` is not read-only, and its capabilities vary by version — detect before running.** Depending on
+version and flags it may write a GitNexus block into `CLAUDE.md`/`AGENTS.md` and install local static skill dirs under
+`.claude/skills/gitnexus-*/` (regenerable, gitignored); hooks are installed only by the separate `gitnexus setup` (never
+by `analyze`). **FIRST run `gitnexus analyze --help` to detect the installed CLI's capabilities**, then choose the safe
+default accordingly:
 
-- **Option A — Index without touching Salvor-owned files (RECOMMENDED DEFAULT):** run
-  `gitnexus analyze --skip-agents-md`. This builds/refreshes the code index and does NOT write GitNexus blocks into
-  `CLAUDE.md`/`AGENTS.md` (Salvor keeps its own concise, hand-authored GitNexus routing note in the hub). GitNexus also
-  drops local `.claude/skills/gitnexus-*/` skill files during analyze — regenerable local artifacts, gitignored, not
-  committed. No hooks, no MCP/global config change.
-- **Option B — Index + repo-specific community skills:** add `--skills` (`gitnexus analyze --skip-agents-md --skills`)
-  ONLY after showing me the generated `.claude/skills/gitnexus-*/` paths, explaining they are third-party GitNexus
-  artifacts, and getting my explicit approval. Repo-specific community skills are opt-in only. Preserve existing skills;
-  overwrite nothing unrelated.
-- **Option C — Index + MCP config / hooks:** only via `gitnexus setup` (it installs the MCP config / hooks; `analyze`
-  never does), after showing me the exact changes + their purpose + getting my explicit approval. Preserve existing
-  hooks; never install user/global hooks silently.
+- **If `--index-only` is supported (GitNexus v1.6.9+):** run `gitnexus analyze --index-only` (and/or merge
+  `.gitnexusrc {"indexOnly": true}`). This is pure index mode — it builds/refreshes the code index and leaves
+  `CLAUDE.md`/`AGENTS.md`/`GEMINI.md` UNCHANGED, generates NO skills, creates NO `.claude/` dir, installs NO hooks, and
+  makes NO global MCP/config change. This is the correct pure-index default now.
+- **Else if only `--skip-agents-md` exists (older, e.g. v1.6.3):** run `gitnexus analyze --skip-agents-md`. This keeps
+  GitNexus from writing its block into `CLAUDE.md`/`AGENTS.md`, but WARN me that older versions still generate local
+  skills — SHOW the expected `.claude/skills/gitnexus-*/` paths (gitnexus-cli, -exploring, -guide, -debugging,
+  -impact-analysis, -refactoring), get my explicit approval, and confirm they are gitignored.
+- **Else (neither flag exists):** do NOT run `gitnexus analyze` automatically. Show the upstream upgrade instructions,
+  offer to stay in Salvor Core mode (fully functional without GitNexus), or require my explicit approval only after
+  enumerating every file/config mutation `analyze` would make.
+
+> **Config-key caveat, scoped to the tested version:** In GitNexus v1.6.3 the `.gitnexusrc` keys `indexOnly` /
+> `skipContextFiles` / `skipSkills` were NOT honored — they did not prevent block injection or skill installation, and
+> the reliable control was the `--skip-agents-md` flag. Current releases (v1.6.9) recognize `indexOnly` and add
+> `--index-only` (verified: `.gitnexusrc {"indexOnly": true}` yields the same clean result as the flag). Detect via
+> `gitnexus analyze --help` and verify the actual behavior rather than trusting the version number.
+
+Present me an **explicit choice** and wait — do not pick for me:
+
+- **Option A — Pure index mode (RECOMMENDED):** run `gitnexus analyze --index-only` (or merge
+  `.gitnexusrc {"indexOnly": true}`) where supported. Builds/refreshes the code index with **no context blocks, no
+  skills, no hooks, and no global MCP change** (Salvor keeps its own concise, hand-authored GitNexus routing note in the
+  hub). On older CLIs without `--index-only`, fall back to `--skip-agents-md` per the detection ladder above (which still
+  drops gitignored local skills).
+- **Option B — Index + generated skills:** run `gitnexus analyze --skills` ONLY after enumerating the exact expected
+  `.claude/skills/gitnexus-*/` paths, explaining they are third-party GitNexus artifacts, and getting my explicit
+  approval. Repo-specific / generated skills are opt-in only. Preserve existing skills; overwrite nothing unrelated.
+- **Option C — Index + hooks:** hooks come from the separate `gitnexus setup` (`analyze` never installs them). Only after
+  enumerating the exact hook changes + their purpose + getting my explicit approval. Preserve existing hooks; never
+  install user/global hooks silently.
 - **Option D — Full approved integration:** enumerate every file + config mutation, require my explicit approval, and
   preserve Salvor + user ownership throughout.
 
-> This repo's `.gitnexusrc` carries `{"skipAgentsMd": true}` for forward-compatibility (merge into any existing file,
-> never replace; preserve unrelated keys), but in the current CLI the `--skip-agents-md` FLAG is the reliable control.
+> Never run `gitnexus setup` without my explicit approval. Salvor Core is fully usable without GitNexus.
 
 In every option: **Salvor's GitNexus routing stays hand-authored + thin** in the canonical `CLAUDE.md` hub — there is no
 "gitnexus will append its block here" placeholder; Salvor authors the routing instructions itself. **NEVER run global
 `gitnexus setup`** (or any other global config change) without explicit operator approval. **Core mode remains fully
 functional without GitNexus.**
 
-> GitNexus may generate agent-specific skills under tool-specific directories. Paths and available integrations can vary
-> by GitNexus and coding-agent version; inspect the proposed changes before approving them.
+> GitNexus may generate agent-specific skills under tool-specific directories such as `.claude/skills/gitnexus-*`. Exact
+> paths and available skills can vary by GitNexus and coding-agent version. Inspect the proposed changes before approving
+> them.
 
-For the RECOMMENDED default (Option A), index to populate the local code-intelligence graph without overwriting
-Salvor-owned instruction files:
+For the RECOMMENDED default (Option A), detect capabilities first, then index in pure index mode to populate the local
+code-intelligence graph WITHOUT touching Salvor-owned instruction files:
 
 ```bash
-gitnexus analyze --skip-agents-md
+gitnexus analyze --help          # detect: is --index-only supported?
+gitnexus analyze --index-only    # v1.6.9+: pure index — no context blocks, no skills, no hooks
+# older CLI fallback (v1.6.3): gitnexus analyze --skip-agents-md  (still drops gitignored local skills — approve first)
 ```
 
-With `--skip-agents-md`, GitNexus builds its index without writing its block into your `CLAUDE.md`/`AGENTS.md`. Salvor's
-own thin GitNexus routing already lives in the hub. (The local `.claude/skills/gitnexus-*/` dirs it drops are gitignored
-and regenerable.) Then OFFER — never auto-run — the follow-up commit: stage only relevant tracked changes (any
-`.gitnexusrc` merge and any hand-authored hub edit), show me `git diff --cached`, and commit only after I approve:
+In pure index mode GitNexus builds its index and leaves `CLAUDE.md`/`AGENTS.md`/`GEMINI.md` unchanged — no skills, no
+`.claude/` dir, no hooks. Salvor's own thin GitNexus routing already lives in the hub. Then OFFER — never auto-run — the
+follow-up commit: stage only relevant tracked changes (any `.gitnexusrc` merge and any hand-authored hub edit), show me
+`git diff --cached`, and commit only after I approve:
 
 ```bash
-git commit -m "chore(gitnexus): enable local code-intelligence index (--skip-agents-md)"
+git commit -m "chore(gitnexus): enable local code-intelligence index (pure index mode)"
 ```
 
 ## Step 4 — Operating ground rules going forward

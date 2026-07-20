@@ -1,8 +1,8 @@
 # Quality and Performance Principles
 
-> Serena memories are retrieval aids, not the canonical brain. Canon: ../../RULES.md, ../../.salvor/active_state.md.
+> Serena memories are retrieval aids, not canonical truth. Canon: ../../RULES.md, ../../.salvor/active_state.md.
 
-Salvor always prioritizes top-quality code, maintainability, accessibility, and runtime performance over delivery speed. This applies across the core repository, documentation, GitHub Pages site, release packaging, and future integrations.
+Salvor always prioritizes top-quality code, maintainability, accessibility, and runtime performance over delivery speed. This applies across the core repository, documentation, the site (`site/` on `main`, deployed via `.github/workflows/pages.yml`), release packaging, and future integrations.
 
 Every planning loop must explicitly favor:
 - clean, greenfield-quality architecture over prototype accretion or hodge-podged reuse;

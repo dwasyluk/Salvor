@@ -1,6 +1,6 @@
 # Style And Conventions
 
-> Serena memories are retrieval aids, not the canonical brain. Canon: ../../RULES.md, ../../docs/ARCHITECTURE.md.
+> Serena memories are retrieval aids, not canonical truth. Canon: ../../RULES.md, ../../docs/ARCHITECTURE.md.
 
 This repo is mostly Markdown and prompt text. Writing style is concise, developer-facing, and metaphor-friendly but practical. README uses short sections, badges, feature bullets, and explicit install snippets. Keep templates generic/anonymized and avoid project/company-specific assumptions.
 

@@ -39,9 +39,12 @@ The pointer file says, in effect:
 > spokes, `.salvor/`, and `.serena/memories/`.
 
 Each durable fact has **one canonical owner**; every other shared file (including
-vendor entrypoints) links to or summarizes it rather than forking it. Vendor
-entrypoints route to the canonical records — they are not knowledge forks. See
-`ARCHITECTURE.md` ("One owner per durable fact") for the full ownership map.
+vendor entrypoints) links to or summarizes it rather than forking it. Canonical
+engineering knowledge lives in its assigned `.salvor/` artifact. Serena memories and
+vendor adapters are concise retrieval and routing aids. GitNexus owns machine-derived
+code structure. Vendor entrypoints point to and summarize the canonical records —
+they are never a knowledge fork. See `ARCHITECTURE.md` ("One owner per durable fact")
+for the full ownership map.
 
 That's the whole adapter. The core files it points at are identical across vendors —
 including the GitNexus code-intelligence block, which lands **only** in the canonical
@@ -90,44 +93,46 @@ license. Its current community license is PolyForm Noncommercial; review the
 upstream license or enterprise terms before anticipated commercial use. Salvor Core
 does not require GitNexus. The ownership contract:
 
-- **Indexing without touching Salvor-owned files is the recommended default.**
-  Run `gitnexus analyze --skip-agents-md`. Empirically verified against GitNexus
-  1.6.3: the `.gitnexusrc` config keys `indexOnly` / `skipContextFiles` /
-  `skipSkills` (flat and nested) are **NOT honored** — they do NOT prevent GitNexus
-  from injecting its block into `CLAUDE.md`/`AGENTS.md` or from installing skills.
-  The reliable control is the `--skip-agents-md` **FLAG**, which prevents GitNexus
-  writing its block into `CLAUDE.md` and `AGENTS.md`. This repo's `.gitnexusrc`
-  carries `{"skipAgentsMd": true}` for forward-compatibility (**merge** into any
-  existing file, never replace it), but the flag is the reliable control in the
-  current CLI, and behavior/paths vary by GitNexus version. Salvor keeps its own
-  concise GitNexus routing note in the canonical `CLAUDE.md` hub; vendor adapters
+- **Pure index mode is the recommended default.** Where supported, run
+  `gitnexus analyze --index-only` (or set `.gitnexusrc {"indexOnly": true}`). This
+  skips **all** AI-context file injection — no GitNexus block in
+  `CLAUDE.md`/`AGENTS.md`/`GEMINI.md`, no skills, no hooks, no global MCP change —
+  and just builds the code index. Detect support via `gitnexus analyze --help`.
+  Verified against GitNexus 1.6.9: `--index-only` leaves Salvor-owned entrypoints
+  unchanged and installs no `.claude/` skill files. Salvor keeps its own concise
+  GitNexus routing note in the canonical `CLAUDE.md` hub; vendor adapters
   (`AGENTS.md`, `GEMINI.md`) stay thin.
+- **Legacy fallback for older versions: `--skip-agents-md`.** On releases that
+  predate `--index-only` (e.g. GitNexus 1.6.3), run `gitnexus analyze
+  --skip-agents-md`. This suppresses the context block in `CLAUDE.md`/`AGENTS.md`
+  but still generates local skill files — gitignore them, show the paths, and get
+  approval. In GitNexus 1.6.3 the `.gitnexusrc` config keys
+  `indexOnly` / `skipContextFiles` / `skipSkills` were **not** honored; current
+  releases (v1.6.9) recognize `indexOnly` and add `--index-only`. This repo's
+  `.gitnexusrc` carries `{"indexOnly": true}` for current releases and
+  `{"skipAgentsMd": true}` for the legacy path (**merge** into any existing file,
+  never replace it); behavior and paths vary by GitNexus version, so confirm against
+  `--help`.
 - **Choose an ownership mode before running `gitnexus analyze`.** Analyze can be
   invasive — plan and approve first:
-  - **A — Index without touching Salvor-owned files (default).**
-    `gitnexus analyze --skip-agents-md`. Builds only the code index; does NOT write
-    GitNexus blocks into `CLAUDE.md`/`AGENTS.md`. GitNexus still drops local
-    `.claude/skills/gitnexus-*/` skill files during analyze — regenerable, gitignored,
-    not committed. No hooks, no global config. Recommended.
+  - **A — Pure index, nothing else (recommended).**
+    `gitnexus analyze --index-only`. Builds only the code index; writes no GitNexus
+    blocks into `CLAUDE.md`/`AGENTS.md`/`GEMINI.md`, installs no skills, no hooks, no
+    global config. On pre-`--index-only` versions, fall back to `--skip-agents-md`
+    (which still drops local, gitignored skill files — approve the paths).
   - **B — + repo-specific community skills (opt-in).** Add `--skills`
-    (`gitnexus analyze --skip-agents-md --skills`) to generate additional
-    repo-specific community skills. Inspect the proposed `.claude/skills/gitnexus-*/`
-    paths and approve them before accepting.
+    (`gitnexus analyze --skills`) to generate additional repo-specific community
+    skills. Inspect the proposed `.claude/skills/gitnexus-*` paths and approve them
+    before accepting.
   - **C — + MCP config / hooks (approval).** Hooks and MCP config come only from
     `gitnexus setup` (never from `analyze`). Never run a global `gitnexus setup`
     without approval.
   - **D — Full (enumerate + approve).** Enumerate every file + config mutation and
     approve each before proceeding.
 - **Skill-path caveat.** GitNexus may generate agent-specific skills under
-  tool-specific directories. Paths and available integrations can vary by GitNexus
-  and coding-agent version; inspect the proposed changes before approving them.
-- GitNexus **always** installs local static skill dirs under
-  `.claude/skills/gitnexus-*/` (gitnexus-cli, -exploring, -guide, -debugging,
-  -impact-analysis, -refactoring) during `gitnexus analyze`, regardless of flags —
-  these are **local, regenerable, and gitignored** (Salvor's `.gitignore` matches
-  `**/.claude/skills/gitnexus*/`), which is why they're absent from the Salvor
-  package: each machine regenerates them against its own index. The `--skills` flag
-  adds further opt-in repo-specific community skills.
+  tool-specific directories such as `.claude/skills/gitnexus-*`. Exact paths and
+  available skills can vary by GitNexus and coding-agent version. Inspect the
+  proposed changes before approving them.
 
 The division of labor in one line: **GitNexus remembers how the code is
 connected. Salvor preserves why the team made it that way.**

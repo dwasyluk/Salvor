@@ -1,8 +1,8 @@
 # Codebase structure — Notebook
 
-> Serena memories are retrieval aids, not the canonical brain. Canon for this example: its own `.salvor/` artifacts, `RULES.md`, and `README.md`.
+> Serena memories are retrieval aids, not the canonical brain. Canon for this example: its own `.salvor/` artifacts (`../../.salvor/`), `../../RULES.md`, and `../../README.md`. One-owner rule: each fact has exactly one canonical home — approved rationale in `.salvor/`, machine-derived code structure in GitNexus. This file just points there.
 
-Worked Salvor example: a tiny in-memory notes service, two components, no framework, no DB.
+Worked Salvor example (Strict profile): a tiny in-memory notes service, two components (api + web, v0.1.0), no framework, no DB.
 
 ```
 example-project/
@@ -25,7 +25,7 @@ example-project/
 │   ├── tsconfig.json     # strict, DOM libs, noEmit
 │   ├── index.html        # list container + create form
 │   └── src/main.ts       # fetch/render/post against API_BASE (http://localhost:8787)
-├── .salvor/             # canonical shared brain (owns the knowledge)
+├── .salvor/             # canonical owner of approved engineering knowledge
 │   ├── active_state.md           # L1 (≤50 lines)
 │   ├── active_state_verbose.md   # L2
 │   ├── DOMAIN_REF.md             # living truth + LF# registry
@@ -42,3 +42,11 @@ example-project/
 - Note `id` is a **string**; keep it a string at every boundary.
 - `web` mirrors `api`'s `Note` type by hand — propagate field changes to both (RULES §6.4).
 - In-memory only: state resets on api restart (DEFERRED #1).
+
+## Capture classes (RULES §2, §7) — ask before persisting
+- **Decision / Domain Learning** → `.salvor/decisions/` or `.salvor/domain-learnings/`.
+- **Learned Failure (LF#)** → registered in `.salvor/DOMAIN_REF.md` (e.g. LF-1 copy-return invariant).
+- **Deferred Finding** → `.salvor/DEFERRED_TODOS.md` (e.g. #1 no persistence).
+
+## GitNexus
+- Machine-derived code structure (symbols, call graphs, impact). Safe default: `gitnexus analyze --index-only` (pure index, v1.6.9+; no context files / skills / hooks). Older versions: `--skip-agents-md`. Impact before edits; change-detection before commit. Core mode works without it.

@@ -20,18 +20,38 @@ const faq = read("docs/FAQ.md");
 const gitignore = read(".gitignore");
 const ci = read(".github/workflows/ci.yml");
 
-// --- GitNexus: verified flag-based index-only, not the inert config key ----
-test("index-only default is the --skip-agents-md flag, not an indexOnly config claim", () => {
+// --- GitNexus: index-only primary (v1.6.9+), version-aware fallback --------
+test("index-only is the documented primary default, with a version-aware fallback", () => {
+  assert.match(setup, /--index-only/);
+  assert.match(vendor, /--index-only/);
+  // capability detection via CLI help
+  assert.match(setup, /gitnexus analyze --help/);
+  // --skip-agents-md remains documented as the legacy fallback
   assert.match(setup, /--skip-agents-md/);
-  assert.match(vendor, /--skip-agents-md/);
-  // no current-state doc may present {"indexOnly": true} as the working default
-  assert.doesNotMatch(flat("SETUP_PROMPT.md"), /default[^.]{0,40}"indexOnly"\s*:\s*true/i);
+  // any "config keys inert" claim must be scoped to a tested version, never blanket
+  assert.doesNotMatch(flat("SETUP_PROMPT.md"), /config keys[^.]{0,30}are inert(?![^.]{0,40}1\.6\.3)/i);
 });
 
-test("generated skills are gitignored and community skills are opt-in", () => {
+test("skill paths are version-tolerant (no obsolete nested pattern) and gitignored", () => {
   assert.match(gitignore, /\.claude\/skills\/gitnexus\*/);
-  assert.match(setup, /--skills/); // documented as opt-in
-  assert.match(setup, /gitnexus-\*/); // skill-path shape documented
+  assert.match(setup, /--skills/); // community skills opt-in
+  assert.match(setup, /gitnexus-\*/); // documented shape
+  // the obsolete nested layout must not be documented
+  for (const doc of [setup, vendor]) assert.doesNotMatch(doc, /\.claude\/skills\/gitnexus\/gitnexus-\*/);
+});
+
+test("example project has no stale auto-generated GitNexus block", () => {
+  const ex = read("example-project/CLAUDE.md");
+  assert.doesNotMatch(ex, /gitnexus:start/);
+  assert.doesNotMatch(ex, /161 symbols/); // the old hardcoded counts
+  assert.match(ex, /--index-only/); // hand-authored routing note names the safe default
+});
+
+test("vendor adapters are routing aids, not co-owners", () => {
+  for (const p of ["AGENTS.md", "GEMINI.md"]) {
+    assert.match(flat(p), /retrieval and routing aids|routing\/retrieval aids|retrieval\/routing aids/i);
+    assert.doesNotMatch(read(p), /Shared truth belongs in `CLAUDE\.md`, the spokes, `\.salvor\/`, and `\.serena\/memories\/` — including the GitNexus code-intelligence block/);
+  }
 });
 
 test("hooks/MCP config are opt-in via gitnexus setup only", () => {
@@ -41,8 +61,8 @@ test("hooks/MCP config are opt-in via gitnexus setup only", () => {
 
 test("the verbatim skill-path caveat is present", () => {
   assert.match(setup, /GitNexus may generate agent-specific skills under tool-specific directories/);
-  assert.match(setup, /Paths and available integrations can vary/);
-  assert.match(setup, /inspect the proposed changes before approving them/);
+  assert.match(setup, /can vary by GitNexus and coding-agent version/);
+  assert.match(setup, /inspect the proposed changes before approving/i);
 });
 
 // --- Canonical ownership in the generated template ------------------------

@@ -4,6 +4,17 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-07-20 — GitNexus aligned to current published version v1.6.9 (CORE:07 DOCS:07)
+
+The prior pass (CORE:06) tested GitNexus **1.6.3**, where `--index-only` did not exist, config keys were inert, and `analyze` always installed local skills — so it documented `--skip-agents-md` as the control. But `npm view gitnexus version` = **1.6.9** is what users install today. Upgraded the local CLI to 1.6.9 and re-verified LIVE (fixtures `/tmp/gnA`, `/tmp/gnB`, `/tmp/gn-enh`):
+
+- `gitnexus analyze --index-only` — "Pure index mode: skip all file injection". Result: `CLAUDE.md`/`AGENTS.md`/`GEMINI.md` **unchanged**, **no** `.claude/` skills dir created, index built. `--skip-skills` also now exists.
+- `.gitnexusrc {"indexOnly": true}` (config, no flag) — same clean result. Config keys are now honored in 1.6.9.
+
+So the safe default is now **index-only** (flag or config), documented **version-aware**: agents detect via `gitnexus analyze --help`; use `--index-only` where present (v1.6.9+); fall back to `--skip-agents-md` on older versions (context-only — still generate local skills, which are gitignored, shown, and approved). Any "config keys not honored" statement is explicitly scoped to v1.6.3. Repo `.gitnexusrc` set to `{"indexOnly": true}`.
+
+Reframed SETUP_PROMPT Options A–D (A = pure index recommended), `docs/VENDOR_ADAPTERS.md`, `docs/ARCHITECTURE.md`, root + example adapters (`AGENTS.md`/`GEMINI.md`/`CLAUDE.md` hub note), CHANGELOG, and root + example Serena memories. Adapter ownership corrected to: canonical engineering knowledge lives in its assigned `.salvor/` artifact; Serena memories and vendor adapters are concise retrieval/routing aids (not co-canonical); GitNexus owns machine-derived structure. Removed the stale auto-generated `gitnexus:start` block (hardcoded "161 symbols") from `example-project/CLAUDE.md`, replacing it with a hand-authored routing note. Skill-path wording is version-tolerant (`.claude/skills/gitnexus-*`; no nested `gitnexus/gitnexus-*` pattern). Bumped CORE:06→07, DOCS:06→07.
+
 ## 2026-07-20 — Final launch corrections (CORE:06 DOCS:06)
 
 Bounded independent-review correction pass on the single `main` worktree (baseline `50949f7`).

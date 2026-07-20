@@ -45,12 +45,12 @@ test("GitNexus is described as third-party PolyForm Noncommercial, never MIT/fre
   assert.doesNotMatch(vendor, /GitNexus[^.\n]*\bMIT\b/);
 });
 
-// --- Item 3: GitNexus index-only ownership (flag-based, verified) ----------
-test("repo carries a .gitnexusrc and setup documents the verified --skip-agents-md control", () => {
+// --- Item 3: GitNexus index-only ownership (v1.6.9 pure index, verified) ---
+test("repo carries an indexOnly .gitnexusrc and setup documents pure index mode", () => {
   assert.ok(existsSync(join(root, ".gitnexusrc")), ".gitnexusrc must exist");
   const rc = JSON.parse(read(".gitnexusrc"));
-  assert.equal(rc.skipAgentsMd, true);
-  assert.match(setup, /--skip-agents-md/);
+  assert.equal(rc.indexOnly, true);
+  assert.match(setup, /--index-only/);
   // the brittle write-then-strip default must be gone from setup
   assert.doesNotMatch(setup, /strip (it|the .*block) back out of `?AGENTS\.md`?/i);
 });

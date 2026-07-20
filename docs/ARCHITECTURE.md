@@ -62,17 +62,18 @@ knowledge compound rather than decay:
   knowledge graph of the codebase (symbols, relationships, flows) — *impact
   analysis before edits*, "know your code," not just keyword search. Especially
   valuable when you must assume code is untested. Salvor's recommended default is
-  to run `gitnexus analyze --skip-agents-md` so GitNexus builds only its code index
-  without writing its block into Salvor-owned `CLAUDE.md`/`AGENTS.md` (verified
-  against GitNexus 1.6.3: the `.gitnexusrc` `indexOnly`/`skipContextFiles`/`skipSkills`
-  keys are not honored — the `--skip-agents-md` flag is the reliable control; the
-  repo's `.gitnexusrc` carries `skipAgentsMd` for forward-compat, and behavior
-  varies by version). Repo-specific community skills are opt-in via
-  `gitnexus analyze --skills`, and hooks/MCP config come only from `gitnexus setup`.
-  `gitnexus analyze` always drops local static `.claude/skills/gitnexus-*/` skill
-  files — regenerable and gitignored (`**/.claude/skills/gitnexus*/`), never
-  committed. GitNexus owns its index, its opt-in generated skills/hooks, and its
-  routing note only lives in the canonical `CLAUDE.md` hub (hand-authored by
+  pure index mode — `gitnexus analyze --index-only` (or `.gitnexusrc
+  {"indexOnly": true}`) where supported — so GitNexus builds only its code index
+  with no AI-context file injection: no block in Salvor-owned
+  `CLAUDE.md`/`AGENTS.md`/`GEMINI.md`, no skills, no hooks, no global MCP change
+  (verified against GitNexus 1.6.9; detect support via `gitnexus analyze --help`).
+  On releases that predate `--index-only` (e.g. GitNexus 1.6.3, where the
+  `.gitnexusrc` `indexOnly`/`skipContextFiles`/`skipSkills` keys were not honored),
+  fall back to the `--skip-agents-md` flag, which suppresses the context block but
+  still generates local, gitignored skill files. Repo-specific community skills are
+  opt-in via `gitnexus analyze --skills`, and hooks/MCP config come only from
+  `gitnexus setup`. GitNexus owns its index, its opt-in generated skills/hooks, and
+  its routing note only lives in the canonical `CLAUDE.md` hub (hand-authored by
   Salvor); vendor adapters stay thin. GitNexus is a third-party project (PolyForm
   Noncommercial community license); Salvor Core works without it. (Setup modes and
   the full ownership contract: `VENDOR_ADAPTERS.md`.)
@@ -108,10 +109,12 @@ canonical owner**; other shared files link to or summarize it rather than forkin
   `DOMAIN_REF.md` = current domain facts + the failure (`LF#`) registry;
   `decisions/` = design rationale; `domain-learnings/` = validated discoveries;
   `postmortems/` = incident/failure evidence; `DEFERRED_TODOS.md` = deferred findings.
-- **GitNexus** owns machine-derived structure; **Serena** owns symbol retrieval plus
-  concise pointers; **Spec Kit** owns its specs/plans.
-- **Vendor entrypoints** (`CLAUDE.md` hub, `AGENTS.md`, `GEMINI.md`) route to the
-  canonical records — they are **not** knowledge forks.
+- Canonical engineering knowledge lives in its assigned `.salvor/` artifact.
+  **GitNexus** owns machine-derived code structure; **Serena** memories and **vendor
+  adapters** are concise retrieval and routing aids; **Spec Kit** owns its
+  specs/plans.
+- **Vendor entrypoints** (`CLAUDE.md` hub, `AGENTS.md`, `GEMINI.md`) point to and
+  summarize the canonical records — they are **never** a knowledge fork.
 
 ## The three capture classes (the keystone)
 
