@@ -302,7 +302,15 @@ is the same idea, scaled down to your repo. 🔷
 
 ## License
 
-[MIT](./LICENSE) © 2026 dwasyluk and Salvor contributors.
+[MIT](./LICENSE) © 2026 Dan Wasyluk.
+
+Salvor's code and documentation are MIT licensed. The Salvor name, logo,
+wordmark, and official brand artwork are governed by
+[TRADEMARKS.md](./TRADEMARKS.md).
+
+Serena and GitNexus are third-party projects that keep their own licenses —
+GitNexus's current community license is PolyForm Noncommercial. Review their
+upstream terms before commercial use.
 
 <div align="center">
 <img src="assets/salvor-logo.svg" width="56" alt=""/>

@@ -11,7 +11,7 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [1.0.0] — 2026-07-19
+## [1.0.0] — 2026-07-20
 
 Initial public release.
 
@@ -49,8 +49,8 @@ Initial public release.
   per-user (auto-memory) distinction.
 - **Multivendor out of the box** — setup generates all three entrypoints by default:
   `CLAUDE.md` (canonical hub) + thin `AGENTS.md` (Codex) + `GEMINI.md` (Gemini CLI /
-  Antigravity CLI) pointers, so any teammate's CLI works with no vendor to choose. See
-  `docs/VENDOR_ADAPTERS.md`.
+  Antigravity CLI) pointers, so any teammate's supported CLI works; the Markdown core
+  is portable to other agents through thin adapters. See `docs/VENDOR_ADAPTERS.md`.
 - **`example-project/`** — a tiny, real, runnable two-component app with Salvor
   fully applied (so Serena + GitNexus have real code to index).
 - Contribution scaffolding: `CONTRIBUTING.md`, GitHub issue/PR templates.
@@ -70,6 +70,14 @@ Initial public release.
   `--skip-agents-md` on older versions (which still drop local
   `.claude/skills/gitnexus-*/` skills, gitignored). Generated skills (`--skills`) and
   hooks/MCP config (`gitnexus setup`) are opt-in only.
+- **Licensing + brand policy** — Salvor's code and documentation are MIT licensed
+  (© 2026 Dan Wasyluk). The Salvor name, logo, wordmark, and official brand artwork
+  are governed separately by `TRADEMARKS.md`; MIT is unchanged and commercial products
+  built with Salvor are expressly allowed.
+- **Social sharing** — an evergreen Open Graph / social-preview card
+  (`site/assets/social/salvor-social-card.png`, 1200×630; GitHub preview
+  `assets/social/github-social-preview.png`, 1280×640) plus static Open Graph and
+  X/Twitter metadata in the site head.
 
 [Unreleased]: https://github.com/dwasyluk/salvor/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/dwasyluk/salvor/releases/tag/v1.0.0

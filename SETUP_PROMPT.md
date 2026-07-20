@@ -72,17 +72,46 @@ and how a feature moves from specification to implementation. Salvor preserves
 the longitudinal engineering memory accumulated while the system evolves.
 
 ### 0.3 Tooling check — Core vs Enhanced mode
-Salvor runs in one of two modes:
-- **Salvor Core** — works with repository files + vendor entrypoints alone:
-  `.salvor/` artifacts, user-gated capture approval, canonical ownership, L1/L2
-  state, context recovery, and Git-based sharing. No MCP servers required.
-- **Enhanced mode** — Core plus two optional local tools that add code
-  intelligence to Salvor Core: **Serena** (semantic/symbolic code navigation)
-  and **GitNexus** (code knowledge graph + impact analysis).
+Salvor runs in one of these modes:
+- **CORE** — works with repository files + vendor entrypoints alone: `.salvor/`
+  artifacts, user-gated capture approval, canonical ownership, L1/L2 state,
+  context recovery, and Git-based sharing. No functioning code-intelligence MCP
+  is available to the agent.
+- **ENHANCED-READY / PARTIAL ENHANCED** — Serena/GitNexus CLI, config, and/or
+  index are present, but not every advertised MCP capability is actually
+  invocable by the current agent in the current client.
+- **ENHANCED-ACTIVE** — the Serena and/or GitNexus MCP tools actually respond in
+  the current client, so Salvor's Enhanced rules (impact analysis, symbolic
+  navigation) can genuinely run.
 
-Check availability: Serena (`serena --version`, or its MCP server responding)
-and GitNexus (`gitnexus --version`). If either is missing, offer me exactly
-these options and wait for my choice:
+**Detect and report each integration SEPARATELY. Do NOT infer "Enhanced" just
+because a CLI exists.** A CLI on `PATH`, an on-disk index, and an MCP tool that
+actually responds in this client are four different facts — report each:
+
+- **Serena:** (1) CLI/launcher available (`serena --version`)? (2) project
+  initialized (`.serena/` present, onboarding done)? (3) MCP configured for the
+  current client? (4) MCP tools actually responding in the current client
+  (attempt a lightweight tool call and report success/failure)?
+- **GitNexus:** (1) CLI available (`gitnexus --version`) and its exact detected
+  version? (2) safe indexing mode supported (`--index-only` / `--skip-agents-md`
+  per `gitnexus analyze --help`)? (3) index present (`.gitnexus/`)? (4) index
+  fresh vs the current repo state or stale? (5) MCP configured? (6) MCP tools
+  actually responding in the current client?
+
+Classify from the SEPARATE facts above: no responding code-intelligence MCP →
+**CORE**; CLI/config/index present but not every advertised MCP capability is
+invocable → **ENHANCED-READY / PARTIAL ENHANCED**; the MCP tools actually
+respond → **ENHANCED-ACTIVE**. Report Serena and GitNexus independently — one
+may be ACTIVE while the other is only READY or absent.
+
+**Do NOT instruct the agent to use `gitnexus_impact`, Serena symbol tools, or
+any MCP-only operation unless that specific MCP is confirmed responding in the
+current client.** "Enhanced" must never imply unverified MCP functionality.
+Never run `gitnexus setup`, install global tooling, or modify global/client MCP
+config without explicit approval after enumerating the exact mutations.
+
+If Serena or GitNexus is missing (or present but not MCP-active), offer me
+exactly these options and wait for my choice:
 
   1. **Show official install instructions.** Serena (free/open):
      `uv tool install -p 3.13 serena-agent`, then `serena init`; client-specific
@@ -96,9 +125,10 @@ these options and wait for my choice:
      impact analysis; the generated files mark Enhanced-only rules inactive.
   3. **Cancel setup.**
 
-NEVER silently install packages or modify global MCP configuration. Setup must
-not fail when MCP tooling is missing — and must never report an Enhanced
-install as complete when it actually proceeded in Core mode.
+NEVER silently install packages or modify global/client MCP configuration. Setup
+must not fail when MCP tooling is missing — and must never report ENHANCED-ACTIVE
+when the MCP tools did not actually respond in the current client (a present CLI
+or index is at most ENHANCED-READY, not ENHANCED-ACTIVE).
 
 ## Step 1 — Confirm scope before writing files
 
@@ -130,7 +160,15 @@ has no structured-question tool) BEFORE creating anything:
    They are optional, editable, and project-specific; disabling them never
    breaks Core. For an existing repo they apply only with your explicit
    consent — answer `no` and the generated `RULES.md` marks the `[STRICT]`
-   sections disabled until your team opts in.
+   sections disabled until your team opts in. **`no` also changes the
+   generated versioning artifacts:** no per-component build counters or
+   derived source constants are imposed, `VERSION.md` does not compete with
+   an existing version source (`package.json`, `pyproject.toml`, `Cargo.toml`,
+   Changesets, release-please, semantic-release), and Salvor generates only a
+   minimal project-history file (or references the repo's established
+   mechanism). The per-component-counter language is removed from the initial
+   history rows, component spokes, the final confirmation, and the proposed
+   commit message.
 > **Vendor entrypoints are automatic — no need to choose.** Every project gets all three
 > by default: `CLAUDE.md` (the canonical hub) plus thin `AGENTS.md` (Codex) and `GEMINI.md`
 > (Gemini) pointer files, so any teammate's CLI works out of the box. The core is
@@ -400,9 +438,9 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 ## 8. Memory layers & canonical ownership [CORE]
 - **Shared and Git-tracked does not mean co-canonical. Every durable fact has one canonical owner. Other shared files
   contain concise routing instructions, summaries, derived retrieval aids, or links to that owner.** The in-repo files
-  (`CLAUDE.md` hub + spokes, `RULES.md`, `VERSION.md`, `.salvor/*`, `.serena/memories/` in Enhanced mode, the GitNexus
-  block in the hub) are all shared and read by every contributor's agent — but each durable fact still has exactly ONE
-  owner; everything else points at it.
+  (`CLAUDE.md` hub + spokes, `RULES.md`, `VERSION.md`, `.salvor/*`, `.serena/memories/` in Enhanced mode, the
+  hand-authored GitNexus routing note in the hub) are all shared and read by every contributor's agent — but each durable
+  fact still has exactly ONE owner; everything else points at it.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
   personal/operator preferences, but it is not version-controlled and does not reach teammates. Never put shared truth
   there — that belongs in-repo.
@@ -446,6 +484,12 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 
 ### `VERSION.md`
 
+**This artifact is Q4-conditional — generate the variant that matches the Step 1 Q4 answer:**
+
+**If Q4 = YES (Strict defaults enabled)** — generate the per-component build-ID manifest below. The [STRICT]
+version-check (§0.1), version-increment (§3), and derived-constant rules are active, and the build IDs feed the
+component spokes and session reports.
+
 ```markdown
 <!-- {"version":"0.1.0","<comp_a_lower>":1,"<comp_b_lower>":1} -->
 # <PROJECT_NAME> VERSION MANIFEST
@@ -461,6 +505,31 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 | Date | Build IDs | Summary |
 |------|-----------|---------|
 | [DATE] | <COMP_ID_A>:01 <COMP_ID_B>:01 | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9, VERSION.md, per-component spokes, DEFERRED_TODOS, domain-learnings + postmortems scaffolds. |
+```
+
+**If Q4 = NO (Core mode / Strict defaults disabled)** — do NOT impose per-component build counters or derived source
+constants, and do NOT overwrite or compete with an existing version source. Detect the repo's established version
+mechanism first (`package.json` `version`, `pyproject.toml`, `Cargo.toml`, Changesets, release-please,
+semantic-release, git tags, …):
+- **If the repo already has a version source:** do NOT generate a `VERSION.md` that competes with it. Reference the
+  existing mechanism from the Salvor project-history artifact instead (a one-line pointer: "Versioning is owned by
+  `<detected source>`"), and leave that source untouched.
+- **If the repo has no version source and Core still wants a project-history artifact:** generate the MINIMAL
+  Salvor project-history file below — a dated changelog with NO per-component counters and NO derived-constant
+  columns. All [STRICT] version-counter behavior stays inactive.
+
+```markdown
+# <PROJECT_NAME> Project History
+
+Salvor project-history log (Core mode — no per-component build counters). Versioning of shipped artifacts is owned
+by the repo's established mechanism (`<detected version source, or "none — add one when the project needs releases">`);
+this file is a chronological record of significant changes, not a build-counter manifest.
+
+## History
+
+| Date | Summary |
+|------|---------|
+| [DATE] | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9 (strict defaults DISABLED), DEFERRED_TODOS, domain-learnings + postmortems scaffolds. |
 ```
 
 ### `.salvor/README.md` (folder index)
@@ -492,6 +561,8 @@ behind the code.
 ### `.salvor/active_state.md` (L1, ≤50 lines)
 
 ```markdown
+<!-- Header build IDs are Q4-conditional. If Q4=YES: "# <PROJECT_NAME> Active State — <COMP_ID_A>:01 <COMP_ID_B>:01 ([DATE])".
+     If Q4=NO: omit the per-component build IDs — "# <PROJECT_NAME> Active State — ([DATE])". -->
 # <PROJECT_NAME> Active State — <COMP_ID_A>:01 <COMP_ID_B>:01 ([DATE])
 ## Architecture: [ONE-LINE: top-level stack + ports]
 ## Pipeline: [ONE-LINE: request/data flow, if applicable]
@@ -688,7 +759,8 @@ touches an adjacent component that quietly depends on this one.
 
 ## Build
 - [command to build this component]
-- [where the version constant comes from — VERSION.md key + build step]
+- [Q4=YES only: where the version constant comes from — VERSION.md key + build step. Q4=NO: omit the per-component
+  build-counter line; reference the repo's established version mechanism if the component ships releases.]
 
 For codebase tree: use Serena MCP `get_symbols_overview`.
 For domain logic: see `.salvor/DOMAIN_REF.md`. For infra/ops: see `.salvor/INFRA.md`.
@@ -751,7 +823,10 @@ named one by one, never a blanket add — then run `git diff --cached`, show me
 the output, and only after I approve what's staged, commit:
 
 ```bash
+# If Q4 = YES (Strict defaults enabled — per-component build counters in VERSION.md):
 git commit -m "chore: scaffold Salvor — hub-and-spoke + L1/L2 + RULES + per-component spokes"
+# If Q4 = NO (Core mode — no per-component counters; VERSION.md omitted or a minimal project-history file):
+git commit -m "chore: scaffold Salvor — hub-and-spoke + L1/L2 + RULES (Core mode)"
 ```
 
 (If your repo enforces commit signing and you're running unattended, add `--no-gpg-sign` only with operator approval.)
@@ -777,31 +852,40 @@ version and flags it may write a GitNexus block into `CLAUDE.md`/`AGENTS.md` and
 by `analyze`). **FIRST run `gitnexus analyze --help` to detect the installed CLI's capabilities**, then choose the safe
 default accordingly:
 
-- **If `--index-only` is supported (GitNexus v1.6.9+):** run `gitnexus analyze --index-only` (and/or merge
-  `.gitnexusrc {"indexOnly": true}`). This is pure index mode — it builds/refreshes the code index and leaves
-  `CLAUDE.md`/`AGENTS.md`/`GEMINI.md` UNCHANGED, generates NO skills, creates NO `.claude/` dir, installs NO hooks, and
-  makes NO global MCP/config change. This is the correct pure-index default now.
-- **Else if only `--skip-agents-md` exists (older, e.g. v1.6.3):** run `gitnexus analyze --skip-agents-md`. This keeps
-  GitNexus from writing its block into `CLAUDE.md`/`AGENTS.md`, but WARN me that older versions still generate local
-  skills — SHOW the expected `.claude/skills/gitnexus-*/` paths (gitnexus-cli, -exploring, -guide, -debugging,
-  -impact-analysis, -refactoring), get my explicit approval, and confirm they are gitignored.
+- **If `--index-only` is supported (GitNexus v1.6.9+):** run `gitnexus analyze --index-only`, and persist the repo
+  default by merging `{"indexOnly": true}` into `.gitnexusrc` (this is the current safe persisted default). This is
+  pure index mode — it builds/refreshes the code index and leaves `CLAUDE.md`/`AGENTS.md`/`GEMINI.md` UNCHANGED,
+  generates NO skills, creates NO `.claude/` dir, installs NO hooks, and makes NO global MCP/config change. This is the
+  correct pure-index default now. When merging, PRESERVE any unrelated existing `.gitnexusrc` keys — add/set only
+  `indexOnly`.
+- **Else if only `--skip-agents-md` exists (older, e.g. v1.6.3):** the legacy fallback is the `--skip-agents-md` CLI
+  **flag** used per-run after disclosure + approval — it is NOT persisted as a repo-config promise (do NOT write
+  `{"skipAgentsMd": true}` into `.gitnexusrc` as a durable default; on v1.6.3 that key is inert and gives a false sense
+  of safety). Run `gitnexus analyze --skip-agents-md`. This keeps GitNexus from writing its block into
+  `CLAUDE.md`/`AGENTS.md`, but WARN me that older versions still generate local skills — SHOW the expected
+  `.claude/skills/gitnexus-*/` paths (gitnexus-cli, -exploring, -guide, -debugging, -impact-analysis, -refactoring), get
+  my explicit approval, and confirm they are gitignored.
 - **Else (neither flag exists):** do NOT run `gitnexus analyze` automatically. Show the upstream upgrade instructions,
   offer to stay in Salvor Core mode (fully functional without GitNexus), or require my explicit approval only after
   enumerating every file/config mutation `analyze` would make.
 
-> **Config-key caveat, scoped to the tested version:** In GitNexus v1.6.3 the `.gitnexusrc` keys `indexOnly` /
-> `skipContextFiles` / `skipSkills` were NOT honored — they did not prevent block injection or skill installation, and
-> the reliable control was the `--skip-agents-md` flag. Current releases (v1.6.9) recognize `indexOnly` and add
-> `--index-only` (verified: `.gitnexusrc {"indexOnly": true}` yields the same clean result as the flag). Detect via
-> `gitnexus analyze --help` and verify the actual behavior rather than trusting the version number.
+> **Config-key caveat, scoped to v1.6.3:** In GitNexus v1.6.3 the `.gitnexusrc` keys `indexOnly` / `skipContextFiles` /
+> `skipSkills` were NOT honored — they did not prevent block injection or skill installation, and the reliable control
+> was the `--skip-agents-md` **flag** (a per-run CLI flag, never a persisted repo-config promise). Current releases
+> (v1.6.9+) recognize `indexOnly` and add `--index-only` (verified: persisting `.gitnexusrc {"indexOnly": true}` yields
+> the same clean result as the flag) — this is the recommended persisted repo default. Do NOT persist
+> `{"skipAgentsMd": true}` as a repo default on any version; on v1.6.3 it is inert, and on newer versions `indexOnly`
+> is the correct persisted key. Detect via `gitnexus analyze --help` and verify the actual behavior rather than trusting
+> the version number.
 
 Present me an **explicit choice** and wait — do not pick for me:
 
-- **Option A — Pure index mode (RECOMMENDED):** run `gitnexus analyze --index-only` (or merge
-  `.gitnexusrc {"indexOnly": true}`) where supported. Builds/refreshes the code index with **no context blocks, no
-  skills, no hooks, and no global MCP change** (Salvor keeps its own concise, hand-authored GitNexus routing note in the
-  hub). On older CLIs without `--index-only`, fall back to `--skip-agents-md` per the detection ladder above (which still
-  drops gitignored local skills).
+- **Option A — Pure index mode (RECOMMENDED):** run `gitnexus analyze --index-only` and persist the repo default by
+  merging `{"indexOnly": true}` into `.gitnexusrc` (preserving any unrelated existing keys) where supported.
+  Builds/refreshes the code index with **no context blocks, no skills, no hooks, and no global MCP change** (Salvor keeps
+  its own concise, hand-authored GitNexus routing note in the hub). On older CLIs without `--index-only`, fall back to
+  the per-run `--skip-agents-md` flag per the detection ladder above (a CLI flag, not a persisted `skipAgentsMd`
+  config default — it still drops gitignored local skills).
 - **Option B — Index + generated skills:** run `gitnexus analyze --skills` ONLY after enumerating the exact expected
   `.claude/skills/gitnexus-*/` paths, explaining they are third-party GitNexus artifacts, and getting my explicit
   approval. Repo-specific / generated skills are opt-in only. Preserve existing skills; overwrite nothing unrelated.
@@ -854,10 +938,14 @@ State that you understand these at the end of the scaffold confirmation message.
    durable shared engineering record always asks first (rule 1).
 3. **RULES.md §0 Task Termination Protocol is mandatory.** L1 sync → L2 sync → spoke sync before "done" — plus VERSION
    bump and mirror parity when strict defaults are enabled.
-4. **[Enhanced mode] Serena MCP is the primary search tool.** `find_symbol` / `get_symbols_overview` before any read of
-   a file >100 lines. Serena memories stay concise pointers — canonical content lives in `.salvor/` (RULES §8).
-5. **[Enhanced mode] GitNexus impact analysis before edits.** Run impact analysis on a symbol before modifying it; run
-   change-detection before committing; re-run `gitnexus analyze` after structural changes.
+4. **[ENHANCED-ACTIVE only] Serena MCP is the primary search tool.** Only when Serena's MCP tools actually respond in
+   this client: `find_symbol` / `get_symbols_overview` before any read of a file >100 lines. Serena memories stay
+   concise pointers — canonical content lives in `.salvor/` (RULES §8). If Serena is only ENHANCED-READY or absent,
+   use `grep`/`glob` and do not pretend symbolic tools ran.
+5. **[ENHANCED-ACTIVE only] GitNexus impact analysis before edits.** Only when GitNexus's MCP tools actually respond in
+   this client: run impact analysis on a symbol before modifying it; run change-detection before committing; re-run
+   `gitnexus analyze` after structural changes. If GitNexus is only ENHANCED-READY or absent, state that impact
+   analysis is unavailable rather than invoking `gitnexus_impact`.
 6. **[STRICT] Branch hygiene (RULES §6.11).** Merge → push → delete local + remote branch in one step.
 7. **Containers / production (RULES §5).** Ask before `build`/`up`/`down`/`restart` and before any production-affecting
    or outward-facing action (push, release, deploy).
@@ -870,15 +958,29 @@ State that you understand these at the end of the scaffold confirmation message.
 ## Step 5 — Confirmation report
 
 After Steps 2–4, return a short report:
-- Mode: **Core** or **Enhanced** (and, if Core, which tools were unavailable).
+- Mode, reported per integration (do NOT collapse to a single "Enhanced" flag):
+  overall **CORE** / **ENHANCED-READY (PARTIAL ENHANCED)** / **ENHANCED-ACTIVE**,
+  plus a separate line each for **Serena** and **GitNexus** stating CLI available?
+  / initialized-or-indexed? / index fresh? / MCP configured? / MCP tools actually
+  responding in this client? Only claim ENHANCED-ACTIVE for an integration whose
+  MCP tools responded. If CORE (or an integration is not MCP-active), state which
+  tools were unavailable or only READY and why, and confirm no MCP-only operation
+  was instructed for a non-responding MCP.
 - File list created/modified (with byte counts or LOC), plus confirmation that the completed diff was shown.
 - Confirmation that root `CLAUDE.md`, `RULES.md` (§0–§9, with strict defaults marked enabled/disabled per Step 1 Q4),
-  `VERSION.md`, L1, L2, `DOMAIN_REF`, `INFRA`, `DEFERRED_TODOS`, `decisions/README`, `postmortems/README`,
+  L1, L2, `DOMAIN_REF`, `INFRA`, `DEFERRED_TODOS`, `decisions/README`, `postmortems/README`,
   `domain-learnings/README`, and each spoke `CLAUDE.md` exist and have project-specific placeholders filled in.
+- **Versioning (Q4-conditional):** if Q4=YES, confirm `VERSION.md` exists with per-component build IDs and that the
+  [STRICT] version-check/increment/derived-constant rules are active. If Q4=NO, confirm NO per-component build
+  counters were imposed — state which version mechanism the repo owns (`package.json` / `pyproject.toml` /
+  `Cargo.toml` / Changesets / release-please / semantic-release / git tags / none), and whether a minimal Salvor
+  project-history file was generated or the existing source is simply referenced. All [STRICT] version-counter
+  behavior is inactive.
 - All three entrypoints present: `CLAUDE.md` (canonical hub) + `AGENTS.md` + `GEMINI.md` pointers (merged as
   salvor-managed sections where the files pre-existed).
 - Initialization commit hash **if I approved the commit** — otherwise note that the files are left uncommitted by design.
-- GitNexus index counts (symbols / relationships / execution flows) — Enhanced mode only.
+- GitNexus index counts (symbols / relationships / execution flows) — only if an index was actually built this run;
+  otherwise state the index status (present-and-fresh / present-but-stale / absent) rather than a fabricated count.
 - Acknowledge the 9 operating rules from Step 4.
 
 After confirmation, I'll brief you on the first real task.

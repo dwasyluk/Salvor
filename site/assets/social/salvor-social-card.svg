@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="630" viewBox="0 0 1200 630" font-family="'SFMono-Regular','SF Mono',Menlo,Monaco,Consolas,monospace">
+  <!-- Editable source for the Salvor Open Graph card (1200x630). Rendered to salvor-social-card.png. -->
+  <defs>
+    <radialGradient id="glow" cx="80%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#c9841d" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#c9841d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#050608"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <!-- Brand: white node sigil + SALVOR wordmark -->
+  <image xlink:href="../brand/salvor-v10-node-sigil-white.svg" x="84" y="96" width="104" height="104"/>
+  <text x="212" y="182" fill="#f3f0e8" font-size="76" font-weight="800" letter-spacing="10">SALVOR</text>
+  <!-- Tagline -->
+  <text x="84" y="312" fill="#ffd77a" font-size="56" font-weight="800">Your repo</text>
+  <text x="84" y="372" fill="#ffd77a" font-size="56" font-weight="800">remembers.</text>
+  <!-- Supporting line -->
+  <text x="84" y="452" fill="#9a9ba0" font-size="25">Version-controlled engineering memory</text>
+  <text x="84" y="486" fill="#9a9ba0" font-size="25">for coding agents.</text>
+  <!-- Mystic artifact (hero) -->
+  <image xlink:href="../hero/salvor-mystic.png" x="700" y="194" width="430" height="242" preserveAspectRatio="xMidYMid meet"/>
+</svg>

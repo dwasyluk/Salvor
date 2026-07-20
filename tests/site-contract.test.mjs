@@ -24,15 +24,15 @@ test("the site mirrors the canonical framework taxonomy and governance", async (
     /CLAUDE\.md\s+is the canonical hub/i,
     /AGENTS\.md/i,
     /GEMINI\.md/i,
-    /no vendor to choose/i,
+    /portable to other agents through thin adapters/i,
     /\.salvor\/domain-learnings\//i,
     /\.salvor\/decisions\//i,
     /Save this as a domain learning\? \(yes\/no\)/i,
     /Continued Learning/i,
     /Learned Failure/i,
     /Deferred Finding/i,
-    /RULES\.md\s+§0/i,
-    /per-component\s+VERSION\.md/i,
+    /RULES\.md\s+keeps reviewed memory and component context synchronized/i,
+    /Optional Strict defaults can also enforce project-specific version counters/i,
     /Serena \+ GitNexus/i,
   ]) {
     assert.match(visibleText, claim);
@@ -133,10 +133,10 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     read(".salvor/INFRA.md"),
     read(".serena/memories/task_completion.md"),
   ]);
-  assert.match(version, /"ghpage"\s*:\s*3/);
-  assert.match(version, /GHPAGE:03/);
+  assert.match(version, /"ghpage"\s*:\s*4/);
+  assert.match(version, /GHPAGE:04/);
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
-  assert.match(l1, /GHPAGE:03/);
+  assert.match(l1, /GHPAGE:04/);
   // The responsive-check SOP lives in its canonical homes (L1, INFRA, L2), not
   // duplicated across every Serena memory — post-refresh, Serena memories are
   // concise pointers under the one-owner model.

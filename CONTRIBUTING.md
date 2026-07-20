@@ -19,6 +19,9 @@ Issues and PRs are both encouraged — no need to ask first for small changes.
 Salvor is MIT-licensed. By contributing, you agree your contributions are
 accepted under the project's [MIT license](./LICENSE). No CLA.
 
+For questions about the Salvor name, logo, or brand identity, see
+[TRADEMARKS.md](./TRADEMARKS.md).
+
 ## Core Protocol vs Optional Strict Defaults
 
 Two kinds of change, two levels of ceremony:

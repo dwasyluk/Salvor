@@ -100,14 +100,14 @@ next agent not repeat?"
 
 ## Does my code leave my machine? What access does Salvor need?
 
-Salvor is files in your git repo plus two MCP servers (Serena, GitNexus) that run
-on your machine over stdio. Salvor introduces no hosted service or additional
-account. Serena and GitNexus operate locally for their documented core workflows.
-Your selected coding agent and model provider may still process repository
-content according to their configuration and data-handling policies — Salvor
-doesn't change that boundary, and it doesn't request calendar, email, or
-vault-wide scopes the way "wire your whole life into an agent" setups do. Your
-reasoning stays in your repo, under your version control.
+Salvor Core is repository-local files and governance. Enhanced mode can optionally
+add Serena and GitNexus integrations. Salvor adds no hosted memory service, SaaS
+account, telemetry pipeline, or cloud synchronization. Repository memory and local
+indexes remain under your control. Your selected coding agent may still transmit
+code or context according to that provider's deployment and data-handling policies.
+Salvor doesn't request calendar, email, or vault-wide scopes the way "wire your
+whole life into an agent" setups do. Your reasoning stays in your repo, under your
+version control.
 
 ## Isn't this just Cline/Roo's "Memory Bank"?
 

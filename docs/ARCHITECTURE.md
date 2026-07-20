@@ -36,8 +36,11 @@ cheap. Both are git-tracked.
 ### 3. RULES.md — the enforcement layer
 The documents above are inert without discipline. `RULES.md` is what makes the
 knowledge compound rather than decay:
-- **§0 Task Termination Protocol** — nothing is "done" until VERSION is bumped and
-  L1/L2 + spokes are synced.
+- **§0 Task Termination Protocol** — RULES.md keeps reviewed memory and component
+  context synchronized: nothing is "done" until L1/L2 + spokes are synced. Optional
+  Strict defaults can also enforce project-specific version counters and parity
+  rules (e.g. bumping `VERSION.md`); per-component versioning and `APP_NAME`
+  conventions are part of the Strict profile, not a Core requirement.
 - **§1 Context Recovery Procedure** — a loop-breaker.
 - **§2 Continued Learning Protocol** and **§7 Out-of-scope finding capture** — the
   user-gated capture classes (below).
@@ -45,9 +48,11 @@ knowledge compound rather than decay:
   discipline, and the shared-vs-per-user memory rule.
 
 ### 4. Versioned audit trail of the *why*
-- **`VERSION.md`** — single source of truth for per-component build IDs, each bump
-  carrying a detailed *why* row. Source reads versions at build time; nothing is
-  hardcoded.
+- **`VERSION.md`** *(optional Strict profile)* — single source of truth for
+  per-component build IDs, each bump carrying a detailed *why* row. Source reads
+  versions at build time; nothing is hardcoded. Per-component versioning and
+  `APP_NAME` conventions are Strict defaults, independent of the Core Protocol —
+  a project can run the Core capture/governance loop without them.
 - **`.salvor/domain-learnings/`** — dated, frozen artifacts (hypothesis → evidence →
   verdict), indexed in a TOC. `DOMAIN_REF.md` holds the living truth; the artifacts
   are the receipts.

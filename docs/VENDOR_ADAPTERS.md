@@ -4,7 +4,7 @@
 
 **How realistic is that?** The honest split:
 
-- **~90% of Salvor is vendor-neutral.** All the substance — `RULES.md`,
+- **~90% of Salvor is vendor-portable.** All the substance — `RULES.md`,
   `VERSION.md`, everything in `docs/` (L1/L2, DOMAIN_REF, DEFERRED_TODOS,
   postmortems, domain-learnings), `.serena/memories/`, and the GitNexus index — is
   just git-tracked files plus two **MCP** servers. MCP is a cross-vendor standard;
@@ -13,7 +13,7 @@
 - **The glue is vendor-specific.** *How* project instructions auto-load, where
   per-session memory lives, and how per-turn rules are enforced differ per tool.
 
-So Salvor ships a **neutral core + all three thin entrypoint adapters by default** —
+So Salvor ships a **portable core + all three thin entrypoint adapters by default** —
 `CLAUDE.md` (canonical hub) plus `AGENTS.md` and `GEMINI.md` pointer files. Each adapter is
 tiny (one pointer file), and there's no vendor to choose: any teammate's CLI works out of
 the box.
@@ -46,9 +46,11 @@ code structure. Vendor entrypoints point to and summarize the canonical records 
 they are never a knowledge fork. See `ARCHITECTURE.md` ("One owner per durable fact")
 for the full ownership map.
 
-That's the whole adapter. The core files it points at are identical across vendors —
-including the GitNexus code-intelligence block, which lands **only** in the canonical
-`CLAUDE.md` hub.
+That's the whole adapter. The core files it points at are identical across vendors.
+In pure index mode GitNexus injects nothing; any GitNexus code-intelligence routing
+note is a hand-authored note in the canonical `CLAUDE.md` hub — never a
+GitNexus-owned block. Generated `.claude/skills/gitnexus-*` appear **only** when a
+user explicitly picks a skill-generating mode.
 
 **Gemini CLI / Antigravity CLI.** Google's coding-agent entrypoint reads the compatible
 `GEMINI.md` project-context file. Google moved consumer terminal usage from Gemini CLI to
@@ -106,13 +108,15 @@ does not require GitNexus. The ownership contract:
   predate `--index-only` (e.g. GitNexus 1.6.3), run `gitnexus analyze
   --skip-agents-md`. This suppresses the context block in `CLAUDE.md`/`AGENTS.md`
   but still generates local skill files — gitignore them, show the paths, and get
-  approval. In GitNexus 1.6.3 the `.gitnexusrc` config keys
+  approval. The legacy fallback is a CLI **flag** used after disclosure and
+  approval — it is **not** a persisted `.gitnexusrc` config key or promise. In
+  GitNexus 1.6.3 the `.gitnexusrc` config keys
   `indexOnly` / `skipContextFiles` / `skipSkills` were **not** honored; current
   releases (v1.6.9) recognize `indexOnly` and add `--index-only`. This repo's
-  `.gitnexusrc` carries `{"indexOnly": true}` for current releases and
-  `{"skipAgentsMd": true}` for the legacy path (**merge** into any existing file,
-  never replace it); behavior and paths vary by GitNexus version, so confirm against
-  `--help`.
+  persisted safe default is `.gitnexusrc {"indexOnly": true}` (GitNexus v1.6.9+);
+  when you **merge** it into any existing `.gitnexusrc`, preserve unrelated keys and
+  never replace the file. Behavior and paths vary by GitNexus version, so confirm
+  against `--help`.
 - **Choose an ownership mode before running `gitnexus analyze`.** Analyze can be
   invasive — plan and approve first:
   - **A — Pure index, nothing else (recommended).**
