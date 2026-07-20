@@ -284,7 +284,9 @@ The Task Termination Protocol (RULES §0) makes updating L1/L2 + spokes + versio
 part of *finishing* work, so the memory stays tied to the code.
 
 A first-class **`salvor health`** pass — flagging stale L1 lines, unresolved `LF#`s,
-aging deferred TODOs, drifted GitNexus blocks, and `DOMAIN_REF` ↔ L1 ↔ L2
+aging deferred TODOs, drift in the hand-authored GitNexus routing note,
+unsafe/unexpected `.gitnexusrc` changes, stale or missing index state, unexpected
+context-file injection, unexpected generated skills/hooks, and `DOMAIN_REF` ↔ L1 ↔ L2
 contradictions — is the top roadmap item. See the
 [Roadmap](../README.md#contributing--roadmap) for the full list.
 

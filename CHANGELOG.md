@@ -18,8 +18,10 @@ Initial public release.
 ### Added
 - **`SETUP_PROMPT.md`** — the self-contained, prompt-first scaffolder. Paste it
   into any LLM CLI; it interviews your project and generates the full Salvor
-  structure (hub-and-spoke `CLAUDE.md`, L1/L2 cache, `RULES.md`, `VERSION.md`
-  with configurable per-component build IDs, component spokes).
+  structure (hub-and-spoke `CLAUDE.md`, L1/L2 cache, `RULES.md`, component
+  spokes, and — when the optional Strict defaults are enabled — a `VERSION.md`
+  manifest with per-component build IDs; otherwise Salvor reuses your existing
+  version source or a minimal non-counter project history).
 - **Installer safety** — the setup prompt runs a preflight check before writing
   anything, never auto-commits (you review and commit the scaffold yourself),
   and is idempotent: re-running it on an already-scaffolded repo detects

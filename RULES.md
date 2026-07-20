@@ -67,8 +67,8 @@ On `no`, acknowledge and continue without saving any partial artifact.
 ## 4. Search & Tools
 
 1. **Search before read:** do not read any file over 100 lines without first using `rg`, `find_symbol`, or `get_symbols_overview` to target relevant ranges.
-2. **Priority:** use Serena MCP symbolic tools first for code structure; fall back to `rg`/glob only when Serena cannot resolve the need.
-3. **Impact before edits:** before modifying a function, class, or method, run GitNexus impact analysis and report blast radius. Run GitNexus change detection before committing.
+2. **Priority:** use Serena MCP symbolic tools first for code structure when the Serena MCP is responding; fall back to `rg`/glob/manual review when Serena cannot resolve the need or the MCP is not responding, and do not claim Serena results when it was not available.
+3. **Impact before edits:** when the GitNexus MCP is active, impact analysis before edits is required — before modifying a function, class, or method, run GitNexus impact analysis and report blast radius, and run GitNexus change detection before committing. When it is not active, state that explicitly, use the best available structural search/review fallback (Serena symbols, `rg`, manual review), and never fabricate MCP results.
 4. **App name:** use `APP_NAME`, defaulting to `salvor`; do not add a separate hardcoded app-name constant.
 
 ## 5. Infrastructure & Safety

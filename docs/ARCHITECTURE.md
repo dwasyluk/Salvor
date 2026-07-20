@@ -18,8 +18,10 @@ A small root `CLAUDE.md` **hub** (<~60 lines) holds project-wide invariants and 
 documentation map. Each component has its own **spoke** `CLAUDE.md`. An agent
 working in `api/` loads the hub + the `api` spoke — not the entire repo's
 context. You pay for the context you use. Thin `AGENTS.md` and `GEMINI.md` pointers ship
-alongside the hub by default, so Codex and Gemini load the same context — multivendor out
-of the box, no vendor to choose.
+alongside the hub by default, so Codex and Gemini load the same context. Salvor's Markdown
+memory format is vendor-portable: setup generates tested entrypoints for Claude Code,
+Codex, and GEMINI.md-compatible clients — Claude Code is the most deeply dogfooded path,
+while the Codex and Google adapters are wired and documented but less exercised.
 
 ### 2. Two-tier persisted memory (L1 / L2)
 - **L1 — `.salvor/active_state.md`:** ≤50 lines of dense shorthand. Current truth,

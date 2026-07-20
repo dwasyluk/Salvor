@@ -4,19 +4,28 @@
 
 **How realistic is that?** The honest split:
 
-- **~90% of Salvor is vendor-portable.** All the substance — `RULES.md`,
-  `VERSION.md`, everything in `docs/` (L1/L2, DOMAIN_REF, DEFERRED_TODOS,
-  postmortems, domain-learnings), `.serena/memories/`, and the GitNexus index — is
-  just git-tracked files plus two **MCP** servers. MCP is a cross-vendor standard;
-  Serena and GitNexus already work in Claude Code, Codex, Gemini CLI, Cursor, and
-  others. Any capable agent told to read `RULES.md` can follow the protocols.
+- **Salvor Core is repository-local Markdown, adapters, and governance.** The
+  substance lives under `.salvor/` — L1/L2 (`active_state.md` /
+  `active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
+  `decisions/`, `domain-learnings/`, and `postmortems/`. Root `RULES.md` + the
+  vendor entrypoints provide governance and routing; `VERSION.md` exists only under
+  the optional Strict/minimal-history path. Any capable agent told to read
+  `RULES.md` can follow the protocols.
+- **Enhanced mode optionally adds Serena + GitNexus.** They are OPTIONAL Enhanced
+  integrations, not constituent requirements of Salvor Core. Serena memories
+  (`.serena/memories/`) are an OPTIONAL retrieval aid; GitNexus's index is
+  machine-derived and **gitignored** — not canonical git-tracked memory. Both are
+  standard **MCP** servers (a cross-vendor standard) and already work in Claude
+  Code, Codex, Gemini CLI, Cursor, and others.
 - **The glue is vendor-specific.** *How* project instructions auto-load, where
   per-session memory lives, and how per-turn rules are enforced differ per tool.
 
 So Salvor ships a **portable core + all three thin entrypoint adapters by default** —
-`CLAUDE.md` (canonical hub) plus `AGENTS.md` and `GEMINI.md` pointer files. Each adapter is
-tiny (one pointer file), and there's no vendor to choose: any teammate's CLI works out of
-the box.
+`CLAUDE.md` (canonical hub) plus `AGENTS.md` and `GEMINI.md` pointer files. Salvor's
+Markdown memory format is vendor-portable: setup generates tested entrypoints for Claude
+Code, Codex, and GEMINI.md-compatible clients. Claude Code is the most deeply dogfooded
+path; the Codex and Google adapters are wired and documented but less exercised. Other
+agents can integrate through thin adapters.
 
 ## The adapter pattern
 

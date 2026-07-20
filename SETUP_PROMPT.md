@@ -19,8 +19,8 @@ Salvor gives this repo: a **hub-and-spoke** `CLAUDE.md` (token-thrifty context),
 a **two-tier persisted memory** (L1 concise + L2 curated deep archive), a
 **`RULES.md`** split into a Core Protocol plus optional strict defaults, **three
 user-gated capture classes** (Decision / Domain Learning, Learned Failure,
-Deferred Finding), **per-component versioning**, and optional **Serena +
-GitNexus** discipline (Enhanced mode). Set it up exactly as specified below.
+Deferred Finding), optional **per-component versioning** (when Strict defaults are
+enabled), and optional **Serena + GitNexus** discipline (Enhanced mode). Set it up exactly as specified below.
 
 Everything Salvor writes is **in-repo and git-tracked** — that is the *shared*
 brain every contributor's agent reads. (A per-user auto-memory layer is an
@@ -56,9 +56,13 @@ Detect and report which of these already exist:
 - Third-party instruction sections in `CLAUDE.md` / `AGENTS.md` / `GEMINI.md`
   (other tools' managed blocks, hand-written project guidance)
 
-**If `.salvor/` already exists, this is an update, not an install.** Identify
-the installed version (`VERSION.md` header + `.salvor/README.md`), report it,
-and propose a **repair/update plan** (add missing files, refresh Salvor-managed
+**If `.salvor/` already exists, this is an update, not an install.** Treat
+`.salvor/README.md` + Salvor-managed markers as the PRIMARY installation evidence
+(a Salvor install may exist with no `VERSION.md` when Q4=NO). Identify the installed
+version by reading `VERSION.md` ONLY WHEN IT EXISTS; when Q4=NO and `VERSION.md` was
+intentionally not generated, read the repo's established version source instead
+(`package.json` / `pyproject.toml` / `Cargo.toml` / Changesets / release tool / git
+tags). Report it, and propose a **repair/update plan** (add missing files, refresh Salvor-managed
 sections) instead of reinstalling. Never overwrite accumulated project knowledge
 (`active_state*.md`, `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
 `decisions/`, `domain-learnings/`, `postmortems/`) and never re-seed sample or
@@ -171,8 +175,11 @@ has no structured-question tool) BEFORE creating anything:
    commit message.
 > **Vendor entrypoints are automatic — no need to choose.** Every project gets all three
 > by default: `CLAUDE.md` (the canonical hub) plus thin `AGENTS.md` (Codex) and `GEMINI.md`
-> (Gemini) pointer files, so any teammate's CLI works out of the box. The core is
-> vendor-neutral; only the entrypoint glue differs (see `docs/VENDOR_ADAPTERS.md`).
+> (Gemini) pointer files. Salvor's Markdown memory format is vendor-portable; setup generates
+> tested entrypoints for Claude Code, Codex, and GEMINI.md-compatible clients (Claude Code is
+> the most dogfooded; the Codex and Google entrypoints are wired + documented but less
+> exercised). Other agents integrate via thin adapters. Only the entrypoint glue differs
+> (see `docs/VENDOR_ADAPTERS.md`).
 
 Wait for answers. Do not invent components or assume a stack. Once I respond,
 proceed to Step 2.
@@ -186,7 +193,12 @@ proceed to Step 2.
 
 **Approval gate — before writing anything**, present in one message, based on
 the Step 0 scan and my Step 1 answers:
-- **Files to create** (new, no conflict)
+- **Files to create** (new, no conflict). List `VERSION.md` here ONLY when the
+  selected Q4 path creates or updates it (Q4=YES, or Q4=NO with the minimal
+  Salvor project-history artifact when the repo has no version source). When
+  Q4=NO leaves an existing version source (`package.json` / `pyproject.toml` /
+  `Cargo.toml` / Changesets / release tool) as the sole release-version source,
+  do NOT list `VERSION.md` and generate NO references to a nonexistent one.
 - **Files to modify** (existing files gaining or updating a Salvor-managed section)
 - **Files unchanged**
 - **Conflicts** (existing content overlapping Salvor's role) and the **merge
@@ -201,7 +213,8 @@ plan, then scaffold. When scaffolding is done, show me the completed diff of
 every file created or modified.
 
 > **Layout:** vendor entrypoints (`CLAUDE.md` hub + component spokes,
-> `AGENTS.md`/`GEMINI.md`) and governance (`RULES.md`, `VERSION.md`) live at the repo
+> `AGENTS.md`/`GEMINI.md`) and governance (`RULES.md`, plus `VERSION.md` **only when
+> Q4=YES** — see the VERSION.md section for the Q4=NO handling) live at the repo
 > **root** (the CLIs/build tooling auto-discover them there). Everything else — the
 > memory/audit **brain** — lives under **`.salvor/`**. Create that folder; it is
 > git-committed (the shared brain), never ignored.
@@ -438,7 +451,8 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 ## 8. Memory layers & canonical ownership [CORE]
 - **Shared and Git-tracked does not mean co-canonical. Every durable fact has one canonical owner. Other shared files
   contain concise routing instructions, summaries, derived retrieval aids, or links to that owner.** The in-repo files
-  (`CLAUDE.md` hub + spokes, `RULES.md`, `VERSION.md`, `.salvor/*`, `.serena/memories/` in Enhanced mode, the
+  (`CLAUDE.md` hub + spokes, `RULES.md`, the version source — `VERSION.md` when Strict defaults are enabled (Q4=YES),
+  otherwise the repo's established version mechanism — `.salvor/*`, `.serena/memories/` in Enhanced mode, the
   hand-authored GitNexus routing note in the hub) are all shared and read by every contributor's agent — but each durable
   fact still has exactly ONE owner; everything else points at it.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
@@ -541,7 +555,11 @@ This folder is <PROJECT_NAME>'s **git-tracked memory**, maintained by Salvor. Sh
 Git-tracked does not mean co-canonical: every durable fact has one canonical owner (see
 RULES §8's one-owner table), and other shared files contain concise routing instructions,
 summaries, derived retrieval aids, or links to that owner. (Governance and entrypoints live
-at the repo root: `CLAUDE.md` hub + spokes, `RULES.md`, `VERSION.md`.)
+at the repo root: `CLAUDE.md` hub + spokes, `RULES.md`, and — Q4-conditional — the version
+source. Q4=YES: `VERSION.md`. Q4=NO with an existing version source: `RULES.md` plus a pointer
+to the detected version source, with no assertion that `VERSION.md` exists. Q4=NO with a minimal
+project-history file: `RULES.md` plus `<PROJECT_NAME> Project History` — name the exact artifact
+the plan generated.)
 
 | File | What it is |
 |------|-----------|
@@ -560,10 +578,22 @@ behind the code.
 
 ### `.salvor/active_state.md` (L1, ≤50 lines)
 
+The header is Q4-conditional. Emit EXACTLY ONE of the two variants below — the one that
+matches the Step 1 Q4 answer — and delete the other. The generated file must contain only
+the selected heading (no component IDs when Q4=NO).
+
+**Q4=YES header (per-component build IDs):**
 ```markdown
-<!-- Header build IDs are Q4-conditional. If Q4=YES: "# <PROJECT_NAME> Active State — <COMP_ID_A>:01 <COMP_ID_B>:01 ([DATE])".
-     If Q4=NO: omit the per-component build IDs — "# <PROJECT_NAME> Active State — ([DATE])". -->
 # <PROJECT_NAME> Active State — <COMP_ID_A>:01 <COMP_ID_B>:01 ([DATE])
+```
+
+**Q4=NO header (no build IDs):**
+```markdown
+# <PROJECT_NAME> Active State — ([DATE])
+```
+
+The rest of the L1 body is identical either way:
+```markdown
 ## Architecture: [ONE-LINE: top-level stack + ports]
 ## Pipeline: [ONE-LINE: request/data flow, if applicable]
 ## DEPLOYED: [environment, ingress, deploy/perf notes — or "local only"]
@@ -586,7 +616,13 @@ secrets, credentials, PII, or unredacted logs here (RULES §9) — redact before
 ---
 
 ## [DATE] — Project initialized
-Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9, VERSION.md, three capture classes.
+<!-- The scaffold line is Q4-conditional — write the variant matching the Step 1 Q4 answer:
+     Q4=YES: "Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9, VERSION.md
+              (per-component build counters), three capture classes."
+     Q4=NO:  "Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9 (strict defaults
+              DISABLED), three capture classes. Versioning owned by <detected existing version source, or the
+              minimal Salvor project-history file when the plan generated one> — no VERSION.md scaffolded." -->
+Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9, VERSION.md (per-component build counters), three capture classes.
 ```
 
 ### `.salvor/DOMAIN_REF.md`
@@ -786,8 +822,11 @@ generates NO skills at all; the pattern stays in `.gitignore` as a harmless safe
 
 ### Entrypoint adapters (generate all three by default)
 
-`CLAUDE.md` is the **canonical hub** (created above). Always also create the two thin pointer
-files so any teammate's CLI works out of the box — no vendor choice needed:
+`CLAUDE.md` is the **canonical hub** (created above). Salvor's Markdown memory format is
+vendor-portable; setup generates tested entrypoints for Claude Code, Codex, and
+GEMINI.md-compatible clients (Claude Code is the most dogfooded; the Codex and Google
+entrypoints are wired + documented but less exercised). Other agents integrate via thin
+adapters. Always also create the two thin pointer files so those CLIs work out of the box:
 
 - **`AGENTS.md`** (Codex and other AGENTS-aware CLIs) — at repo root, containing:
   > Before any work, read `CLAUDE.md` (the hub) + the relevant component spoke + `RULES.md` +

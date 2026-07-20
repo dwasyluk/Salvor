@@ -1,6 +1,6 @@
 # core — universal Salvor setup protocol
 
-Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds vendor-neutral governance and memory, then adds thin CLI-specific entrypoints.
+Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds vendor-portable governance and memory, then adds thin CLI-specific entrypoints.
 
 ## Key Files
 - `../SETUP_PROMPT.md` — canonical one-shot installer and scaffold templates
@@ -8,7 +8,7 @@ Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds ven
 - `../CHANGELOG.md` — user-visible protocol history
 
 ## Architecture Notes
-- Keep the installer vendor-neutral; adapter glue must not fork the shared brain.
+- Keep the installer vendor-portable; adapter glue must not fork the shared brain.
 - Scope questions are user-gated. Never invent components, stacks, or parity paths.
 - A prompt behavior change must be reflected in `example-project/` and user-facing documentation.
 

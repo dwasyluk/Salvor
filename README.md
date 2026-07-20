@@ -43,8 +43,11 @@ It is **prompt-first**: paste one setup prompt, answer four setup questions, and
 your project gains a hub-and-spoke context layer, a two-tier persisted memory,
 a rules protocol, and user-approved capture gates that record knowledge *and
 the reasoning behind it* as you work. Everything lives as plain Markdown in
-your repo — reviewable in PRs, diffable, branchable, vendor-neutral. No hosted
-service, no additional account.
+your repo — reviewable in PRs, diffable, branchable, vendor-portable. Setup
+generates tested entrypoints for Claude Code, Codex, and GEMINI.md-compatible
+clients; Claude Code is the most deeply dogfooded path, while the Codex and
+Google adapters are wired and documented but less exercised. No hosted service,
+no additional account.
 
 ## The three capture classes
 
@@ -265,7 +268,9 @@ it is to build the harder pieces together — issues tagged
 - **🧠 Sub-brains → master brain** — scoped per-agent ledgers that roll durable
   learnings up to the project's shared L1/L2, gated by the same capture classes.
 - **🩺 Salvor health checks** — lint the memory for stale L1 lines, unresolved
-  LF# entries, broken links, aging deferred findings, drifted GitNexus blocks,
+  LF# entries, broken links, aging deferred findings, drift in the hand-authored
+  GitNexus routing note, unsafe/unexpected `.gitnexusrc` changes, stale or missing
+  index state, unexpected context-file injection, unexpected generated skills/hooks,
   and component spokes that fell behind the code.
 - **📥 Existing-repo adoption/import** — scan ADRs, READMEs, postmortems, and
   existing agent instruction files, then propose the initial Salvor structure.
@@ -273,7 +278,7 @@ it is to build the harder pieces together — issues tagged
   Cursor / OpenCode / others.
 - **🧩 Vendor plugins** — a Claude Code plugin (a convenience wrapper over the
   same universal `SETUP_PROMPT.md`) is coming soon. Always a wrapper, never a
-  replacement for the paste-anywhere floor that keeps Salvor vendor-agnostic.
+  replacement for the paste-anywhere floor that keeps Salvor vendor-portable.
   Codex and Gemini equivalents are open for contributors.
 
 Contributions welcome beyond the roadmap too:
