@@ -4,7 +4,7 @@ Operational reference for local work, deployment, environment variables, externa
 
 ## Local
 
-- The canonical repository is primarily Markdown; this branch also has a root Node test harness for the ghpage.
+- The canonical repository is primarily Markdown; this branch also has a root Node test harness for the site.
 - Run `npm test` for site contracts/interactions and `npm run test:browser` for direct Playwright rendering.
 - `example-project/api` and `example-project/web` are separate TypeScript regression fixtures; inspect their package manifests before running fixture commands.
 - Use the narrowest structural, link/path, diff, and Markdown checks appropriate to the change.

@@ -20,7 +20,7 @@ The app itself is deliberately tiny: an in-memory **Notes** service.
 ## Layout
 - `CLAUDE.md` — hub (project overview, architecture table, memory + capture directives).
 - `AGENTS.md` — entrypoint adapter for `AGENTS.md`-native CLIs (Claude Code uses the `CLAUDE.md` hub).
-- `RULES.md` — §0–§8 development rules (Core Protocol + the strict profile this example demonstrates).
+- `RULES.md` — §0–§9 development rules (Core Protocol + the strict profile this example demonstrates).
 - `VERSION.md` — per-component build IDs (`API:01 | WEB:01`).
 - `api/`, `web/` — the two components, each with its own spoke `CLAUDE.md`.
 - `.salvor/` — L1 (`active_state.md`) + L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,

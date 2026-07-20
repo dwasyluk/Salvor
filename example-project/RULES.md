@@ -6,7 +6,7 @@ These rules are MANDATORY. They supplement CLAUDE.md and take precedence over de
 
 This example project demonstrates the **optional strict profile** — every strict default enabled on top of the core.
 
-- **Core Protocol (always on):** context loading and hub/spoke reading (§6.1), L1/L2 memory maintenance (§0.2–0.3), user-gated capture approval (§2, §7), context recovery (§1), security and git-safe operation (§5.2, §5.3), canonical ownership and memory layers (§8), and vendor portability via thin adapters. Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
+- **Core Protocol (always on):** context loading and hub/spoke reading (§6.1), L1/L2 memory maintenance (§0.2–0.3), user-gated capture approval (§2, §7), context recovery (§1), security and git-safe operation (§9), canonical ownership and memory layers (§8), and vendor portability via thin adapters. Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
 - **Optional Strict Engineering Defaults:** these defaults are optional, editable, and project-specific; disabling them does not break Salvor Core. They cover component build counters (§0.1, §3), env-var conventions (§4.4, §6.2), the branch-deletion rule (§6.11), container permission rules (§5.1), impact analysis before every edit (§4.3), the >100-line search-before-read limit (§4.1), and mirror parity (§0.5, §6.3).
 
 ---
@@ -97,9 +97,7 @@ fail.
    operator may run parallel sessions.
 2. **Production endpoints / external APIs:** explicit permission required for any call that mutates external state, costs
    money, or touches shared infrastructure.
-3. **Never-persist list.** Never write any of the following into L1, L2, or any `.salvor/` or context file: API keys,
-   passwords, tokens, private keys, `.env` contents, credential-bearing URLs, customer PII, unredacted production logs,
-   large raw dumps, or hidden model reasoning. Other sections reference this list rather than restating it.
+3. See §9 for never-persist rules and git-safe operation.
 
 ## 6. Coding required practices
 1. Read root `CLAUDE.md`, the relevant spoke `CLAUDE.md`(s), and referenced L1/L2 state before coding any component.
@@ -143,7 +141,7 @@ Bundle multiple findings that emerge together into one prompt. **On `yes`:**
 
 When one is later fixed: delete its entry, and reference it in the fixing commit (`closes deferred #N` if numbered).
 
-## 8. Memory layers (what's shared vs per-user)
+## 8. Memory layers & canonical ownership [CORE]
 - **Shared and Git-tracked does not mean co-canonical.** Every durable fact has one canonical owner; other shared files
   link or summarize rather than fork a second copy. The `.salvor/` artifacts own their knowledge:
   - **L1 (`.salvor/active_state.md`)** — concise current state.
@@ -160,3 +158,15 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
   personal/operator preferences, but it is not version-controlled and does not reach teammates. Never put shared truth
   there — that belongs in-repo.
+
+## 9. Security & Git-safe operation [CORE]
+
+1. **NEVER persist** to any memory/knowledge file: API keys, passwords, tokens, private keys, cookies, `.env` contents,
+   credential-bearing URLs, customer PII, production datasets, unredacted logs, dependency dumps, large build output, or
+   hidden model reasoning. **Redact before writing.** Summarize command output — keep evidence, conclusions, and
+   commit/test/issue IDs; drop the noise.
+2. `.gitignore` does not remove already-committed data. If credentials were ever committed: revoke them AND remediate git
+   history — ignoring the file afterward is not a fix.
+3. **Git-safe operation:** never blanket-stage (no catch-all add flags, no staging `.`), never commit without explicit
+   approval, never silently overwrite files or another tool's managed sections. Stage explicit path lists; show
+   `git diff --cached` before any commit you were asked to make.

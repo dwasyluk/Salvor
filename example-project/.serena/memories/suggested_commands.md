@@ -1,5 +1,7 @@
 # Suggested commands — Notebook
 
+> Serena memories are retrieval aids, not the canonical brain. Canon for this example: its own `.salvor/` artifacts, `RULES.md`, and `README.md`. This is a Strict-profile "Notebook" demo (api + web, v0.1.0).
+
 ## api (cd api)
 - `npm install` — install deps (`typescript`, `tsx`, `@types/node`).
 - `npm run dev` — start the REST API on `http://localhost:8787` (`tsx src/server.ts`). Override port with `PORT=…`.

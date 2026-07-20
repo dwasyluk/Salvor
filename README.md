@@ -24,8 +24,9 @@ Code shows an agent what exists. It rarely preserves *why*.
 A fresh coding-agent session can rediscover functions and dependencies. It
 cannot reliably recover why an architecture was chosen, which plausible
 approaches already failed, what a teammate validated earlier, or what was
-intentionally deferred. Every session starts without your project's
-accumulated reasoning — and re-derives, re-litigates, or quietly loses it.
+intentionally deferred. Fresh sessions often lack a reviewed, team-shared
+record of the project's accumulated reasoning — and re-derive, re-litigate,
+or quietly lose it.
 
 Salvor gives that engineering knowledge a durable, reviewable home in the
 repository.
@@ -217,7 +218,7 @@ person or a runtime; Salvor serves a repository. By job-to-be-done:
 | [Serena](https://github.com/oraios/serena) | Semantic code intelligence, with an optional memory substrate | Salvor decides *what gets promoted* to durable memory and owns the canonical artifacts; Serena's memories serve as retrieval pointers. |
 | [GitNexus](https://github.com/abhigyanpatwari/GitNexus) | Code knowledge graph + impact analysis | GitNexus remembers how the code is connected. Salvor preserves why the team made it that way. |
 | Vendor memory (Claude Code / Codex / Gemini project instructions & memories) | Personal, tool-specific continuity and preferences | Salvor is the repository's reviewed, shared record — it survives vendor switches and is diffable in PRs. Use both. |
-| [Cline Memory Bank](https://docs.cline.bot/prompting/cline-memory-bank) | Structured repo-memory methodology for an agent | Closest cousin. Salvor adds explicit capture approval, distinct knowledge classes, learned-failure retention, canonical ownership, and team governance. |
+| [Cline Memory Bank](https://docs.cline.bot/prompting/cline-memory-bank) | Structured, repository-local documentation methodology usable across AI tools (commands and integrations vary) | Closest cousin — both use structured repository-local Markdown for continuity. Salvor additionally defines gated promotion into durable team knowledge, separate decision/learning/failure/deferred lifecycles, canonical ownership rules, and optional Serena/GitNexus orchestration. |
 | [Obsidian](https://obsidian.md) | General knowledge vault shaped around a person or team | Salvor is a repo-local protocol with capture gates and code-intelligence integration, not a general vault. |
 | [Google ADK](https://google.github.io/adk-docs/) | Runtime framework for *building* agents | Orthogonal: Salvor helps teams retain repo reasoning while building software — including ADK software. |
 

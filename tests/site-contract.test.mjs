@@ -137,8 +137,11 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
   assert.match(version, /GHPAGE:03/);
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
   assert.match(l1, /GHPAGE:03/);
-  for (const memory of [spoke, l2, infra, completion]) {
-    assert.match(memory, /source-of-truth sync/i);
+  // The responsive-check SOP lives in its canonical homes (L1, INFRA, L2), not
+  // duplicated across every Serena memory — post-refresh, Serena memories are
+  // concise pointers under the one-owner model.
+  void spoke; void completion;
+  for (const memory of [l1, infra, l2]) {
     assert.match(memory, /Playwright/i);
     assert.match(memory, /desktop/i);
     assert.match(memory, /tablet/i);

@@ -63,9 +63,11 @@ Initial public release.
   `.github/workflows/pages.yml` deploys it via GitHub Actions (operator-controlled).
 - **Optional Enhanced tooling, clearly scoped** — Serena (open source) and GitNexus
   (a third-party project under the PolyForm Noncommercial community license) add code
-  intelligence; neither is required for Salvor Core. Enhanced-mode setup uses a
-  `skipContextFiles`-first `.gitnexusrc` so GitNexus never overwrites Salvor-owned
-  instruction files.
+  intelligence; neither is required for Salvor Core. Enhanced-mode setup runs
+  `gitnexus analyze --skip-agents-md` so GitNexus builds only its code index without
+  writing Salvor-owned instruction files (`CLAUDE.md`/`AGENTS.md`); the local
+  `.claude/skills/gitnexus-*/` skill dirs it always drops are gitignored; repo-specific
+  community skills (`--skills`) and hooks/MCP config (`gitnexus setup`) are opt-in only.
 
 [Unreleased]: https://github.com/dwasyluk/salvor/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/dwasyluk/salvor/releases/tag/v1.0.0

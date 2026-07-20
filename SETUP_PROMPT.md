@@ -241,10 +241,13 @@ You self-identify knowledge worth persisting durably and ask me, verbatim, befor
 3. **Deferred Finding** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
 ### GitNexus — Code Intelligence (Enhanced mode only; hand-authored, thin)
-[Salvor authors this section itself — GitNexus does NOT auto-write it (Step 3 sets `skipContextFiles`
-before `gitnexus analyze`). Keep it to a few lines of routing: run impact analysis before editing a
+[Salvor authors this section itself — GitNexus does NOT write it when Enhanced setup runs
+`gitnexus analyze --skip-agents-md` (Step 3's Option A), which prevents GitNexus writing its block into
+`CLAUDE.md`/`AGENTS.md`. Keep it to a few lines of routing: run impact analysis before editing a
 symbol; use the knowledge graph to trace callers/execution flows instead of grepping; re-index after
-structural changes. Remove this whole section in Core mode.]
+structural changes. GitNexus may generate agent-specific skills under tool-specific directories; paths and
+available integrations can vary by GitNexus and coding-agent version — inspect proposed changes before approving.
+Remove this whole section in Core mode.]
 ```
 
 ### `RULES.md` (mandatory; §0–§9, tiered)
@@ -394,9 +397,11 @@ Bundle multiple findings that emerge together into one prompt. **On `yes`:**
 When one is later fixed: delete its entry, and reference it in the fixing commit (`closes deferred #N` if numbered).
 
 ## 8. Memory layers & canonical ownership [CORE]
-- **Shared, canonical, git-tracked (the team brain):** everything in-repo — `CLAUDE.md` hub + spokes, `RULES.md`,
-  `VERSION.md`, `.salvor/*` (L1, L2, DOMAIN_REF, INFRA, DEFERRED_TODOS, decisions, domain-learnings, postmortems),
-  `.serena/memories/` (Enhanced mode), and the GitNexus block in the hub. This is what every contributor's agent reads.
+- **Shared and Git-tracked does not mean co-canonical. Every durable fact has one canonical owner. Other shared files
+  contain concise routing instructions, summaries, derived retrieval aids, or links to that owner.** The in-repo files
+  (`CLAUDE.md` hub + spokes, `RULES.md`, `VERSION.md`, `.salvor/*`, `.serena/memories/` in Enhanced mode, the GitNexus
+  block in the hub) are all shared and read by every contributor's agent — but each durable fact still has exactly ONE
+  owner; everything else points at it.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
   personal/operator preferences, but it is not version-controlled and does not reach teammates. Never put shared truth
   there — that belongs in-repo.
@@ -405,20 +410,26 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 
   | Durable fact | Canonical owner |
   |--------------|-----------------|
-  | Concise current state | `.salvor/active_state.md` (L1) |
-  | Curated history / reasoning | `.salvor/active_state_verbose.md` (L2) |
-  | Current domain facts + LF# registry | `.salvor/DOMAIN_REF.md` |
-  | Design rationale / invariants | `.salvor/decisions/` |
-  | Validated empirical discoveries | `.salvor/domain-learnings/` |
-  | Incident evidence | `.salvor/postmortems/` |
+  | Concise current state | `.salvor/active_state.md` |
+  | Curated recovery history | `.salvor/active_state_verbose.md` |
+  | Current domain facts + terminology | `.salvor/DOMAIN_REF.md` |
+  | Design rationale | decision artifact (`.salvor/decisions/`) |
+  | Validated empirical discovery | domain-learning artifact (`.salvor/domain-learnings/`) |
+  | Incident / failed-approach evidence | learned-failure / postmortem artifact (`.salvor/postmortems/`) |
   | Deferred findings | `.salvor/DEFERRED_TODOS.md` |
-  | Code structure / call graph | GitNexus index (Enhanced mode) |
-  | Symbol navigation | Serena (Enhanced mode) |
-  | Specs / plans / constitution | Spec Kit files (`.specify/`, `specs/`), where present |
-  | Vendor entrypoints (`AGENTS.md`, `GEMINI.md`) | Thin routing only — never a knowledge fork |
+  | Machine-derived structural code knowledge | GitNexus |
+  | Symbol retrieval + semantic navigation | Serena |
+  | Spec Kit requirements + plans | existing Spec Kit artifacts (`.specify/`, `specs/`) |
+  | Vendor context routing | thin vendor adapter (`AGENTS.md`, `GEMINI.md`) |
+  | Tool-specific retrieval aids | derived pointer / summary |
 
-- **Serena memories are retrieval assistance only:** `.serena/memories/` holds concise pointers and summaries that help
-  Serena route to `.salvor/` — canonical content lives in `.salvor/`, never as a competing full copy in Serena.
+- **Serena memory is NOT co-canonical:** `.serena/memories/` holds concise pointers and summaries that help Serena route
+  to `.salvor/` — canonical content lives in `.salvor/`, never as a competing full copy in Serena.
+- **GitNexus-generated context is NOT co-canonical:** it is a machine-derived, regenerable retrieval aid, not an owner of
+  durable facts.
+- **Vendor adapters are NOT co-canonical:** `AGENTS.md` / `GEMINI.md` carry thin routing only — never a knowledge fork.
+- **Component spokes link to the owner rather than duplicate:** a spoke points at the canonical artifact instead of
+  restating its content.
 
 ## 9. Security & Git-safe operation [CORE]
 1. **NEVER persist** to any memory/knowledge file: API keys, passwords, tokens, private keys, cookies, `.env` contents,
@@ -456,9 +467,11 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 ```markdown
 # .salvor/ — <PROJECT_NAME>'s brain
 
-This folder is <PROJECT_NAME>'s **git-tracked memory**, maintained by Salvor — the
-shared, canonical knowledge every contributor's coding agent reads. (Governance and
-entrypoints live at the repo root: `CLAUDE.md` hub + spokes, `RULES.md`, `VERSION.md`.)
+This folder is <PROJECT_NAME>'s **git-tracked memory**, maintained by Salvor. Shared and
+Git-tracked does not mean co-canonical: every durable fact has one canonical owner (see
+RULES §8's one-owner table), and other shared files contain concise routing instructions,
+summaries, derived retrieval aids, or links to that owner. (Governance and entrypoints live
+at the repo root: `CLAUDE.md` hub + spokes, `RULES.md`, `VERSION.md`.)
 
 | File | What it is |
 |------|-----------|
@@ -689,11 +702,13 @@ RULES §8); only caches and locally-generated tooling are ignored:
 .tmp/
 .gitnexus/
 .serena/cache/
-.claude/skills/gitnexus/
+**/.claude/skills/gitnexus*/
 ```
 
-`.claude/skills/gitnexus/` is generated locally by `gitnexus analyze`/setup and is gitignored — which is also why those
-skill files never ship in a release package.
+`gitnexus analyze` ALWAYS installs local static skill dirs under `.claude/skills/gitnexus-*/` (gitnexus-cli, -exploring,
+-guide, -debugging, -impact-analysis, -refactoring), regardless of flags or config — these are local, regenerable
+artifacts. The `**/.claude/skills/gitnexus*/` pattern gitignores them, which is why those skill files never ship in a
+release package. (The `--skills` flag generates ADDITIONAL repo-specific community skills; opt-in only — see Step 3.)
 
 ### Entrypoint adapters (generate all three by default)
 
@@ -748,38 +763,60 @@ Ownership contract, before you run anything:
 
 - **Salvor owns** `.salvor/` and the `<!-- salvor:start --> … <!-- salvor:end -->` managed sections. **User content
   stays user-owned.**
-- **GitNexus owns** its index (`.gitnexus/`), graph data, generated skills (`.claude/skills/gitnexus/`), and hooks.
+- **GitNexus owns** its index (`.gitnexus/`), graph data, generated skills (`.claude/skills/gitnexus-*/`), and hooks.
 - Salvor's OWN concise GitNexus routing instructions live in the canonical `CLAUDE.md` hub as a **hand-authored, thin**
   section (see the hub template above) — GitNexus does NOT auto-write instruction blocks into `CLAUDE.md`/`AGENTS.md`.
 - Never run a global `gitnexus setup` (or any other global config change) without my approval.
 
-**`gitnexus analyze` is not read-only.** It may create/update `AGENTS.md` + `CLAUDE.md`, install agent skills, register
-hooks, and build a local index. The DEFAULT flow keeps it from writing instruction blocks:
+**`gitnexus analyze` is not read-only.** By default it writes a GitNexus block into `CLAUDE.md`/`AGENTS.md`, and it
+ALWAYS installs local static skill dirs under `.claude/skills/gitnexus-*/` (regenerable, gitignored) regardless of
+flags or config; hooks are installed only by the separate `gitnexus setup` (never by `analyze`). Empirically verified
+against GitNexus 1.6.3: the `.gitnexusrc` config keys `indexOnly` / `skipContextFiles` / `skipSkills` (flat and nested)
+are NOT honored — they do NOT prevent GitNexus from injecting its block into `CLAUDE.md`/`AGENTS.md` or from installing
+skills. The reliable control is the **`--skip-agents-md` FLAG** on `gitnexus analyze`. Behavior and paths vary by
+GitNexus version — inspect proposed changes before approving. Present me an **explicit choice** and wait — do not pick
+for me:
 
-1. **Preview before running.** Show me the expected files, skills, hooks, and config changes `gitnexus analyze` will
-   make, and get my approval before running it.
-2. **`.gitnexusrc` first — suppress instruction-block writes BEFORE analyze.** Create or merge a repo-level
-   `.gitnexusrc` containing `{"skipContextFiles": true}` (verified current option name) BEFORE running `gitnexus
-   analyze`, so GitNexus does NOT write instruction blocks into `CLAUDE.md`/`AGENTS.md`. If a `.gitnexusrc` already
-   exists, **MERGE that key into it** — never replace unrelated options; show me the proposed change first.
-3. **Salvor's GitNexus routing stays hand-authored + thin** in the canonical `CLAUDE.md` hub. There is no
-   "gitnexus will append its block here" placeholder — Salvor authors the routing instructions itself.
-4. **Ask before installing generated skills/hooks** that affect user-level or tool-specific config.
-5. **NEVER run global `gitnexus setup`** without explicit operator approval.
-6. **Core mode remains fully functional without GitNexus.**
+- **Option A — Index without touching Salvor-owned files (RECOMMENDED DEFAULT):** run
+  `gitnexus analyze --skip-agents-md`. This builds/refreshes the code index and does NOT write GitNexus blocks into
+  `CLAUDE.md`/`AGENTS.md` (Salvor keeps its own concise, hand-authored GitNexus routing note in the hub). GitNexus also
+  drops local `.claude/skills/gitnexus-*/` skill files during analyze — regenerable local artifacts, gitignored, not
+  committed. No hooks, no MCP/global config change.
+- **Option B — Index + repo-specific community skills:** add `--skills` (`gitnexus analyze --skip-agents-md --skills`)
+  ONLY after showing me the generated `.claude/skills/gitnexus-*/` paths, explaining they are third-party GitNexus
+  artifacts, and getting my explicit approval. Repo-specific community skills are opt-in only. Preserve existing skills;
+  overwrite nothing unrelated.
+- **Option C — Index + MCP config / hooks:** only via `gitnexus setup` (it installs the MCP config / hooks; `analyze`
+  never does), after showing me the exact changes + their purpose + getting my explicit approval. Preserve existing
+  hooks; never install user/global hooks silently.
+- **Option D — Full approved integration:** enumerate every file + config mutation, require my explicit approval, and
+  preserve Salvor + user ownership throughout.
 
-Then index to populate the local code-intelligence graph:
+> This repo's `.gitnexusrc` carries `{"skipAgentsMd": true}` for forward-compatibility (merge into any existing file,
+> never replace; preserve unrelated keys), but in the current CLI the `--skip-agents-md` FLAG is the reliable control.
+
+In every option: **Salvor's GitNexus routing stays hand-authored + thin** in the canonical `CLAUDE.md` hub — there is no
+"gitnexus will append its block here" placeholder; Salvor authors the routing instructions itself. **NEVER run global
+`gitnexus setup`** (or any other global config change) without explicit operator approval. **Core mode remains fully
+functional without GitNexus.**
+
+> GitNexus may generate agent-specific skills under tool-specific directories. Paths and available integrations can vary
+> by GitNexus and coding-agent version; inspect the proposed changes before approving them.
+
+For the RECOMMENDED default (Option A), index to populate the local code-intelligence graph without overwriting
+Salvor-owned instruction files:
 
 ```bash
-gitnexus analyze
+gitnexus analyze --skip-agents-md
 ```
 
-With `skipContextFiles` set first, GitNexus builds its index without mutating your instruction files. Salvor's own thin
-GitNexus routing already lives in the hub. Then OFFER — never auto-run — the follow-up commit: stage only the
-`.gitnexusrc` change (and any hand-authored hub edit), show me `git diff --cached`, and commit only after I approve:
+With `--skip-agents-md`, GitNexus builds its index without writing its block into your `CLAUDE.md`/`AGENTS.md`. Salvor's
+own thin GitNexus routing already lives in the hub. (The local `.claude/skills/gitnexus-*/` dirs it drops are gitignored
+and regenerable.) Then OFFER — never auto-run — the follow-up commit: stage only relevant tracked changes (any
+`.gitnexusrc` merge and any hand-authored hub edit), show me `git diff --cached`, and commit only after I approve:
 
 ```bash
-git commit -m "chore(gitnexus): enable local code-intelligence index (skipContextFiles)"
+git commit -m "chore(gitnexus): enable local code-intelligence index (--skip-agents-md)"
 ```
 
 ## Step 4 — Operating ground rules going forward

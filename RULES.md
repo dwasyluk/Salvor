@@ -4,7 +4,7 @@ These rules are MANDATORY. They supplement `CLAUDE.md` and take precedence over 
 
 ## Protocol Tiers
 
-- **Core Protocol (always on):** context loading and hub/spoke reading (§6.1), L1/L2 memory maintenance (§0.2–0.3), user-gated capture approval (§2, §7), context recovery (§1), security and git-safe operation (§5.2, §5.3), canonical ownership and memory layers (§8), and vendor portability via thin adapters. Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
+- **Core Protocol (always on):** context loading and hub/spoke reading (§6.1), L1/L2 memory maintenance (§0.2–0.3), user-gated capture approval (§2, §7), context recovery (§1), security and git-safe operation (§9), canonical ownership and memory layers (§8), and vendor portability via thin adapters. Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
 - **Optional Strict Engineering Defaults:** these defaults are optional, editable, and project-specific; disabling them does not break Salvor Core. They cover component build counters (§0.1, §3), env-var conventions (§4.4, §6.2), the branch-deletion rule (§6.11), container permission rules (§5.1), impact analysis before every edit (§4.3), the >100-line search-before-read limit (§4.1), and mirror parity (§0.5, §6.3).
 
 ---
@@ -75,7 +75,7 @@ On `no`, acknowledge and continue without saving any partial artifact.
 
 1. Docker/container build, up/down, or restart requires explicit operator permission because parallel sessions may be active.
 2. Calls that mutate production or external state, cost money, or touch shared infrastructure require explicit operator permission.
-3. **Never-persist list.** Never write any of the following into L1, L2, or any `.salvor/` or context file: API keys, passwords, tokens, private keys, `.env` contents, credential-bearing URLs, customer PII, unredacted production logs, large raw dumps, or hidden model reasoning. Other sections reference this list rather than restating it.
+3. See §9 for never-persist rules and git-safe operation.
 
 ## 6. Coding Required Practices
 
@@ -99,7 +99,13 @@ This is the third capture class: **Deferred Finding**. When work surfaces an unr
 
 Bundle only findings that emerge together. On `yes`, read the ledger and deduplicate first. If new, record title, location, issue, six-month severity, suggested fix, and reason deferred. Do not derail the current task. When fixed, delete the entry and reference it in the fixing commit.
 
-## 8. Memory Layers
+## 8. Memory layers & canonical ownership [CORE]
 
 - **Shared and Git-tracked does not mean co-canonical.** Every durable fact has one canonical owner; other shared files link or summarize. One-owner model: `.salvor/` artifacts own their engineering knowledge; L1 (`.salvor/active_state.md`) = concise current state; L2 (`.salvor/active_state_verbose.md`) = curated recovery history; `.salvor/DOMAIN_REF.md` = current domain facts + failure registry; decision artifacts (`.salvor/decisions/`) = design rationale; domain-learning artifacts (`.salvor/domain-learnings/`) = validated empirical discoveries; postmortems = incident/failure evidence; `.salvor/DEFERRED_TODOS.md` = deferred findings; GitNexus = machine-derived code structure; Serena = symbol retrieval + concise pointers (not a canonical fork); Spec Kit = its own specs/plans; vendor entrypoints (`CLAUDE.md`/`AGENTS.md`/`GEMINI.md`) route to canonical records and are NOT knowledge forks. This one-owner model is consistent with `SETUP_PROMPT.md` §8.
 - **Per-user and optional:** Claude auto-memory under `~/.claude/projects/.../memory/`. It is not shared or canonical and must never hold team truth.
+
+## 9. Security & Git-safe operation [CORE]
+
+1. **NEVER persist** to any memory/knowledge file: API keys, passwords, tokens, private keys, cookies, `.env` contents, credential-bearing URLs, customer PII, production datasets, unredacted logs, dependency dumps, large build output, or hidden model reasoning. **Redact before writing.** Summarize command output — keep evidence, conclusions, and commit/test/issue IDs; drop the noise.
+2. `.gitignore` does not remove already-committed data. If credentials were ever committed: revoke them AND remediate git history — ignoring the file afterward is not a fix.
+3. **Git-safe operation:** never blanket-stage (no catch-all add flags, no staging `.`), never commit without explicit approval, never silently overwrite files or another tool's managed sections. Stage explicit path lists; show `git diff --cached` before any commit you were asked to make.

@@ -58,7 +58,7 @@ test("setup works without MCP tools (Core mode)", () => {
 
 // --- GitNexus ownership ----------------------------------------------------
 test("gitnexus ownership contract is documented", () => {
-  assert.match(setup, /skipContextFiles/, ".gitnexusrc opt-out must be documented");
+  assert.match(setup, /--skip-agents-md/, "the verified index-only control must be documented");
 });
 
 // --- Capture taxonomy: canonical prompts, byte-identical everywhere -------

@@ -31,8 +31,8 @@ hiring for:
   continuity and preferences that follow you across sessions.
 - **RAG / vector DBs** — for retrieval infrastructure over documents you already
   have.
-- **Cline/Roo Memory Bank** — for structured, agent-maintained per-project notes
-  in the repo.
+- **Cline/Roo Memory Bank** — a structured, repository-local documentation
+  methodology usable across AI tools (commands and integrations vary).
 
 Salvor is built for the specific intersection of code-grounded, team-shared,
 git-versioned, and governed engineering memory — that's the job it's designed
@@ -111,16 +111,21 @@ reasoning stays in your repo, under your version control.
 
 ## Isn't this just Cline/Roo's "Memory Bank"?
 
-Memory Bank is the closest cousin, and a genuinely good one: an existing,
-structured repo-memory methodology — markdown files an agent maintains per
-project, same sound instinct that project knowledge belongs in the repo. Salvor
-differentiates on governance and structure: user-approved capture (the agent
-asks before persisting durable knowledge), **three distinct capture classes**
-(decisions & domain learnings / learned failures / deferred findings), a
-learned-failure registry, deferred-finding capture, canonical-ownership rules,
-team governance (Task Termination Protocol, per-component versioning), and
-orchestration of Serena + GitNexus for code grounding — and it's
-vendor-agnostic, not tied to one extension.
+Memory Bank is the closest cousin, and a genuinely good one. Cline Memory Bank is
+a structured repository-local documentation methodology that can be used across AI
+tools, although commands and integrations vary — markdown files an agent maintains
+per project, same sound instinct that project knowledge belongs in the repo. Cline
+Memory Bank and Salvor both use structured repository-local Markdown for
+continuity. Salvor additionally defines gated promotion into durable team
+knowledge, separate decision/learning/failure/deferred lifecycles, canonical
+ownership rules, and optional Serena/GitNexus orchestration. Concretely, Salvor
+differentiates on: user-approved capture (the agent asks before persisting durable
+knowledge), **three distinct capture classes** (decisions & domain learnings /
+learned failures / deferred findings), a learned-failure registry,
+deferred-finding capture, canonical-ownership rules, distributed-team Git review,
+maintenance/recovery, team governance (Task Termination Protocol, per-component
+versioning), thin vendor adapters, a Core/Enhanced split, and orchestration of
+Serena + GitNexus for code grounding.
 
 ## Doesn't Mem0 / Letta / Zep / an MCP memory server already do agent memory?
 

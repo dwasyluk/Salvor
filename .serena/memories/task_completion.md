@@ -1,9 +1,17 @@
 # Task Completion
 
-Before completing repo work, run the narrowest relevant verification. For docs-only naming/README work: review rendered Markdown mentally or with available markdown tooling, check links/paths touched, and inspect `git diff`.
+> Serena memories are retrieval aids, not the canonical brain. Canon: ../../RULES.md, ../../.salvor/active_state.md.
 
-For SETUP_PROMPT.md behavior changes: update/sync example-project/ and update CHANGELOG for user-visible changes.
+Before completing repo work, run the narrowest relevant verification. For docs-only naming/README work: review rendered Markdown, check links/paths touched, and inspect `git diff`.
+
+For SETUP_PROMPT.md behavior changes: update/sync `example-project/` (the regression fixture for prompt drift).
 
 Never overwrite unrelated user changes. Use `git status --short` and inspect diffs for touched files before final response.
 
-For every canonical source-of-truth sync into the ghpage, run Playwright directly against the rendered site at desktop, tablet, Galaxy-S25-Edge-like small-phone, and 320px narrow viewports. Confirm the hero and body copy remain readable, local assets load, and there is no horizontal overflow; never assume responsive health from code or CSS inspection alone.
+## Release validation workflow (v1.0.0)
+- Run the test suite: `npm run test:unit` (contract + interactions + burn-field + setup-safety + ratification) and `npm run test:browser` (Playwright), or `npm test` for both.
+- `git diff --check` for whitespace/conflict-marker hygiene.
+- Regenerate the release package when packaging changes.
+
+## Site responsive check
+The site lives in `site/` on `main` and deploys from `main` via `.github/workflows/pages.yml` (GitHub Actions) — there is no separate presentation-mirror branch. When the site changes, run Playwright directly against the rendered `site/` at desktop, tablet, small-phone (Galaxy-S25-Edge-like), and 320px narrow viewports. Confirm the hero and body copy stay readable, local assets load, and there is no horizontal overflow; never assume responsive health from CSS inspection alone.

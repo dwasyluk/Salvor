@@ -59,12 +59,23 @@ knowledge compound rather than decay:
   as a retrieval aid holding pointers and structural notes; `.salvor/` remains the
   canonical engineering record.
 - **GitNexus** — indexing, impact analysis, and execution-flow tracing over a
-  knowledge graph of the codebase (symbols, relationships, flows), plus generated
-  skills/hooks and context-file generation — *impact analysis before edits*,
-  "know your code," not just keyword search. Especially valuable when you must
-  assume code is untested. GitNexus owns its index, its generated skills/hooks,
-  and its marked `gitnexus:start`/`gitnexus:end` block in the canonical
-  `CLAUDE.md` hub only; vendor adapters stay thin.
+  knowledge graph of the codebase (symbols, relationships, flows) — *impact
+  analysis before edits*, "know your code," not just keyword search. Especially
+  valuable when you must assume code is untested. Salvor's recommended default is
+  to run `gitnexus analyze --skip-agents-md` so GitNexus builds only its code index
+  without writing its block into Salvor-owned `CLAUDE.md`/`AGENTS.md` (verified
+  against GitNexus 1.6.3: the `.gitnexusrc` `indexOnly`/`skipContextFiles`/`skipSkills`
+  keys are not honored — the `--skip-agents-md` flag is the reliable control; the
+  repo's `.gitnexusrc` carries `skipAgentsMd` for forward-compat, and behavior
+  varies by version). Repo-specific community skills are opt-in via
+  `gitnexus analyze --skills`, and hooks/MCP config come only from `gitnexus setup`.
+  `gitnexus analyze` always drops local static `.claude/skills/gitnexus-*/` skill
+  files — regenerable and gitignored (`**/.claude/skills/gitnexus*/`), never
+  committed. GitNexus owns its index, its opt-in generated skills/hooks, and its
+  routing note only lives in the canonical `CLAUDE.md` hub (hand-authored by
+  Salvor); vendor adapters stay thin. GitNexus is a third-party project (PolyForm
+  Noncommercial community license); Salvor Core works without it. (Setup modes and
+  the full ownership contract: `VENDOR_ADAPTERS.md`.)
 
 Both are standard MCP servers, so they work across Claude Code, Codex, Gemini CLI /
 Antigravity CLI, Cursor, and others. The division of labor: **GitNexus remembers how
