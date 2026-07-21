@@ -11,6 +11,11 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+- Hero burn-off now reveals the tracked full-color mystic artwork instead of the
+  dark fallback on desktop and mobile; browser regressions cover the truth
+  layer's visibility, image loading, hero coverage, and cover-fit behavior.
+
 ## [1.0.0] — 2026-07-20
 
 Initial public release.

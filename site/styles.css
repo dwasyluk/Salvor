@@ -117,7 +117,7 @@ svg {
   object-position: var(--scene-x) center;
 }
 
-.hero-mystic {
+.hero-scene > .hero-mystic {
   opacity: 0;
 }
 

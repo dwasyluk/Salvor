@@ -21,6 +21,6 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 ## Build and deploy
 - Static files live in `site/`; `.github/workflows/pages.yml` deploys that directory from `main`. `main` is the single source of truth.
 - Run the Node contract/interaction tests and Playwright browser suite before commit. A push deploys, so never push without explicit approval.
-- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:06`; derived constant: `GHPAGE_BUILD`.
+- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:07`; derived constant: `GHPAGE_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for deployment details.

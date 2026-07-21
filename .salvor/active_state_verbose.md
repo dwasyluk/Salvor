@@ -4,6 +4,13 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-07-21 — Hero burn truth-layer regression fixed (GHPAGE:07)
+
+- **Symptom.** Burning the hero wireframe exposed only the near-black `.burn-truth` fallback instead of the full-color mystic artwork, on both desktop and mobile. The standalone tracked sources were still present: `site/assets/hero/salvor-mystic.png` and `.webp`, both 1672×941.
+- **Root cause.** The burn script clones `<picture class="hero-mystic">` into `.burn-truth`. The global `.hero-mystic { opacity: 0; }` source-hiding rule therefore also applied to the clone, leaving only `.burn-truth { background: #020914; }` visible. The fix scopes that rule to the original direct child: `.hero-scene > .hero-mystic { opacity: 0; }`.
+- **Regression coverage.** Playwright now checks the cloned truth layer at 1440×1000 and 390×844: opacity/visibility, successful WebP loading from the canonical mystic asset, 1672×941 natural dimensions, exact coverage of the rendered hero bounds, and `object-fit: cover`. Visual end-state inspection confirmed the blue/gold mystic composition on both viewports.
+- **Safety.** No hero asset was regenerated or restored because none was missing. The operator-owned untracked `site/assets/hero/salvor-mystic-trace.psb` was not read, modified, moved, or deleted.
+
 ## 2026-07-20 — Canonical W10 brand system (GHPAGE:06 DOCS:10)
 
 - **Authority/provenance.** The operator confirmed the displayed 1374×1492 screenshot is the approved final W10 reference and the requested-hash mismatch is a screenshot/transport artifact. Preserved bytes SHA-256 `085c7cf9b9133df9465d3fb6a91249272ca82eb9de094724a77638b0b10a6b51`; the original-prompt hash remains recorded in the brand manifest/documentation. The raster's ghosting, grid, asymmetry, rough joins, and stray `128px` mark are explicitly non-authoritative defects.

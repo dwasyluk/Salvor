@@ -96,6 +96,50 @@ test("the enhanced hero uses the compact source and one semantic heading", async
   expect(decodedBytes).toBeLessThan(800_000);
 });
 
+for (const [name, viewport] of [
+  ["desktop", { width: 1440, height: 1000 }],
+  ["mobile", { width: 390, height: 844 }],
+]) {
+  test(`${name} burn truth visibly reveals the full-color mystic`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    await expect(page.locator("[data-burn-hero]")).toHaveAttribute("data-burn-state", "ready");
+
+    const truth = await page.locator(".burn-truth > picture").evaluate((picture) => {
+      const image = picture.querySelector("img");
+      const pictureStyle = getComputedStyle(picture);
+      const imageStyle = getComputedStyle(image);
+      const heroRect = picture.closest("[data-burn-hero]").getBoundingClientRect();
+      return {
+        opacity: pictureStyle.opacity,
+        visibility: pictureStyle.visibility,
+        width: picture.getBoundingClientRect().width,
+        height: picture.getBoundingClientRect().height,
+        heroWidth: heroRect.width,
+        heroHeight: heroRect.height,
+        imageComplete: image.complete,
+        currentSrc: image.currentSrc,
+        naturalWidth: image.naturalWidth,
+        naturalHeight: image.naturalHeight,
+        objectFit: imageStyle.objectFit,
+      };
+    });
+
+    expect(truth).toMatchObject({
+      opacity: "1",
+      visibility: "visible",
+      width: viewport.width,
+      imageComplete: true,
+      naturalWidth: 1672,
+      naturalHeight: 941,
+      objectFit: "cover",
+    });
+    expect(Math.abs(truth.width - truth.heroWidth)).toBeLessThanOrEqual(1);
+    expect(Math.abs(truth.height - truth.heroHeight)).toBeLessThanOrEqual(1);
+    expect(truth.currentSrc).toMatch(/salvor-mystic\.webp$/);
+  });
+}
+
 test("mobile navigation is real and keyboard accessible", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
