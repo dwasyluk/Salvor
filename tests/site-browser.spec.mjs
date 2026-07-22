@@ -31,7 +31,7 @@ for (const [name, viewport] of viewports) {
     await page.setViewportSize(viewport);
     await page.goto("/");
     await expect(page.locator("#hero-title")).toHaveText("SALVOR");
-    await expect(page.locator(".burn-copy .hero-title-visual").first()).toBeVisible();
+    await expect(page.locator(".burn-webgl")).toBeVisible();
     await expect(page.locator(".hero-actions .button-primary").first()).toBeVisible();
 
     const readability = await page.evaluate(() => {
@@ -82,8 +82,11 @@ for (const [name, viewport] of viewports) {
 test("the enhanced hero uses the compact source and one semantic heading", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("[data-burn-hero]")).toHaveAttribute("data-burn-state", "ready");
+  await expect(page.locator("[data-burn-hero]")).toHaveAttribute("data-burn-renderer", "webgl");
+  await expect(page.locator(".burn-webgl")).toHaveCount(1);
+  await expect(page.locator(".burn-webgl")).toHaveCSS("pointer-events", "none");
   expect(await page.locator("h1").count()).toBe(1);
-  const heroAsset = await page.locator(".burn-truth > picture img").evaluate((image) => ({
+  const heroAsset = await page.locator("[data-mystic-layer] img").evaluate((image) => ({
     currentSrc: image.currentSrc,
     width: image.naturalWidth,
     height: image.naturalHeight,
@@ -100,12 +103,12 @@ for (const [name, viewport] of [
   ["desktop", { width: 1440, height: 1000 }],
   ["mobile", { width: 390, height: 844 }],
 ]) {
-  test(`${name} burn truth visibly reveals the full-color mystic`, async ({ page }) => {
+  test(`${name} keeps the full-color mystic ready beneath WebGL WF`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto("/");
     await expect(page.locator("[data-burn-hero]")).toHaveAttribute("data-burn-state", "ready");
 
-    const truth = await page.locator(".burn-truth > picture").evaluate((picture) => {
+    const truth = await page.locator("[data-mystic-layer]").evaluate((picture) => {
       const image = picture.querySelector("img");
       const pictureStyle = getComputedStyle(picture);
       const imageStyle = getComputedStyle(image);
@@ -157,6 +160,7 @@ test("hero copy passes mouse drags through to the burn surface while the slogan 
   await page.goto("/");
   const hero = page.locator("[data-burn-hero]");
   await expect(hero).toHaveAttribute("data-burn-state", "ready");
+  await expect(hero).toHaveAttribute("data-burn-renderer", "webgl");
 
   const interaction = await page.evaluate(() => Object.fromEntries([
     ["title", [getComputedStyle(document.querySelector("#hero-title")).userSelect, getComputedStyle(document.querySelector("#hero-title")).pointerEvents]],
@@ -166,6 +170,7 @@ test("hero copy passes mouse drags through to the burn surface while the slogan 
     ["header", [getComputedStyle(document.querySelector("[data-burn-hero] > .site-header")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .site-header")).pointerEvents]],
     ["brand", [getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .brand-wordmark")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .brand-wordmark")).pointerEvents]],
     ["nav", [getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .desktop-nav a")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .desktop-nav a")).pointerEvents]],
+    ["primaryAction", [getComputedStyle(document.querySelector("[data-burn-hero] > .hero-copy .button-primary")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .hero-copy .button-primary")).pointerEvents]],
   ]));
   expect(interaction).toEqual({
     title: ["none", "none"],
@@ -175,6 +180,7 @@ test("hero copy passes mouse drags through to the burn surface while the slogan 
     header: ["text", "auto"],
     brand: ["text", "auto"],
     nav: ["text", "auto"],
+    primaryAction: ["none", "auto"],
   });
 
   const titleBox = await page.locator("#hero-title").boundingBox();
@@ -189,6 +195,128 @@ test("hero copy passes mouse drags through to the burn surface while the slogan 
   await expect(hero).toHaveAttribute("data-burn-state", "ready");
   await page.locator("[data-burn-hero] > .hero-copy > .hero-tagline").click();
   await expect(hero).toHaveAttribute("data-burn-state", "ready");
+  await page.locator("[data-burn-hero] > .hero-copy .button-primary").click({ trial: true });
+  await expect(hero).toHaveAttribute("data-burn-state", "ready");
+});
+
+test("slow mouse drags use spaced burn points and later clicks keep earlier burns", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  const hero = page.locator("[data-burn-hero]");
+  await expect(hero).toHaveAttribute("data-burn-state", "ready");
+
+  await page.mouse.move(900, 620);
+  await page.mouse.down();
+  await page.mouse.move(1100, 620, { steps: 200 });
+  await page.mouse.up();
+  const dragCount = Number(await hero.getAttribute("data-burn-count"));
+  expect(dragCount).toBeGreaterThan(5);
+  expect(dragCount).toBeLessThan(30);
+
+  await page.mouse.click(1180, 500);
+  await expect.poll(async () => Number(await hero.getAttribute("data-burn-count")))
+    .toBeGreaterThan(dragCount);
+  await expect(hero).toHaveAttribute("data-burn-state", "burning");
+});
+
+test("WebGL owns exact browser-rendered UI transition without changing the established ready or M end states", async ({ page }) => {
+  await page.setViewportSize({ width: 823, height: 621 });
+  await page.goto("/");
+  const hero = page.locator("[data-burn-hero]");
+  await expect(hero).toHaveAttribute("data-burn-state", "ready");
+
+  const ready = await page.evaluate(() => {
+    const root = document.querySelector("[data-burn-hero]");
+    const copy = root.querySelector(":scope > .hero-copy");
+    const title = root.querySelector("#hero-title");
+    const menu = root.querySelector(".menu-toggle");
+    const brandMark = root.querySelector(".brand-mark");
+    const primary = root.querySelector(".button-primary");
+    return {
+      uiRenderer: root.dataset.burnUiRenderer,
+      blurContent: getComputedStyle(copy, "::before").content,
+      blurFilter: getComputedStyle(copy, "::before").filter,
+      titleColor: getComputedStyle(title).color,
+      titleFill: getComputedStyle(title).webkitTextFillColor,
+      titleBlend: getComputedStyle(title).mixBlendMode,
+      menuColor: getComputedStyle(menu).color,
+      menuBlend: getComputedStyle(menu).mixBlendMode,
+      brandOpacity: getComputedStyle(brandMark).opacity,
+      primaryColor: getComputedStyle(primary).color,
+      primaryBackground: getComputedStyle(primary).backgroundColor,
+      primaryBorder: getComputedStyle(primary).borderColor,
+    };
+  });
+  expect(ready).toEqual({
+    uiRenderer: "foreign-object",
+    blurContent: "none",
+    blurFilter: "none",
+    titleColor: "rgba(0, 0, 0, 0)",
+    titleFill: "rgba(0, 0, 0, 0)",
+    titleBlend: "normal",
+    menuColor: "rgba(0, 0, 0, 0)",
+    menuBlend: "normal",
+    brandOpacity: "0",
+    primaryColor: "rgba(0, 0, 0, 0)",
+    primaryBackground: "rgba(0, 0, 0, 0)",
+    primaryBorder: "rgba(0, 0, 0, 0)",
+  });
+
+  await hero.evaluate((root) => {
+    root.dataset.burnState = "burning";
+  });
+  const burning = await page.evaluate(() => {
+    const root = document.querySelector("[data-burn-hero]");
+    const title = root.querySelector("#hero-title");
+    const menu = root.querySelector(".menu-toggle");
+    const brandMark = root.querySelector(".brand-mark");
+    return {
+      titleColor: getComputedStyle(title).color,
+      titleBlend: getComputedStyle(title).mixBlendMode,
+      menuColor: getComputedStyle(menu).color,
+      menuBlend: getComputedStyle(menu).mixBlendMode,
+      brandOpacity: getComputedStyle(brandMark).opacity,
+    };
+  });
+  expect(burning).toEqual({
+    titleColor: "rgba(0, 0, 0, 0)",
+    titleBlend: "normal",
+    menuColor: "rgba(0, 0, 0, 0)",
+    menuBlend: "normal",
+    brandOpacity: "0",
+  });
+
+  await hero.evaluate((root) => {
+    root.dataset.burnState = "revealed";
+    root.querySelector(".burn-webgl").hidden = true;
+  });
+  const revealed = await page.evaluate(() => {
+    const root = document.querySelector("[data-burn-hero]");
+    const title = root.querySelector("#hero-title");
+    const menu = root.querySelector(".menu-toggle");
+    const brandMark = root.querySelector(".brand-mark");
+    const primary = root.querySelector(".button-primary");
+    return {
+      titleColor: getComputedStyle(title).color,
+      titleBlend: getComputedStyle(title).mixBlendMode,
+      menuColor: getComputedStyle(menu).color,
+      menuBlend: getComputedStyle(menu).mixBlendMode,
+      brandFilter: getComputedStyle(brandMark).filter,
+      brandBlend: getComputedStyle(brandMark).mixBlendMode,
+      primaryColor: getComputedStyle(primary).color,
+      primaryBackground: getComputedStyle(primary).backgroundImage,
+    };
+  });
+  expect(revealed).toEqual({
+    titleColor: "rgb(255, 244, 227)",
+    titleBlend: "normal",
+    menuColor: "rgb(255, 244, 227)",
+    menuBlend: "normal",
+    brandFilter: "invert(1)",
+    brandBlend: "normal",
+    primaryColor: "rgb(23, 15, 4)",
+    primaryBackground: "linear-gradient(rgb(255, 220, 135), rgb(201, 134, 34))",
+  });
 });
 
 test("touch input can tap and drag the burn surface through the large SALVOR text", async ({ browser }) => {
@@ -201,6 +329,7 @@ test("touch input can tap and drag the burn surface through the large SALVOR tex
   await page.goto("/");
   const hero = page.locator("[data-burn-hero]");
   await expect(hero).toHaveAttribute("data-burn-state", "ready");
+  await expect(hero).toHaveAttribute("data-burn-renderer", "webgl");
   const titleBox = await page.locator("#hero-title").boundingBox();
   const start = { x: titleBox.x + titleBox.width * 0.25, y: titleBox.y + titleBox.height * 0.5 };
   const cdp = await context.newCDPSession(page);
@@ -216,7 +345,25 @@ test("touch input can tap and drag the burn surface through the large SALVOR tex
   }
   await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
   await expect(hero).toHaveAttribute("data-burn-state", "burning");
+  expect(Number(await hero.getAttribute("data-burn-count"))).toBeGreaterThan(1);
   await context.close();
+});
+
+test("WebGL failure preserves the static WF fallback", async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function getContext(type, ...args) {
+      if (type === "webgl") return null;
+      return original.call(this, type, ...args);
+    };
+  });
+  await page.goto("/");
+  const hero = page.locator("[data-burn-hero]");
+  await expect(hero).toHaveAttribute("data-burn-state", "fallback");
+  await expect(hero).not.toHaveAttribute("data-burn-renderer", "webgl");
+  await expect(page.locator(".burn-webgl")).toHaveCount(0);
+  await expect(page.locator("[data-wireframe-layer]")).toHaveCSS("opacity", "1");
+  await expect(page.locator("[data-mystic-layer]")).toHaveCSS("opacity", "0");
 });
 
 test("reduced motion leaves the wireframe static", async ({ browser }) => {

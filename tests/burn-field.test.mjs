@@ -2,52 +2,137 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  BURN_CONFIG,
-  advance,
-  createBurnField,
-  ignite,
+  BURN_FRAGMENT_SHADER,
+  BurnReveal,
+  MAX_BURNS,
+  createUiSnapshotSvg,
+  sampleDragPoints,
 } from "../site/scripts/burn-reveal.js";
 
-test("createBurnField starts with a cold, unburned field", () => {
-  const field = createBurnField(40, 24);
-  assert.equal(field.width, 40);
-  assert.equal(field.height, 24);
-  assert.equal(field.burn.length, 960);
-  assert.ok(field.burn.every((value) => value === 0));
-  assert.ok(field.heat.every((value) => value === 0));
-});
-
-test("ignite creates an irregular bounded neighborhood", () => {
-  const field = createBurnField(60, 40);
-  ignite(field, 30, 20, 6, 1.35, 100);
-  const lit = [];
-  field.heat.forEach((value, index) => {
-    if (value > 0) lit.push([index % field.width, Math.floor(index / field.width)]);
-  });
-
-  assert.ok(lit.length > 24);
-  assert.ok(lit.length < 150);
-  assert.ok(lit.every(([x, y]) => Math.hypot(x - 30, y - 20) <= 9));
-});
-
-test("one ignition remains self-sustaining and increases coverage", () => {
-  const field = createBurnField(80, 48);
-  ignite(field, 40, 24, 6, BURN_CONFIG.ignition, 200);
-  const initial = advance(field, 201, BURN_CONFIG).coverage;
-  let result;
-  for (let frame = 0; frame < 220; frame += 1) {
-    result = advance(field, 202 + frame * 16, BURN_CONFIG);
+function minimumDistance(data, count, point, aspect = 1) {
+  let minimum = Number.POSITIVE_INFINITY;
+  for (let index = 0; index < count; index += 1) {
+    const offset = index * 3;
+    minimum = Math.min(minimum, Math.hypot(
+      (point.x - data[offset]) * aspect,
+      point.y - data[offset + 1],
+    ) - data[offset + 2]);
   }
-  assert.ok(result.coverage > initial + 0.035, `${result.coverage} should exceed ${initial}`);
+  return minimum;
+}
+
+test("sampleDragPoints fills drag gaps without exceeding the uniform capacity", () => {
+  const points = sampleDragPoints(
+    { x: 0.1, y: 0.2 },
+    { x: 0.5, y: 0.2 },
+    0.012,
+    MAX_BURNS,
+  );
+
+  assert.ok(points.length > 1);
+  assert.ok(points.length <= MAX_BURNS);
+  assert.deepEqual(points.at(-1), { x: 0.5, y: 0.2 });
+  for (let index = 1; index < points.length; index += 1) {
+    assert.ok(Math.hypot(
+      points[index].x - points[index - 1].x,
+      points[index].y - points[index - 1].y,
+    ) <= 0.0121);
+  }
 });
 
-test("multiple fronts merge without reversing burned cells", () => {
-  const field = createBurnField(80, 48);
-  ignite(field, 18, 24, 6, BURN_CONFIG.ignition, 300);
-  ignite(field, 62, 24, 6, BURN_CONFIG.ignition, 301);
-  for (let frame = 0; frame < 140; frame += 1) advance(field, 302 + frame * 16, BURN_CONFIG);
-  const snapshot = Float32Array.from(field.burn);
-  for (let frame = 0; frame < 140; frame += 1) advance(field, 2600 + frame * 16, BURN_CONFIG);
-  field.burn.forEach((value, index) => assert.ok(value >= snapshot[index]));
-  assert.ok(field.burn.some((value, index) => index % field.width > 32 && index % field.width < 48 && value > 0.05));
+test("sampleDragPoints respects remaining burn capacity", () => {
+  const points = sampleDragPoints(
+    { x: 0.1, y: 0.1 },
+    { x: 0.9, y: 0.9 },
+    0.012,
+    3,
+  );
+
+  assert.equal(points.length, 3);
+  assert.deepEqual(points.at(-1), { x: 0.9, y: 0.9 });
+});
+
+test("sampleDragPoints waits until pointer movement reaches the drag spacing", () => {
+  assert.deepEqual(
+    sampleDragPoints(
+      { x: 0.1, y: 0.1 },
+      { x: 0.105, y: 0.105 },
+      0.012,
+      MAX_BURNS,
+    ),
+    [],
+  );
+});
+
+test("adding past capacity preserves every existing burned area", () => {
+  const burn = Object.create(BurnReveal.prototype);
+  burn.capacity = 2;
+  burn.burnCount = 2;
+  burn.width = 100;
+  burn.height = 100;
+  burn.root = { dataset: {} };
+  burn.burnData = new Float32Array([
+    0.1, 0.5, 0.1,
+    0.2, 0.5, 0.1,
+  ]);
+  const existingEdges = [
+    { x: 0, y: 0.5 },
+    { x: 0.3, y: 0.5 },
+  ];
+  const before = existingEdges.map((point) => minimumDistance(
+    burn.burnData,
+    burn.burnCount,
+    point,
+  ));
+
+  burn.addBurn({ x: 0.9, y: 0.9 });
+
+  assert.equal(burn.burnCount, 2);
+  assert.equal(burn.root.dataset.burnCount, "2");
+  existingEdges.forEach((point, index) => {
+    assert.ok(
+      minimumDistance(burn.burnData, burn.burnCount, point) <= before[index] + 1e-6,
+      `existing burn coverage receded at ${JSON.stringify(point)}`,
+    );
+  });
+});
+
+test("the fragment shader composites exact WF and M UI snapshots at the burn edge", () => {
+  assert.match(BURN_FRAGMENT_SHADER, /uniform sampler2D u_wireframe/);
+  assert.match(BURN_FRAGMENT_SHADER, /uniform sampler2D u_wireUi/);
+  assert.match(BURN_FRAGMENT_SHADER, /uniform sampler2D u_mysticUi/);
+  assert.match(BURN_FRAGMENT_SHADER, /texture2D\(u_wireframe/);
+  assert.match(BURN_FRAGMENT_SHADER, /texture2D\(u_wireUi/);
+  assert.match(BURN_FRAGMENT_SHADER, /texture2D\(u_mysticUi/);
+  assert.match(BURN_FRAGMENT_SHADER, /textFade\s*=\s*smoothstep\([^;]*edgeBoundary\)/);
+  assert.match(BURN_FRAGMENT_SHADER, /mix\(mysticUiSample, wireUiSample, textFade\)/);
+  assert.match(BURN_FRAGMENT_SHADER, /gl_FragColor/);
+  assert.match(BURN_FRAGMENT_SHADER, /baseAlpha/);
+});
+
+test("UI snapshots preserve canonical hero markup and switch only the visual state", () => {
+  const root = {
+    className: "hero is-enhanced",
+    querySelectorAll() {
+      return [
+        { outerHTML: '<header class="site-header"><a class="brand">SALVOR</a></header>' },
+        { outerHTML: '<div class="hero-copy"><a class="button button-primary">COPY SETUP_PROMPT.md</a></div>' },
+      ];
+    },
+  };
+
+  const wire = createUiSnapshotSvg(root, 964, 772, "wire", ".hero{color:#050608}");
+  const mystic = createUiSnapshotSvg(root, 964, 772, "mystic", ".hero{color:#fff4e3}");
+
+  assert.match(wire, /class="hero burn-ui-snapshot"/);
+  assert.doesNotMatch(wire, /is-enhanced/);
+  assert.match(mystic, /class="hero burn-ui-snapshot is-enhanced"/);
+  assert.match(mystic, /data-burn-state="revealed"/);
+  assert.match(wire, /button button-primary/);
+  assert.match(mystic, /button button-primary/);
+  assert.doesNotMatch(wire, /drawTextMask|fillText/);
+});
+
+test("the smoke uses a visible light-neutral base instead of near-black grey", () => {
+  assert.match(BURN_FRAGMENT_SHADER, /smokeColor\s*=\s*mix\(\s*vec3\(0\.42\)/);
 });

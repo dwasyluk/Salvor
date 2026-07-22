@@ -112,6 +112,39 @@ test("production JavaScript has focused module boundaries", async () => {
   ]);
 });
 
+test("the hero burn is one WebGL runtime with no legacy effect machinery", async () => {
+  const [html, css, burnSource] = await Promise.all([
+    read("site/index.html"),
+    read("site/styles.css"),
+    read("site/scripts/burn-reveal.js"),
+  ]);
+
+  assert.match(burnSource, /getContext\(["']webgl["']/);
+  assert.match(burnSource, /BURN_FRAGMENT_SHADER/);
+  assert.match(burnSource, /u_wireUi/);
+  assert.match(burnSource, /u_mysticUi/);
+  assert.match(burnSource, /foreignObject/);
+  assert.match(css, /\.burn-webgl\s*\{/);
+  assert.doesNotMatch(css, /mix-blend-mode:\s*difference/);
+  for (const legacy of [
+    "createBurnField",
+    "createImageData",
+    "toDataURL",
+    "burn-edge",
+    "burn-fx",
+    "burn-copy",
+    "burn-truth",
+    "burn-wire",
+  ]) {
+    assert.doesNotMatch(`${burnSource}\n${css}`, new RegExp(legacy));
+  }
+
+  const stylesheetVersion = html.match(/href=["']\.\/styles\.css\?v=([^"']+)["']/)?.[1];
+  const burnVersion = html.match(/src=["']\.\/scripts\/burn-reveal\.js\?v=([^"']+)["']/)?.[1];
+  assert.ok(stylesheetVersion);
+  assert.equal(burnVersion, stylesheetVersion);
+});
+
 test("repository surfaces include the canonical loop and deploy only this versioned site", async () => {
   const [readme, workflow, ignore] = await Promise.all([
     read("README.md"),

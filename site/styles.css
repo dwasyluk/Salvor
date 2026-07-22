@@ -92,12 +92,7 @@ svg {
 
 .hero-scene,
 .hero-scene picture,
-.hero-scene img,
-.burn-truth,
-.burn-wire,
-.burn-truth > picture,
-.burn-truth > picture > img,
-.burn-wire > img {
+.hero-scene img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -110,9 +105,7 @@ svg {
   pointer-events: none;
 }
 
-.hero-scene img,
-.burn-truth > picture > img,
-.burn-wire > img {
+.hero-scene img {
   object-fit: cover;
   object-position: var(--scene-x) center;
 }
@@ -874,106 +867,100 @@ h1,
   font-size: 12px;
 }
 
-/* Burn enhancement layers are generated from canonical DOM by burn-reveal.js. */
-.burn-truth,
-.burn-wire {
+/* WebGL owns the complete burn surface; WF and M stay canonical scene assets. */
+.burn-webgl {
+  position: absolute;
+  inset: 0;
   z-index: 3;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.burn-truth {
-  color: #fff4e3;
-  background: #020914;
-}
-
-.burn-truth::after {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  content: "";
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.48), rgba(0, 0, 0, 0.04) 58%, rgba(0, 0, 0, 0.35));
-}
-
-.burn-wire {
-  color: var(--ink);
-  background: var(--paper);
-}
-
-.burn-copy {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-}
-
-.burn-copy .site-header,
-.burn-copy .hero-copy {
-  position: absolute;
-  left: 0;
-  width: 100%;
-}
-
-.burn-copy .site-header {
-  top: 0;
-}
-
-.burn-copy .hero-copy {
-  top: 96px;
-  width: min(720px, 55vw);
-}
-
-.burn-truth .brand .brand-mark {
-  content: url("./assets/brand/salvor-mark-full-white.svg");
-}
-
-.burn-truth .brand .brand-wordmark {
-  content: url("./assets/brand/salvor-wordmark-white.svg");
-}
-
-.burn-truth .button-primary {
-  border-color: #ffdc87;
-  background: linear-gradient(#ffdc87, #c98622);
-  color: #170f04;
-}
-
-.burn-edge,
-.burn-fx {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
   width: 100%;
   height: 100%;
   pointer-events: none;
 }
 
-.burn-edge {
-  mix-blend-mode: screen;
+.hero.is-enhanced > .hero-scene > .hero-mystic {
+  opacity: 1;
 }
 
-.hero.is-enhanced > .hero-scene {
-  visibility: hidden;
+.hero.is-enhanced > .hero-scene > .hero-wireframe {
+  opacity: 0;
 }
 
-.hero.is-enhanced > [data-hero-content] {
+/* WebGL paints browser-rendered copies of both UI states so the geometry stays
+   identical while each pixel changes where the burn arrives. The semantic DOM
+   remains in place for selection and interaction. */
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .site-header .brand img {
+  opacity: 0;
+}
+
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .site-header .desktop-nav a,
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .site-header .menu-toggle,
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .eyebrow,
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy h1,
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .hero-tagline,
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .hero-points li,
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .button-primary,
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .button-link {
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
 
-.hero.is-enhanced > .site-header .brand img {
-  opacity: 0;
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .hero-tagline > span,
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .hero-points li > span {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
-.hero.is-enhanced > [data-hero-content] .button-primary,
-.hero.is-enhanced > [data-hero-content] .button-link::after {
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .button-primary {
   border-color: transparent;
   background: transparent;
   box-shadow: none;
 }
 
-.hero.is-enhanced > [data-hero-content] ::selection {
-  background: rgba(255, 215, 122, 0.48);
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .button-link::after {
+  background: transparent;
+}
+
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .button:hover {
+  transform: none;
+}
+
+.hero.is-enhanced:not([data-burn-state="revealed"]) ::selection {
+  background: var(--gold-hot);
   color: var(--ink);
   -webkit-text-fill-color: var(--ink);
+}
+
+.hero.is-enhanced[data-burn-state="revealed"] > .site-header,
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy {
+  color: #fff4e3;
+}
+
+.hero.is-enhanced[data-burn-state="revealed"] > .site-header .brand img {
+  opacity: 1;
+  filter: invert(1);
+}
+
+.hero.is-enhanced[data-burn-state="revealed"] > .site-header .desktop-nav a,
+.hero.is-enhanced[data-burn-state="revealed"] > .site-header .menu-toggle,
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy .eyebrow,
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy h1,
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy .hero-tagline,
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy .hero-points li,
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy .button-link {
+  color: #fff4e3;
+  -webkit-text-fill-color: currentColor;
+}
+
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy .hero-tagline > span,
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy .hero-points li > span {
+  color: var(--gold);
+  -webkit-text-fill-color: var(--gold);
+}
+
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy .button-primary {
+  border-color: #ffdc87;
+  background: linear-gradient(#ffdc87, #c98622);
+  color: #170f04;
 }
 
 @media (max-width: 900px) {
@@ -991,15 +978,13 @@ h1,
     align-content: space-between;
   }
 
-  .hero-copy,
-  .burn-copy .hero-copy {
+  .hero-copy {
     width: min(620px, calc(100% - 44px));
     margin-left: 22px;
     padding-top: clamp(56px, 8vh, 82px);
   }
 
-  .hero:not(.is-enhanced) > .hero-copy::before,
-  .burn-wire .hero-copy::before {
+  .hero:not(.is-enhanced) > .hero-copy::before {
     position: absolute;
     inset: 28px -14px -24px;
     z-index: -1;
@@ -1118,8 +1103,7 @@ h1,
     height: 48px;
   }
 
-  .hero-copy,
-  .burn-copy .hero-copy {
+  .hero-copy {
     top: 72px;
     width: calc(100% - 40px);
     margin-left: 20px;
@@ -1276,23 +1260,7 @@ h1,
     scroll-behavior: auto;
   }
 
-  .burn-truth,
-  .burn-wire,
-  .burn-edge,
-  .burn-fx {
+  .burn-webgl {
     display: none !important;
-  }
-
-  .hero.is-enhanced > .hero-scene {
-    visibility: visible;
-  }
-
-  .hero.is-enhanced > [data-hero-content] {
-    color: inherit;
-    -webkit-text-fill-color: currentColor;
-  }
-
-  .hero.is-enhanced > .site-header .brand img {
-    opacity: 1;
   }
 }
