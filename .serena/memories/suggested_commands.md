@@ -4,7 +4,7 @@
 
 Repo discovery: `rg --files`, `rg <pattern>`, `git status --short`, `git diff -- <file>`.
 
-## Root (there IS a root package.json — name `salvor-site`, v1.0.0, private, MIT)
+## Root (there IS a root package.json — name `salvor-site`, v1.0.0-beta, private, MIT)
 - `npm ci` — install dependencies.
 - `npm run test:unit` — node `--test` suite (contract + site-interactions + burn-field + setup-safety + ratification + final). See package.json `test:unit` for the current file list/count.
 - `npm run test:contract` — narrower node `--test` contract subset (site-contract + setup-safety + ratification + final).

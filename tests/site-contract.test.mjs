@@ -6,9 +6,9 @@ import path from "node:path";
 const root = process.cwd();
 const read = (file) => readFile(path.join(root, file), "utf8");
 
-test("the site is scoped to v1.0.0 and describes plugins only as future work", async () => {
+test("the site is scoped to v1.0.0-beta and describes plugins only as future work", async () => {
   const html = await read("site/index.html");
-  assert.match(html, /SALVOR v1\.0\.0/);
+  assert.match(html, /SALVOR v1\.0\.0-beta/);
   assert.match(html, /coming soon/i);
   assert.match(html, /in active development, ships with v1\.1\.0/i);
   assert.match(html, /Codex and Gemini plugin equivalents are open for contributors/i);
@@ -24,7 +24,8 @@ test("the site mirrors the canonical framework taxonomy and governance", async (
     /CLAUDE\.md\s+is the canonical hub/i,
     /AGENTS\.md/i,
     /GEMINI\.md/i,
-    /portable to other agents through thin adapters/i,
+    /vendor-agnostic and vendor-portable/i,
+    /through compatible thin adapters/i,
     /\.salvor\/domain-learnings\//i,
     /\.salvor\/decisions\//i,
     /Save this as a domain learning\? \(yes\/no\)/i,
@@ -37,6 +38,31 @@ test("the site mirrors the canonical framework taxonomy and governance", async (
   ]) {
     assert.match(visibleText, claim);
   }
+});
+
+test("the site presents six portable process steps and linked Enhanced integrations", async () => {
+  const html = await read("site/index.html");
+  const process = html.match(
+    /<div class="process-grid">([\s\S]*?)<\/div>\s*<div class="brain-summary">/,
+  )?.[1] ?? "";
+  assert.equal((process.match(/<article>/g) ?? []).length, 6);
+  assert.match(process, /Hub, Spokes &amp; Adapters/);
+  assert.match(process, /Vendor-Agnostic &amp; Portable/);
+  assert.ok(process.indexOf("Vendor-Agnostic") > process.indexOf("3 Capture Classes"));
+  assert.ok(process.indexOf("Vendor-Agnostic") < process.indexOf("Governed, Versioned Why"));
+  assert.match(html, /<h2><a href="https:\/\/github\.com\/oraios\/serena">Serena<\/a>/);
+  assert.match(html, /<h2><a href="https:\/\/github\.com\/abhigyanpatwari\/GitNexus">GitNexus<\/a>/);
+  assert.match(html, /optional[^.]*highly recommended|highly recommended[^.]*optional/i);
+});
+
+test("hero bullets use a separate marker column for wrapped copy", async () => {
+  const [html, css] = await Promise.all([
+    read("site/index.html"),
+    read("site/styles.css"),
+  ]);
+  assert.equal((html.match(/class="hero-point-marker"/g) ?? []).length, 3);
+  assert.equal((html.match(/class="hero-point-copy"/g) ?? []).length, 3);
+  assert.match(css, /\.hero-points li\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:/s);
 });
 
 test("the production site embeds two standalone Salvor Loop panels", async () => {
@@ -167,10 +193,10 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     read(".salvor/INFRA.md"),
     read(".serena/memories/task_completion.md"),
   ]);
-  assert.match(version, /"ghpage"\s*:\s*7/);
-  assert.match(version, /GHPAGE:07/);
+  assert.match(version, /"ghpage"\s*:\s*8/);
+  assert.match(version, /GHPAGE:08/);
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
-  assert.match(l1, /GHPAGE:07/);
+  assert.match(l1, /GHPAGE:08/);
   // The responsive-check SOP lives in its canonical homes (L1, INFRA, L2), not
   // duplicated across every Serena memory — post-refresh, Serena memories are
   // concise pointers under the one-owner model.

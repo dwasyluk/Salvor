@@ -5,6 +5,9 @@ two-component TypeScript app with the full Salvor brain applied on top — so yo
 (and so Serena + GitNexus have real code to index). It demonstrates the **optional strict profile**: every Optional
 Strict Engineering Default in `RULES.md` is enabled on top of the Core Protocol.
 
+Its shared Salvor brain is vendor-agnostic repository Markdown. Compatible thin
+adapters make that same memory vendor-portable without copying or migrating it.
+
 The app itself is deliberately tiny: an in-memory **Notes** service.
 
 > The store is **in-memory** — all notes are lost when the API restarts. There is no database. That's intentional for a

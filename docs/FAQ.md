@@ -142,7 +142,8 @@ Serena and GitNexus are the substrate: they tell the agent about your code *as i
 is right now* — symbols, call graph, impact. Salvor is the discipline and the
 memory *on top*: why decisions were made, what was tried and failed, what's
 deferred, what changed and when. Code intelligence answers "what is this?"; Salvor
-answers "what did we learn, and why." Salvor uses them — it isn't them.
+answers "what did we learn, and why." Both integrations are optional, but highly
+recommended for the best code-grounded results. Salvor uses them — it isn't them.
 
 **GitNexus remembers how the code is connected. Salvor preserves why the team
 made it that way.**
@@ -295,4 +296,3 @@ contradictions — is the top roadmap item. See the
 Salvor is the version-controlled engineering memory layer for a codebase: the
 part that lets every coding agent inherit the team's accumulated reasoning, not
 just the files.
-

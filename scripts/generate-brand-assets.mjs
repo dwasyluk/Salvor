@@ -134,7 +134,7 @@ function socialSvg(geometry, textOutlines, width, height, heroData, label) {
   const tagY = Math.round(height * .68);
   const taglineSize = Math.round(height * .068);
   const supportSize = Math.round(height * .035);
-  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="social-title social-desc" data-layout="full-bleed-hero" data-brand-source="canonical-w10"><title id="social-title">Salvor — Your repo remembers.</title><desc id="social-desc">Version-controlled engineering memory for coding agents.</desc><image href="data:image/png;base64,${heroData}" x="0" y="0" width="${width}" height="${height}" preserveAspectRatio="xMidYMid slice"/><rect width="${width}" height="${height}" fill="url(#readability)"/><defs><linearGradient id="readability" x1="0" x2="1"><stop offset="0" stop-color="#020304" stop-opacity=".92"/><stop offset=".64" stop-color="#020304" stop-opacity=".64"/><stop offset="1" stop-color="#020304" stop-opacity=".26"/></linearGradient></defs><g transform="translate(${markX} ${markY}) scale(${markSize / 1000})">${markElements(geometry, "#ffffff", "full")}</g>${wordmarkGroup(wordmark, "#ffffff", wordX, wordY, wordScale)}<path d="M${markX} ${tagY - 44}H${Math.round(width * .49)}" stroke="#c9841d" stroke-width="5"/>${outlinedText(tagline, "#ffffff", markX, tagY - taglineSize * .86, taglineSize / 100, 'data-copy="tagline" data-typography="sf-mono-800"')}${outlinedText(support, "#f3f0e8", markX, tagY + Math.round(height * .095) - supportSize * .86, supportSize / 100, 'data-copy="support" data-typography="sf-mono-600"')}<metadata>${xml(label)} generated from canonical W10 geometry, fixed SF Mono outlines, and the full-bleed v1.0.0 hero.</metadata></svg>\n`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="social-title social-desc" data-layout="full-bleed-hero" data-brand-source="canonical-w10"><title id="social-title">Salvor — Your repo remembers.</title><desc id="social-desc">Version-controlled engineering memory for coding agents.</desc><image href="data:image/png;base64,${heroData}" x="0" y="0" width="${width}" height="${height}" preserveAspectRatio="xMidYMid slice"/><rect width="${width}" height="${height}" fill="url(#readability)"/><defs><linearGradient id="readability" x1="0" x2="1"><stop offset="0" stop-color="#020304" stop-opacity=".92"/><stop offset=".64" stop-color="#020304" stop-opacity=".64"/><stop offset="1" stop-color="#020304" stop-opacity=".26"/></linearGradient></defs><g transform="translate(${markX} ${markY}) scale(${markSize / 1000})">${markElements(geometry, "#ffffff", "full")}</g>${wordmarkGroup(wordmark, "#ffffff", wordX, wordY, wordScale)}<path d="M${markX} ${tagY - 44}H${Math.round(width * .49)}" stroke="#c9841d" stroke-width="5"/>${outlinedText(tagline, "#ffffff", markX, tagY - taglineSize * .86, taglineSize / 100, 'data-copy="tagline" data-typography="sf-mono-800"')}${outlinedText(support, "#f3f0e8", markX, tagY + Math.round(height * .095) - supportSize * .86, supportSize / 100, 'data-copy="support" data-typography="sf-mono-600"')}<metadata>${xml(label)} generated from canonical W10 geometry, fixed SF Mono outlines, and the full-bleed v1.0.0-beta hero.</metadata></svg>\n`;
 }
 
 function coreEmbed(geometry) {
@@ -269,7 +269,7 @@ async function dataUri(path, mime) {
 }
 
 async function generateAudit() {
-  const auditDir = join(tmpdir(), "salvor-v1.0.0-brand-audit");
+  const auditDir = join(tmpdir(), "salvor-v1.0.0-beta-brand-audit");
   await mkdir(auditDir, { recursive: true });
   const browser = await chromium.launch({ headless: true });
   try {
@@ -337,7 +337,7 @@ async function generateAudit() {
       img{display:block;max-width:100%;max-height:100%;object-fit:contain}.wide img{width:100%}.tall img{height:100%}.pixel{width:224px;height:224px;image-rendering:pixelated}
       .stack{position:relative;width:100%;height:100%}.stack img{position:absolute;inset:0;margin:auto}.stack .mirror{transform:scaleX(-1);opacity:.45;filter:sepia(1) saturate(6)}
       .stack .reference{opacity:.36}.stack .reconstruction{opacity:.64;mix-blend-mode:multiply}
-    </style></head><body><h1>SALVOR v1.0.0 · CANONICAL BRAND AUDIT</h1><p>Generated evidence · full/core geometry · site states · small sizes · social compositions · infographic variants</p><main class="grid">${cards.join("")}</main></body></html>`;
+    </style></head><body><h1>SALVOR v1.0.0-beta · CANONICAL BRAND AUDIT</h1><p>Generated evidence · full/core geometry · site states · small sizes · social compositions · infographic variants</p><main class="grid">${cards.join("")}</main></body></html>`;
     await writeFile(join(auditDir, "contact-sheet.html"), auditHtml);
     const auditPage = await browser.newPage({ viewport: { width: 1800, height: 2400 }, deviceScaleFactor: 1 });
     await auditPage.setContent(auditHtml, { waitUntil: "load" });

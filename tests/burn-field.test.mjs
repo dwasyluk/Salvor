@@ -133,6 +133,10 @@ test("UI snapshots preserve canonical hero markup and switch only the visual sta
   assert.doesNotMatch(wire, /drawTextMask|fillText/);
 });
 
-test("the smoke uses a visible light-neutral base instead of near-black grey", () => {
-  assert.match(BURN_FRAGMENT_SHADER, /smokeColor\s*=\s*mix\(\s*vec3\(0\.42\)/);
+test("the smoke uses the approved #9fa2a6 neutral base", () => {
+  assert.match(
+    BURN_FRAGMENT_SHADER,
+    /smokeBaseColor\s*=\s*vec3\(\s*159\.0\s*\/\s*255\.0,\s*162\.0\s*\/\s*255\.0,\s*166\.0\s*\/\s*255\.0\s*\)/,
+  );
+  assert.match(BURN_FRAGMENT_SHADER, /smokeColor\s*=\s*mix\(\s*smokeBaseColor,/);
 });

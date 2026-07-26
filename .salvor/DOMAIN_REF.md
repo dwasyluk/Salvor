@@ -4,7 +4,11 @@ Authoritative current truth for Salvor's product logic. Artifacts in `.salvor/do
 
 ## Purpose
 
-Salvor gives a repository a version-controlled institutional brain shared across sessions, contributors, and LLM vendors. Shared rationale belongs in git-tracked repository files, not in one vendor's private memory.
+Salvor gives a repository a version-controlled institutional brain shared
+across sessions, contributors, and LLM vendors. The shared brain is
+vendor-agnostic because its canonical record is repo-owned Markdown, not one
+vendor's private memory; compatible thin adapters make it vendor-portable
+without a memory migration.
 
 ## Product Pillars
 
@@ -13,7 +17,7 @@ Salvor gives a repository a version-controlled institutional brain shared across
 3. Mandatory `RULES.md` enforcement and termination protocol.
 4. Three user-gated capture classes: Decision / Domain Learning, Learned Failure (LF#), and Deferred Finding.
 5. An auditable history of why; optional Strict installations add per-component version counters, while Core/Q4=NO uses the project's established version source or a minimal history artifact.
-6. Optional Enhanced mode adds Serena semantic/symbolic code intelligence and GitNexus relationship/impact intelligence; Core works without either tool.
+6. Optional Enhanced mode adds Serena semantic/symbolic code intelligence and GitNexus relationship/impact intelligence; Core works without either tool, but both are highly recommended for the best code-grounded results.
 
 ## Canonical Public Sources
 

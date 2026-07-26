@@ -5,8 +5,9 @@
 > to give a memory to — new or existing. The agent runs a safety preflight, asks
 > **four setup questions**, then scaffolds the full Salvor structure. Setup
 > never blanket-stages files and never commits without asking you first. Serena +
-> GitNexus MCP servers are **optional** (Enhanced mode — see Step 0); Salvor
-> Core works with repository files alone.
+> GitNexus MCP servers are **optional** (Enhanced mode — see Step 0) but highly
+> recommended for the best code-grounded results; Salvor Core works with
+> repository files alone.
 
 ---
 
@@ -22,9 +23,11 @@ user-gated capture classes** (Decision / Domain Learning, Learned Failure,
 Deferred Finding), optional **per-component versioning** (when Strict defaults are
 enabled), and optional **Serena + GitNexus** discipline (Enhanced mode). Set it up exactly as specified below.
 
-Everything Salvor writes is **in-repo and git-tracked** — that is the *shared*
-brain every contributor's agent reads. (A per-user auto-memory layer is an
-optional, vendor-specific enhancement; see Step 4.)
+Everything Salvor writes is **in-repo and git-tracked** — that vendor-agnostic
+repository record is the *shared* brain every contributor's agent reads. Thin
+vendor adapters make the same brain vendor-portable without a memory migration.
+(A per-user auto-memory layer is an optional, vendor-specific enhancement; see
+Step 4.)
 
 The capture contract in one line: Salvor may update concise operational state as
 work progresses. It must ask before promoting a decision, domain learning,
@@ -114,6 +117,9 @@ current client.** "Enhanced" must never imply unverified MCP functionality.
 Never run `gitnexus setup`, install global tooling, or modify global/client MCP
 config without explicit approval after enumerating the exact mutations.
 
+Serena and GitNexus remain optional, but both are highly recommended for the
+best code-grounded results.
+
 If Serena or GitNexus is missing (or present but not MCP-active), offer me
 exactly these options and wait for my choice:
 
@@ -175,10 +181,13 @@ has no structured-question tool) BEFORE creating anything:
    commit message.
 > **Vendor entrypoints are automatic — no need to choose.** Every project gets all three
 > by default: `CLAUDE.md` (the canonical hub) plus thin `AGENTS.md` (Codex) and `GEMINI.md`
-> (Gemini) pointer files. Salvor's Markdown memory format is vendor-portable; setup generates
-> tested entrypoints for Claude Code, Codex, and GEMINI.md-compatible clients (Claude Code is
-> the most dogfooded; the Codex and Google entrypoints are wired + documented but less
-> exercised). Other agents integrate via thin adapters. Only the entrypoint glue differs
+> (Gemini) pointer files. Salvor Core is vendor-agnostic: the shared brain is
+> repository-owned Markdown, not vendor-owned state. Thin adapters make that
+> memory vendor-portable, so supported agents can be switched without migrating
+> the shared record. Setup generates tested entrypoints for Claude Code, Codex,
+> and GEMINI.md-compatible clients (Claude Code is the most dogfooded; the Codex
+> and Google entrypoints are wired + documented but less exercised). Other
+> agents integrate via compatible thin adapters. Only the entrypoint glue differs
 > (see `docs/VENDOR_ADAPTERS.md`).
 
 Wait for answers. Do not invent components or assume a stack. Once I respond,

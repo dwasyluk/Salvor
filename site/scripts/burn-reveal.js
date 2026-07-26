@@ -119,8 +119,13 @@ export function fragmentShaderSource(maxBurns = MAX_BURNS) {
         1.0
       );
       float glowFactor = smoothstep(-0.04, 0.0, edgeBoundary);
+      vec3 smokeBaseColor = vec3(
+        159.0 / 255.0,
+        162.0 / 255.0,
+        166.0 / 255.0
+      );
       vec3 smokeColor = mix(
-        vec3(0.42),
+        smokeBaseColor,
         vec3(1.0, 0.6, 0.1),
         glowFactor
       ) * smokeAlpha;

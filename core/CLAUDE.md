@@ -1,6 +1,8 @@
 # core — universal Salvor setup protocol
 
-Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds vendor-portable governance and memory, then adds thin CLI-specific entrypoints.
+Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds a
+vendor-agnostic, repository-owned brain and makes it vendor-portable through
+thin CLI-specific entrypoints.
 
 ## Key Files
 - `../SETUP_PROMPT.md` — canonical one-shot installer and scaffold templates
@@ -8,7 +10,8 @@ Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds ven
 - `../CHANGELOG.md` — user-visible protocol history
 
 ## Architecture Notes
-- Keep the installer vendor-portable; adapter glue must not fork the shared brain.
+- Keep the installer vendor-agnostic and vendor-portable; thin adapter glue must
+  never fork or take ownership of the shared brain.
 - Scope questions are user-gated. Never invent components, stacks, or parity paths.
 - A prompt behavior change must be reflected in `example-project/` and user-facing documentation.
 
@@ -17,6 +20,6 @@ Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds ven
 - Scan for unresolved template tokens and verify all vendor adapters point to the same canonical core.
 
 ## Build
-- No compilation. `VERSION.md` key: `CORE`; derived constant: `CORE_BUILD`.
+- No compilation. `VERSION.md` key: `CORE`; current build `CORE:10`; derived constant: `CORE_BUILD`.
 
 Use Serena for repository structure, `.salvor/DOMAIN_REF.md` for product truth, and `.salvor/INFRA.md` for operational details.

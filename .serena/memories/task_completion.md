@@ -8,7 +8,7 @@ For SETUP_PROMPT.md behavior changes: update/sync `example-project/` (the regres
 
 Never overwrite unrelated user changes. Use `git status --short` and inspect diffs for touched files before final response.
 
-## Release validation workflow (v1.0.0)
+## Release validation workflow (v1.0.0-beta)
 - Run the test suite: `npm run test:unit` (contract + interactions + burn-field + setup-safety + ratification + final) and `npm run test:browser` (Playwright), or `npm test` for both. Exact file list per the root `package.json` scripts.
 - `git diff --check` for whitespace/conflict-marker hygiene.
 - Regenerate the release package when packaging changes.

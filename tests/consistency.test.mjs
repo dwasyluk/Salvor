@@ -106,3 +106,30 @@ test("current governance and lifecycle wording keeps versioning conditional", ()
   assert.match(flat(".salvor/DOMAIN_REF.md"), /optional Strict[^]{0,100}per-component version/i);
   assert.doesNotMatch(domain, /future GitHub Pages site/i);
 });
+
+test("canonical docs define vendor-agnostic core and vendor portability separately", () => {
+  for (const file of [
+    "README.md",
+    "SETUP_PROMPT.md",
+    "docs/ARCHITECTURE.md",
+    "docs/VENDOR_ADAPTERS.md",
+  ]) {
+    const source = flat(file);
+    assert.match(source, /vendor-agnostic/i, file);
+    assert.match(source, /vendor-portable|vendor portability/i, file);
+    assert.match(source, /thin adapters?/i, file);
+  }
+});
+
+test("Enhanced integrations are optional and highly recommended", () => {
+  for (const file of [
+    "README.md",
+    "SETUP_PROMPT.md",
+    "docs/VENDOR_ADAPTERS.md",
+    "docs/FAQ.md",
+  ]) {
+    const source = flat(file);
+    assert.match(source, /optional/i, file);
+    assert.match(source, /highly recommended|best results/i, file);
+  }
+});

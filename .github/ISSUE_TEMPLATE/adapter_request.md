@@ -18,4 +18,6 @@ Does it have a per-session memory mechanism? A way to enforce per-turn instructi
 Does it support MCP servers (so Serena + GitNexus work)? Any setup quirks?
 
 **Willing to contribute?**
-Salvor's core is vendor-neutral; an adapter is mostly a thin entrypoint file. PRs welcome — see `docs/VENDOR_ADAPTERS.md`.
+Salvor's core is vendor-agnostic repository Markdown; a compatible thin
+entrypoint adapter makes that shared brain vendor-portable. PRs welcome — see
+`docs/VENDOR_ADAPTERS.md`.

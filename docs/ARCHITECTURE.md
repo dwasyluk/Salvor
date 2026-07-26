@@ -17,10 +17,12 @@ propagate, and compound**, all inside git.
 A small root `CLAUDE.md` **hub** (<~60 lines) holds project-wide invariants and a
 documentation map. Each component has its own **spoke** `CLAUDE.md`. An agent
 working in `api/` loads the hub + the `api` spoke — not the entire repo's
-context. You pay for the context you use. Thin `AGENTS.md` and `GEMINI.md` pointers ship
-alongside the hub by default, so Codex and Gemini load the same context. Salvor's Markdown
-memory format is vendor-portable: setup generates tested entrypoints for Claude Code,
-Codex, and GEMINI.md-compatible clients — Claude Code is the most deeply dogfooded path,
+context. You pay for the context you use. Thin `AGENTS.md` and `GEMINI.md`
+pointers ship alongside the hub by default, so Codex and Gemini load the same
+context. The repository-owned Markdown brain is vendor-agnostic; thin adapters
+make it vendor-portable, so a supported-agent switch does not require a memory
+migration. Setup generates tested entrypoints for Claude Code, Codex, and
+GEMINI.md-compatible clients — Claude Code is the most deeply dogfooded path,
 while the Codex and Google adapters are wired and documented but less exercised.
 
 ### 2. Two-tier persisted memory (L1 / L2)
@@ -60,6 +62,9 @@ knowledge compound rather than decay:
   are the receipts.
 
 ### 5. MCP substrate: Serena + GitNexus
+Both integrations are optional; Salvor Core works without them. They are highly
+recommended for the best code-grounded results.
+
 - **Serena** — semantic/symbolic code intelligence, so the agent navigates by
   symbol (token-thrifty) instead of re-reading whole files. IDE-agnostic. Serena
   also has its own optional memory folder, `.serena/memories/` — Salvor treats it
@@ -149,6 +154,6 @@ Code's per-user auto-memory (`~/.claude/.../memory/`) is a *separate, optional,
 non-shared* convenience layer; canonical truth never lives there.
 
 **Salvor's version vs your project's version.** Salvor's own releases use SemVer
-git tags (`v1.0.0`, …) tracked in `CHANGELOG.md`. The `VERSION.md` Salvor scaffolds
+git tags (`v1.0.0-beta`, …) tracked in `CHANGELOG.md`. The `VERSION.md` Salvor scaffolds
 *into your project* (with per-component IDs like `API:01`) versions **your**
 project — not Salvor.

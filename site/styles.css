@@ -277,14 +277,8 @@ h1,
   line-height: 1.05;
 }
 
-.hero > .hero-copy > .hero-tagline {
-  pointer-events: auto;
-  user-select: text;
-  -webkit-user-select: text;
-}
-
 .hero-tagline span,
-.hero-points span {
+.hero-point-marker {
   color: var(--gold);
 }
 
@@ -297,9 +291,15 @@ h1,
   list-style: none;
 }
 
-.hero-points span {
-  display: inline-block;
-  margin-right: 8px;
+.hero-points li {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: start;
+}
+
+.hero-point-copy {
+  min-width: 0;
 }
 
 .hero-actions {
@@ -467,8 +467,9 @@ h1,
 
 .process-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 28px;
+  row-gap: 44px;
 }
 
 .process-grid article {
@@ -476,7 +477,7 @@ h1,
   text-align: center;
 }
 
-.process-grid article:not(:last-child)::after {
+.process-grid article:not(:nth-child(3n))::after {
   position: absolute;
   top: 30px;
   right: -22px;
@@ -790,6 +791,16 @@ h1,
   overflow-wrap: anywhere;
 }
 
+.foundation-grid h2 a {
+  color: inherit;
+}
+
+.foundation-grid h2 a:hover {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
 .closing-line {
   display: flex;
   align-items: center;
@@ -905,7 +916,7 @@ h1,
 }
 
 .hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .hero-tagline > span,
-.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .hero-points li > span {
+.hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy .hero-point-marker {
   color: transparent;
   -webkit-text-fill-color: transparent;
 }
@@ -935,6 +946,12 @@ h1,
   color: #fff4e3;
 }
 
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy {
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
 .hero.is-enhanced[data-burn-state="revealed"] > .site-header .brand img {
   opacity: 1;
   filter: invert(1);
@@ -952,7 +969,7 @@ h1,
 }
 
 .hero.is-enhanced[data-burn-state="revealed"] > .hero-copy .hero-tagline > span,
-.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy .hero-points li > span {
+.hero.is-enhanced[data-burn-state="revealed"] > .hero-copy .hero-point-marker {
   color: var(--gold);
   -webkit-text-fill-color: var(--gold);
 }
@@ -1038,7 +1055,7 @@ h1,
   }
 
   .process-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: 38px;
   }
 
@@ -1177,11 +1194,7 @@ h1,
   }
 
   .process-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .process-grid article:last-child {
-    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
   }
 
   .terminal-card {
@@ -1246,13 +1259,6 @@ h1,
     font-size: 12px;
   }
 
-  .process-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .process-grid article:last-child {
-    grid-column: auto;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

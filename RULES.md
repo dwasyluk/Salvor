@@ -30,7 +30,7 @@ If the operator requests context recovery or a logic loop occurs:
 
 ## 2. Continued Learning Protocol
 
-This protocol covers the first two capture classes: **Decision / Domain Learning** and **Learned Failure (LF#)**. (The third class, **Deferred Finding**, is covered by §7.)
+This protocol covers the first two capture classes: **Decision / Domain Learning** and **Learned Failure (LF#)**. (The third class, **Deferred Finding**, is covered by §7.) Its shared record is vendor-agnostic repository Markdown; thin adapters make it vendor-portable without forking that record.
 
 Every domain discovery, hypothesis falsification, validation, vendor/model verdict, parameter learning, evidence-backed bakeoff, dependency probe, technique validation, Learned Failure, deliberate design decision or load-bearing invariant, or durable taxonomy clarification is a mandatory save checkpoint.
 

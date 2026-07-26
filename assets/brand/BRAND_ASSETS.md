@@ -81,7 +81,7 @@ npm run brand:audit
 
 `brand:check` rebuilds every output in a temporary directory and compares its
 bytes with the checked-in files. `brand:audit` also creates visual evidence in
-`/tmp/salvor-v1.0.0-brand-audit/`; audit output is not part of the release.
+`/tmp/salvor-v1.0.0-beta-brand-audit/`; audit output is not part of the release.
 
 ## Composition rules
 
@@ -92,7 +92,7 @@ bytes with the checked-in files. `brand:audit` also creates visual evidence in
   inside the mark.
 - Do not simplify or replace the topology for favicons. Small PNGs are direct
   exact-size renders of the canonical full SVG.
-- Social cards use the approved v1.0.0 hero as a full-bleed background with a
+- Social cards use the approved v1.0.0-beta hero as a full-bleed background with a
   controlled readability overlay. The 1280×640 preview is rendered for its own
   canvas and is not a stretched 1200×630 image.
 - The full mark is the only favicon/application icon geometry.

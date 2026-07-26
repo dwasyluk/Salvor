@@ -1,6 +1,10 @@
 # .salvor/ — salvor's brain
 
-This folder is salvor's git-tracked memory: the shared, canonical knowledge every contributor's coding agent reads. Governance and vendor entrypoints live at the repository root in `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `RULES.md`, and `VERSION.md`.
+This folder is salvor's git-tracked memory: the shared, vendor-agnostic
+canonical knowledge every contributor's coding agent reads. Compatible thin
+adapters make it vendor-portable without moving or duplicating that memory.
+Governance and vendor entrypoints live at the repository root in `CLAUDE.md`,
+`AGENTS.md`, `GEMINI.md`, `RULES.md`, and `VERSION.md`.
 
 | File | What it is |
 |------|------------|
@@ -9,7 +13,8 @@ This folder is salvor's git-tracked memory: the shared, canonical knowledge ever
 | `DOMAIN_REF.md` | Authoritative current truth and the LF# registry |
 | `INFRA.md` | Running, environment variables, deployment, external tools, and observability |
 | `DEFERRED_TODOS.md` | User-approved out-of-scope findings not yet fixed |
-| `domain-learnings/` | Dated, frozen decision and learning artifacts |
+| `decisions/` | User-approved design decisions, rationale, invariants, and coupling |
+| `domain-learnings/` | Dated, frozen empirical discoveries and validated domain knowledge |
 | `postmortems/` | Incident write-ups that feed LF# and deferred findings |
 
 Everything here is intended for humans and agents alike: it preserves the why behind the repository.

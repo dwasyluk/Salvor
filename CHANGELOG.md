@@ -11,14 +11,28 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta] — 2026-07-26
+
+Initial public beta.
+
+### Changed
+- Defined the vendor-agnostic repository core separately from vendor
+  portability through compatible thin adapters, including explicit adapter
+  maturity and memory-migration boundaries.
+- Clarified Serena and GitNexus as optional Enhanced integrations that are
+  highly recommended for the best code-grounded results.
+- Expanded the GitHub Pages presentation with the six-step portable workflow,
+  linked integrations, restored standalone Salvor Loop panels, responsive
+  3/2/1 process layout, and vendor-agnostic/vendor-portable reasoning.
+- Refined the single WebGL hero renderer with lighter neutral smoke,
+  hanging-indent bullets, and burn-state-aware text selection while preserving
+  mouse/touch burn accumulation, localized black-to-white copy transition, and
+  interactive navigation/actions.
+
 ### Fixed
 - Hero burn-off now reveals the tracked full-color mystic artwork instead of the
   dark fallback on desktop and mobile; browser regressions cover the truth
   layer's visibility, image loading, hero coverage, and cover-fit behavior.
-
-## [1.0.0] — 2026-07-20
-
-Initial public release.
 
 ### Added
 - **`SETUP_PROMPT.md`** — the self-contained, prompt-first scaffolder. Paste it
@@ -92,5 +106,5 @@ Initial public release.
   machine-readable hashes, drift contracts, and visual contact-sheet auditing.
   Retired badge, node-sigil, gem, and hand-built W10/WF approximations do not ship.
 
-[Unreleased]: https://github.com/dwasyluk/salvor/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/dwasyluk/salvor/releases/tag/v1.0.0
+[Unreleased]: https://github.com/dwasyluk/salvor/compare/v1.0.0-beta...HEAD
+[1.0.0-beta]: https://github.com/dwasyluk/salvor/releases/tag/v1.0.0-beta

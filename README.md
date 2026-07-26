@@ -6,7 +6,7 @@
 
 ### A repo-native engineering memory and governance protocol for coding agents.
 
-[![release](https://img.shields.io/badge/release-v1.0.0-blue)](https://github.com/dwasyluk/salvor/releases)
+[![release](https://img.shields.io/static/v1?label=release&message=v1.0.0-beta&color=blue)](https://github.com/dwasyluk/salvor/releases)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![works with](https://img.shields.io/badge/works%20with-Claude%20Code%20·%20Codex%20·%20Gemini%20CLI%20%2F%20Antigravity-8A2BE2)](./docs/VENDOR_ADAPTERS.md)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](./CONTRIBUTING.md)
@@ -42,12 +42,14 @@ reconstructing it.
 It is **prompt-first**: paste one setup prompt, answer four setup questions, and
 your project gains a hub-and-spoke context layer, a two-tier persisted memory,
 a rules protocol, and user-approved capture gates that record knowledge *and
-the reasoning behind it* as you work. Everything lives as plain Markdown in
-your repo — reviewable in PRs, diffable, branchable, vendor-portable. Setup
-generates tested entrypoints for Claude Code, Codex, and GEMINI.md-compatible
-clients; Claude Code is the most deeply dogfooded path, while the Codex and
-Google adapters are wired and documented but less exercised. No hosted service,
-no additional account.
+the reasoning behind it* as you work. The shared brain is vendor-agnostic:
+everything lives as plain Markdown in your repo, owned by no LLM vendor and
+reviewable in PRs, diffable, and branchable. Thin adapters make that same brain
+vendor-portable, so teams can switch supported agents without migrating their
+memory. Setup generates tested entrypoints for Claude Code, Codex, and
+GEMINI.md-compatible clients; Claude Code is the most deeply dogfooded path,
+while the Codex and Google adapters are wired and documented but less exercised.
+No hosted service, no additional account.
 
 ## The three capture classes
 
@@ -122,7 +124,9 @@ code for the Enhanced-mode tools to index.
 
 Every memory and governance claim in this README holds in **Core** mode.
 Claims about symbol-level navigation, "what breaks if I change this?" impact
-analysis, and code-graph awareness require **Enhanced** mode.
+analysis, and code-graph awareness require **Enhanced** mode. Serena and
+GitNexus are optional, but both are highly recommended for the best
+code-grounded results.
 
 ## Lifecycle: the Salvor Loop
 
@@ -147,7 +151,8 @@ Full write-up of the five pillars in
 ## Enhanced mode: Serena + GitNexus
 
 Two optional local tools add code intelligence to Salvor Core to pair with
-Salvor's memory. Neither is affiliated with Salvor; both run locally for their
+Salvor's memory. Both are highly recommended for the best code-grounded
+results. Neither is affiliated with Salvor; both run locally for their
 documented core workflows.
 
 ### 🧠 Serena — semantic symbol navigation

@@ -4,8 +4,9 @@
 
 **How realistic is that?** The honest split:
 
-- **Salvor Core is repository-local Markdown, adapters, and governance.** The
-  substance lives under `.salvor/` — L1/L2 (`active_state.md` /
+- **Salvor Core is vendor-agnostic repository-local Markdown and governance.**
+  No LLM vendor owns the shared brain. The substance lives under `.salvor/` —
+  L1/L2 (`active_state.md` /
   `active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
   `decisions/`, `domain-learnings/`, and `postmortems/`. Root `RULES.md` + the
   vendor entrypoints provide governance and routing; `VERSION.md` exists only under
@@ -15,17 +16,20 @@
   integrations, not constituent requirements of Salvor Core. Serena memories
   (`.serena/memories/`) are an OPTIONAL retrieval aid; GitNexus's index is
   machine-derived and **gitignored** — not canonical git-tracked memory. Both are
-  standard **MCP** servers (a cross-vendor standard) and already work in Claude
-  Code, Codex, Gemini CLI, Cursor, and others.
+  highly recommended for the best code-grounded results. They are standard
+  **MCP** servers (a cross-vendor standard) and already work in Claude Code,
+  Codex, Gemini CLI, Cursor, and others.
 - **The glue is vendor-specific.** *How* project instructions auto-load, where
   per-session memory lives, and how per-turn rules are enforced differ per tool.
 
-So Salvor ships a **portable core + all three thin entrypoint adapters by default** —
-`CLAUDE.md` (canonical hub) plus `AGENTS.md` and `GEMINI.md` pointer files. Salvor's
-Markdown memory format is vendor-portable: setup generates tested entrypoints for Claude
-Code, Codex, and GEMINI.md-compatible clients. Claude Code is the most deeply dogfooded
-path; the Codex and Google adapters are wired and documented but less exercised. Other
-agents can integrate through thin adapters.
+So Salvor ships a **vendor-agnostic core + all three thin entrypoint adapters by
+default** — `CLAUDE.md` (canonical hub) plus `AGENTS.md` and `GEMINI.md` pointer
+files. Those thin adapters make the shared brain vendor-portable: supported
+agents can be switched without migrating the repository memory. Setup generates
+tested entrypoints for Claude Code, Codex, and GEMINI.md-compatible clients.
+Claude Code is the most deeply dogfooded path; the Codex and Google adapters are
+wired and documented but less exercised. Other agents can integrate through
+compatible thin adapters.
 
 ## The adapter pattern
 

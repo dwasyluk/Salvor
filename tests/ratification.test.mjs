@@ -1,5 +1,5 @@
 // Ratification contract tests — lock in the independent-review corrections so
-// they cannot silently regress before or after the v1.0.0 soft launch.
+// they cannot silently regress before or after the v1.0.0-beta soft launch.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
@@ -79,11 +79,11 @@ test("setup enumerates four questions including the Strict-defaults choice", () 
   assert.match(readme, /[Oo]ptional per-component versioning/);
 });
 
-// --- Item 8: root release version is 1.0.0 ---------------------------------
-test("root Salvor release metadata is v1.0.0 (template + example stay 0.1.0)", () => {
-  assert.match(version, /"version"\s*:\s*"1\.0\.0"/);
-  assert.match(version, /Project Version:\*\*\s*v1\.0\.0/);
-  assert.match(pkg, /"version":\s*"1\.0\.0"/);
+// --- Item 8: root release version is 1.0.0-beta ----------------------------
+test("root Salvor release metadata is v1.0.0-beta (template + example stay 0.1.0)", () => {
+  assert.match(version, /"version"\s*:\s*"1\.0\.0-beta"/);
+  assert.match(version, /Project Version:\*\*\s*v1\.0\.0-beta/);
+  assert.match(pkg, /"version":\s*"1\.0\.0-beta"/);
   // the scaffolded-template + example projects legitimately stay at 0.1.0
   assert.match(read("example-project/VERSION.md"), /v0\.1\.0/);
 });

@@ -55,6 +55,11 @@ for (const [name, viewport] of viewports) {
 
     const loopPanels = page.locator("#loop .loop-panels > img");
     await expect(loopPanels).toHaveCount(2);
+    const processGrid = page.locator(".process-grid");
+    await expect(processGrid.locator("article")).toHaveCount(6);
+    const processColumns = await processGrid.evaluate((grid) =>
+      getComputedStyle(grid).gridTemplateColumns.split(" ").length);
+    expect(processColumns).toBe(viewport.width > 900 ? 3 : viewport.width > 640 ? 2 : 1);
     await loopPanels.first().scrollIntoViewIfNeeded();
     for (const panel of await loopPanels.all()) {
       await expect(panel).toBeVisible();
@@ -155,7 +160,7 @@ test("mobile navigation is real and keyboard accessible", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Open menu" })).toHaveAttribute("aria-expanded", "false");
 });
 
-test("hero copy passes mouse drags through to the burn surface while the slogan and navigation remain selectable", async ({ page }) => {
+test("hero copy passes mouse drags through to the burn surface while navigation remains selectable", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
   const hero = page.locator("[data-burn-hero]");
@@ -176,7 +181,7 @@ test("hero copy passes mouse drags through to the burn surface while the slogan 
     title: ["none", "none"],
     eyebrow: ["none", "none"],
     points: ["none", "none"],
-    slogan: ["text", "auto"],
+    slogan: ["none", "none"],
     header: ["text", "auto"],
     brand: ["text", "auto"],
     nav: ["text", "auto"],
@@ -192,8 +197,6 @@ test("hero copy passes mouse drags through to the burn surface while the slogan 
   await expect(hero).toHaveAttribute("data-burn-state", "burning");
 
   await page.reload();
-  await expect(hero).toHaveAttribute("data-burn-state", "ready");
-  await page.locator("[data-burn-hero] > .hero-copy > .hero-tagline").click();
   await expect(hero).toHaveAttribute("data-burn-state", "ready");
   await page.locator("[data-burn-hero] > .hero-copy .button-primary").click({ trial: true });
   await expect(hero).toHaveAttribute("data-burn-state", "ready");
@@ -297,6 +300,11 @@ test("WebGL owns exact browser-rendered UI transition without changing the estab
     const brandMark = root.querySelector(".brand-mark");
     const primary = root.querySelector(".button-primary");
     return {
+      heroCopySelect: getComputedStyle(root.querySelector(":scope > .hero-copy")).userSelect,
+      titleSelect: getComputedStyle(title).userSelect,
+      taglineSelect: getComputedStyle(root.querySelector(".hero-tagline")).userSelect,
+      pointsSelect: getComputedStyle(root.querySelector(".hero-points")).userSelect,
+      primarySelect: getComputedStyle(primary).userSelect,
       titleColor: getComputedStyle(title).color,
       titleBlend: getComputedStyle(title).mixBlendMode,
       menuColor: getComputedStyle(menu).color,
@@ -308,6 +316,11 @@ test("WebGL owns exact browser-rendered UI transition without changing the estab
     };
   });
   expect(revealed).toEqual({
+    heroCopySelect: "text",
+    titleSelect: "text",
+    taglineSelect: "text",
+    pointsSelect: "text",
+    primarySelect: "text",
     titleColor: "rgb(255, 244, 227)",
     titleBlend: "normal",
     menuColor: "rgb(255, 244, 227)",

@@ -114,7 +114,7 @@ check("retired brand families are absent from production surfaces", () => {
   return "no retired paths, public references, or gem-generation directions";
 });
 
-check("v1.0.0 contains no plugin implementation or generated GitNexus index", () => {
+check("v1.0.0-beta contains no plugin implementation or generated GitNexus index", () => {
   const forbidden = files.filter((file) => /(^|\/)(?:plugins?|marketplace|\.gitnexus|\.claude\/skills\/gitnexus[^/]*)(\/|$)/i.test(file) && file !== ".gitnexusrc");
   assert.deepEqual(forbidden, []);
   return "plugin/index paths absent";
@@ -123,7 +123,7 @@ check("v1.0.0 contains no plugin implementation or generated GitNexus index", ()
 check("release metadata and public licensing agree", () => {
   const version = JSON.parse(read("VERSION.md").match(/<!--\s*({[^\n]+})\s*-->/)[1]);
   const pkg = JSON.parse(read("package.json"));
-  assert.equal(version.version, "1.0.0");
+  assert.equal(version.version, "1.0.0-beta");
   assert.equal(pkg.version, version.version);
   assert.match(read("LICENSE"), /MIT License/);
   assert.match(read("TRADEMARKS.md"), /does not (?:restrict|change|limit|affect)[^\n]*(?:MIT|code)/i);

@@ -31,13 +31,13 @@
     <link rel="icon" type="image/png" sizes="64x64" href="./assets/brand/salvor-mark-full-black-64.png" />
     <link rel="apple-touch-icon" sizes="128x128" href="./assets/brand/salvor-mark-full-black-128.png" />
     <link rel="preload" as="image" href="./assets/hero/salvor-wireframe.png" fetchpriority="high" />
-    <link rel="stylesheet" href="./styles.css?v=hero-burn-webgl-v4" />
+    <link rel="stylesheet" href="./styles.css?v=hero-burn-webgl-v7" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "SoftwareSourceCode",
         "name": "Salvor",
-        "version": "1.0.0",
+        "version": "1.0.0-beta",
         "url": "https://dwasyluk.github.io/salvor/",
         "codeRepository": "https://github.com/dwasyluk/salvor",
         "license": "https://opensource.org/licenses/MIT",
@@ -90,19 +90,19 @@
         </header>
 
         <div class="hero-copy" data-hero-content>
-          <p class="eyebrow">&gt; SALVOR v1.0.0</p>
+          <p class="eyebrow">&gt; SALVOR v1.0.0-beta</p>
           <h1 id="hero-title">SALVOR</h1>
           <p class="hero-tagline">Your repo remembers<span>.</span></p>
           <ul class="hero-points">
-            <li><span aria-hidden="true">&gt;</span> Version-controlled memory for coding agents.</li>
-            <li><span aria-hidden="true">&gt;</span> Decisions, learned failures, domain knowledge, and deferred findings — reviewed in Git, available to the next session.</li>
-            <li><span aria-hidden="true">&gt;</span> Prompt-first. Vendor-portable.</li>
+            <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Version-controlled memory for coding agents.</span></li>
+            <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Decisions, learned failures, domain knowledge, and deferred findings — reviewed in Git, available to the next session.</span></li>
+            <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Prompt-first. Vendor-portable.</span></li>
           </ul>
           <div class="hero-actions">
             <a
               class="button button-primary"
-              href="https://github.com/dwasyluk/salvor/blob/v1.0.0/SETUP_PROMPT.md"
-              data-copy-prompt="https://raw.githubusercontent.com/dwasyluk/salvor/v1.0.0/SETUP_PROMPT.md"
+              href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/SETUP_PROMPT.md"
+              data-copy-prompt="https://raw.githubusercontent.com/dwasyluk/salvor/v1.0.0-beta/SETUP_PROMPT.md"
             >
               <span aria-hidden="true">&gt;</span> <span data-copy-label>COPY SETUP_PROMPT.md</span>
             </a>
@@ -146,8 +146,8 @@
                   <path d="M32 7 52 15v15c0 13-7 22-20 28C19 52 12 43 12 30V15Z"/>
                 </svg>
               </div>
-              <h2>No SaaS, no lock-in.</h2>
-              <p>No hosted service, no account. Serena and GitNexus run locally for their core workflows; your coding agent and model provider still process repository content per their own policies.</p>
+              <h2>Vendor-agnostic. Vendor-portable.</h2>
+              <p>No hosted service, no account, and no vendor-owned shared brain. Repository Markdown stays canonical while compatible thin adapters let you switch supported agents without migrating your memory.</p>
             </article>
           </div>
         </section>
@@ -157,7 +157,7 @@
           <div class="process-grid">
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="4"/><circle cx="28" cy="7" r="3"/><circle cx="49" cy="28" r="3"/><circle cx="28" cy="49" r="3"/><circle cx="7" cy="28" r="3"/><path d="M28 10v14m18 4H32m-4 4v14M10 28h14M13 13l12 12m18-12L31 25m12 18L31 31M13 43l12-12"/></svg>
-              <h2>Hub &amp; Spoke</h2><p><code>CLAUDE.md</code> is the canonical hub; component spokes load only what you're working on.</p>
+              <h2>Hub, Spokes &amp; Adapters</h2><p><code>CLAUDE.md</code> is the canonical hub; component spokes keep context focused, while thin adapters route supported agents to the same shared brain.</p>
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="m28 5 18 10-18 10L10 15Zm-18 19 18 10 18-10M10 34l18 10 18-10"/></svg>
@@ -168,12 +168,16 @@
               <h2>3 Capture Classes</h2><p>User-gated Continued Learning: Decision / Domain Learning · Learned Failure · Deferred Finding.</p>
             </article>
             <article>
+              <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><circle cx="12" cy="28" r="5"/><circle cx="44" cy="12" r="5"/><circle cx="44" cy="44" r="5"/><path d="M17 28h9m4-4 9-9m-9 17 9 9M26 20v16"/><path d="m22 16 8 4-8 4m0 8 8 4-8 4"/></svg>
+              <h2>Vendor-Agnostic &amp; Portable</h2><p>The shared brain is repo-owned Markdown. Compatible thin adapters let you switch supported vendors without migrating memory.</p>
+            </article>
+            <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="M7 30 29 8h20v20L27 50Z"/><circle cx="39" cy="18" r="3"/></svg>
               <h2>Governed, Versioned Why</h2><p><code>RULES.md</code> keeps reviewed memory and component context synchronized. Optional Strict defaults can also enforce project-specific version counters and parity rules.</p>
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="m28 5 18 10v26L28 51 10 41V15Zm0 20 18-10M28 25 10 15m18 10v26"/></svg>
-              <h2>Serena + GitNexus</h2><p>Understand code. Analyze impact.</p>
+              <h2>Serena + GitNexus</h2><p>Optional, highly recommended code intelligence: navigate by symbol and analyze impact before editing.</p>
             </article>
           </div>
           <div class="brain-summary">
@@ -229,7 +233,7 @@
                 <span class="terminal-glyph" aria-hidden="true">&gt;_</span>
                 <div><h2>Paste the prompt in any supported agent</h2><p class="status">PRIMARY PATH</p></div>
               </header>
-              <p>Multivendor out of the box: <code>CLAUDE.md</code> is the canonical hub, with thin <code>AGENTS.md</code> and <code>GEMINI.md</code> entrypoints generated by default. Claude Code, Codex, and GEMINI.md-compatible clients get generated entrypoints; Salvor's Markdown core is portable to other agents through thin adapters.</p>
+              <p>Vendor-agnostic and vendor-portable out of the box: <code>CLAUDE.md</code> is the canonical hub, with thin <code>AGENTS.md</code> and <code>GEMINI.md</code> entrypoints generated by default. Claude Code, Codex, and GEMINI.md-compatible clients get generated entrypoints; other agents can route to the same repository-owned brain through compatible thin adapters.</p>
               <ol>
                 <li>Open a supported coding agent at the repository root.</li>
                 <li>Paste <code>SETUP_PROMPT.md</code> and answer the four setup questions.</li>
@@ -238,12 +242,12 @@
                 <li>When GitNexus is selected, let setup detect the installed CLI's capabilities and offer the safest supported indexing mode.</li>
                 <li>Review and optionally commit only the Salvor-related changes.</li>
               </ol>
-              <p>Core works with repository files alone; Serena + GitNexus add semantic navigation and impact analysis (Enhanced). Setup doesn't fail without them.</p>
+              <p>Core works with repository files alone. Serena + GitNexus are optional Enhanced integrations, but both are highly recommended for the best code-grounded results. Setup doesn't fail without them.</p>
               <pre><code>$ cat SETUP_PROMPT.md
 $ # copy the output; paste into your CLI
 $ # answer the setup questions
 $ # Salvor scaffolds the rest</code></pre>
-              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0/SETUP_PROMPT.md">View SETUP_PROMPT.md <span>→</span></a>
+              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/SETUP_PROMPT.md">View SETUP_PROMPT.md <span>→</span></a>
             </article>
 
             <article class="terminal-card future-card" id="claude">
@@ -251,25 +255,25 @@ $ # Salvor scaffolds the rest</code></pre>
                 <svg class="terminal-cube" viewBox="0 0 48 48" aria-hidden="true"><path d="m24 3 18 10v22L24 45 6 35V13Zm0 20 18-10M24 23 6 13m18 10v22"/></svg>
                 <div><h2>Claude Code plugin: coming soon</h2><p class="status">ACTIVE DEVELOPMENT · SHIPS WITH v1.1.0</p></div>
               </header>
-              <p>The Claude Code plugin is in active development, ships with v1.1.0. It is not part of the v1.0.0 release; the universal prompt above is the supported path today.</p>
+              <p>The Claude Code plugin is in active development, ships with v1.1.0. It is not part of the v1.0.0-beta release; the universal prompt above is the supported path today.</p>
               <p>The future plugin is a convenience wrapper over the same canonical prompt and shared files, never a replacement for the vendor-portable foundation.</p>
               <p>Codex and Gemini plugin equivalents are open for contributors.</p>
-              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0/README.md#roadmap--help-wanted">Plugin roadmap <span>→</span></a>
+              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/README.md#roadmap--help-wanted">Plugin roadmap <span>→</span></a>
             </article>
           </div>
         </section>
 
         <section class="section foundations" id="foundations" aria-labelledby="foundations-title">
           <p class="section-label" id="foundations-title">// CODE INTELLIGENCE INTEGRATIONS</p>
-          <p class="foundation-intro">Salvor's core runs on repository files alone. Serena and GitNexus are optional Enhanced code-intelligence integrations you can enable on top — each under its own license and terms.</p>
+          <p class="foundation-intro">Salvor's core runs on repository files alone. Serena and GitNexus are optional Enhanced code-intelligence integrations, but both are highly recommended for the best code-grounded results — each under its own license and terms.</p>
           <div class="foundation-grid">
             <article>
               <svg class="foundation-mark" viewBox="0 0 72 72" aria-hidden="true"><path d="m36 4 28 16v32L36 68 8 52V20Zm0 0v64M8 20l28 16 28-16"/><circle cx="36" cy="36" r="5"/></svg>
-              <div><h2>Serena <span>CODE INTELLIGENCE</span></h2><p>Optional open-source integration for semantic code navigation and targeted edits by symbol. Understand before you change.</p><a href="https://github.com/oraios/serena">github.com/oraios/serena →</a></div>
+              <div><h2><a href="https://github.com/oraios/serena">Serena</a> <span>CODE INTELLIGENCE</span></h2><p>Optional open-source integration for semantic code navigation and targeted edits by symbol. Highly recommended for the best results: understand before you change.</p><a href="https://github.com/oraios/serena">github.com/oraios/serena →</a></div>
             </article>
             <article>
               <svg class="foundation-mark" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="28"/><circle cx="36" cy="36" r="5"/><path d="M36 8v23m0 10v23M8 36h23m10 0h23M16 16l16 16m8 8 16 16M56 16 40 32m-8 8L16 56"/></svg>
-              <div><h2>GitNexus <span>IMPACT ANALYSIS</span></h2><p>Optional integration providing a code knowledge graph — see what breaks before you ship. A third-party project under the PolyForm Noncommercial license; review its terms for your use.</p><a href="https://github.com/abhigyanpatwari/GitNexus">github.com/abhigyanpatwari/GitNexus →</a></div>
+              <div><h2><a href="https://github.com/abhigyanpatwari/GitNexus">GitNexus</a> <span>IMPACT ANALYSIS</span></h2><p>Optional, highly recommended integration providing a code knowledge graph — see what breaks before you ship. A third-party project under the PolyForm Noncommercial license; review its terms for your use.</p><a href="https://github.com/abhigyanpatwari/GitNexus">github.com/abhigyanpatwari/GitNexus →</a></div>
             </article>
           </div>
         </section>
@@ -284,17 +288,17 @@ $ # Salvor scaffolds the rest</code></pre>
           <img class="brand-mark" src="./assets/brand/salvor-mark-full-white.svg" width="72" height="72" alt="" />
           <img class="brand-wordmark" src="./assets/brand/salvor-wordmark-white.svg" width="151" height="30" alt="" />
         </a>
-        <div class="footer-copy"><p>Open source. Community powered.<br />Make your project's knowledge compound.</p><p>v1.0.0 &nbsp;·&nbsp; MIT License</p></div>
+        <div class="footer-copy"><p>Open source. Community powered.<br />Make your project's knowledge compound.</p><p>v1.0.0-beta &nbsp;·&nbsp; MIT License</p></div>
         <nav aria-label="Footer navigation">
           <a href="https://github.com/dwasyluk/salvor">GitHub ↗</a>
-          <a href="https://github.com/dwasyluk/salvor/tree/v1.0.0/docs">Docs</a>
-          <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0/SETUP_PROMPT.md">SETUP_PROMPT.md</a>
+          <a href="https://github.com/dwasyluk/salvor/tree/v1.0.0-beta/docs">Docs</a>
+          <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/SETUP_PROMPT.md">SETUP_PROMPT.md</a>
           <a href="https://github.com/dwasyluk/salvor/blob/main/TRADEMARKS.md">Brand policy</a>
         </nav>
       </div>
     </footer>
 
     <script type="module" src="./scripts/site.js"></script>
-    <script type="module" src="./scripts/burn-reveal.js?v=hero-burn-webgl-v4"></script>
+    <script type="module" src="./scripts/burn-reveal.js?v=hero-burn-webgl-v7"></script>
   </body>
 </html>
