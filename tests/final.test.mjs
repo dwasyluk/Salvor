@@ -93,6 +93,11 @@ test("the categorical session-memory claim is calibrated", () => {
 // --- Core vs Strict --------------------------------------------------------
 test("per-component versioning is Strict/optional, not a Core requirement", () => {
   assert.match(readme, /[Oo]ptional per-component versioning/);
+  assert.doesNotMatch(vendor, /VERSION\.md exists only under[^.]*minimal-history/i);
+  assert.match(
+    flat("docs/VENDOR_ADAPTERS.md"),
+    /VERSION\.md.*optional Strict.*Q4=NO.*existing version source.*minimal project-history/i,
+  );
 });
 
 // --- Topology: no retired ghpages CI trigger or stale current-state wording -
@@ -118,4 +123,71 @@ test("example Serena memory reflects §0–§9 and .salvor paths", () => {
   const cs = read("example-project/.serena/memories/codebase_structure.md");
   assert.match(cs, /§0[–-]§9/);
   assert.doesNotMatch(cs, /§0[–-]§8/);
+});
+
+// --- Final soft-launch ownership + optional-tool consistency ---------------
+test("capture artifacts update their matching index and Domain Learning does not own decisions", () => {
+  for (const p of ["SETUP_PROMPT.md", "RULES.md", "example-project/RULES.md"]) {
+    const source = flat(p);
+    assert.match(
+      source,
+      /TOC update:.*matching chronological index.*domain-learnings\/README\.md.*findings.*decisions\/README\.md.*design decisions/i,
+      p,
+    );
+  }
+
+  for (const p of [
+    "SETUP_PROMPT.md",
+    ".salvor/domain-learnings/README.md",
+    "example-project/.salvor/domain-learnings/README.md",
+  ]) {
+    assert.doesNotMatch(read(p), /`ARCH` — architectural decision/i, p);
+    assert.match(read(p), /`ARCH` — empirical architecture/i, p);
+  }
+});
+
+test("the Strict example keeps Enhanced tools conditional on responding MCPs", () => {
+  const exRules = flat("example-project/RULES.md");
+  const exHub = flat("example-project/CLAUDE.md");
+  const exDecisionTemplate = flat("example-project/.salvor/decisions/README.md");
+  const exCommands = flat("example-project/.serena/memories/suggested_commands.md");
+
+  assert.match(exRules, /Serena MCP.*when.*respond.*fall back/i);
+  assert.match(exRules, /GitNexus MCP.*when.*respond.*unavailable/i);
+  assert.match(exHub, /Only when GitNexus.*MCP tools.*respond/i);
+  assert.match(exDecisionTemplate, /when the GitNexus MCP is active.*otherwise/i);
+  assert.match(exCommands, /when its MCP tools respond.*otherwise/i);
+});
+
+test("the Strict example routes its runtime display name through configuration", () => {
+  const server = read("example-project/api/src/server.ts");
+  const webMain = read("example-project/web/src/main.ts");
+  const webHtml = read("example-project/web/index.html");
+  const exampleVersion = read("example-project/VERSION.md");
+
+  assert.match(server, /const APP_NAME = process\.env\.APP_NAME \?\? "Notebook"/);
+  assert.doesNotMatch(server, /`Notebook API listening/);
+  assert.match(webHtml, /data-app-name="Notebook"/);
+  assert.doesNotMatch(webHtml, /<title>Notebook<\/title>|<h1>Notebook<\/h1>/);
+  assert.match(webMain, /dataset\.appName/);
+  assert.match(webMain, /document\.title = APP_NAME/);
+  assert.match(exampleVersion, /"api"\s*:\s*2/);
+  assert.match(exampleVersion, /"web"\s*:\s*2/);
+  assert.match(exampleVersion, /API:02 \| WEB:02/);
+  assert.match(read("example-project/.salvor/active_state.md"), /API:02 WEB:02/);
+  assert.match(read("example-project/README.md"), /API:02 \| WEB:02/);
+});
+
+test("vendor-portability copy does not overclaim universal automatic loading", () => {
+  for (const p of [
+    "SETUP_PROMPT.md",
+    ".salvor/README.md",
+    "example-project/.salvor/README.md",
+    "docs/ARCHITECTURE.md",
+    "docs/FAQ.md",
+    "docs/VENDOR_ADAPTERS.md",
+  ]) {
+    assert.doesNotMatch(read(p), /every contributor's (?:coding )?agent reads|every teammate's agent reads/i, p);
+  }
+  assert.doesNotMatch(vendor, /Any teammate's CLI works out of the box|no vendor choice/i);
 });

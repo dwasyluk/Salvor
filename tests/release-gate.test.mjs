@@ -117,3 +117,14 @@ test("site shows the plugin as coming in v1.1.0, no installable commands", () =>
   assert.match(html, /ships with v1\.1\.0|coming soon/i);
   assert.doesNotMatch(html, /\/salvor:(init|status|capture|health)/);
 });
+
+test("CI and Pages workflows use current supported GitHub Action majors", () => {
+  const ci = read(".github/workflows/ci.yml");
+  const pages = read(".github/workflows/pages.yml");
+  assert.match(ci, /actions\/checkout@v7/);
+  assert.match(ci, /actions\/setup-node@v7/);
+  assert.match(pages, /actions\/checkout@v7/);
+  assert.match(pages, /actions\/configure-pages@v5/);
+  assert.match(pages, /actions\/upload-pages-artifact@v5/);
+  assert.match(pages, /actions\/deploy-pages@v4/);
+});

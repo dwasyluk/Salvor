@@ -1,8 +1,9 @@
 # .salvor/ — salvor's brain
 
-This folder is salvor's git-tracked memory: the shared, vendor-agnostic
-canonical knowledge every contributor's coding agent reads. Compatible thin
-adapters make it vendor-portable without moving or duplicating that memory.
+This folder is salvor's git-tracked memory: shared, vendor-agnostic canonical
+knowledge available to each supported coding agent through its compatible
+entrypoint. Thin adapters make it vendor-portable without moving or duplicating
+that memory.
 Governance and vendor entrypoints live at the repository root in `CLAUDE.md`,
 `AGENTS.md`, `GEMINI.md`, `RULES.md`, and `VERSION.md`.
 

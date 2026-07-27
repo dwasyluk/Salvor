@@ -15,7 +15,8 @@ when it touches an adjacent component that quietly depends on this one.
 - **Rationale** — the *why* that must outlive the refactor.
 - **Invariant** — what must stay true; what NOT to "fix" without first understanding this.
 - **Coupling / blast radius** — which components/files depend on this; touch with care
-  (pair with a GitNexus impact check before editing them).
+  (pair with a GitNexus impact check when the GitNexus MCP is active; otherwise
+  use the best available structural search/review fallback).
 - **Alternatives rejected** — and why.
 
 ## Index

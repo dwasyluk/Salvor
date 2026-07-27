@@ -58,7 +58,9 @@ into one prompt, do not defer.
    verdict, cross-links) per `.salvor/domain-learnings/README.md`, **or** a **design decision** in
    `.salvor/decisions/YYYY-MM-DD-[slug].md` (Context, Decision, Rationale, Invariant, Coupling, Alternatives) per
    `.salvor/decisions/README.md`.
-2. **TOC update:** add a row to the chronological index in `.salvor/domain-learnings/README.md`.
+2. **TOC update:** add a row to the matching chronological index:
+   `.salvor/domain-learnings/README.md` for empirical findings, or
+   `.salvor/decisions/README.md` for design decisions.
 3. **DOMAIN_REF.md:** update to reflect new authoritative state — new/updated LF# entry, parameter rationale, finding
    status. DOMAIN_REF is current truth; the artifact is the frozen audit trail.
 4. **Stack evaluation — update if affected:** `CLAUDE.md` hub (only if project-wide context shifts); spoke `CLAUDE.md`;
@@ -87,10 +89,12 @@ fail.
 ## 4. Search & Tools
 1. **Search-Before-Read:** do not `read_file` on any file >100 lines without first using `grep`, `find_symbol`, or
    `get_symbols_overview` to find specific line ranges. Targeted reads only.
-2. **Priority:** Serena MCP symbolic tools first (`find_symbol`, `get_symbols_overview`). Fall back to `grep`/`glob` only
-   if Serena can't resolve.
-3. **Impact before edits:** before modifying a function/class/method, run GitNexus impact analysis and report the blast
-   radius. Run change-detection before committing.
+2. **Serena MCP priority:** when its tools respond in the current client, use symbolic tools first
+   (`find_symbol`, `get_symbols_overview`); fall back to `grep`/`glob` when Serena cannot resolve the need or its MCP is
+   unavailable, and never claim Serena results that did not run.
+3. **GitNexus MCP impact:** when its tools respond in the current client, run impact analysis before modifying a
+   function/class/method and change-detection before committing. When unavailable, state that explicitly, use the best
+   available structural review fallback, and never fabricate GitNexus results.
 4. **App Name:** never hardcode the project name — use `APP_NAME` or the build constant.
 
 ## 5. Infrastructure & Safety
@@ -152,7 +156,7 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
   - **`.salvor/domain-learnings/`** — validated empirical discoveries.
   - **`.salvor/postmortems/`** — incident / failure evidence.
   - **`.salvor/DEFERRED_TODOS.md`** — deferred, out-of-scope findings.
-  - **GitNexus** — machine-derived code structure (index blocks).
+  - **GitNexus** — machine-derived code structure in its regenerable, gitignored index.
   - **Serena (`.serena/memories/`)** — symbol retrieval + concise pointers into the canonical records above.
   - **Vendor entrypoints** (`CLAUDE.md` hub + spokes, `AGENTS.md`, `GEMINI.md`) route to those canonical records; they
     do not fork or duplicate the knowledge.

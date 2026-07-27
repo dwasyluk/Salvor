@@ -21,8 +21,9 @@ Each of these tools does a different job well — the question is which job you'
 hiring for:
 
 - **Salvor** — for keeping a team's repository-specific engineering reasoning in
-  git: user-approved capture, distinct capture classes, RULES governance, and
-  per-component versioning, orchestrating Serena + GitNexus for code grounding.
+  git: user-approved capture, distinct capture classes, RULES governance,
+  optional Strict per-component versioning, and optional Enhanced orchestration
+  of Serena + GitNexus for code grounding.
 - **Obsidian + Claude** — for building and organizing a general knowledge vault:
   notes, research, and personal or shared knowledge graphs.
 - **GBrain** — for running a full knowledge runtime: ingestion, retrieval,
@@ -68,8 +69,9 @@ are aimed at AI-first PKM: notes, tasks, calendars, research, and personal
 knowledge graphs.
 
 Salvor gives a software repo a governed memory system: component spokes,
-versioned rationale, learned failures, deferred findings, task termination rules,
-and code intelligence through Serena and GitNexus.
+versioned rationale, learned failures, deferred findings, and task termination
+rules. Optional Enhanced mode adds code intelligence through Serena and GitNexus;
+both are highly recommended for the best code-grounded results.
 
 Obsidian is a general knowledge vault — flexible enough to hold anything,
 including code notes, for individuals or teams. Salvor's job is narrower: an
@@ -174,7 +176,7 @@ built with ADK.
 ## Isn't this just a folder of markdown files?
 
 Yes — on purpose. Plain markdown in git is reviewable, diffable, branchable,
-portable, and locked to no vendor. The value isn't a binary or a database; it's the
+portable, and not locked to a single vendor. The value isn't a binary or a database; it's the
 **protocol** around those files — what gets captured, when, with what reasoning,
 and how it stays in sync with the code. The simplicity is the feature.
 
@@ -183,8 +185,9 @@ and how it stays in sync with the code. The simplicity is the feature.
 Vendor memory is useful for personal or tool-specific continuity — preferences,
 working style, light context that follows you. Salvor is intended for engineering
 knowledge that should become part of the repository's reviewed, shared team
-record: it lives in your repo, every teammate's agent reads it, you can diff it
-in a PR, and it travels across branches and vendors. Different jobs — use both.
+record: it lives in your repo, compatible agents can load it through thin
+entrypoints, you can diff it in a PR, and it travels across branches and vendors.
+Different jobs — use both.
 
 ## What does it cost, and is it only for teams?
 

@@ -25,8 +25,11 @@ const changelog = read("CHANGELOG.md");
 test("site does not tell every user to install Serena and GitNexus", () => {
   assert.doesNotMatch(site, /Install Serena and GitNexus/i);
 });
-test("public quickstart presents Enhanced integrations as optional", () => {
-  assert.match(flat("site/index.html"), /Optionally enable Serena and\/or GitNexus/i);
+test("public quickstart presents both Enhanced integrations as optional and highly recommended", () => {
+  assert.match(
+    flat("site/index.html"),
+    /<li>[^<]*Serena[^<]*GitNexus[^<]*both[^<]*optional[^<]*highly recommended[^<]*best code-grounded results[^<]*<\/li>/i,
+  );
 });
 
 // 3-8 — Q4 completeness in SETUP_PROMPT ------------------------------------

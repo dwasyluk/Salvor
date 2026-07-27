@@ -28,7 +28,8 @@ Do not "optimize" the copy away — returning the internal object *is* the LF-1 
 - Every reader of a `Note` (`api/src/server.ts` handlers, `web/src/main.ts` render). If
   you change the store to return references, any of them can corrupt state.
 - Before touching the `store.ts` accessors, run a GitNexus impact check on `getNote` /
-  `listNotes` to see the callers.
+  `listNotes` when the GitNexus MCP is active; otherwise inspect callers with the
+  best available structural search/review fallback.
 
 ## Alternatives rejected
 - **Deep clone** — unnecessary; notes are flat. Extra cost for no benefit.

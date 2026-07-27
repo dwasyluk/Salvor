@@ -5,10 +5,20 @@ const INITIAL_RADIUS = -0.08;
 const RADIUS_PER_FRAME = 0.0008;
 const REVEAL_PADDING = 0.18;
 const SELECTION_UNLOCK_PROGRESS = 0.8;
-const MAX_RENDER_PIXELS = 900_000;
-const MIN_RENDER_SCALE = 0.65;
+const MAX_RENDER_PIXELS = 4_000_000;
+const MAX_RENDER_SCALE = 2;
 const INTERACTIVE_SELECTOR = "a, button, [data-hero-content]";
 const UI_CONTENT_SELECTOR = ":scope > .site-header, :scope > .hero-copy";
+
+export function computeRenderScale(width, height, pixelRatio = 1) {
+  const safePixels = Math.max(1, width * height);
+  const desiredScale = Math.min(
+    Math.max(1, Number.isFinite(pixelRatio) ? pixelRatio : 1),
+    MAX_RENDER_SCALE,
+  );
+  const budgetScale = Math.sqrt(MAX_RENDER_PIXELS / safePixels);
+  return Math.max(1, Math.min(desiredScale, budgetScale));
+}
 
 export const BURN_VERTEX_SHADER = `
   attribute vec2 a_position;
@@ -474,14 +484,7 @@ export class BurnReveal {
     const rect = this.root.getBoundingClientRect();
     const width = Math.max(1, rect.width);
     const height = Math.max(1, rect.height);
-    const desiredScale = Math.min(devicePixelRatio || 1, 1.25);
-    const pixelBudgetScale = Math.sqrt(
-      MAX_RENDER_PIXELS / (width * height),
-    );
-    const renderScale = Math.max(
-      MIN_RENDER_SCALE,
-      Math.min(desiredScale, pixelBudgetScale),
-    );
+    const renderScale = computeRenderScale(width, height, devicePixelRatio);
     const version = (this.resizeVersion || 0) + 1;
     this.resizeVersion = version;
     const wireSvg = createUiSnapshotSvg(

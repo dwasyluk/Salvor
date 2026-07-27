@@ -4,6 +4,27 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-07-27 — Soft-launch visual polish and hardware gate (CORE:11 GHPAGE:13 DOCS:14)
+
+- **Loop legibility.** Reduced and raised the embedded canonical regular mark so it clears the `.salvor/` brain label, moved the brain-copy stack down into clean space, and placed Serena + GitNexus in a separate `OPTIONAL ENHANCED` pill outside the stack. The generator now owns the corrected logo bounds across root and site Loop variants.
+- **Favicon behavior.** Replaced competing media-qualified PNG favicon tags with one generated adaptive canonical SM SVG that switches black/white ink inside the asset under `prefers-color-scheme`, preceded by an unqualified black 32px PNG fallback. Canonical `LOGO-SM.svg` bytes and geometry remain unchanged; the black Apple touch icon remains unchanged.
+- **Enhanced guidance.** The visible Primary Path now states in one action that Serena and GitNexus are both optional and both highly recommended for the best code-grounded results, while preserving installation/license review and truthful capability detection.
+- **Hero fidelity.** The WebGL canvas no longer renders below CSS-pixel resolution. It targets up to 2× density under a four-million-pixel cap, preserving the approved shader, smoke color, timing, input accumulation, text-selection threshold, WF/M states, and protected hero assets. Automated Chromium checks cover Retina backing scale plus existing desktop/mobile interaction behavior.
+- **Verification.** 114/114 unit and contract checks pass, including deterministic brand drift, Loop clearance, adaptive-favicon geometry, Primary Path guidance, and render-scale policy. 18/18 direct Chromium checks pass on isolated port 4205 across desktop, compact desktop, tablet, large phone, Galaxy-S25-Edge-like small phone, and 320px, including real light/dark SVG raster behavior, Retina backing scale, pointer/touch accumulation, exact WF→M transition, WebGL fallback, and reduced motion. The 11-gate release audit passes across 196 candidate paths and 81 manifest outputs; deterministic `brand:check` and the inspected visual brand audit pass; both example typechecks, protected canonical-logo/hero hashes, and `git diff --check` pass.
+- **Gate.** Automated release checks are green, and the operator's real mobile hardware review confirmed strong visual quality and performance. The milestone is GO and authorized for a local commit; push remains operator-controlled.
+
+---
+
+## 2026-07-27 — Final v1.0.0-beta release consistency gate (CORE:11 GHPAGE:12 DOCS:13)
+
+- **Scope.** Audited tracked core, documentation, site, dogfooded `.salvor/` artifacts, the runnable example project, release metadata, brand consumers, CI/Pages configuration, and the manual GitHub Pages/DNS handoff. Ignored planning notes and operator-owned untracked visual source files are not release inputs and remain outside the commit set.
+- **Canonical ownership.** Installer, adapter, FAQ, and example wording now consistently treat `.salvor/` artifacts as the canonical approved knowledge base. Thin vendor adapters and optional Serena memories are retrieval/routing aids, while GitNexus owns only its machine-derived, gitignored code index.
+- **Enhanced guidance.** Serena and GitNexus remain independently optional, never bundled prerequisites. Both are explicitly highly recommended for the best code-grounded results, with GitNexus licensing and MCP/CLI state boundaries preserved.
+- **Release plumbing.** CI and Pages use current supported GitHub Action majors. The authored-logo migration and adaptive favicon behavior are part of the `v1.0.0-beta` release record rather than post-beta Unreleased work.
+- **Verification.** 112/112 unit and contract tests pass. 17/17 direct Chromium checks pass on isolated port 4201 across desktop, compact desktop, tablet, large phone, Galaxy-S25-Edge-like small phone, and 320px, including adaptive favicons, responsive overflow, accessible navigation, mouse/touch burn accumulation, exact WF→M transition, WebGL fallback, and reduced motion. The 11-gate release audit passes across 194 candidate paths; deterministic `brand:check` and visual `brand:audit` pass; both canonical logo hashes and all three protected hero hashes remain exact. Root plus both example package audits report 0 vulnerabilities; both example typechecks and a live GET/POST/GET/OPTIONS/DELETE API smoke pass. GitNexus pure index refreshed to 632 nodes / 950 edges / 36 clusters / 38 flows and rates the complete change set low risk with no affected execution flow. `git diff --check` passes.
+
+---
+
 ## 2026-07-27 — Theme-aware canonical favicons (GHPAGE:11)
 
 - **Behavior.** Browser-tab favicons use the canonical SM black family under `prefers-color-scheme: light` and the canonical SM white family under `prefers-color-scheme: dark`. Each 16, 32, 48, and 64px size retains an unqualified black fallback for clients that ignore favicon media queries; the 128px Apple touch icon remains black and unqualified.

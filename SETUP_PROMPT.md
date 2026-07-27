@@ -24,8 +24,9 @@ Deferred Finding), optional **per-component versioning** (when Strict defaults a
 enabled), and optional **Serena + GitNexus** discipline (Enhanced mode). Set it up exactly as specified below.
 
 Everything Salvor writes is **in-repo and git-tracked** — that vendor-agnostic
-repository record is the *shared* brain every contributor's agent reads. Thin
-vendor adapters make the same brain vendor-portable without a memory migration.
+repository record is the *shared* brain available to each supported agent
+through its compatible entrypoint. Thin vendor adapters make the same brain
+vendor-portable without a memory migration.
 (A per-user auto-memory layer is an optional, vendor-specific enhancement; see
 Step 4.)
 
@@ -372,7 +373,9 @@ into one prompt, do not defer.
    `.salvor/domain-learnings/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` (hypothesis, evidence, verdict, cross-links) per
    `.salvor/domain-learnings/README.md`, **or** a **design decision** in `.salvor/decisions/YYYY-MM-DD-[slug].md` (Context,
    Decision, Rationale, **Invariant**, **Coupling/blast-radius**, Alternatives) per `.salvor/decisions/README.md`.
-2. **TOC update:** add a row to the chronological index in `.salvor/domain-learnings/README.md`.
+2. **TOC update:** add a row to the matching chronological index:
+   `.salvor/domain-learnings/README.md` for empirical findings, or
+   `.salvor/decisions/README.md` for design decisions.
 3. **DOMAIN_REF.md:** update to reflect new authoritative state — new/updated LF# entry, parameter rationale, finding
    status. DOMAIN_REF is current truth; the artifact is the frozen audit trail.
 4. **Stack evaluation — update if affected:** `CLAUDE.md` hub (only if project-wide context shifts); spoke `CLAUDE.md`;
@@ -462,8 +465,8 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
   contain concise routing instructions, summaries, derived retrieval aids, or links to that owner.** The in-repo files
   (`CLAUDE.md` hub + spokes, `RULES.md`, the version source — `VERSION.md` when Strict defaults are enabled (Q4=YES),
   otherwise the repo's established version mechanism — `.salvor/*`, `.serena/memories/` in Enhanced mode, the
-  hand-authored GitNexus routing note in the hub) are all shared and read by every contributor's agent — but each durable
-  fact still has exactly ONE owner; everything else points at it.
+  hand-authored GitNexus routing note in the hub) are all shared and available to each supported agent through its
+  compatible entrypoint — but each durable fact still has exactly ONE owner; everything else points at it.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
   personal/operator preferences, but it is not version-controlled and does not reach teammates. Never put shared truth
   there — that belongs in-repo.
@@ -740,7 +743,7 @@ Categories (extend as needed):
 - `PROBE` — exploration of an external system / vendor with a verdict
 - `BAKEOFF` — A/B/N test of competing approaches with a verdict
 - `LF##` — Learned Failure spec with root cause + fix
-- `ARCH` — architectural decision or refactor spec
+- `ARCH` — empirical architecture probe with evidence and a verdict
 - `MIGRATION` — pre-spec for a non-trivial change
 
 ## What goes here
@@ -775,7 +778,8 @@ touches an adjacent component that quietly depends on this one.
 - **Rationale** — the *why* that must outlive the refactor.
 - **Invariant** — what must stay true; what NOT to "fix" without first understanding this.
 - **Coupling / blast radius** — which components/files depend on this; touch with care
-  (pair with a GitNexus impact check before editing them).
+  (pair with a GitNexus impact check when the GitNexus MCP is active; otherwise use
+  the best available structural search/review fallback).
 - **Alternatives rejected** — and why.
 
 ## Index
@@ -841,8 +845,10 @@ adapters. Always also create the two thin pointer files so those CLIs work out o
   > Before any work, read `CLAUDE.md` (the hub) + the relevant component spoke + `RULES.md` +
   > `.salvor/active_state.md` (L1). Follow `RULES.md` exactly — including the Task Termination
   > Protocol and the capture classes. The canonical context lives in `CLAUDE.md`; this file
-  > just points there. **Do not duplicate or fork project knowledge into this adapter** — shared
-  > truth belongs in `CLAUDE.md`, the component spokes, `.salvor/`, and `.serena/memories/`.
+  > just points there. **Do not duplicate or fork project knowledge into this adapter.**
+  > Canonical engineering knowledge lives in its assigned `.salvor/` artifact and the
+  > `CLAUDE.md` hub + component spokes; `.serena/memories/` contains concise Enhanced-mode
+  > retrieval aids only.
 - **`GEMINI.md`** (Gemini CLI / Antigravity CLI — Google coding-agent entrypoint using the
   compatible `GEMINI.md` project-context file; Google moved consumer terminal usage from Gemini CLI
   to Antigravity CLI while keeping `GEMINI.md` compatibility, and enterprise Gemini Code Assist /

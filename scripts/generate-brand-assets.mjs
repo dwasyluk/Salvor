@@ -45,6 +45,8 @@ const outputFiles = [
   "site/assets/salvor-loop.svg",
   "site/assets/salvor-loop-with.svg",
   "site/assets/salvor-loop-without.svg",
+  "assets/brand/generated/salvor-logo-sm-adaptive.svg",
+  "site/assets/brand/salvor-logo-sm-adaptive.svg",
   ...Object.values(canonicalLogos).flatMap(({ stem }) => [
     ...["black", "white"].flatMap((color) => [
       `assets/brand/generated/${stem}-${color}.svg`,
@@ -77,6 +79,24 @@ function deriveLogoVariant(source, colorName) {
   const matches = source.match(/#231f20/gi) || [];
   assertCondition(matches.length > 0, "canonical logo color token is missing");
   return source.replace(/#231f20/gi, "#ffffff");
+}
+
+function deriveAdaptiveFavicon(source) {
+  const closingStyle = "    </style>";
+  assertCondition(source.includes(closingStyle), "canonical small logo style block is missing");
+  return source.replace(
+    closingStyle,
+    `      @media (prefers-color-scheme: dark) {
+        .cls-1, .cls-2, .cls-3 {
+          stroke: #ffffff;
+        }
+
+        .cls-4 {
+          fill: #ffffff;
+        }
+      }
+${closingStyle}`,
+  );
 }
 
 function embeddedLogo(source, x, y, width, height, attributes = "") {
@@ -117,7 +137,7 @@ function socialSvg(regularWhite, textOutlines, width, height, heroData, label) {
 }
 
 function regularLogoEmbed(regularBlack) {
-  return `<!-- CANONICAL_LOGO_REGULAR_START -->${embeddedLogo(regularBlack, 277, 286, 246, 246)}<!-- CANONICAL_LOGO_REGULAR_END -->`;
+  return `<!-- CANONICAL_LOGO_REGULAR_START -->${embeddedLogo(regularBlack, 300, 278, 200, 200)}<!-- CANONICAL_LOGO_REGULAR_END -->`;
 }
 
 function injectRegularLogo(source, regularBlack) {
@@ -166,6 +186,10 @@ async function build(outputRoot) {
       await ensureWrite(outputRoot, `site/assets/brand/${logo.stem}-${color}.svg`, source);
     }
   }
+
+  const adaptiveFavicon = deriveAdaptiveFavicon(variants.get("small-black"));
+  await ensureWrite(outputRoot, "assets/brand/generated/salvor-logo-sm-adaptive.svg", adaptiveFavicon);
+  await ensureWrite(outputRoot, "site/assets/brand/salvor-logo-sm-adaptive.svg", adaptiveFavicon);
 
   for (const color of ["black", "white"]) {
     const wordmark = wordmarkSvg(wordmarkOutline, color);

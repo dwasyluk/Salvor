@@ -9,8 +9,10 @@
   L1/L2 (`active_state.md` /
   `active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
   `decisions/`, `domain-learnings/`, and `postmortems/`. Root `RULES.md` + the
-  vendor entrypoints provide governance and routing; `VERSION.md` exists only under
-  the optional Strict/minimal-history path. Any capable agent told to read
+  vendor entrypoints provide governance and routing. `VERSION.md` is generated
+  only under the optional Strict profile; with Q4=NO, Salvor references the
+  repository's existing version source or creates a minimal project-history
+  artifact without per-component counters. Any capable agent told to read
   `RULES.md` can follow the protocols.
 - **Enhanced mode optionally adds Serena + GitNexus.** They are OPTIONAL Enhanced
   integrations, not constituent requirements of Salvor Core. Serena memories
@@ -33,7 +35,7 @@ compatible thin adapters.
 
 ## The adapter pattern
 
-Every vendor needs one thing: a **native entrypoint** that the tool auto-reads,
+Every compatible client needs one thing: a **native entrypoint** that the tool auto-reads,
 which points the agent at the shared in-repo core.
 
 | Vendor | Native entrypoint | Per-session memory | Per-turn enforcement | MCP (Serena/GitNexus) |
@@ -48,8 +50,9 @@ The pointer file says, in effect:
 > Before any work, read `CLAUDE.md` (hub) + the relevant component spoke +
 > `RULES.md` + `.salvor/active_state.md` (L1). Follow `RULES.md` exactly, including
 > the Task Termination Protocol and the three capture classes. Do not duplicate or
-> fork project knowledge into this adapter — shared truth lives in `CLAUDE.md`, the
-> spokes, `.salvor/`, and `.serena/memories/`.
+> fork project knowledge into this adapter. Canonical engineering knowledge lives
+> in its assigned `.salvor/` artifact and the `CLAUDE.md` hub + spokes;
+> `.serena/memories/` contains concise Enhanced-mode retrieval aids only.
 
 Each durable fact has **one canonical owner**; every other shared file (including
 vendor entrypoints) links to or summarizes it rather than forking it. Canonical
@@ -74,9 +77,10 @@ Salvor doesn't remove it — and it doesn't assume native Antigravity behavior b
 
 ## What ships (all three by default)
 
-Setup generates **all three entrypoints** — no vendor choice: `CLAUDE.md` (the canonical
-hub) plus thin `AGENTS.md` and `GEMINI.md` pointer files. Any teammate's CLI works out of
-the box; the core files they point at are identical.
+Setup generates **all three entrypoints by default**: `CLAUDE.md` (the canonical
+hub) plus thin `AGENTS.md` and `GEMINI.md` pointer files. Teammates using those
+compatible entrypoints load the same core files; other clients require a
+compatible thin adapter.
 
 - **Claude Code — built and dogfooded.** The `CLAUDE.md` hub uses `@`-imports; the
   `example-project/` demonstrates the full setup, and Salvor's own repo runs on it.

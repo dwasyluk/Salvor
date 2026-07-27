@@ -10,7 +10,7 @@ Categories (extend as needed):
 - `PROBE` — exploration of an external system / vendor with a verdict
 - `BAKEOFF` — A/B/N test of competing approaches with a verdict
 - `LF##` — Learned Failure spec with root cause + fix
-- `ARCH` — architectural decision or refactor spec
+- `ARCH` — empirical architecture probe with evidence and a verdict
 - `MIGRATION` — pre-spec for a non-trivial change
 
 ## What goes here

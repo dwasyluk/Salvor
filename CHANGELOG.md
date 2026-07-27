@@ -11,6 +11,10 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta] — 2026-07-27
+
+Initial public beta.
+
 ### Changed
 - Replaced the reconstructed W10 mark family with the exact operator-authored
   `LOGO.svg` regular master and `LOGO-SM.svg` favicon master. The deterministic
@@ -18,15 +22,9 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   both families, uses uniform scaling, and propagates the regular logo through
   the hero navigation, footer, README, social cards, metadata, and Loop assets
   without changing the hero background artwork.
-- Added system-theme-aware SM favicons: light browser chrome selects the black
-  family, dark browser chrome selects the white family, and unqualified black
-  PNGs remain as compatibility fallbacks. The Apple touch icon remains black.
-
-## [1.0.0-beta] — 2026-07-26
-
-Initial public beta.
-
-### Changed
+- Added a system-theme-aware canonical SM SVG favicon that renders black in
+  light browser chrome and white in dark browser chrome, with an unqualified
+  black PNG compatibility fallback. The Apple touch icon remains black.
 - Defined the vendor-agnostic repository core separately from vendor
   portability through compatible thin adapters, including explicit adapter
   maturity and memory-migration boundaries.
@@ -34,11 +32,21 @@ Initial public beta.
   highly recommended for the best code-grounded results.
 - Expanded the GitHub Pages presentation with the six-step portable workflow,
   linked integrations, restored standalone Salvor Loop panels, responsive
-  3/2/1 process layout, and vendor-agnostic/vendor-portable reasoning.
+  3/2/1 process layout, and vendor-agnostic/vendor-portable reasoning. The Loop
+  center now keeps its canonical mark clear of the `.salvor/` brain labels and
+  identifies Serena/GitNexus in a separate optional-Enhanced pill.
 - Refined the single WebGL hero renderer with lighter neutral smoke,
-  hanging-indent bullets, and burn-state-aware text selection while preserving
-  mouse/touch burn accumulation, localized black-to-white copy transition, and
-  interactive navigation/actions.
+  hanging-indent bullets, burn-state-aware text selection, and high-resolution
+  canvas backing up to Retina density under a four-million-pixel cap while
+  preserving mouse/touch burn accumulation, localized black-to-white copy
+  transition, and interactive navigation/actions.
+- Aligned the installer, adapters, FAQ, dogfooded protocol, and example project
+  on the one-owner model: `.salvor/` holds canonical approved knowledge;
+  adapters and Serena memories remain retrieval aids; GitNexus owns only its
+  machine-derived, gitignored index.
+- Upgraded the CI and GitHub Pages workflows to current supported GitHub Action
+  majors and added release contracts that reject stale action versions,
+  component-build drift, and release-record drift.
 
 ### Fixed
 - Hero burn-off now reveals the tracked full-color mystic artwork instead of the
@@ -57,8 +65,10 @@ Initial public beta.
   and is idempotent: re-running it on an already-scaffolded repo detects
   existing Salvor files and updates rather than clobbers.
 - **Core vs Enhanced modes** — Core mode works with files and prompts alone (no
-  extra tooling); Enhanced mode layers in the Serena and GitNexus MCP servers
-  for symbol-level memory and code-graph navigation. Same protocol either way.
+  extra tooling); Enhanced mode layers in optional Serena and GitNexus
+  integrations for semantic symbol navigation and code-graph analysis. Both
+  are highly recommended for the best code-grounded results. Same protocol
+  either way.
 - **Three capture classes** (user-gated, verbatim-prompted, with defined
   propagation paths) — **Decision/Domain Learning** (rationale behind choices),
   **Learned Failure** (`LF#`, what didn't work and why), and **Deferred
@@ -75,8 +85,10 @@ Initial public beta.
 - **`.salvor/` layout** — the git-tracked "brain" (L1/L2, `DOMAIN_REF`, `INFRA`,
   `DEFERRED_TODOS`, `domain-learnings/`, `postmortems/`, and a `README` index) lives
   under one namespaced folder, so Salvor never squats in your project's `docs/`.
-  Governance (`RULES.md`, `VERSION.md`) + entrypoints (`CLAUDE.md` hub/spokes) stay
-  at the repo root.
+  Root governance (`RULES.md`, plus `VERSION.md` when Strict is enabled) and
+  entrypoints (`CLAUDE.md` hub/spokes) stay at the repo root. With Strict off,
+  Salvor references the project's existing version source or a minimal
+  non-counter history artifact in its planned location.
 - **`docs/ARCHITECTURE.md`** — the five pillars, plus the shared (in-repo) vs
   per-user (auto-memory) distinction.
 - **Multivendor out of the box** — setup generates all three entrypoints by default:
@@ -110,12 +122,12 @@ Initial public beta.
   (`site/assets/social/salvor-social-card.png`, 1200×630; GitHub preview
   `assets/social/github-social-preview.png`, 1280×640) plus static Open Graph and
   X/Twitter metadata in the site head.
-- **Canonical W10 brand system** — the operator-approved artifact is reconstructed
-  as square, bilaterally symmetric vector geometry with deterministic generation,
-  full/core and black/white variants, exact-size favicons, one outlined wordmark,
-  README lockup, full-bleed social compositions, canonical loop embedding,
-  machine-readable hashes, drift contracts, and visual contact-sheet auditing.
-  Retired badge, node-sigil, gem, and hand-built W10/WF approximations do not ship.
+- **Canonical authored brand system** — the exact operator-authored regular and
+  small SVG masters drive deterministic black/white variants, exact-size
+  favicons, the outlined wordmark, README lockup, full-bleed social
+  compositions, canonical loop embedding, machine-readable hashes, drift
+  contracts, and visual contact-sheet auditing. Retired badge, node-sigil, gem,
+  reconstructed W10 geometry, and hand-built WF approximations do not ship.
 
 [Unreleased]: https://github.com/dwasyluk/salvor/compare/v1.0.0-beta...HEAD
 [1.0.0-beta]: https://github.com/dwasyluk/salvor/releases/tag/v1.0.0-beta

@@ -45,7 +45,9 @@ Do not infer the answer, batch unrelated discoveries, or defer the prompt.
 On `yes`:
 
 1. Create `.salvor/domain-learnings/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` following its README, including hypothesis, evidence, datasets, verdict, and cross-links — or, for a design decision, `.salvor/decisions/YYYY-MM-DD-[slug].md` (Context, Decision, Rationale, Invariant, Coupling, Alternatives).
-2. Add it to the chronological index in `.salvor/domain-learnings/README.md`.
+2. **TOC update:** add it to the matching chronological index:
+   `.salvor/domain-learnings/README.md` for empirical findings, or
+   `.salvor/decisions/README.md` for design decisions.
 3. Update `.salvor/DOMAIN_REF.md` as current truth, including any new or revised LF#.
 4. Update affected root context, component spoke, L1, L2, and `.serena/memories/`.
 5. Report every touched file for end-to-end verification.

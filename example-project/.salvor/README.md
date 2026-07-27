@@ -1,9 +1,9 @@
 # .salvor/ — Notebook's brain
 
-This folder is Notebook's **git-tracked memory**, maintained by Salvor — the
-shared, vendor-agnostic canonical knowledge every contributor's coding agent
-reads. Compatible thin adapters make it vendor-portable without moving or
-duplicating that memory. (Governance and entrypoints live at the repo root:
+This folder is Notebook's **git-tracked memory**, maintained by Salvor — shared,
+vendor-agnostic canonical knowledge available to each supported coding agent
+through its compatible entrypoint. Thin adapters make it vendor-portable
+without moving or duplicating that memory. (Governance and entrypoints live at the repo root:
 `CLAUDE.md` hub + `api`/`web` spokes, `RULES.md`, `VERSION.md`.)
 
 | File | What it is |

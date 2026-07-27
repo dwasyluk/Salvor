@@ -29,7 +29,11 @@ None. This is a local-only worked example — there is no deployment target, con
 | Var | Component | Where consumed | Default |
 |-----|-----------|----------------|---------|
 | `PORT` | api | `src/server.ts` (`process.env.PORT ?? 8787`) | `8787` |
-| `APP_NAME` | both | display name; never hardcoded (CLAUDE.md APP_NAME) | `Notebook` |
+| `APP_NAME` | api | startup-log display name (`src/server.ts`) | `Notebook` |
+
+The static web client reads its display name from `data-app-name` on the root
+element in `web/index.html`; `src/main.ts` applies that configured value to the
+document title and heading.
 
 The `web` API base (`http://localhost:8787`) is a module constant in `src/main.ts`; change it there if the api port moves.
 
@@ -39,4 +43,4 @@ CORS headers (`Access-Control-Allow-Origin: *`) so the static page can call it f
 third-party APIs, no auth, and no rate limits.
 
 ## Observability
-The api logs a single startup line (`Notebook API listening on …`) to stdout. No metrics or dashboards in the demo.
+The api logs a single startup line (`<APP_NAME> API listening on …`) to stdout. No metrics or dashboards in the demo.

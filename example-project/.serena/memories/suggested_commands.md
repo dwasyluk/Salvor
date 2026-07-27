@@ -19,7 +19,9 @@
 - `curl -X DELETE localhost:8787/notes/1` — delete (204) / 404 if missing.
 
 ## Discipline (RULES.md §0–§9)
-- Before editing a symbol: GitNexus impact analysis; before committing: change-detection.
+- When its MCP tools respond, use GitNexus impact analysis before editing a
+  symbol and change-detection before committing; otherwise state that the MCP is
+  unavailable and use the best structural review fallback.
 - GitNexus safe default: `gitnexus analyze --index-only` (pure index, v1.6.9+; `--skip-agents-md` on older versions). Core mode works without GitNexus.
 - On "done": bump `VERSION.md` (API/WEB), sync L1 (`.salvor/active_state.md`) + L2, sync the touched spoke. No live/mirror
   parity step — N/A here.

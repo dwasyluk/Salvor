@@ -20,19 +20,36 @@ async function overflowReport(page) {
     .slice(0, 12));
 }
 
-test("system theme selects a contrasting SM favicon family", async ({ browser }) => {
-  for (const [colorScheme, expectedFamily] of [
-    ["light", "salvor-logo-sm-black"],
-    ["dark", "salvor-logo-sm-white"],
+test("adaptive SM favicon renders dark on light chrome and white on dark chrome", async ({ browser }) => {
+  for (const [colorScheme, expectedRange] of [
+    ["light", [0, 80]],
+    ["dark", [200, 255]],
   ]) {
     const page = await browser.newPage({ colorScheme });
     await page.goto("/");
-    const eligibleIcons = await page.locator('link[rel="icon"]').evaluateAll((links) =>
-      links
-        .filter((link) => !link.media || matchMedia(link.media).matches)
-        .map((link) => new URL(link.href).pathname));
-    expect(eligibleIcons.length).toBeGreaterThan(0);
-    expect(eligibleIcons.at(-1)).toContain(`${expectedFamily}-64.png`);
+    const adaptiveIcon = page.locator('link[rel="icon"][type="image/svg+xml"]');
+    await expect(adaptiveIcon).toHaveAttribute("href", /salvor-logo-sm-adaptive\.svg/);
+    const luminance = await page.evaluate(async () => {
+      const image = new Image();
+      image.src = document.querySelector('link[rel="icon"][type="image/svg+xml"]').href;
+      await image.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = 128;
+      canvas.height = 128;
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      let total = 0;
+      let count = 0;
+      for (let index = 0; index < pixels.length; index += 4) {
+        if (pixels[index + 3] < 32) continue;
+        total += (pixels[index] + pixels[index + 1] + pixels[index + 2]) / 3;
+        count += 1;
+      }
+      return total / count;
+    });
+    expect(luminance).toBeGreaterThanOrEqual(expectedRange[0]);
+    expect(luminance).toBeLessThanOrEqual(expectedRange[1]);
     await page.close();
   }
 });
@@ -119,6 +136,22 @@ test("the enhanced hero uses the compact source and one semantic heading", async
   const decodedBytes = await page.evaluate(() => performance.getEntriesByType("resource")
     .reduce((total, entry) => total + entry.decodedBodySize, 0));
   expect(decodedBytes).toBeLessThan(800_000);
+});
+
+test("Retina desktop WebGL keeps the WF hero at high-resolution backing scale", async ({ browser }) => {
+  const page = await browser.newPage({
+    viewport: { width: 1440, height: 900 },
+    deviceScaleFactor: 2,
+  });
+  await page.goto("/?review=retina-backing-scale");
+  const hero = page.locator("[data-burn-hero]");
+  await expect(hero).toHaveAttribute("data-burn-state", "ready");
+  const backingScale = await page.locator(".burn-webgl").evaluate((canvas) => {
+    const rect = canvas.getBoundingClientRect();
+    return Math.min(canvas.width / rect.width, canvas.height / rect.height);
+  });
+  expect(backingScale).toBeGreaterThanOrEqual(1.7);
+  await page.close();
 });
 
 for (const [name, viewport] of [

@@ -1,9 +1,9 @@
 # Salvor architecture
 
 Salvor is not a tool you run; it's a **disciplined structure** you add to a repo
-so that an LLM coding agent — any agent, any session, any contributor — works
-against the same accumulated, version-controlled knowledge instead of starting
-cold every time.
+so a supported LLM coding agent, through a compatible entrypoint, works against
+the same accumulated, version-controlled knowledge instead of starting cold
+every time.
 
 Out of the box, an LLM CLI carries little context from one session to the next.
 The rationale a teammate captured two months ago (in another session, maybe
@@ -27,7 +27,8 @@ while the Codex and Google adapters are wired and documented but less exercised.
 
 ### 2. Two-tier persisted memory (L1 / L2)
 - **L1 — `.salvor/active_state.md`:** ≤50 lines of dense shorthand. Current truth,
-  active deltas, and "Learned Failures." Auto-loaded every session.
+  active deltas, and "Learned Failures." Loaded at session start through the
+  compatible entrypoint (auto-imported by Claude Code; explicitly read elsewhere).
 - **L2 — `.salvor/active_state_verbose.md`:** detailed but curated archive. Full
   reasoning, evidence, *rejected* hypotheses. Read only when recovering from
   confusion. Rotation rule: when L2 exceeds ~1,500 lines or at release milestones,
@@ -100,8 +101,8 @@ and the ownership contract: `VENDOR_ADAPTERS.md`.)
 Salvor keeps a clean split so it never squats in your project's own `docs/`:
 
 - **Root — governance + entrypoints:** the `CLAUDE.md` hub + component spokes,
-  `AGENTS.md`/`GEMINI.md`, `RULES.md`, and `VERSION.md` — where the CLIs and build
-  tooling auto-discover them.
+  `AGENTS.md`/`GEMINI.md`, `RULES.md`, and `VERSION.md` when the optional Strict
+  profile is enabled — where compatible CLIs and build tooling discover them.
 - **`.salvor/` — the brain (git-committed, shared):** L1 (`active_state.md`),
   L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
   `domain-learnings/`, `decisions/`, `postmortems/`, and a `README.md` index.
@@ -149,9 +150,10 @@ kinds of knowledge with different homes.
 ## Two things people conflate (don't)
 
 **Shared brain vs per-user memory.** Everything Salvor writes is **in-repo and
-git-tracked** — that's the shared brain every contributor's agent reads. Claude
-Code's per-user auto-memory (`~/.claude/.../memory/`) is a *separate, optional,
-non-shared* convenience layer; canonical truth never lives there.
+git-tracked** — that's the shared brain each supported agent can load through a
+compatible entrypoint. Claude Code's per-user auto-memory
+(`~/.claude/.../memory/`) is a *separate, optional, non-shared* convenience
+layer; canonical truth never lives there.
 
 **Salvor's version vs your project's version.** Salvor's own releases use SemVer
 git tags (`v1.0.0-beta`, …) tracked in `CHANGELOG.md`. The `VERSION.md` Salvor scaffolds

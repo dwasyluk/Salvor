@@ -94,6 +94,10 @@ function geometrySignature(source) {
     .trim();
 }
 
+function drawingGeometry(source) {
+  return [...source.matchAll(/\b(?:d|points)="([^"]+)"/g)].map((match) => match[1]);
+}
+
 test("authored logo masters are byte-identical and retain their intrinsic viewBoxes", () => {
   for (const [name, logo] of Object.entries(logoFamilies)) {
     const source = svg(logo.source);
@@ -173,24 +177,28 @@ test("public surfaces use the small logo only for favicons and the regular logo 
   assert.match(html, /assets\/brand\/salvor-logo-black\.svg/);
   assert.match(html, /assets\/brand\/salvor-logo-white\.svg/);
   const faviconTags = html.match(/<link[^>]+rel="icon"[^>]*>/g) || [];
-  for (const size of [16, 32, 48, 64]) {
-    const sizedTags = faviconTags.filter((tag) => tag.includes(`sizes="${size}x${size}"`));
-    assert.equal(sizedTags.length, 3, `${size}px must expose fallback, light, and dark favicons`);
-    assert.ok(
-      sizedTags.some((tag) => tag.includes(`salvor-logo-sm-black-${size}.png`) && !tag.includes("media=")),
-      `${size}px must retain an unqualified black fallback`,
-    );
-    assert.ok(
-      sizedTags.some((tag) =>
-        tag.includes(`salvor-logo-sm-black-${size}.png`) &&
-        tag.includes('media="(prefers-color-scheme: light)"')),
-      `${size}px must use the black SM logo for light themes`,
-    );
-    assert.ok(
-      sizedTags.some((tag) =>
-        tag.includes(`salvor-logo-sm-white-${size}.png`) &&
-        tag.includes('media="(prefers-color-scheme: dark)"')),
-      `${size}px must use the white SM logo for dark themes`,
+  assert.equal(faviconTags.length, 2, "favicon contract must expose one PNG fallback and one adaptive SVG");
+  assert.match(faviconTags[0], /salvor-logo-sm-black-32\.png/);
+  assert.doesNotMatch(faviconTags[0], /media=/);
+  assert.match(faviconTags[1], /type="image\/svg\+xml"/);
+  assert.match(faviconTags[1], /sizes="any"/);
+  assert.match(faviconTags[1], /salvor-logo-sm-adaptive\.svg/);
+  assert.doesNotMatch(faviconTags[1], /media=/);
+
+  for (const path of [
+    "assets/brand/generated/salvor-logo-sm-adaptive.svg",
+    "site/assets/brand/salvor-logo-sm-adaptive.svg",
+  ]) {
+    assert.ok(existsSync(join(root, path)), `${path} must be generated`);
+    if (!existsSync(join(root, path))) continue;
+    const adaptive = read(path);
+    assert.match(adaptive, /@media\s*\(prefers-color-scheme:\s*dark\)/);
+    assert.match(adaptive, /stroke:\s*#ffffff/);
+    assert.match(adaptive, /fill:\s*#ffffff/);
+    assert.deepEqual(
+      drawingGeometry(adaptive),
+      drawingGeometry(read(logoFamilies.small.source)),
+      `${path} must preserve the authored SM geometry`,
     );
   }
   assert.match(
@@ -219,6 +227,35 @@ test("loop assets embed the regular canonical logo and without stays empty", () 
     assert.doesNotMatch(source, /canonical-w10|salvor-logo-sm/i);
   }
   assert.doesNotMatch(read("site/assets/salvor-loop-without.svg"), /canonical-logo|canonical-w10/);
+});
+
+test("Salvor Loop center keeps the canonical logo clear of the brain labels", () => {
+  for (const path of [
+    "assets/salvor-loop.svg",
+    "site/assets/salvor-loop.svg",
+    "site/assets/salvor-loop-with.svg",
+  ]) {
+    const source = read(path);
+    const logo = source.match(
+      /data-brand-source="canonical-logo-regular"[^>]+y="(\d+)"[^>]+width="(\d+)"[^>]+height="(\d+)"/,
+    );
+    const label = source.match(
+      /<text x="400" y="(\d+)"[^>]*>\.salvor\/<\/text>/,
+    );
+    assert.ok(logo, `${path} must expose the canonical logo bounds`);
+    assert.ok(label, `${path} must expose the .salvor/ label baseline`);
+    const logoBottom = Number(logo[1]) + Number(logo[3]);
+    const labelTop = Number(label[1]) - 22;
+    assert.ok(
+      logoBottom <= labelTop - 12,
+      `${path} logo must keep 12 units of clearance before .salvor/`,
+    );
+    assert.match(
+      source,
+      /OPTIONAL ENHANCED · SERENA \+ GITNEXUS/,
+      `${path} must place Enhanced integrations outside the brain stack`,
+    );
+  }
 });
 
 test("brand generator is deterministic and checked-in outputs have no drift", () => {

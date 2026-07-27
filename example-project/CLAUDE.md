@@ -5,7 +5,7 @@
 > For deep historical context, architecture logs, or context recovery: `.salvor/active_state_verbose.md`
 
 ## Project Overview
-Notebook is a tiny notes service: a TypeScript `api` (Node built-in `http`, no framework) exposing a small REST surface (`GET/POST/DELETE /notes`) backed by an in-memory `Map`, plus a static `web` page (plain DOM, no framework) that fetches and posts notes against the API base. The dominant non-obvious constraint: **the store is purely in-memory — all notes are lost on API restart, there is no persistence.** This is a worked Salvor example, deliberately minimal so Serena + GitNexus have real code to index.
+Notebook is a tiny notes service: a TypeScript `api` (Node built-in `http`, no framework) exposing a small REST surface (`GET/POST/DELETE /notes`) backed by an in-memory `Map`, plus a static `web` page (plain DOM, no framework) that fetches and posts notes against the API base. The dominant non-obvious constraint: **the store is purely in-memory — all notes are lost on API restart, there is no persistence.** This is a worked Salvor example, deliberately minimal so Serena can navigate real symbols and GitNexus can index their relationships.
 
 ## Architecture
 
@@ -24,11 +24,13 @@ Notebook is a tiny notes service: a TypeScript `api` (Node built-in `http`, no f
 | `.salvor/decisions/` | Design decisions + load-bearing invariants (why it's this way, what must stay) | Before changing/refactoring anything non-trivial |
 | `api/CLAUDE.md` | api architecture and key files | Working in api/ |
 | `web/CLAUDE.md` | web architecture and key files | Working in web/ |
-| `.serena/memories/` | Codebase structure, execution logic, domain findings | Use Serena MCP tools to query |
+| `.serena/memories/` | Enhanced-mode retrieval pointers and structural notes (not canonical truth) | Use Serena MCP tools to query |
 
 ## APP_NAME
-Configurable via `APP_NAME` env var. Default: `Notebook`. Never hardcode — reference the env var or the
-language-specific constant your build wires up.
+The API reads `APP_NAME` from the environment; the static web client reads
+`data-app-name` from `index.html`. Both default to `Notebook`. Runtime display
+and log sites reference those configuration sources rather than embedding the
+project name independently.
 
 ### SYSTEM DIRECTIVE: TWO-TIER MEMORY MANAGEMENT
 You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise) and `.salvor/active_state_verbose.md`
@@ -66,5 +68,8 @@ GitNexus owns machine-derived structural knowledge (symbols, call graphs, impact
 engineering rationale in `.salvor/`. Recommended default: `gitnexus analyze --index-only` (v1.6.9+; pure index — no
 context-file injection, no generated skills, no hooks). Detect capabilities with `gitnexus analyze --help`; on older
 versions fall back to `--skip-agents-md` and gitignore any generated `.claude/skills/gitnexus-*/`. Run impact analysis
-before edits (`gitnexus_impact` upstream) and change-detection before committing; report HIGH/CRITICAL blast radius
-before proceeding. Never run `gitnexus setup` without approval. Core mode works without GitNexus.
+Only when GitNexus's MCP tools actually respond in the current client, run impact
+analysis before edits and change-detection before committing; report
+HIGH/CRITICAL blast radius before proceeding. If the MCP is unavailable, state
+that and use the best structural review fallback. Never run `gitnexus setup`
+without approval. Core mode works without GitNexus.

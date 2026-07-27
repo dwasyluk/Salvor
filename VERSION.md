@@ -1,8 +1,8 @@
-<!-- {"version":"1.0.0-beta","core":10,"ghpage":11,"docs":12} -->
+<!-- {"version":"1.0.0-beta","core":11,"ghpage":13,"docs":14} -->
 # salvor VERSION MANIFEST
 ## Current State
 - **Project Version:** v1.0.0-beta
-- **Build IDs:** CORE:10 | GHPAGE:11 | DOCS:12
+- **Build IDs:** CORE:11 | GHPAGE:13 | DOCS:14
 - **Last Updated:** 2026-07-27
 
 ---
@@ -11,6 +11,8 @@
 
 | Date | Build IDs | Summary |
 |------|-----------|---------|
+| 2026-07-27 | CORE:11 GHPAGE:13 DOCS:14 | Completed final soft-launch visual polish: cleared the Salvor Loop center by reducing the canonical mark and moving optional Serena/GitNexus Enhanced tooling outside the brain stack; replaced competing favicon media tags with a generated adaptive canonical SM SVG plus PNG fallback; made the Primary Path explicitly state that both Enhanced integrations are optional and highly recommended for the best code-grounded results; raised WebGL hero backing resolution to at least CSS-pixel fidelity with Retina detail under a four-million-pixel cap, preserving the approved burn behavior, smoke, interactions, assets, and WF/M states. |
+| 2026-07-27 | CORE:11 GHPAGE:12 DOCS:13 | Completed the final soft-launch consistency gate across the installer, public docs, dogfooded protocol, example project, CI, and Pages deployment. Reasserted `.salvor/` artifacts as canonical knowledge while adapters and Serena memories remain retrieval aids; preserved Serena and GitNexus as optional Enhanced integrations that are both highly recommended for the best code-grounded results; corrected the example's RULES-history and GitNexus index ownership language; upgraded CI/Pages workflows to current supported GitHub Action majors; folded the canonical authored-logo and adaptive-favicon work into the beta release record; added regression contracts for these release invariants. |
 | 2026-07-27 | CORE:10 GHPAGE:11 DOCS:12 | Added system-theme-aware canonical SM favicons: black for light browser chrome, white for dark browser chrome, with unqualified black PNG fallbacks at 16–64px and the black 128px Apple touch icon unchanged. Added static contract and real Chromium color-scheme coverage without JavaScript, new assets, or changes to the hero/navigation artwork. |
 | 2026-07-27 | CORE:10 GHPAGE:10 DOCS:12 | Replaced the reconstructed W10 mark family with the exact operator-authored `LOGO.svg` regular master and `LOGO-SM.svg` favicon master. Added hash-pinned, deterministic black/white SVG and 16–512 PNG families with uniform aspect-preserving scaling; migrated hero navigation, footer, favicons, metadata, README, social cards, previews, and Loop diagrams; preserved the wordmark and hero background images; retired old geometry and generated mark derivatives; expanded source, raster, consumer, browser, drift, and release contracts. |
 | 2026-07-26 | CORE:10 GHPAGE:09 DOCS:11 | Unlocked semantic hero-text selection at 80% of burn completion while preserving the WebGL animation through its padded visual endpoint. Kept the same server-rendered hero content for users and crawlers; no crawler-specific rendering or user-agent detection was added. |

@@ -11,7 +11,7 @@ Categories may be extended when needed:
 - `PROBE` — external-system or vendor exploration with a verdict.
 - `BAKEOFF` — A/B/N comparison with a verdict.
 - `LF##` — Learned Failure root cause and fix specification.
-- `ARCH` — architectural decision or refactor specification.
+- `ARCH` — empirical architecture probe with evidence and a verdict.
 - `MIGRATION` — pre-specification for a non-trivial change.
 
 ## Required Content

@@ -70,3 +70,47 @@ test(".salvor ownership index keeps decisions and Domain Learnings separate", as
   assert.match(index, /\| `domain-learnings\/` \|[^|]*empirical discoveries/i);
   assert.doesNotMatch(index, /domain-learnings\/` \|[^|]*decision and learning/i);
 });
+
+test("agent-routing and example surfaces keep Serena memories as retrieval aids", async () => {
+  const surfaces = [
+    "SETUP_PROMPT.md",
+    "docs/VENDOR_ADAPTERS.md",
+    "example-project/README.md",
+    "example-project/CLAUDE.md",
+    "example-project/RULES.md",
+  ];
+  for (const file of surfaces) {
+    const source = await read(file);
+    assert.doesNotMatch(source, /committed shared-brain notes/i, file);
+    assert.doesNotMatch(source, /shared truth[^.\n]*\.serena\/memories|\.serena\/memories[^.\n]*shared truth/i, file);
+  }
+  assert.match((await read("example-project/README.md")).replace(/\s+/g, " "), /\.serena\/memories\/[^.]*retrieval aid/i);
+  assert.match(await read("example-project/CLAUDE.md"), /^\| `\.serena\/memories\/` \| Enhanced-mode retrieval/im);
+  assert.doesNotMatch(await read("example-project/RULES.md"), /GitNexus[^.\n]*index blocks/i);
+});
+
+test("soft-launch component build IDs are synchronized across current state and spokes", async () => {
+  const version = await read("VERSION.md");
+  assert.match(version, /"core"\s*:\s*11/);
+  assert.match(version, /"ghpage"\s*:\s*13/);
+  assert.match(version, /"docs"\s*:\s*14/);
+  assert.match(version, /CORE:11 \| GHPAGE:13 \| DOCS:14/);
+
+  const currentSurfaces = [
+    [".salvor/active_state.md", /CORE:11 GHPAGE:13 DOCS:14/],
+    ["core/CLAUDE.md", /current build `CORE:11`/],
+    ["site/CLAUDE.md", /current build `GHPAGE:13`/],
+    ["docs/CLAUDE.md", /current build `DOCS:14`/],
+  ];
+  for (const [file, expected] of currentSurfaces) {
+    assert.match(await read(file), expected, file);
+  }
+});
+
+test("canonical-logo work ships in the beta changelog instead of Unreleased", async () => {
+  const changelog = await read("CHANGELOG.md");
+  assert.match(changelog, /## \[Unreleased\]\s+## \[1\.0\.0-beta\] — 2026-07-27/);
+  const betaEntry = changelog.split("## [1.0.0-beta]")[1];
+  assert.match(betaEntry, /operator-authored\s+`LOGO\.svg` regular master and `LOGO-SM\.svg` favicon master/);
+  assert.match(betaEntry, /system-theme-aware canonical SM SVG favicon/);
+});

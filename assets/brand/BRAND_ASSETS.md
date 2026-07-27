@@ -42,7 +42,10 @@ preview, and Salvor Loop diagrams.
 
 ### Small logo
 
-Use the small logo only for browser favicons and touch icons. It is an authored
+Use the small logo only for browser favicons and touch icons. The generated
+`salvor-logo-sm-adaptive.svg` preserves the authored geometry and switches its
+ink from black to white when browser chrome reports a dark system theme; the
+32 px black PNG remains the compatibility fallback. It is an authored
 small-format design, not a generated simplification of the regular logo.
 
 ### Color variants

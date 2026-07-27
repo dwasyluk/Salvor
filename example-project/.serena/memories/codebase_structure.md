@@ -49,4 +49,4 @@ example-project/
 - **Deferred Finding** → `.salvor/DEFERRED_TODOS.md` (e.g. #1 no persistence).
 
 ## GitNexus
-- Machine-derived code structure (symbols, call graphs, impact). Safe default: `gitnexus analyze --index-only` (pure index, v1.6.9+; no context files / skills / hooks). Older versions: `--skip-agents-md`. Impact before edits; change-detection before commit. Core mode works without it.
+- Machine-derived code structure (symbols, call graphs, impact). Safe default: `gitnexus analyze --index-only` (pure index, v1.6.9+; no context files / skills / hooks). Older versions: `--skip-agents-md`. When GitNexus MCP tools respond, run impact before edits and change-detection before commit; otherwise use the best available structural review fallback. Core mode works without it.

@@ -6,6 +6,19 @@ history of reasoning, rejected hypotheses, and detail pruned from L1. Update tri
 
 ---
 
+## 2026-07-27 — Final fixture consistency sync (API:02 WEB:02)
+
+The runnable example now demonstrates its Strict defaults without implying that
+optional Enhanced tools are installed: Serena-first and GitNexus-impact rules
+activate only when their MCP tools respond, with explicit structural-review
+fallbacks otherwise. Capture-class propagation updates the matching Domain
+Learning or Design Decision index instead of always writing to the learning
+index. The API startup display name reads `APP_NAME`; the static web client reads
+`data-app-name` from `index.html` and applies it to the title and heading. Both
+component typechecks and the live API smoke are release-gate requirements.
+
+---
+
 ## 2026-06-22 — Project initialized
 Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§8, VERSION.md, three capture classes.
 

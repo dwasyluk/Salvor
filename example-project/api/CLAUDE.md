@@ -24,7 +24,8 @@ HTTP for the static `web` client.
 - Install: `npm install`. Run dev server: `npm run dev` (`tsx src/server.ts`). Typecheck:
   `npm run typecheck` (`tsc --noEmit`).
 - Listens on `process.env.PORT ?? 8787`.
-- Version constant: `API_BUILD`, derived from `VERSION.md` key `api` (`API:XX`) at build time.
+- Startup display name comes from `process.env.APP_NAME ?? "Notebook"`.
+- Version constant: `API_BUILD`, derived from `VERSION.md` key `api`; current build `API:02`.
 
 For codebase tree: use Serena MCP `get_symbols_overview`.
 For domain logic: see `.salvor/DOMAIN_REF.md`. For infra/ops: see `.salvor/INFRA.md`.

@@ -5,6 +5,7 @@ import {
   BURN_FRAGMENT_SHADER,
   BurnReveal,
   MAX_BURNS,
+  computeRenderScale,
   createUiSnapshotSvg,
   sampleDragPoints,
 } from "../site/scripts/burn-reveal.js";
@@ -20,6 +21,13 @@ function minimumDistance(data, count, point, aspect = 1) {
   }
   return minimum;
 }
+
+test("render scale preserves CSS-pixel fidelity and uses Retina detail within budget", () => {
+  assert.equal(computeRenderScale(1440, 900, 2), Math.sqrt(4_000_000 / (1440 * 900)));
+  assert.equal(computeRenderScale(390, 844, 3), 2);
+  assert.equal(computeRenderScale(2400, 1400, 1), 1);
+  assert.equal(computeRenderScale(4000, 2000, 3), 1);
+});
 
 test("sampleDragPoints fills drag gaps without exceeding the uniform capacity", () => {
   const points = sampleDragPoints(
