@@ -290,6 +290,29 @@ test("WebGL owns exact browser-rendered UI transition without changing the estab
   });
 
   await hero.evaluate((root) => {
+    root.dataset.burnSelectable = "true";
+  });
+  const selectableBurning = await page.evaluate(() => {
+    const root = document.querySelector("[data-burn-hero]");
+    const copy = root.querySelector(":scope > .hero-copy");
+    const title = root.querySelector("#hero-title");
+    return {
+      burnState: root.dataset.burnState,
+      heroCopySelect: getComputedStyle(copy).userSelect,
+      titleSelect: getComputedStyle(title).userSelect,
+      titleColor: getComputedStyle(title).color,
+      canvasHidden: root.querySelector(".burn-webgl").hidden,
+    };
+  });
+  expect(selectableBurning).toEqual({
+    burnState: "burning",
+    heroCopySelect: "text",
+    titleSelect: "text",
+    titleColor: "rgba(0, 0, 0, 0)",
+    canvasHidden: false,
+  });
+
+  await hero.evaluate((root) => {
     root.dataset.burnState = "revealed";
     root.querySelector(".burn-webgl").hidden = true;
   });

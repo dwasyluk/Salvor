@@ -97,6 +97,37 @@ test("adding past capacity preserves every existing burned area", () => {
   });
 });
 
+test("step unlocks hero selection at 80% while the burn keeps rendering", () => {
+  const burn = Object.create(BurnReveal.prototype);
+  const completionRadius = Math.hypot(0.5, 0.5) + 0.18;
+  burn.width = 100;
+  burn.height = 100;
+  burn.burnCount = 1;
+  burn.burnData = new Float32Array([
+    0.5,
+    0.5,
+    completionRadius * 0.8,
+  ]);
+  burn.root = { dataset: { burnState: "burning" } };
+  burn.canvas = { hidden: false };
+  burn.frame = 1;
+  burn.lastFrameAt = 0;
+  burn.draw = () => {};
+
+  const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+  globalThis.requestAnimationFrame = () => 99;
+  try {
+    burn.step(16.667);
+  } finally {
+    globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+  }
+
+  assert.equal(burn.root.dataset.burnSelectable, "true");
+  assert.equal(burn.root.dataset.burnState, "burning");
+  assert.equal(burn.canvas.hidden, false);
+  assert.equal(burn.frame, 99);
+});
+
 test("the fragment shader composites exact WF and M UI snapshots at the burn edge", () => {
   assert.match(BURN_FRAGMENT_SHADER, /uniform sampler2D u_wireframe/);
   assert.match(BURN_FRAGMENT_SHADER, /uniform sampler2D u_wireUi/);

@@ -4,6 +4,12 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-07-26 — Early semantic selection unlock (GHPAGE:09)
+
+- **Behavior.** The semantic hero copy becomes selectable once a burn reaches 80% of its padded completion radius. The WebGL renderer remains visible and continues through the same final smoke endpoint, so selection timing changes without altering the localized black→white visual transition or WF/M states.
+- **SEO.** Hero headings, paragraphs, list copy, and links remain server-rendered semantic HTML for every client. `user-select` affects human interaction, not DOM availability; crawler-specific rendering and user-agent sniffing are intentionally absent.
+- **Regression contract.** Unit coverage locks the 80% threshold and continued animation; Playwright locks selectable semantic copy during `burning` while the transparent DOM and visible WebGL canvas preserve the in-progress appearance.
+
 ## 2026-07-26 — v1.0.0-beta protocol, portability, and site consistency (CORE:10 GHPAGE:08 DOCS:11)
 
 - **Release identity.** The soft-launch line is `v1.0.0-beta` across Salvor-owned metadata, public copy, URLs, history, scripts, brand audit output, state, and retrieval memories. Independent scaffold/example `v0.1.0`, dependency versions, GitNexus versions, and future plugin `v1.1.0` remain unchanged.

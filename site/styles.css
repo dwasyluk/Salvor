@@ -946,6 +946,7 @@ h1,
   color: #fff4e3;
 }
 
+.hero.is-enhanced[data-burn-selectable="true"] > .hero-copy,
 .hero.is-enhanced[data-burn-state="revealed"] > .hero-copy {
   pointer-events: auto;
   user-select: text;

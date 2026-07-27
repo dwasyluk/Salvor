@@ -3,6 +3,8 @@ export const MAX_BURNS = 200;
 const DRAG_SPACING = 0.012;
 const INITIAL_RADIUS = -0.08;
 const RADIUS_PER_FRAME = 0.0008;
+const REVEAL_PADDING = 0.18;
+const SELECTION_UNLOCK_PROGRESS = 0.8;
 const MAX_RENDER_PIXELS = 900_000;
 const MIN_RENDER_SCALE = 0.65;
 const INTERACTIVE_SELECTOR = "a, button, [data-hero-content]";
@@ -663,6 +665,12 @@ export class BurnReveal {
     }
     this.draw(time);
 
+    if (
+      this.root.dataset.burnSelectable !== "true"
+      && this.revealProgressReached(SELECTION_UNLOCK_PROGRESS)
+    ) {
+      this.root.dataset.burnSelectable = "true";
+    }
     if (this.coversViewport()) {
       this.canvas.hidden = true;
       this.root.dataset.burnState = "revealed";
@@ -671,7 +679,7 @@ export class BurnReveal {
     this.frame = requestAnimationFrame((nextTime) => this.step(nextTime));
   }
 
-  coversViewport() {
+  revealProgressReached(progress) {
     const aspect = this.width / this.height;
     for (let index = 0; index < this.burnCount; index += 1) {
       const offset = index * 3;
@@ -684,9 +692,13 @@ export class BurnReveal {
         Math.hypot(centerX, 1 - centerY),
         Math.hypot(aspect - centerX, 1 - centerY),
       );
-      if (radius >= farthestCorner + 0.18) return true;
+      if (radius >= (farthestCorner + REVEAL_PADDING) * progress) return true;
     }
     return false;
+  }
+
+  coversViewport() {
+    return this.revealProgressReached(1);
   }
 
   draw(time) {

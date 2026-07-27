@@ -193,10 +193,10 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     read(".salvor/INFRA.md"),
     read(".serena/memories/task_completion.md"),
   ]);
-  assert.match(version, /"ghpage"\s*:\s*8/);
-  assert.match(version, /GHPAGE:08/);
+  assert.match(version, /"ghpage"\s*:\s*9/);
+  assert.match(version, /GHPAGE:09/);
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
-  assert.match(l1, /GHPAGE:08/);
+  assert.match(l1, /GHPAGE:09/);
   // The responsive-check SOP lives in its canonical homes (L1, INFRA, L2), not
   // duplicated across every Serena memory — post-refresh, Serena memories are
   // concise pointers under the one-owner model.

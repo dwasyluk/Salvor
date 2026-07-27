@@ -1,8 +1,8 @@
-<!-- {"version":"1.0.0-beta","core":10,"ghpage":8,"docs":11} -->
+<!-- {"version":"1.0.0-beta","core":10,"ghpage":9,"docs":11} -->
 # salvor VERSION MANIFEST
 ## Current State
 - **Project Version:** v1.0.0-beta
-- **Build IDs:** CORE:10 | GHPAGE:08 | DOCS:11
+- **Build IDs:** CORE:10 | GHPAGE:09 | DOCS:11
 - **Last Updated:** 2026-07-26
 
 ---
@@ -11,6 +11,7 @@
 
 | Date | Build IDs | Summary |
 |------|-----------|---------|
+| 2026-07-26 | CORE:10 GHPAGE:09 DOCS:11 | Unlocked semantic hero-text selection at 80% of burn completion while preserving the WebGL animation through its padded visual endpoint. Kept the same server-rendered hero content for users and crawlers; no crawler-specific rendering or user-agent detection was added. |
 | 2026-07-26 | CORE:10 GHPAGE:08 DOCS:11 | Prepared the v1.0.0-beta soft launch across protocol, documentation, state, and site. Defined the vendor-agnostic repository core separately from vendor portability through compatible thin adapters; clarified Serena and GitNexus as optional but highly recommended for the best code-grounded results; retained Domain Learning as the canonical taxonomy. Updated the public site with vendor portability copy, a sixth process step, linked Enhanced integrations, responsive 3/2/1 process layout, restored loop assets, lighter WebGL smoke, hanging-indent hero bullets, and burn-state-aware text selection. |
 | 2026-07-21 | CORE:09 GHPAGE:07 DOCS:10 | Fixed the hero burn reveal so its cloned truth layer displays the tracked full-color mystic artwork instead of the dark fallback. Scoped the source-only opacity rule to the original hero child, preserved the standalone PNG/WebP assets, and added desktop/mobile Playwright coverage for image loading, full hero coverage, visibility, and cover-fit behavior. |
 | 2026-07-20 | CORE:09 GHPAGE:06 DOCS:10 | Canonical W10 brand system and soft-launch visual gate. Preserved the operator-approved 1374×1492 W10 reference with transport provenance; replaced badge/node-sigil/gem/WF approximations with one square, mirrored geometry model and deterministic Node/Playwright generator. Added full/core black/white SVGs, exact-size 16–512 PNGs, outlined shared wordmark, README lockup, full-bleed social cards, GitHub preview, canonical loop embedding, byte-level drift tests, visual contact-sheet audit, manifest, ownership documentation, and design-decision record. Site header/footer/burn state/favicons/metadata now use generated assets with uniform scaling. README lifecycle/governance and DOMAIN_REF current-state wording now keep Strict versioning conditional. |
