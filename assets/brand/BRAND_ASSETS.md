@@ -1,75 +1,73 @@
 # Salvor Brand Assets
 
-This directory owns Salvor's canonical W10 brand system. Generated files must
-never be hand-edited; change the geometry or generator and rebuild them.
+This directory owns Salvor's canonical authored-SVG brand system. Generated
+files must never be hand-edited; update an approved reference master or the
+generator and rebuild them.
 
 ## Visual authority and provenance
 
-- Approved reference: `assets/brand/reference/salvor-w10-reference.png`
-- Dimensions: `1374 × 1492`
-- Preserved attachment SHA-256: `085c7cf9b9133df9465d3fb6a91249272ca82eb9de094724a77638b0b10a6b51`
-- Original prompt SHA-256: `8d77d855c152a0b4ca6ad5737e44f46c28aed5307eeecd6e562309125cca80b9`
+Two operator-supplied SVGs are the sole visual authority for the Salvor mark:
 
-The operator confirmed that the displayed attachment is the approved final
-reference and that the hash mismatch is a screenshot/transport artifact. The
-preserved attachment is visual authority, not a production-ready master: its
-pixelation, ghost lines, grid, asymmetry, rough joins, and stray marks are not
-part of the design.
+- Regular master: `assets/brand/reference/LOGO.svg`
+  - SHA-256:
+    `b9e7aec604dc072c8619853de109c68d74a10036223cf209938d6436443df615`
+  - ViewBox: `0 0 529.76 551.44`
+- Small master: `assets/brand/reference/LOGO-SM.svg`
+  - SHA-256:
+    `05dabb5f372c1e9ab09d3be4cf267bb7234bbc69e64a0dd95a7d84b1cc25aa7a`
+  - ViewBox: `0 0 502.26 545.67`
+
+The reference SVGs are tracked byte-for-byte as supplied. Do not rewrite,
+optimize, reformat, recolor, or edit their paths, groups, styles, stroke widths,
+fill rules, or viewBoxes.
 
 ## Canonical sources
 
-- Geometry: `assets/brand/source/salvor-mark-geometry.json`
+- Regular mark: `assets/brand/reference/LOGO.svg`
+- Small mark: `assets/brand/reference/LOGO-SM.svg`
 - Typography outlines: `assets/brand/source/salvor-text-outlines.json`
 - Generator: `scripts/generate-brand-assets.mjs`
-- Canonical SVG master: `assets/brand/generated/salvor-mark-full-black.svg`
 - Manifest: `assets/brand/generated/manifest.json`
 
-The geometry model uses a square `0 0 1000 1000` viewBox, one centerline at
-`x=500`, named stroke weights, mirrored left-side structural geometry, and
-named layers. Black and white outputs use identical geometry.
+The previous reconstructed W10 geometry is historical and no longer an active
+brand source.
 
-## Approved variants
+## Approved families
 
-### Full mark
+### Regular logo
 
-Contains the complete polyhedron, structural lines, central triangular frame,
-nested triangle, four-point star, vertical stem, and two concentric elliptical
-rings. Use it for the README lockup, site header/footer, favicons and app icons,
-metadata, social cards, and standalone official branding.
+Use the regular logo for the README lockup, standalone branding, site
+header/footer and hero navigation, structured metadata, social cards, GitHub
+preview, and Salvor Loop diagrams.
 
-### Core/infographic mark
+### Small logo
 
-Uses the exact full-mark geometry with only the named `stem` and `rings` layers
-omitted. Use it only inside the Salvor Loop or similarly constrained diagrams.
-It is not separately drawn and must never gain a different triangle, star, or
-polyhedral topology.
+Use the small logo only for browser favicons and touch icons. It is an authored
+small-format design, not a generated simplification of the regular logo.
 
-## Wordmark
+### Color variants
 
-The approved SALVOR wordmark preserves the pre-migration GitHub Pages computed
-treatment: the macOS SF Mono system face at weight 800, uppercase, with `0.22em`
-tracking. Its verified glyphs are stored as filled SVG outlines rather than live
-font text, so no font binary or platform fallback is required. The same paths
-are used in the site navigation, footer, README lockup, Open Graph card, and
-GitHub preview. Social-card tagline/support copy is outlined from the matching
-SF Mono 800/600 treatments as well, keeping generated PNG bytes independent of
-host font availability.
+The authored black color is `#231f20`. Black derivatives preserve the master
+bytes exactly. White derivatives change only that color token to `#ffffff`;
+their geometry and every other byte-level design property remain equivalent.
+
+### Wordmark
+
+The approved SALVOR wordmark remains the verified SF Mono system treatment at
+weight 800 with `0.22em` tracking. Its fixed filled SVG outlines are independent
+of the logo geometry and are unchanged by this migration.
 
 ## Generated inventory
 
-- Full/core black and white SVG marks
-- Black and white outlined wordmark SVGs
-- Full-mark transparent PNGs at 16, 32, 48, 64, 128, 256, and 512 pixels
+- Regular and small black/white SVG derivatives
+- Regular and small transparent PNGs at 16, 32, 48, 64, 128, 256, and 512
+  pixels
 - 720×180 README horizontal lockup (SVG and PNG)
 - 1200×630 Open Graph/Twitter card (SVG and PNG)
 - 1280×640 GitHub social preview (SVG and PNG)
-- Root and site Salvor Loop assets with the canonical core mark
-- Machine-readable manifest with output hashes
-
-The site aliases under `site/assets/brand/` are generated from the same source
-as the root masters. Compatibility names are allowed only when the generator
-produces them and this document identifies them; there are currently no legacy
-logo-family aliases.
+- Root and site Salvor Loop assets with the regular canonical logo
+- Site aliases generated from the same sources
+- Machine-readable manifest with source and output hashes
 
 ## Regeneration and drift
 
@@ -80,21 +78,23 @@ npm run brand:audit
 ```
 
 `brand:check` rebuilds every output in a temporary directory and compares its
-bytes with the checked-in files. `brand:audit` also creates visual evidence in
-`/tmp/salvor-v1.0.0-beta-brand-audit/`; audit output is not part of the release.
+bytes with the checked-in files. `brand:audit` creates visual evidence at
+`/tmp/salvor-v1.0.0-beta-brand-audit/contact-sheet.png`; audit output is not
+part of the release.
 
 ## Composition rules
 
-- Never stretch, compress, crop, rotate, skew, or nonuniformly scale the mark.
-- Symbol placements use square cells, `object-fit: contain`, and
+- Never stretch, compress, crop, rotate, skew, or nonuniformly scale either
+  logo.
+- Use one scale factor for both axes. Square cells and raster canvases may
+  include transparent padding.
+- Symbol placements use `object-fit: contain` or
   `preserveAspectRatio="xMidYMid meet"`.
-- Do not add dots, orbit nodes, gradients, glow, shadows, or decorative depth
-  inside the mark.
-- Do not simplify or replace the topology for favicons. Small PNGs are direct
-  exact-size renders of the canonical full SVG.
-- Social cards use the approved v1.0.0-beta hero as a full-bleed background with a
-  controlled readability overlay. The 1280×640 preview is rendered for its own
-  canvas and is not a stretched 1200×630 image.
-- The full mark is the only favicon/application icon geometry.
-- Do not restore the retired node-sigil, gem, circular badge, prior W10/WF
-  approximations, hand-built loop polygon, or exploratory logo families.
+- Do not add gradients, glow, shadows, nodes, or decorative depth inside the
+  logo.
+- Favicons and touch icons use only the small family.
+- Every other official mark placement uses only the regular family.
+- Social cards retain the approved v1.0.0-beta hero as a full-bleed background;
+  changing the logo must not alter the hero background source.
+- Do not restore the retired node-sigil, gem, circular badge, reconstructed W10
+  geometry, hand-built Loop polygon, or exploratory logo families.

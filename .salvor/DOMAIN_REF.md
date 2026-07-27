@@ -27,6 +27,15 @@ without a memory migration.
 
 The deployable GitHub Pages site in `site/` is a semantic presentation mirror of these sources, not an independent authority.
 
+## Brand Authority
+
+The operator-supplied `assets/brand/reference/LOGO.svg` and
+`assets/brand/reference/LOGO-SM.svg` are the immutable canonical mark masters.
+The small master owns favicon and touch-icon geometry; the regular master owns
+every other mark placement. Black and white derivatives at supported sizes
+preserve exact geometry and uniform scaling. The outlined SALVOR wordmark
+remains separately canonical and unchanged.
+
 ## Learned Failures (LF#)
 
 None registered.

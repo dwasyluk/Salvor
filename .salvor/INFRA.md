@@ -6,7 +6,7 @@ Operational reference for local work, deployment, environment variables, externa
 
 - The canonical repository is primarily Markdown; this branch also has a root Node test harness for the site.
 - Run `npm test` for site contracts/interactions and `npm run test:browser` for direct Playwright rendering.
-- Run `npm run brand:build` to regenerate the canonical W10 asset family, `npm run brand:check` for byte-level drift detection, and `npm run brand:audit` for a visual contact sheet under `/tmp/salvor-v1.0.0-beta-brand-audit/`.
+- Run `npm run brand:build` to regenerate the canonical regular/small authored-SVG asset families, `npm run brand:check` for byte-level drift detection, and `npm run brand:audit` for a visual contact sheet under `/tmp/salvor-v1.0.0-beta-brand-audit/`.
 - `example-project/api` and `example-project/web` are separate TypeScript regression fixtures; inspect their package manifests before running fixture commands.
 - Use the narrowest structural, link/path, diff, and Markdown checks appropriate to the change.
 
@@ -14,7 +14,7 @@ Operational reference for local work, deployment, environment variables, externa
 
 - The deployable static site is `site/` on `main`. `.github/workflows/pages.yml` deploys `site/` from `main` via GitHub Actions (source = GitHub Actions); pushing/deploying remain operator-controlled.
 - A source-of-truth sync must stop for design review when new page elements are required and must run Playwright directly at desktop, tablet, Galaxy-S25-Edge-like small-phone, and 320px narrow viewports before completion. Verify the six-card process grid resolves to 3/2/1 columns and the hero retains mouse/touch burn input, selection-state behavior, and interactive controls.
-- Brand outputs are owned by `assets/brand/source/salvor-mark-geometry.json` and `scripts/generate-brand-assets.mjs`; generated SVG/PNG files are checked in, while audit evidence stays outside the release tree.
+- Brand outputs are owned by immutable `assets/brand/reference/LOGO.svg` and `LOGO-SM.svg` masters plus `scripts/generate-brand-assets.mjs`; generated SVG/PNG files are checked in, while audit evidence stays outside the release tree. Logo-only changes must leave tracked hero background images byte-identical.
 
 ## Environment Variables and Build IDs
 

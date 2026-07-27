@@ -10,6 +10,21 @@ import { inflateSync } from "node:zlib";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path, encoding = "utf8") => readFileSync(join(root, path), encoding);
 const hash = (path) => createHash("sha256").update(read(path, null)).digest("hex");
+const iconSizes = [16, 32, 48, 64, 128, 256, 512];
+const logoFamilies = {
+  regular: {
+    source: "assets/brand/reference/LOGO.svg",
+    stem: "salvor-logo",
+    hash: "b9e7aec604dc072c8619853de109c68d74a10036223cf209938d6436443df615",
+    viewBox: [0, 0, 529.76, 551.44],
+  },
+  small: {
+    source: "assets/brand/reference/LOGO-SM.svg",
+    stem: "salvor-logo-sm",
+    hash: "05dabb5f372c1e9ab09d3be4cf267bb7234bbc69e64a0dd95a7d84b1cc25aa7a",
+    viewBox: [0, 0, 502.26, 545.67],
+  },
+};
 
 function png(path) {
   const bytes = read(path, null);
@@ -67,73 +82,65 @@ function pngAlphaBounds(path) {
 
 function svg(path) {
   const source = read(path);
-  assert.match(source, /^<svg[^>]+viewBox="0 0 1000 1000"/);
-  assert.match(source, /preserveAspectRatio="xMidYMid meet"/);
+  assert.match(source, /<svg\b[^>]*viewBox="[^"]+"/);
   assert.doesNotMatch(source, /filter=|gradient|blur|scale\([^,]+,[^)]+\)/i);
   return source;
 }
 
 function geometrySignature(source) {
   return source
-    .replace(/Salvor canonical (?:black|white)/g, "Salvor canonical COLOR")
-    .replace(/(?:#050608|#ffffff)/gi, "COLOR")
+    .replace(/(?:#231f20|#ffffff)/gi, "COLOR")
     .replace(/\s+/g, " ")
     .trim();
 }
 
-test("approved W10 screenshot is preserved with verified transport provenance", () => {
-  const reference = "assets/brand/reference/salvor-w10-reference.png";
-  assert.ok(existsSync(join(root, reference)));
-  assert.deepEqual(png(reference), { width: 1374, height: 1492 });
-  assert.equal(hash(reference), "085c7cf9b9133df9465d3fb6a91249272ca82eb9de094724a77638b0b10a6b51");
-});
-
-test("canonical geometry is square, mirrored, and layer-owned", () => {
-  const geometry = JSON.parse(read("assets/brand/source/salvor-mark-geometry.json"));
-  assert.equal(geometry.viewBox, 1000);
-  assert.equal(geometry.axisX, 500);
-  assert.deepEqual(geometry.fullLayers, ["axis", "structure", "frame", "triangle", "star", "stem", "rings"]);
-  assert.deepEqual(geometry.coreLayers, ["axis", "structure", "frame", "triangle", "star"]);
-  assert.ok(geometry.leftSegments.length >= 8);
-  for (const segment of geometry.leftSegments) {
-    for (const point of segment.points) assert.ok(point[0] <= geometry.axisX, `${segment.id} must be left-owned`);
-  }
-  assert.equal(geometry.star.cx, geometry.axisX);
-  assert.equal(geometry.stem.x, geometry.axisX);
-  for (const ring of geometry.rings) assert.equal(ring.cx, geometry.axisX);
-});
-
-test("full and core SVG variants share geometry across colors", () => {
-  const fullBlack = svg("assets/brand/generated/salvor-mark-full-black.svg");
-  const fullWhite = svg("assets/brand/generated/salvor-mark-full-white.svg");
-  const coreBlack = svg("assets/brand/generated/salvor-mark-core-black.svg");
-  const coreWhite = svg("assets/brand/generated/salvor-mark-core-white.svg");
-  assert.equal(geometrySignature(fullBlack), geometrySignature(fullWhite));
-  assert.equal(geometrySignature(coreBlack), geometrySignature(coreWhite));
-  assert.match(fullBlack, /data-layer="stem"/);
-  assert.match(fullBlack, /data-layer="rings"/);
-  assert.doesNotMatch(coreBlack, /data-layer="(?:stem|rings)"/);
-  for (const layer of ["axis", "structure", "frame", "triangle", "star"]) {
-    assert.match(fullBlack, new RegExp(`data-layer="${layer}"`));
-    assert.match(coreBlack, new RegExp(`data-layer="${layer}"`));
+test("authored logo masters are byte-identical and retain their intrinsic viewBoxes", () => {
+  for (const [name, logo] of Object.entries(logoFamilies)) {
+    const source = svg(logo.source);
+    assert.equal(hash(logo.source), logo.hash, `${name} canonical source hash`);
+    assert.match(source, new RegExp(`viewBox="${logo.viewBox.join(" ")}"`));
+    assert.match(source, /#231f20/i);
   }
 });
 
-test("generated favicon and application PNGs are exact square exports", () => {
-  for (const color of ["black", "white"]) {
-    for (const size of [16, 32, 48, 64, 128]) {
-      const path = `assets/brand/generated/icons/salvor-mark-full-${color}-${size}.png`;
-      assert.deepEqual(png(path), { width: size, height: size });
+test("black and white SVG families preserve the authored geometry", () => {
+  for (const [name, logo] of Object.entries(logoFamilies)) {
+    const canonical = svg(logo.source);
+    const black = svg(`assets/brand/generated/${logo.stem}-black.svg`);
+    const white = svg(`assets/brand/generated/${logo.stem}-white.svg`);
+    assert.equal(black, canonical, `${name} black SVG must preserve the canonical source bytes`);
+    assert.equal(geometrySignature(black), geometrySignature(white), `${name} black/white geometry`);
+    assert.match(white, /#ffffff/i);
+    assert.doesNotMatch(white, /#231f20/i);
+  }
+});
+
+test("regular and small PNG families are exact square exports at every supported size", () => {
+  for (const logo of Object.values(logoFamilies)) {
+    for (const color of ["black", "white"]) {
+      for (const size of iconSizes) {
+        const rootPath = `assets/brand/generated/icons/${logo.stem}-${color}-${size}.png`;
+        const sitePath = `site/assets/brand/${logo.stem}-${color}-${size}.png`;
+        assert.deepEqual(png(rootPath), { width: size, height: size });
+        assert.deepEqual(png(sitePath), { width: size, height: size });
+        assert.equal(hash(sitePath), hash(rootPath), `${sitePath} must alias ${rootPath}`);
+      }
     }
   }
 });
 
-test("black and white raster variants retain identical canonical alpha bounds", () => {
-  for (const size of [16, 32, 48, 64, 128, 256, 512]) {
-    const black = pngAlphaBounds(`assets/brand/generated/icons/salvor-mark-full-black-${size}.png`);
-    const white = pngAlphaBounds(`assets/brand/generated/icons/salvor-mark-full-white-${size}.png`);
-    assert.deepEqual(black, white, `${size}px black/white alpha geometry drift`);
-    assert.ok(black.width / black.height > 0.75 && black.width / black.height < 1.05, `${size}px mark aspect drift`);
+test("black and white rasters retain identical geometry and proportional scaling", () => {
+  for (const [name, logo] of Object.entries(logoFamilies)) {
+    const expectedRatio = logo.viewBox[2] / logo.viewBox[3];
+    for (const size of iconSizes) {
+      const black = pngAlphaBounds(`assets/brand/generated/icons/${logo.stem}-black-${size}.png`);
+      const white = pngAlphaBounds(`assets/brand/generated/icons/${logo.stem}-white-${size}.png`);
+      assert.deepEqual(black, white, `${name} ${size}px black/white alpha geometry drift`);
+      assert.ok(
+        Math.abs(black.width / black.height - expectedRatio) <= 2 / size,
+        `${name} ${size}px logo must retain its intrinsic aspect ratio`,
+      );
+    }
   }
 });
 
@@ -143,7 +150,8 @@ test("README lockup and social canvases use canonical generated compositions", (
   assert.deepEqual(png("assets/social/github-social-preview.png"), { width: 1280, height: 640 });
   const social = read("site/assets/social/salvor-social-card.svg");
   assert.match(social, /data-layout="full-bleed-hero"/);
-  assert.match(social, /data-brand-source="canonical-w10"/);
+  assert.match(social, /data-brand-source="canonical-logo-regular"/);
+  assert.doesNotMatch(social, /salvor-logo-sm|canonical-w10/i);
   assert.match(social, /data-wordmark="outlined"/);
   assert.match(social, /data-typography="sf-mono-800-0\.22em"/);
   assert.match(social, /Your repo remembers\./);
@@ -155,30 +163,62 @@ test("README lockup and social canvases use canonical generated compositions", (
   assert.doesNotMatch(wordmark, /stroke="#050608"/);
 });
 
-test("public surfaces consume only canonical W10 assets without distortion", () => {
+test("public surfaces use the small logo only for favicons and the regular logo everywhere else", () => {
   const html = read("site/index.html");
   const css = read("site/styles.css");
   const readme = read("README.md");
   assert.doesNotMatch(`${html}\n${css}\n${readme}`, /salvor-v10-node-sigil|salvor-logo-final-source|salvor-logo-badge/i);
   assert.match(readme, /assets\/brand\/generated\/salvor-readme-lockup\.png/);
-  assert.match(html, /assets\/brand\/salvor-mark-full-black\.svg/);
-  assert.match(html, /assets\/brand\/salvor-mark-full-white\.svg/);
+  assert.match(readme, /assets\/brand\/generated\/salvor-logo-black\.svg/);
+  assert.match(html, /assets\/brand\/salvor-logo-black\.svg/);
+  assert.match(html, /assets\/brand\/salvor-logo-white\.svg/);
+  const faviconTags = html.match(/<link[^>]+rel="icon"[^>]*>/g) || [];
+  for (const size of [16, 32, 48, 64]) {
+    const sizedTags = faviconTags.filter((tag) => tag.includes(`sizes="${size}x${size}"`));
+    assert.equal(sizedTags.length, 3, `${size}px must expose fallback, light, and dark favicons`);
+    assert.ok(
+      sizedTags.some((tag) => tag.includes(`salvor-logo-sm-black-${size}.png`) && !tag.includes("media=")),
+      `${size}px must retain an unqualified black fallback`,
+    );
+    assert.ok(
+      sizedTags.some((tag) =>
+        tag.includes(`salvor-logo-sm-black-${size}.png`) &&
+        tag.includes('media="(prefers-color-scheme: light)"')),
+      `${size}px must use the black SM logo for light themes`,
+    );
+    assert.ok(
+      sizedTags.some((tag) =>
+        tag.includes(`salvor-logo-sm-white-${size}.png`) &&
+        tag.includes('media="(prefers-color-scheme: dark)"')),
+      `${size}px must use the white SM logo for dark themes`,
+    );
+  }
+  assert.match(
+    html,
+    /<link[^>]+rel="apple-touch-icon"[^>]+salvor-logo-sm-black-128\.png[^>]*>/,
+  );
+  assert.doesNotMatch(
+    html.match(/<link[^>]+rel="apple-touch-icon"[^>]*>/)?.[0] || "",
+    /media=/,
+  );
+  const htmlWithoutIcons = html.replace(/<link[^>]+(?:rel="icon"|rel="apple-touch-icon")[^>]*>/g, "");
+  assert.doesNotMatch(htmlWithoutIcons, /salvor-logo-sm/);
   assert.match(css, /\.brand \.brand-mark[\s\S]*?object-fit:\s*contain/);
   assert.doesNotMatch(css, /\.brand \.brand-mark[\s\S]*?transform:\s*scale\([^)]*,/);
-  for (const tag of html.match(/<img[^>]+salvor-mark[^>]+>/g) || []) {
+  for (const tag of html.match(/<img[^>]+salvor-logo[^>]+>/g) || []) {
     const width = tag.match(/width="(\d+)"/)?.[1];
     const height = tag.match(/height="(\d+)"/)?.[1];
     assert.equal(width, height, `logo placement must be square: ${tag}`);
   }
 });
 
-test("loop assets embed the generated core variant and without stays empty", () => {
+test("loop assets embed the regular canonical logo and without stays empty", () => {
   for (const path of ["assets/salvor-loop.svg", "site/assets/salvor-loop.svg", "site/assets/salvor-loop-with.svg"]) {
     const source = read(path);
-    assert.match(source, /data-brand-source="canonical-w10-core"/);
-    assert.doesNotMatch(source, /data-layer="(?:stem|rings)"/);
+    assert.match(source, /data-brand-source="canonical-logo-regular"/);
+    assert.doesNotMatch(source, /canonical-w10|salvor-logo-sm/i);
   }
-  assert.doesNotMatch(read("site/assets/salvor-loop-without.svg"), /canonical-w10|data-layer="star"/);
+  assert.doesNotMatch(read("site/assets/salvor-loop-without.svg"), /canonical-logo|canonical-w10/);
 });
 
 test("brand generator is deterministic and checked-in outputs have no drift", () => {
@@ -192,6 +232,11 @@ test("retired official logo families are absent from tracked release paths", () 
     "assets/salvor-logo-final-source.png",
     "site/assets/brand/salvor-v10-node-sigil-black.svg",
     "site/assets/brand/salvor-v10-node-sigil-white.svg",
+    "assets/brand/source/salvor-mark-geometry.json",
+    "assets/brand/generated/salvor-mark-full-black.svg",
+    "assets/brand/generated/salvor-mark-full-white.svg",
+    "assets/brand/generated/salvor-mark-core-black.svg",
+    "assets/brand/generated/salvor-mark-core-white.svg",
   ]) assert.equal(existsSync(join(root, path)), false, `${path} must be retired`);
   assert.equal(existsSync(join(root, "assets/hero-prompt.md")), false, "retired generative-image handoff must not ship");
   assert.doesNotMatch(read("README.md"), /faceted gem|octahedron|salvor-logo\.svg|Midjourney|DALL[·-]?E/i, "README retains retired brand direction");

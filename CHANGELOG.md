@@ -11,6 +11,17 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+- Replaced the reconstructed W10 mark family with the exact operator-authored
+  `LOGO.svg` regular master and `LOGO-SM.svg` favicon master. The deterministic
+  pipeline now produces geometry-identical black/white SVGs and 16–512 PNGs for
+  both families, uses uniform scaling, and propagates the regular logo through
+  the hero navigation, footer, README, social cards, metadata, and Loop assets
+  without changing the hero background artwork.
+- Added system-theme-aware SM favicons: light browser chrome selects the black
+  family, dark browser chrome selects the white family, and unqualified black
+  PNGs remain as compatibility fallbacks. The Apple touch icon remains black.
+
 ## [1.0.0-beta] — 2026-07-26
 
 Initial public beta.

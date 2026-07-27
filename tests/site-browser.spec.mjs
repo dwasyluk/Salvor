@@ -20,6 +20,23 @@ async function overflowReport(page) {
     .slice(0, 12));
 }
 
+test("system theme selects a contrasting SM favicon family", async ({ browser }) => {
+  for (const [colorScheme, expectedFamily] of [
+    ["light", "salvor-logo-sm-black"],
+    ["dark", "salvor-logo-sm-white"],
+  ]) {
+    const page = await browser.newPage({ colorScheme });
+    await page.goto("/");
+    const eligibleIcons = await page.locator('link[rel="icon"]').evaluateAll((links) =>
+      links
+        .filter((link) => !link.media || matchMedia(link.media).matches)
+        .map((link) => new URL(link.href).pathname));
+    expect(eligibleIcons.length).toBeGreaterThan(0);
+    expect(eligibleIcons.at(-1)).toContain(`${expectedFamily}-64.png`);
+    await page.close();
+  }
+});
+
 for (const [name, viewport] of viewports) {
   test(`${name} renders without horizontal overflow`, async ({ page }) => {
     const runtimeErrors = [];
@@ -348,7 +365,7 @@ test("WebGL owns exact browser-rendered UI transition without changing the estab
     titleBlend: "normal",
     menuColor: "rgb(255, 244, 227)",
     menuBlend: "normal",
-    brandFilter: "invert(1)",
+    brandFilter: "brightness(0) invert(1)",
     brandBlend: "normal",
     primaryColor: "rgb(23, 15, 4)",
     primaryBackground: "linear-gradient(rgb(255, 220, 135), rgb(201, 134, 34))",

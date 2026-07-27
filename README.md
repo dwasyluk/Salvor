@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/brand/generated/salvor-readme-lockup.png" width="520" alt="SALVOR — canonical W10 mark and wordmark"/>
+<img src="assets/brand/generated/salvor-readme-lockup.png" width="520" alt="SALVOR — canonical logo and wordmark"/>
 
 # Salvor
 
@@ -300,8 +300,8 @@ Contributions welcome beyond the roadmap too:
 A *salvor* is one who salvages — someone who recovers what would otherwise be
 lost. For the [Foundation](https://en.wikipedia.org/wiki/Foundation_(TV_series))
 fans: Salvor Hardin kept the Foundation alive through its first crisis with
-knowledge rather than force, and the Prime Radiant — represented here by the
-architectural W10 artifact — is the device that carries the accumulated plan
+knowledge rather than force, and the Prime Radiant — represented here by
+Salvor's canonical geometric mark — is the device that carries the accumulated plan
 across generations. A
 version-controlled record that preserves a codebase's reasoning across resets
 is the same idea, scaled down to your repo.
@@ -326,7 +326,7 @@ GitNexus's current community license is PolyForm Noncommercial. Review their
 upstream terms before commercial use.
 
 <div align="center">
-<img src="assets/brand/generated/salvor-mark-full-black.svg" width="72" height="72" alt=""/>
+<img src="assets/brand/generated/salvor-logo-black.svg" width="72" height="72" alt=""/>
 <br/>
 <sub>Salvage your knowledge before it's lost to the next session.</sub>
 </div>

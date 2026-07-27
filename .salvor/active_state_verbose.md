@@ -4,6 +4,26 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-07-27 — Theme-aware canonical favicons (GHPAGE:11)
+
+- **Behavior.** Browser-tab favicons use the canonical SM black family under `prefers-color-scheme: light` and the canonical SM white family under `prefers-color-scheme: dark`. Each 16, 32, 48, and 64px size retains an unqualified black fallback for clients that ignore favicon media queries; the 128px Apple touch icon remains black and unqualified.
+- **Boundary.** This is static metadata only: no JavaScript switching, new asset generation, regular-logo change, navigation-layout change, hero-background change, or WebGL change.
+- **Regression contract.** Static brand coverage locks the fallback/light/dark matrix, while Playwright emulates both color schemes and verifies that the last eligible 64px favicon comes from the contrasting canonical family.
+- **Verification.** Deterministic `brand:check` passes; the full suite passes 104/104 unit/contract tests and 17/17 Playwright checks, including the new real-browser light/dark selection contract plus the existing desktop/mobile hero, navigation, burn, touch, fallback, and reduced-motion coverage. The 11-gate release audit and `git diff --check` pass. Both canonical SVG hashes and all three protected hero-background hashes remain byte-identical.
+
+---
+
+## 2026-07-27 — Canonical authored SVG logo migration (GHPAGE:10 DOCS:12)
+
+- **Authority.** The operator approved `assets/brand/reference/LOGO.svg` and `assets/brand/reference/LOGO-SM.svg` as immutable, tracked masters. The regular master owns every non-favicon placement; the small master owns favicons and touch icons.
+- **Derivation.** The pipeline will generate black (`#231f20`) and white variants for both families at 16, 32, 48, 64, 128, 256, and 512 pixels. Only the canonical color token may differ; path/group/stroke/viewBox geometry stays unchanged. All resizing uses one scale factor for both axes, with transparent padding rather than distortion.
+- **Migration.** Header/footer/burn states, README, structured metadata, social cards, Loop diagrams, and standalone brand assets use the regular family; favicon metadata uses the small family; the outlined SALVOR wordmark remains unchanged. Old W10 mark geometry and derivatives are retired as competing authority. Unrelated operator-owned untracked visual files remain untouched.
+- **Hero boundary.** Only the hero navigation logo changed. `salvor-wireframe.png`, `salvor-mystic.png`, and `salvor-mystic.webp` retain their pre-migration SHA-256 values; the WebGL burn still captures the black regular mark and resolves it to true white in the revealed state.
+- **Record.** User-approved design decision: `.salvor/decisions/2026-07-27-canonical-logo-svg-masters.md`.
+- **Verification.** `brand:build`, byte-level `brand:check`, and the visual `brand:audit` pass; the generated contact sheet was reviewed for both families, both colors, favicon scale, README/social compositions, and Loop embedding. The full suite passes 104/104 unit/contract tests and 16/16 Playwright checks across desktop, compact desktop, tablet, large phone, Galaxy-S25-Edge-like small phone, and 320px narrow layouts, including touch/drag, navigation, exact WF/M transition, WebGL fallback, and reduced motion. The 11-gate release audit passes across 194 candidate paths, 10 JSON, 21 SVG, 64 PNG, 26 Markdown links, 16 HTML/CSS references, and all 79 manifest outputs; `git diff --check` is clean. The three hero background SHA-256 hashes match their pre-migration values exactly.
+
+---
+
 ## 2026-07-26 — Early semantic selection unlock (GHPAGE:09)
 
 - **Behavior.** The semantic hero copy becomes selectable once a burn reaches 80% of its padded completion radius. The WebGL renderer remains visible and continues through the same final smoke endpoint, so selection timing changes without altering the localized black→white visual transition or WF/M states.

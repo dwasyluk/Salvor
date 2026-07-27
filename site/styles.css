@@ -955,7 +955,7 @@ h1,
 
 .hero.is-enhanced[data-burn-state="revealed"] > .site-header .brand img {
   opacity: 1;
-  filter: invert(1);
+  filter: brightness(0) invert(1);
 }
 
 .hero.is-enhanced[data-burn-state="revealed"] > .site-header .desktop-nav a,

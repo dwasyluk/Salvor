@@ -1,9 +1,9 @@
-<!-- {"version":"1.0.0-beta","core":10,"ghpage":9,"docs":11} -->
+<!-- {"version":"1.0.0-beta","core":10,"ghpage":11,"docs":12} -->
 # salvor VERSION MANIFEST
 ## Current State
 - **Project Version:** v1.0.0-beta
-- **Build IDs:** CORE:10 | GHPAGE:09 | DOCS:11
-- **Last Updated:** 2026-07-26
+- **Build IDs:** CORE:10 | GHPAGE:11 | DOCS:12
+- **Last Updated:** 2026-07-27
 
 ---
 
@@ -11,6 +11,8 @@
 
 | Date | Build IDs | Summary |
 |------|-----------|---------|
+| 2026-07-27 | CORE:10 GHPAGE:11 DOCS:12 | Added system-theme-aware canonical SM favicons: black for light browser chrome, white for dark browser chrome, with unqualified black PNG fallbacks at 16–64px and the black 128px Apple touch icon unchanged. Added static contract and real Chromium color-scheme coverage without JavaScript, new assets, or changes to the hero/navigation artwork. |
+| 2026-07-27 | CORE:10 GHPAGE:10 DOCS:12 | Replaced the reconstructed W10 mark family with the exact operator-authored `LOGO.svg` regular master and `LOGO-SM.svg` favicon master. Added hash-pinned, deterministic black/white SVG and 16–512 PNG families with uniform aspect-preserving scaling; migrated hero navigation, footer, favicons, metadata, README, social cards, previews, and Loop diagrams; preserved the wordmark and hero background images; retired old geometry and generated mark derivatives; expanded source, raster, consumer, browser, drift, and release contracts. |
 | 2026-07-26 | CORE:10 GHPAGE:09 DOCS:11 | Unlocked semantic hero-text selection at 80% of burn completion while preserving the WebGL animation through its padded visual endpoint. Kept the same server-rendered hero content for users and crawlers; no crawler-specific rendering or user-agent detection was added. |
 | 2026-07-26 | CORE:10 GHPAGE:08 DOCS:11 | Prepared the v1.0.0-beta soft launch across protocol, documentation, state, and site. Defined the vendor-agnostic repository core separately from vendor portability through compatible thin adapters; clarified Serena and GitNexus as optional but highly recommended for the best code-grounded results; retained Domain Learning as the canonical taxonomy. Updated the public site with vendor portability copy, a sixth process step, linked Enhanced integrations, responsive 3/2/1 process layout, restored loop assets, lighter WebGL smoke, hanging-indent hero bullets, and burn-state-aware text selection. |
 | 2026-07-21 | CORE:09 GHPAGE:07 DOCS:10 | Fixed the hero burn reveal so its cloned truth layer displays the tracked full-color mystic artwork instead of the dark fallback. Scoped the source-only opacity rule to the original hero child, preserved the standalone PNG/WebP assets, and added desktop/mobile Playwright coverage for image loading, full hero coverage, visibility, and cover-fit behavior. |

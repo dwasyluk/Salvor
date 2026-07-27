@@ -103,7 +103,7 @@ check("no credential-shaped secrets are in the release candidate", () => {
 });
 
 check("retired brand families are absent from production surfaces", () => {
-  const retiredPath = /^(?:brand|wireframe_variants|docs\/brand-drafts)\/|salvor-v10-node-sigil|salvor-logo-final-source|salvor-logo-badge|^assets\/salvor-logo\.svg$/i;
+  const retiredPath = /^(?:brand|wireframe_variants|docs\/brand-drafts)\/|salvor-v10-node-sigil|salvor-logo-final-source|salvor-logo-badge|^assets\/salvor-logo\.svg$|^assets\/brand\/source\/salvor-mark-geometry\.json$|\/salvor-mark-(?:full|core)-/i;
   const offenders = files.filter((file) => retiredPath.test(file));
   assert.deepEqual(offenders, []);
   const historicalOrEnforcement = /^(?:\.salvor\/|CHANGELOG\.md$|VERSION\.md$|tests\/|scripts\/audit-release\.mjs$|assets\/brand\/BRAND_ASSETS\.md$)/;
@@ -141,7 +141,16 @@ check("social metadata uses canonical absolute URLs and exact assets", () => {
 
 check("generated brand manifest covers every declared output", () => {
   const manifest = JSON.parse(read("assets/brand/generated/manifest.json"));
-  assert.equal(manifest.reference.transportSha256, "085c7cf9b9133df9465d3fb6a91249272ca82eb9de094724a77638b0b10a6b51");
+  assert.deepEqual(manifest.canonicalLogos, {
+    regular: {
+      path: "assets/brand/reference/LOGO.svg",
+      sha256: "b9e7aec604dc072c8619853de109c68d74a10036223cf209938d6436443df615",
+    },
+    small: {
+      path: "assets/brand/reference/LOGO-SM.svg",
+      sha256: "05dabb5f372c1e9ab09d3be4cf267bb7234bbc69e64a0dd95a7d84b1cc25aa7a",
+    },
+  });
   assert.ok(Object.keys(manifest.generated).length >= 40);
   assert.equal(manifest.canonicalTextOutlines, "assets/brand/source/salvor-text-outlines.json");
   for (const [file, expectedHash] of Object.entries(manifest.generated)) {

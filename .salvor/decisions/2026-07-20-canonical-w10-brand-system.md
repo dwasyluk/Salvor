@@ -1,5 +1,10 @@
 # Canonical W10 brand system
 
+> **Superseded in part on 2026-07-27:** the mark-geometry and favicon decisions
+> below are replaced by
+> [`2026-07-27-canonical-logo-svg-masters.md`](./2026-07-27-canonical-logo-svg-masters.md).
+> The outlined wordmark and deterministic-generation principles remain active.
+
 ## Context
 
 Salvor had accumulated several incompatible official-mark families: a compressed
