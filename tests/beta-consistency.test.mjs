@@ -24,6 +24,31 @@ const salvorReleaseFiles = [
   ".serena/memories/task_completion.md",
 ];
 
+const currentReleaseProseFiles = [
+  ".salvor/DOMAIN_REF.md",
+  ".salvor/INFRA.md",
+  ".salvor/active_state.md",
+  ".salvor/active_state_verbose.md",
+  ".serena/memories/project_overview.md",
+  ".serena/memories/task_completion.md",
+  "CHANGELOG.md",
+  "CLAUDE.md",
+  "CONTRIBUTING.md",
+  "GEMINI.md",
+  "README.md",
+  "SECURITY.md",
+  "SETUP_PROMPT.md",
+  "VERSION.md",
+  "docs/FAQ.md",
+  "docs/VENDOR_ADAPTERS.md",
+  "example-project/.salvor/active_state_verbose.md",
+  "example-project/CLAUDE.md",
+  "example-project/README.md",
+  "example-project/VERSION.md",
+  "site/CLAUDE.md",
+  "site/index.html",
+];
+
 test("every Salvor-owned release surface identifies v1.0.0-beta", async () => {
   const entries = await Promise.all(salvorReleaseFiles.map(async (file) => [
     file,
@@ -64,6 +89,12 @@ test("Domain Learning is the only live taxonomy", async () => {
   }
 });
 
+test("enhanced is lowercase throughout current release prose", async () => {
+  for (const file of currentReleaseProseFiles) {
+    assert.doesNotMatch(await read(file), /\bEnhanced\b/, file);
+  }
+});
+
 test(".salvor ownership index keeps decisions and Domain Learnings separate", async () => {
   const index = await read(".salvor/README.md");
   assert.match(index, /\| `decisions\/` \|[^|]*design decisions/i);
@@ -85,22 +116,22 @@ test("agent-routing and example surfaces keep Serena memories as retrieval aids"
     assert.doesNotMatch(source, /shared truth[^.\n]*\.serena\/memories|\.serena\/memories[^.\n]*shared truth/i, file);
   }
   assert.match((await read("example-project/README.md")).replace(/\s+/g, " "), /\.serena\/memories\/[^.]*retrieval aid/i);
-  assert.match(await read("example-project/CLAUDE.md"), /^\| `\.serena\/memories\/` \| Enhanced-mode retrieval/im);
+  assert.match(await read("example-project/CLAUDE.md"), /^\| `\.serena\/memories\/` \| enhanced-mode retrieval/im);
   assert.doesNotMatch(await read("example-project/RULES.md"), /GitNexus[^.\n]*index blocks/i);
 });
 
 test("soft-launch component build IDs are synchronized across current state and spokes", async () => {
   const version = await read("VERSION.md");
-  assert.match(version, /"core"\s*:\s*11/);
-  assert.match(version, /"ghpage"\s*:\s*13/);
-  assert.match(version, /"docs"\s*:\s*14/);
-  assert.match(version, /CORE:11 \| GHPAGE:13 \| DOCS:14/);
+  assert.match(version, /"core"\s*:\s*12/);
+  assert.match(version, /"ghpage"\s*:\s*15/);
+  assert.match(version, /"docs"\s*:\s*16/);
+  assert.match(version, /CORE:12 \| GHPAGE:15 \| DOCS:16/);
 
   const currentSurfaces = [
-    [".salvor/active_state.md", /CORE:11 GHPAGE:13 DOCS:14/],
-    ["core/CLAUDE.md", /current build `CORE:11`/],
-    ["site/CLAUDE.md", /current build `GHPAGE:13`/],
-    ["docs/CLAUDE.md", /current build `DOCS:14`/],
+    [".salvor/active_state.md", /CORE:12 GHPAGE:15 DOCS:16/],
+    ["core/CLAUDE.md", /current build `CORE:12`/],
+    ["site/CLAUDE.md", /current build `GHPAGE:15`/],
+    ["docs/CLAUDE.md", /current build `DOCS:16`/],
   ];
   for (const [file, expected] of currentSurfaces) {
     assert.match(await read(file), expected, file);

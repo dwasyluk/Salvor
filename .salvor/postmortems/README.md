@@ -18,3 +18,4 @@ Structured write-ups of incidents and significant failures. Findings feed the LF
 
 | Date | File | One-line takeaway |
 |------|------|-------------------|
+| 2026-07-28 | [`2026-07-28-rendered-pixel-alignment-gate.md`](2026-07-28-rendered-pixel-alignment-gate.md) | More than six box-aligned revisions stayed pixel-wrong; gate visual alignment on DPR-aware rendered ink. |

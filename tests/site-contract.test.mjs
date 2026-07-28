@@ -21,8 +21,8 @@ test("the site mirrors the canonical framework taxonomy and governance", async (
   const html = await read("site/index.html");
   const visibleText = html.replace(/<[^>]+>/g, " ");
   for (const claim of [
-    /CLAUDE\.md\s+is the canonical hub/i,
-    /AGENTS\.md/i,
+    /vendor-agnostic canonical hub/i,
+    /thin multi-vendor adapters/i,
     /GEMINI\.md/i,
     /vendor-agnostic and vendor-portable/i,
     /through compatible thin adapters/i,
@@ -40,7 +40,7 @@ test("the site mirrors the canonical framework taxonomy and governance", async (
   }
 });
 
-test("the site presents six portable process steps and linked Enhanced integrations", async () => {
+test("the site presents six portable process steps and linked enhanced integrations", async () => {
   const html = await read("site/index.html");
   const process = html.match(
     /<div class="process-grid">([\s\S]*?)<\/div>\s*<div class="brain-summary">/,
@@ -55,6 +55,16 @@ test("the site presents six portable process steps and linked Enhanced integrati
   assert.match(html, /optional[^.]*highly recommended|highly recommended[^.]*optional/i);
 });
 
+test("the capture-class card uses the approved three-document foundation icon", async () => {
+  const html = await read("site/index.html");
+  const captureIcon = html.match(
+    /<svg class="process-icon"[^>]*>([\s\S]*?)<\/svg>\s*<h2>3 Capture Classes<\/h2>/,
+  )?.[1] ?? "";
+
+  assert.equal((captureIcon.match(/<rect\b/g) ?? []).length, 3);
+  assert.doesNotMatch(captureIcon, /<path\b[^>]*d="M17 42h22M20 36V23/);
+});
+
 test("hero bullets use a separate marker column for wrapped copy", async () => {
   const [html, css] = await Promise.all([
     read("site/index.html"),
@@ -65,11 +75,59 @@ test("hero bullets use a separate marker column for wrapped copy", async () => {
   assert.match(css, /\.hero-points li\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:/s);
 });
 
-test("the production site embeds two standalone Salvor Loop panels", async () => {
-  const [html, css, withSalvor, withoutSalvor] = await Promise.all([
+test("tablet and mobile hero copy uses a burn-integrated reading panel without changing desktop", async () => {
+  const [html, css] = await Promise.all([
     read("site/index.html"),
     read("site/styles.css"),
+  ]);
+
+  assert.equal((html.match(/class="hero-reading-panel"/g) ?? []).length, 1);
+  assert.match(
+    html,
+    /class="hero-reading-panel"[\s\S]*class="eyebrow"[\s\S]*id="hero-title"[\s\S]*class="hero-tagline"[\s\S]*class="hero-points"[\s\S]*<\/div>\s*<div class="hero-actions">/,
+  );
+  assert.match(css, /@media\s*\(max-width:\s*900px\)/);
+  assert.match(css, /\.hero-reading-panel::before\s*\{[^}]*--panel-fill:\s*rgba\(255,\s*255,\s*255,/s);
+  assert.match(css, /\.hero\.is-enhanced\[data-burn-state="revealed"\][^{]*\.hero-reading-panel::before\s*\{[^}]*--panel-fill:\s*rgba\((?:0|[1-9]\d?),/s);
+  assert.match(css, /\.hero\.is-enhanced:not\(\[data-burn-state="revealed"\]\)[^{]*\.hero-reading-panel::before\s*\{[^}]*opacity:\s*0/s);
+  assert.match(css, /\.hero-reading-panel::before\s*\{[^}]*--panel-stroke:\s*rgba\(/s);
+  assert.match(
+    css,
+    /\.hero-reading-panel::before\s*\{[^}]*linear-gradient\([^;]*var\(--panel-stroke\)[^;]*\)\s*top right\s*\/\s*18px 18px no-repeat/s,
+  );
+  assert.match(
+    css,
+    /\.hero-reading-panel::before\s*\{[^}]*linear-gradient\([^;]*var\(--panel-stroke\)[^;]*\)\s*bottom left\s*\/\s*18px 18px no-repeat/s,
+  );
+  assert.doesNotMatch(css, /filter:\s*blur\(/i);
+
+  const panelRuleIndex = css.indexOf(".hero-reading-panel::before");
+  const tabletMediaIndex = css.lastIndexOf("@media (max-width: 900px)", panelRuleIndex);
+  assert.ok(panelRuleIndex > tabletMediaIndex && tabletMediaIndex >= 0);
+});
+
+test("section hierarchy keeps the Loop copy full width and integration guidance explicit", async () => {
+  const [html, css] = await Promise.all([
+    read("site/index.html"),
+    read("site/styles.css"),
+  ]);
+
+  assert.match(css, /\.loop-heading\s*\{[^}]*max-width:\s*none;/s);
+  assert.match(css, /\.loop-heading h2\s*\{[^}]*max-width:\s*760px;/s);
+  assert.match(css, /\.loop-heading > p:last-child\s*\{[^}]*max-width:\s*none;/s);
+
+  assert.match(html, /Salvor can use Serena MCP and GitNexus MCP/);
+  assert.match(html, /<em>Neither is required<\/em>/);
+  assert.match(html, /<strong>both are highly recommended for the best results and improved token efficiency\.<\/strong>/);
+});
+
+test("the production site embeds two standalone Salvor Loop panels", async () => {
+  const [html, css, rootLoop, withSalvor, siteLoop, withoutSalvor] = await Promise.all([
+    read("site/index.html"),
+    read("site/styles.css"),
+    read("assets/salvor-loop.svg"),
     read("site/assets/salvor-loop-with.svg"),
+    read("site/assets/salvor-loop.svg"),
     read("site/assets/salvor-loop-without.svg"),
   ]);
   assert.match(html, /<section[^>]+id=["']loop["']/i);
@@ -90,12 +148,29 @@ test("the production site embeds two standalone Salvor Loop panels", async () =>
   assert.match(withSalvor, /FULL CONTEXT, COMPOUNDING/);
   assert.match(withSalvor, /Every approved capture gives the next session more context\./);
   assert.doesNotMatch(withSalvor, /EMPTY VESSEL|WITHOUT SALVOR/);
+  for (const loop of [rootLoop, withSalvor, siteLoop]) {
+    assert.match(loop, /VENDOR-AGNOSTIC HUB \+ SPOKES/);
+    assert.match(loop, /navigate by symbol/);
+    assert.doesNotMatch(loop, /CLAUDE\.md|SERENA|GITNEXUS/i);
+  }
 
   assert.match(withoutSalvor, /viewBox=["']0 0 800 960["']/);
   assert.match(withoutSalvor, /EMPTY VESSEL — COLD START EVERY SESSION/);
   assert.match(withoutSalvor, /The same ground is covered again\./);
   assert.doesNotMatch(withoutSalvor, /FULL CONTEXT|THE SALVOR LOOP/);
   assert.doesNotMatch(`${withSalvor}${withoutSalvor}`, /x1=["']800["'][^>]*x2=["']800["']/);
+});
+
+test("the public site describes the hub without exposing a vendor-named canonical filename", async () => {
+  const html = await read("site/index.html");
+  const visibleText = html.replace(/<[^>]+>/g, " ");
+
+  assert.doesNotMatch(visibleText, /CLAUDE\.md/i);
+  assert.match(visibleText, /vendor-agnostic canonical hub/i);
+  assert.match(visibleText, /thin (?:multi-vendor )?(?:entrypoint )?adapters/i);
+  assert.match(visibleText, /Serena MCP and GitNexus MCP/i);
+  assert.match(visibleText, /Neither is required/i);
+  assert.match(visibleText, /both are highly recommended for the best results and improved token efficiency/i);
 });
 
 test("unpublished burn-hero experiment pages are absent", async () => {
@@ -194,10 +269,10 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     read(".salvor/INFRA.md"),
     read(".serena/memories/task_completion.md"),
   ]);
-  assert.match(version, /"ghpage"\s*:\s*13/);
-  assert.match(version, /GHPAGE:13/);
+  assert.match(version, /"ghpage"\s*:\s*15/);
+  assert.match(version, /GHPAGE:15/);
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
-  assert.match(l1, /GHPAGE:13/);
+  assert.match(l1, /GHPAGE:15/);
   // The responsive-check SOP lives in its canonical homes (L1, INFRA, L2), not
   // duplicated across every Serena memory — post-refresh, Serena memories are
   // concise pointers under the one-owner model.

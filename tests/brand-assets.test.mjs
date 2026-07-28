@@ -250,10 +250,12 @@ test("Salvor Loop center keeps the canonical logo clear of the brain labels", ()
       logoBottom <= labelTop - 12,
       `${path} logo must keep 12 units of clearance before .salvor/`,
     );
-    assert.match(
+    assert.match(source, /VENDOR-AGNOSTIC HUB \+ SPOKES/);
+    assert.match(source, /navigate by symbol/);
+    assert.doesNotMatch(
       source,
-      /OPTIONAL ENHANCED · SERENA \+ GITNEXUS/,
-      `${path} must place Enhanced integrations outside the brain stack`,
+      /CLAUDE\.md|SERENA|GITNEXUS/i,
+      `${path} must keep the protocol diagram vendor- and tool-neutral`,
     );
   }
 });

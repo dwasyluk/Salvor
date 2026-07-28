@@ -14,7 +14,7 @@
   repository's existing version source or creates a minimal project-history
   artifact without per-component counters. Any capable agent told to read
   `RULES.md` can follow the protocols.
-- **Enhanced mode optionally adds Serena + GitNexus.** They are OPTIONAL Enhanced
+- **enhanced mode optionally adds Serena + GitNexus.** They are OPTIONAL enhanced
   integrations, not constituent requirements of Salvor Core. Serena memories
   (`.serena/memories/`) are an OPTIONAL retrieval aid; GitNexus's index is
   machine-derived and **gitignored** — not canonical git-tracked memory. Both are
@@ -25,13 +25,15 @@
   per-session memory lives, and how per-turn rules are enforced differ per tool.
 
 So Salvor ships a **vendor-agnostic core + all three thin entrypoint adapters by
-default** — `CLAUDE.md` (canonical hub) plus `AGENTS.md` and `GEMINI.md` pointer
-files. Those thin adapters make the shared brain vendor-portable: supported
-agents can be switched without migrating the repository memory. Setup generates
-tested entrypoints for Claude Code, Codex, and GEMINI.md-compatible clients.
-Claude Code is the most deeply dogfooded path; the Codex and Google adapters are
-wired and documented but less exercised. Other agents can integrate through
-compatible thin adapters.
+default**: `CLAUDE.md` is the canonical cross-vendor hub, while thin `AGENTS.md`
+and `GEMINI.md` adapters route other supported agents to the same shared brain.
+The vendor-named hub filename reflects the most deeply dogfooded adapter; it
+does not make the canonical repository memory Claude-only. Those adapters make
+the shared brain vendor-portable, so supported agents can be switched without
+migrating the repository memory. Setup generates tested entrypoints for Claude
+Code, Codex, and GEMINI.md-compatible clients. Claude Code is the most deeply
+dogfooded path; the Codex and Google adapters are wired and documented but less
+exercised. Other agents can integrate through compatible thin adapters.
 
 ## The adapter pattern
 
@@ -52,7 +54,7 @@ The pointer file says, in effect:
 > the Task Termination Protocol and the three capture classes. Do not duplicate or
 > fork project knowledge into this adapter. Canonical engineering knowledge lives
 > in its assigned `.salvor/` artifact and the `CLAUDE.md` hub + spokes;
-> `.serena/memories/` contains concise Enhanced-mode retrieval aids only.
+> `.serena/memories/` contains concise enhanced-mode retrieval aids only.
 
 Each durable fact has **one canonical owner**; every other shared file (including
 vendor entrypoints) links to or summarizes it rather than forking it. Canonical

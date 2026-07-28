@@ -84,11 +84,14 @@ The scaffold Salvor creates in your repo:
 └── postmortems/               # learned-failure postmortems
 ```
 
-Plus vendor entrypoints at the repo root — `CLAUDE.md` (canonical hub) with
-thin `AGENTS.md` (Codex) and `GEMINI.md` pointer files — and `RULES.md` for
+Plus vendor entrypoints at the repo root: `CLAUDE.md` is the canonical
+cross-vendor hub, while thin `AGENTS.md` (Codex) and `GEMINI.md` adapters
+route other supported agents to that same shared brain. `RULES.md` provides
 the governance protocol. When the optional Strict defaults are enabled,
 Salvor also generates per-component counters in `VERSION.md`; otherwise it
 uses the project's established version source or a minimal history artifact.
+The vendor-named hub filename is an implementation detail of the most deeply
+dogfooded adapter, not a boundary on which models can use Salvor.
 
 ## Quickstart
 
@@ -104,7 +107,7 @@ uses the project's established version source or a minimal history artifact.
 ```
 
 Setup works in **Core mode** even if no MCP tools are present — see
-[Core vs Enhanced](#core-vs-enhanced-mode) below. The whole installer is one
+[Core vs enhanced](#core-vs-enhanced-mode) below. The whole installer is one
 file: **[`SETUP_PROMPT.md`](./SETUP_PROMPT.md)**.
 
 ## See it populated
@@ -113,18 +116,18 @@ file: **[`SETUP_PROMPT.md`](./SETUP_PROMPT.md)**.
 tiny, real, runnable two-component app with Salvor fully applied: the hub +
 spokes, L1/L2, `VERSION.md`, a populated `.salvor/` tree with real decisions,
 a domain-learning artifact, a postmortem, and deferred findings, plus real
-code for the Enhanced-mode tools to index.
+code for the enhanced-mode tools to index.
 
-## Core vs Enhanced mode
+## Core vs enhanced mode
 
 | | What it is | What you get |
 |---|---|---|
 | **Salvor Core** | Repository files + vendor entrypoints only. No MCP servers required. | Persistent, Git-reviewed engineering memory: capture classes, L1/L2 state, hub-and-spoke context, rules protocol. Optional per-component versioning when the Strict defaults profile is enabled. |
-| **Salvor Enhanced** | Core **plus** [Serena](https://github.com/oraios/serena) and [GitNexus](https://github.com/abhigyanpatwari/GitNexus). | Adds semantic symbol navigation (Serena) and graph impact analysis before edits (GitNexus). |
+| **Salvor enhanced** | Core **plus** [Serena](https://github.com/oraios/serena) and [GitNexus](https://github.com/abhigyanpatwari/GitNexus). | Adds semantic symbol navigation (Serena) and graph impact analysis before edits (GitNexus). |
 
 Every memory and governance claim in this README holds in **Core** mode.
 Claims about symbol-level navigation, "what breaks if I change this?" impact
-analysis, and code-graph awareness require **Enhanced** mode. Serena and
+analysis, and code-graph awareness require **enhanced** mode. Serena and
 GitNexus are optional, but both are highly recommended for the best
 code-grounded results.
 
@@ -132,7 +135,7 @@ code-grounded results.
 
 Each session starts by loading the hub and L1 state — the compressed,
 reviewed "now" of the project. As work proceeds, the agent navigates code
-(Enhanced mode adds symbol- and graph-level intelligence), and when it
+(enhanced mode adds symbol- and graph-level intelligence), and when it
 surfaces something durable, a capture gate asks you before anything is saved.
 Finishing a task means updating L1/L2, the affected component spoke, and the
 configured project-history or version artifact when applicable — so the memory
@@ -148,7 +151,7 @@ starts from reviewed knowledge instead of reconstruction.
 Full write-up of the five pillars in
 **[`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)**.
 
-## Enhanced mode: Serena + GitNexus
+## enhanced mode: Serena + GitNexus
 
 Two optional local tools add code intelligence to Salvor Core to pair with
 Salvor's memory. Both are highly recommended for the best code-grounded

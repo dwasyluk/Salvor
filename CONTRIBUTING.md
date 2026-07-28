@@ -98,7 +98,7 @@ adapter, (3) document the tool's memory + MCP quirks in `docs/VENDOR_ADAPTERS.md
 
 ## Serena / GitNexus compatibility updates
 
-Enhanced mode depends on two third-party MCP servers that move fast. PRs that
+enhanced mode depends on two third-party MCP servers that move fast. PRs that
 update Salvor's Serena or GitNexus integration notes should **cite the current
 official docs** (link the specific page/version you verified against), not
 training-data recall — tool names, config formats, and install steps drift.

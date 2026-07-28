@@ -50,10 +50,10 @@ test("re-running setup is treated as update, not reinstall", () => {
   assert.match(setup, /(repair|update|migrat)/i);
 });
 
-// --- Core vs Enhanced mode ------------------------------------------------
+// --- Core vs enhanced mode ------------------------------------------------
 test("setup works without MCP tools (Core mode)", () => {
   assert.match(setup, /Core mode/i);
-  assert.match(setup, /Enhanced/);
+  assert.match(setup, /enhanced/);
 });
 
 // --- GitNexus ownership ----------------------------------------------------

@@ -25,7 +25,7 @@ Operational reference for local work, deployment, environment variables, externa
 
 - Serena MCP provides semantic and symbolic repository intelligence.
 - GitNexus CLI/MCP provides the code knowledge graph, impact analysis, and change detection; pure index mode does not inject routing context, skills, or hooks.
-- Both Enhanced integrations are optional but highly recommended for the best code-grounded results. Neither tool's documented core indexing workflow requires an account or API key.
+- Both enhanced integrations are optional but highly recommended for the best code-grounded results. Neither tool's documented core indexing workflow requires an account or API key.
 
 ## Observability
 

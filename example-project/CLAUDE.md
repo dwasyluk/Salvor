@@ -24,7 +24,7 @@ Notebook is a tiny notes service: a TypeScript `api` (Node built-in `http`, no f
 | `.salvor/decisions/` | Design decisions + load-bearing invariants (why it's this way, what must stay) | Before changing/refactoring anything non-trivial |
 | `api/CLAUDE.md` | api architecture and key files | Working in api/ |
 | `web/CLAUDE.md` | web architecture and key files | Working in web/ |
-| `.serena/memories/` | Enhanced-mode retrieval pointers and structural notes (not canonical truth) | Use Serena MCP tools to query |
+| `.serena/memories/` | enhanced-mode retrieval pointers and structural notes (not canonical truth) | Use Serena MCP tools to query |
 
 ## APP_NAME
 The API reads `APP_NAME` from the environment; the static web client reads
@@ -62,7 +62,7 @@ worth persisting and ask me, verbatim, before persisting it. Three distinct capt
 2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
 3. **Deferred Finding** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
-## GitNexus — Code Intelligence (Enhanced mode)
+## GitNexus — Code Intelligence (enhanced mode)
 
 GitNexus owns machine-derived structural knowledge (symbols, call graphs, impact analysis); Salvor owns approved
 engineering rationale in `.salvor/`. Recommended default: `gitnexus analyze --index-only` (v1.6.9+; pure index — no

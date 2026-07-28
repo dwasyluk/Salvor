@@ -28,18 +28,29 @@ Initial public beta.
 - Defined the vendor-agnostic repository core separately from vendor
   portability through compatible thin adapters, including explicit adapter
   maturity and memory-migration boundaries.
-- Clarified Serena and GitNexus as optional Enhanced integrations that are
+- Clarified Serena and GitNexus as optional enhanced integrations that are
   highly recommended for the best code-grounded results.
 - Expanded the GitHub Pages presentation with the six-step portable workflow,
   linked integrations, restored standalone Salvor Loop panels, responsive
   3/2/1 process layout, and vendor-agnostic/vendor-portable reasoning. The Loop
   center now keeps its canonical mark clear of the `.salvor/` brain labels and
-  identifies Serena/GitNexus in a separate optional-Enhanced pill.
+  presents a vendor-agnostic hub-and-spokes model without embedding optional
+  tool brands in the protocol diagram.
+- Completed the final presentation hierarchy pass: the small-screen hero panel
+  now carries a continuous 1px border across both clipped corners in WF and
+  Mystic, 3 Capture Classes uses a stacked-document foundation icon, the Loop
+  introduction uses the full section width, and the Serena MCP/GitNexus MCP
+  title rows and guidance have a clearer, differentiated hierarchy.
+- Standardized lowercase `enhanced` prose across the installer, current
+  protocol state, public docs, example, release history, and site while
+  preserving literal `ENHANCED-READY` and `ENHANCED-ACTIVE` state tokens.
 - Refined the single WebGL hero renderer with lighter neutral smoke,
   hanging-indent bullets, burn-state-aware text selection, and high-resolution
   canvas backing up to Retina density under a four-million-pixel cap while
   preserving mouse/touch burn accumulation, localized black-to-white copy
-  transition, and interactive navigation/actions.
+  transition, and interactive navigation/actions. Tablet and mobile UI
+  snapshots add a sharp, padded reading panel that burns from translucent white
+  in WF to translucent black in Mystic; laptop/desktop presentation is unchanged.
 - Aligned the installer, adapters, FAQ, dogfooded protocol, and example project
   on the one-owner model: `.salvor/` holds canonical approved knowledge;
   adapters and Serena memories remain retrieval aids; GitNexus owns only its
@@ -64,8 +75,8 @@ Initial public beta.
   anything, never auto-commits (you review and commit the scaffold yourself),
   and is idempotent: re-running it on an already-scaffolded repo detects
   existing Salvor files and updates rather than clobbers.
-- **Core vs Enhanced modes** — Core mode works with files and prompts alone (no
-  extra tooling); Enhanced mode layers in optional Serena and GitNexus
+- **Core vs enhanced modes** — Core mode works with files and prompts alone (no
+  extra tooling); enhanced mode layers in optional Serena and GitNexus
   integrations for semantic symbol navigation and code-graph analysis. Both
   are highly recommended for the best code-grounded results. Same protocol
   either way.
@@ -105,9 +116,9 @@ Initial public beta.
   (Playwright) suites on pushes and PRs to `main`.
 - **GitHub Pages from `main`** — the site source lives in `site/` on `main`;
   `.github/workflows/pages.yml` deploys it via GitHub Actions (operator-controlled).
-- **Optional Enhanced tooling, clearly scoped** — Serena (open source) and GitNexus
+- **Optional enhanced tooling, clearly scoped** — Serena (open source) and GitNexus
   (a third-party project under the PolyForm Noncommercial community license) add code
-  intelligence; neither is required for Salvor Core. Enhanced-mode setup detects
+  intelligence; neither is required for Salvor Core. enhanced-mode setup detects
   capabilities via `gitnexus analyze --help` and defaults to pure index mode —
   `gitnexus analyze --index-only` (GitNexus v1.6.9+: builds only the code index, no
   context-file writes, no generated skills, no hooks) — falling back to

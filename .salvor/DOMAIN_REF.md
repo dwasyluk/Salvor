@@ -17,7 +17,7 @@ without a memory migration.
 3. Mandatory `RULES.md` enforcement and termination protocol.
 4. Three user-gated capture classes: Decision / Domain Learning, Learned Failure (LF#), and Deferred Finding.
 5. An auditable history of why; optional Strict installations add per-component version counters, while Core/Q4=NO uses the project's established version source or a minimal history artifact.
-6. Optional Enhanced mode adds Serena semantic/symbolic code intelligence and GitNexus relationship/impact intelligence; Core works without either tool, but both are highly recommended for the best code-grounded results.
+6. Optional enhanced mode adds Serena semantic/symbolic code intelligence and GitNexus relationship/impact intelligence; Core works without either tool, but both are highly recommended for the best code-grounded results.
 
 ## Canonical Public Sources
 
@@ -38,4 +38,15 @@ remains separately canonical and unchanged.
 
 ## Learned Failures (LF#)
 
-None registered.
+### LF1 — Rendered pixels are the visual-alignment oracle
+
+DOM/CSS rectangles may delimit screenshot scan regions, but they are not proof
+that glyphs or SVG strokes align visually. Final visual-alignment gates must use
+DPR-aware Playwright screenshots and visible-ink measurements: compare a black
+title's lowest ink row with the first rendered line band's lowest gold-label row,
+and compare the icon's topmost visible stroke with the title's topmost glyph
+ink. Report signed deltas and allow at most one CSS pixel across the 1440, 1024,
+768, 390, 360, and 320 release viewports. Wrapped labels stay in their
+right-hand column and align from their first line. This rule exists because more
+than six element-box-aligned revisions still rendered pixel-incorrect. See
+`.salvor/postmortems/2026-07-28-rendered-pixel-alignment-gate.md`.

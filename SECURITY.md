@@ -38,7 +38,7 @@ force-push and re-clone coordination with your team).
 
 ## Trust boundaries
 
-- **MCP servers (Serena, GitNexus).** Salvor's Enhanced mode optionally uses
+- **MCP servers (Serena, GitNexus).** Salvor's enhanced mode optionally uses
   these third-party tools running locally with access to your code. Salvor does
   not vet, bundle, or control them. Review what you install, pin versions where
   you can, and apply the same scrutiny you would to any local dev dependency.

@@ -29,7 +29,7 @@ The app itself is deliberately tiny: an in-memory **Notes** service.
 - `.salvor/` — L1 (`active_state.md`) + L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
   and the `decisions/` + `postmortems/` + `domain-learnings/` knowledge archives (with one worked LF-1 entry threaded
   through all of them).
-- `.serena/memories/` — committed Enhanced-mode retrieval aids (concise structure and command pointers); `.salvor/`
+- `.serena/memories/` — committed enhanced-mode retrieval aids (concise structure and command pointers); `.salvor/`
   remains the canonical engineering record.
 
 ## Run it

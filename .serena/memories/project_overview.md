@@ -6,7 +6,7 @@ Salvor (v1.0.0-beta soft launch, MIT) is repo-native engineering memory plus a g
 
 ## Modes
 - **Core mode** — files only (hub/spokes + `.salvor/` + RULES.md). No MCP dependency.
-- **Enhanced mode** — optionally adds Serena + GitNexus MCP substrate; both are highly recommended for the best code-grounded results. GitNexus safe default = `gitnexus analyze --index-only` (v1.6.9+; pure index, no context files/skills/hooks); merge `.gitnexusrc {"indexOnly": true}` for persistence. Older CLIs fall back to `--skip-agents-md`. Detect via `gitnexus analyze --help`.
+- **enhanced mode** — optionally adds Serena + GitNexus MCP substrate; both are highly recommended for the best code-grounded results. GitNexus safe default = `gitnexus analyze --index-only` (v1.6.9+; pure index, no context files/skills/hooks); merge `.gitnexusrc {"indexOnly": true}` for persistence. Older CLIs fall back to `--skip-agents-md`. Detect via `gitnexus analyze --help`.
 
 ## Capture taxonomy (three CAPTURE CLASSES)
 1. Decision / Domain Learning

@@ -56,13 +56,13 @@
     <text x="400" y="512" fill="#111316" font-size="22" font-weight="800">.salvor/</text>
     <text x="400" y="540" fill="#4e5156" font-size="13">L1/L2 · DOMAIN LEARNINGS · DECISIONS</text>
     <text x="400" y="562" fill="#4e5156" font-size="13">LEARNED FAILURES · DEFERRED FINDINGS</text>
-    <text x="400" y="584" fill="#4e5156" font-size="13">CLAUDE.md HUB + SPOKES · VERSION.md</text>
+    <text x="400" y="584" fill="#4e5156" font-size="13">VENDOR-AGNOSTIC HUB + SPOKES</text>
   </g>
 
   <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" filter="url(#shadow)">
     <g transform="translate(320 151)"><rect width="160" height="58" rx="12" fill="#fff" stroke="#111316" stroke-width="1.5"/><circle cx="25" cy="20" r="12" fill="#111316"/><text x="25" y="25" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">0</text><text x="47" y="24" fill="#111316" font-size="14" font-weight="800">REQUEST</text><text x="17" y="45" fill="#6b6d72" font-size="11">task enters</text></g>
     <g transform="translate(536 213)"><rect width="182" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">1</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">ORIENT</text><text x="17" y="47" fill="#55585d" font-size="11">hub → L1 → spoke</text></g>
-    <g transform="translate(591 362)"><rect width="191" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">2</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">UNDERSTAND</text><text x="17" y="47" fill="#55585d" font-size="11">Serena · by symbol</text></g>
+    <g transform="translate(591 362)"><rect width="191" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">2</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">UNDERSTAND</text><text x="17" y="47" fill="#55585d" font-size="11">navigate by symbol</text></g>
     <g transform="translate(565 515)"><rect width="217" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">3</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">ENRICH</text><text x="17" y="47" fill="#55585d" font-size="10">impact + flows · before edit</text></g>
     <g transform="translate(421 626)"><rect width="218" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">4</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">RECALL THE WHY</text><text x="17" y="47" fill="#55585d" font-size="11">decisions · L1/L2 · VERSION</text></g>
     <g transform="translate(161 626)"><rect width="218" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">5</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">PLAN</text><text x="17" y="47" fill="#55585d" font-size="11">accumulated context</text></g>
@@ -71,16 +71,11 @@
     <g transform="translate(36 205)"><rect width="220" height="76" rx="12" fill="#fff" stroke="#c9841d" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#c9841d"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">8</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">TERMINATE</text><text x="17" y="48" fill="#55585d" font-size="10">RULES §0 · VERSION</text><text x="17" y="64" fill="#55585d" font-size="10">sync L1/L2 · spokes · parity</text></g>
   </g>
 
-  <g text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
-    <rect x="264" y="699" width="272" height="30" rx="15" fill="#f1f0ff" stroke="#b7b4ff"/>
-    <text x="400" y="719" fill="#4338ca" font-size="11" font-weight="800">OPTIONAL ENHANCED · SERENA + GITNEXUS</text>
-  </g>
-
   <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="800">
-    <line x1="170" y1="764" x2="210" y2="764" stroke="#6366f1" stroke-width="5" stroke-linecap="round"/>
-    <text x="224" y="769" fill="#4338ca">ASSEMBLE CONTEXT · READ</text>
-    <line x1="448" y1="764" x2="488" y2="764" stroke="#c9841d" stroke-width="5" stroke-linecap="round"/>
-    <text x="502" y="769" fill="#8d5711">COMPOUND · WRITE</text>
+    <line x1="170" y1="744" x2="210" y2="744" stroke="#6366f1" stroke-width="5" stroke-linecap="round"/>
+    <text x="224" y="749" fill="#4338ca">ASSEMBLE CONTEXT · READ</text>
+    <line x1="448" y1="744" x2="488" y2="744" stroke="#c9841d" stroke-width="5" stroke-linecap="round"/>
+    <text x="502" y="749" fill="#8d5711">COMPOUND · WRITE</text>
   </g>
 
   <g text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">

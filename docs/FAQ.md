@@ -22,7 +22,7 @@ hiring for:
 
 - **Salvor** — for keeping a team's repository-specific engineering reasoning in
   git: user-approved capture, distinct capture classes, RULES governance,
-  optional Strict per-component versioning, and optional Enhanced orchestration
+  optional Strict per-component versioning, and optional enhanced orchestration
   of Serena + GitNexus for code grounding.
 - **Obsidian + Claude** — for building and organizing a general knowledge vault:
   notes, research, and personal or shared knowledge graphs.
@@ -70,7 +70,7 @@ knowledge graphs.
 
 Salvor gives a software repo a governed memory system: component spokes,
 versioned rationale, learned failures, deferred findings, and task termination
-rules. Optional Enhanced mode adds code intelligence through Serena and GitNexus;
+rules. Optional enhanced mode adds code intelligence through Serena and GitNexus;
 both are highly recommended for the best code-grounded results.
 
 Obsidian is a general knowledge vault — flexible enough to hold anything,
@@ -102,7 +102,7 @@ next agent not repeat?"
 
 ## Does my code leave my machine? What access does Salvor need?
 
-Salvor Core is repository-local files and governance. Enhanced mode can optionally
+Salvor Core is repository-local files and governance. enhanced mode can optionally
 add Serena and GitNexus integrations. Salvor adds no hosted memory service, SaaS
 account, telemetry pipeline, or cloud synchronization. Repository memory and local
 indexes remain under your control. Your selected coding agent may still transmit
@@ -126,7 +126,7 @@ knowledge), **three distinct capture classes** (decisions & domain learnings /
 learned failures / deferred findings), a learned-failure registry,
 deferred-finding capture, canonical-ownership rules, distributed-team Git review,
 maintenance/recovery, team governance (Task Termination Protocol, per-component
-versioning), thin vendor adapters, a Core/Enhanced split, and orchestration of
+versioning), thin vendor adapters, a Core/enhanced split, and orchestration of
 Serena + GitNexus for code grounding.
 
 ## Doesn't Mem0 / Letta / Zep / an MCP memory server already do agent memory?

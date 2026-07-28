@@ -155,7 +155,7 @@ test("UI snapshots preserve canonical hero markup and switch only the visual sta
     querySelectorAll() {
       return [
         { outerHTML: '<header class="site-header"><a class="brand">SALVOR</a></header>' },
-        { outerHTML: '<div class="hero-copy"><a class="button button-primary">COPY SETUP_PROMPT.md</a></div>' },
+        { outerHTML: '<div class="hero-copy"><div class="hero-reading-panel"><h1>SALVOR</h1></div><a class="button button-primary">COPY SETUP_PROMPT.md</a></div>' },
       ];
     },
   };
@@ -169,6 +169,8 @@ test("UI snapshots preserve canonical hero markup and switch only the visual sta
   assert.match(mystic, /data-burn-state="revealed"/);
   assert.match(wire, /button button-primary/);
   assert.match(mystic, /button button-primary/);
+  assert.match(wire, /hero-reading-panel/);
+  assert.match(mystic, /hero-reading-panel/);
   assert.doesNotMatch(wire, /drawTextMask|fillText/);
 });
 

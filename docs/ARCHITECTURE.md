@@ -17,13 +17,15 @@ propagate, and compound**, all inside git.
 A small root `CLAUDE.md` **hub** (<~60 lines) holds project-wide invariants and a
 documentation map. Each component has its own **spoke** `CLAUDE.md`. An agent
 working in `api/` loads the hub + the `api` spoke — not the entire repo's
-context. You pay for the context you use. Thin `AGENTS.md` and `GEMINI.md`
-pointers ship alongside the hub by default, so Codex and Gemini load the same
-context. The repository-owned Markdown brain is vendor-agnostic; thin adapters
-make it vendor-portable, so a supported-agent switch does not require a memory
-migration. Setup generates tested entrypoints for Claude Code, Codex, and
-GEMINI.md-compatible clients — Claude Code is the most deeply dogfooded path,
-while the Codex and Google adapters are wired and documented but less exercised.
+context. You pay for the context you use. `CLAUDE.md` is the current canonical
+cross-vendor hub implementation, not a Claude-only memory boundary. Thin
+`AGENTS.md` and `GEMINI.md` pointers ship alongside it by default, so Codex and
+Gemini load the same context. The repository-owned Markdown brain is
+vendor-agnostic; thin adapters make it vendor-portable, so a supported-agent
+switch does not require a memory migration. Setup generates tested entrypoints
+for Claude Code, Codex, and GEMINI.md-compatible clients — Claude Code is the
+most deeply dogfooded path, while the Codex and Google adapters are wired and
+documented but less exercised.
 
 ### 2. Two-tier persisted memory (L1 / L2)
 - **L1 — `.salvor/active_state.md`:** ≤50 lines of dense shorthand. Current truth,

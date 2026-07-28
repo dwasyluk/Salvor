@@ -5,7 +5,7 @@
 > to give a memory to — new or existing. The agent runs a safety preflight, asks
 > **four setup questions**, then scaffolds the full Salvor structure. Setup
 > never blanket-stages files and never commits without asking you first. Serena +
-> GitNexus MCP servers are **optional** (Enhanced mode — see Step 0) but highly
+> GitNexus MCP servers are **optional** (enhanced mode — see Step 0) but highly
 > recommended for the best code-grounded results; Salvor Core works with
 > repository files alone.
 
@@ -21,7 +21,7 @@ a **two-tier persisted memory** (L1 concise + L2 curated deep archive), a
 **`RULES.md`** split into a Core Protocol plus optional strict defaults, **three
 user-gated capture classes** (Decision / Domain Learning, Learned Failure,
 Deferred Finding), optional **per-component versioning** (when Strict defaults are
-enabled), and optional **Serena + GitNexus** discipline (Enhanced mode). Set it up exactly as specified below.
+enabled), and optional **Serena + GitNexus** discipline (enhanced mode). Set it up exactly as specified below.
 
 Everything Salvor writes is **in-repo and git-tracked** — that vendor-agnostic
 repository record is the *shared* brain available to each supported agent
@@ -79,7 +79,7 @@ instructions rather than replacing them. Spec Kit governs what should be built
 and how a feature moves from specification to implementation. Salvor preserves
 the longitudinal engineering memory accumulated while the system evolves.
 
-### 0.3 Tooling check — Core vs Enhanced mode
+### 0.3 Tooling check — Core vs enhanced mode
 Salvor runs in one of these modes:
 - **CORE** — works with repository files + vendor entrypoints alone: `.salvor/`
   artifacts, user-gated capture approval, canonical ownership, L1/L2 state,
@@ -89,10 +89,10 @@ Salvor runs in one of these modes:
   index are present, but not every advertised MCP capability is actually
   invocable by the current agent in the current client.
 - **ENHANCED-ACTIVE** — the Serena and/or GitNexus MCP tools actually respond in
-  the current client, so Salvor's Enhanced rules (impact analysis, symbolic
+  the current client, so Salvor's enhanced rules (impact analysis, symbolic
   navigation) can genuinely run.
 
-**Detect and report each integration SEPARATELY. Do NOT infer "Enhanced" just
+**Detect and report each integration SEPARATELY. Do NOT infer "enhanced" just
 because a CLI exists.** A CLI on `PATH`, an on-disk index, and an MCP tool that
 actually responds in this client are four different facts — report each:
 
@@ -114,7 +114,7 @@ may be ACTIVE while the other is only READY or absent.
 
 **Do NOT instruct the agent to use `gitnexus_impact`, Serena symbol tools, or
 any MCP-only operation unless that specific MCP is confirmed responding in the
-current client.** "Enhanced" must never imply unverified MCP functionality.
+current client.** "enhanced" must never imply unverified MCP functionality.
 Never run `gitnexus setup`, install global tooling, or modify global/client MCP
 config without explicit approval after enumerating the exact mutations.
 
@@ -133,7 +133,7 @@ exactly these options and wait for my choice:
      license or enterprise terms before anticipated commercial use. Salvor Core
      does not require GitNexus.**
   2. **Continue in Core mode** — everything works except semantic navigation and
-     impact analysis; the generated files mark Enhanced-only rules inactive.
+     impact analysis; the generated files mark enhanced-only rules inactive.
   3. **Cancel setup.**
 
 NEVER silently install packages or modify global/client MCP configuration. Setup
@@ -259,7 +259,7 @@ non-obvious constraint contributors must remember.]
 | `.salvor/decisions/` | Design decisions + load-bearing invariants (why it's this way, what must stay) | Before changing/refactoring anything non-trivial |
 | `<COMPONENT_A>/CLAUDE.md` | <COMPONENT_A> architecture and key files | Working in <COMPONENT_A>/ |
 | `<COMPONENT_B>/CLAUDE.md` | <COMPONENT_B> architecture and key files | Working in <COMPONENT_B>/ |
-| `.serena/memories/` | Enhanced mode: retrieval pointers into `.salvor/` (concise summaries only) | Use Serena MCP tools to query |
+| `.serena/memories/` | enhanced mode: retrieval pointers into `.salvor/` (concise summaries only) | Use Serena MCP tools to query |
 
 ## APP_NAME
 Configurable via `APP_NAME` env var. Default: `<PROJECT_NAME>`. With the optional Strict defaults enabled (RULES §4.4),
@@ -301,8 +301,8 @@ You self-identify knowledge worth persisting durably and ask me, verbatim, befor
 2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
 3. **Deferred Finding** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
-### GitNexus — Code Intelligence (Enhanced mode only; hand-authored, thin)
-[Salvor authors this section itself — GitNexus does NOT write it when Enhanced setup uses pure index mode
+### GitNexus — Code Intelligence (enhanced mode only; hand-authored, thin)
+[Salvor authors this section itself — GitNexus does NOT write it when enhanced setup uses pure index mode
 (Step 3's recommended Option A: `gitnexus analyze --index-only` where supported, else the legacy
 `--skip-agents-md` fallback), which prevents GitNexus writing its block into `CLAUDE.md`/`AGENTS.md`.
 Keep it to a few lines of routing: run impact analysis before editing a symbol; use the knowledge graph to
@@ -380,7 +380,7 @@ into one prompt, do not defer.
    status. DOMAIN_REF is current truth; the artifact is the frozen audit trail.
 4. **Stack evaluation — update if affected:** `CLAUDE.md` hub (only if project-wide context shifts); spoke `CLAUDE.md`;
    L1 (`.salvor/active_state.md`); L2 (`.salvor/active_state_verbose.md`); Serena memories (`.serena/memories/`,
-   Enhanced mode — concise pointers only, per §8); per-user auto-memory (if enabled — see §8).
+   enhanced mode — concise pointers only, per §8); per-user auto-memory (if enabled — see §8).
 5. **Confirmation report:** list which files were touched so I can verify end-to-end.
 
 **On `no`:** acknowledge and continue. Do not silently save a partial version.
@@ -402,12 +402,12 @@ decision, domain learning, learned failure, or deferred finding into the reposit
 
 **ALL version bumps MUST be logged in VERSION.md first. No hardcoded versions in source code.**
 
-## 4. Search & Tools [STRICT / Enhanced]
+## 4. Search & Tools [STRICT / enhanced]
 1. **[STRICT] Search-Before-Read:** do not `read_file` on any file >100 lines without first using `grep`, `find_symbol`,
    or `get_symbols_overview` to find specific line ranges. Targeted reads only.
-2. **[Enhanced mode] Priority:** Serena MCP symbolic tools first (`find_symbol`, `get_symbols_overview`). Fall back to
+2. **[enhanced mode] Priority:** Serena MCP symbolic tools first (`find_symbol`, `get_symbols_overview`). Fall back to
    `grep`/`glob` only if Serena can't resolve. (Core mode: `grep`/`glob` are the primary tools.)
-3. **[STRICT, Enhanced mode] Impact before edits:** before modifying a function/class/method, run GitNexus impact
+3. **[STRICT, enhanced mode] Impact before edits:** before modifying a function/class/method, run GitNexus impact
    analysis and report the blast radius. Run change-detection before committing. (Core mode: state that impact analysis
    is unavailable rather than pretending it ran.)
 4. **[STRICT] App Name:** never hardcode the project name — use `APP_NAME` or the build constant.
@@ -464,7 +464,7 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 - **Shared and Git-tracked does not mean co-canonical. Every durable fact has one canonical owner. Other shared files
   contain concise routing instructions, summaries, derived retrieval aids, or links to that owner.** The in-repo files
   (`CLAUDE.md` hub + spokes, `RULES.md`, the version source — `VERSION.md` when Strict defaults are enabled (Q4=YES),
-  otherwise the repo's established version mechanism — `.salvor/*`, `.serena/memories/` in Enhanced mode, the
+  otherwise the repo's established version mechanism — `.salvor/*`, `.serena/memories/` in enhanced mode, the
   hand-authored GitNexus routing note in the hub) are all shared and available to each supported agent through its
   compatible entrypoint — but each durable fact still has exactly ONE owner; everything else points at it.
 - **Per-user, optional, NOT shared (Claude Code only):** auto-memory at `~/.claude/projects/.../memory/`. Useful for
@@ -847,7 +847,7 @@ adapters. Always also create the two thin pointer files so those CLIs work out o
   > Protocol and the capture classes. The canonical context lives in `CLAUDE.md`; this file
   > just points there. **Do not duplicate or fork project knowledge into this adapter.**
   > Canonical engineering knowledge lives in its assigned `.salvor/` artifact and the
-  > `CLAUDE.md` hub + component spokes; `.serena/memories/` contains concise Enhanced-mode
+  > `CLAUDE.md` hub + component spokes; `.serena/memories/` contains concise enhanced-mode
   > retrieval aids only.
 - **`GEMINI.md`** (Gemini CLI / Antigravity CLI — Google coding-agent entrypoint using the
   compatible `GEMINI.md` project-context file; Google moved consumer terminal usage from Gemini CLI
@@ -863,7 +863,7 @@ sections. Update an existing salvor-managed section in place — never duplicate
 The core files are identical across vendors; only these thin entrypoints differ. See
 `docs/VENDOR_ADAPTERS.md`.
 
-## Step 3 — Show the diff, offer a commit, then index (Enhanced mode)
+## Step 3 — Show the diff, offer a commit, then index (enhanced mode)
 
 After creating all files, show me the completed diff of everything created or
 modified (Step 0's no-silent-overwrite rule). Setup NEVER stages unrelated work
@@ -888,7 +888,7 @@ git commit -m "chore: scaffold Salvor — hub-and-spoke + L1/L2 + RULES (Core mo
 **If I decline:** setup still succeeds — leave the files uncommitted for me to
 review and commit myself.
 
-### GitNexus indexing (Enhanced mode only — skip entirely in Core mode)
+### GitNexus indexing (enhanced mode only — skip entirely in Core mode)
 
 Ownership contract, before you run anything:
 
@@ -1012,7 +1012,7 @@ State that you understand these at the end of the scaffold confirmation message.
 ## Step 5 — Confirmation report
 
 After Steps 2–4, return a short report:
-- Mode, reported per integration (do NOT collapse to a single "Enhanced" flag):
+- Mode, reported per integration (do NOT collapse to a single "enhanced" flag):
   overall **CORE** / **ENHANCED-READY (PARTIAL ENHANCED)** / **ENHANCED-ACTIVE**,
   plus a separate line each for **Serena** and **GitNexus** stating CLI available?
   / initialized-or-indexed? / index fresh? / MCP configured? / MCP tools actually

@@ -9,7 +9,7 @@ history of reasoning, rejected hypotheses, and detail pruned from L1. Update tri
 ## 2026-07-27 — Final fixture consistency sync (API:02 WEB:02)
 
 The runnable example now demonstrates its Strict defaults without implying that
-optional Enhanced tools are installed: Serena-first and GitNexus-impact rules
+optional enhanced tools are installed: Serena-first and GitNexus-impact rules
 activate only when their MCP tools respond, with explicit structural-review
 fallbacks otherwise. Capture-class propagation updates the matching Domain
 Learning or Design Decision index instead of always writing to the learning

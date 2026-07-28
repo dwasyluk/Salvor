@@ -210,7 +210,6 @@ export function createUiSnapshotSvg(
       <body xmlns="http://www.w3.org/1999/xhtml" style="margin:0;width:${width}px;height:${height}px;overflow:hidden;background:transparent">
         <style><![CDATA[${cssText}
           .burn-ui-snapshot { background: transparent !important; border: 0 !important; }
-          .burn-ui-snapshot > .hero-copy::before { content: none !important; }
         ]]></style>
         <section class="${className}"${burnState} style="width:${width}px;height:${height}px;min-height:${height}px;overflow:hidden">${content}</section>
       </body>

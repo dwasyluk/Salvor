@@ -146,7 +146,7 @@ test("capture artifacts update their matching index and Domain Learning does not
   }
 });
 
-test("the Strict example keeps Enhanced tools conditional on responding MCPs", () => {
+test("the Strict example keeps enhanced tools conditional on responding MCPs", () => {
   const exRules = flat("example-project/RULES.md");
   const exHub = flat("example-project/CLAUDE.md");
   const exDecisionTemplate = flat("example-project/.salvor/decisions/README.md");

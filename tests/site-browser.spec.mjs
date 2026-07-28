@@ -20,6 +20,103 @@ async function overflowReport(page) {
     .slice(0, 12));
 }
 
+async function renderedInkBounds(page, locator, regions) {
+  await locator.scrollIntoViewIfNeeded();
+  const screenshotGeometry = await locator.evaluate((root, specs) => {
+    const rootRect = root.getBoundingClientRect();
+    return {
+      rootWidth: rootRect.width,
+      rootHeight: rootRect.height,
+      specs: specs.map((spec) => {
+        const target = root.querySelector(spec.selector);
+        const rect = target.getBoundingClientRect();
+        return {
+          ...spec,
+          x: rect.left - rootRect.left,
+          y: rect.top - rootRect.top,
+          width: rect.width,
+          height: rect.height,
+        };
+      }),
+    };
+  }, regions);
+  const screenshot = await locator.screenshot({ animations: "disabled" });
+
+  return page.evaluate(async ({ source, rootWidth, rootHeight, specs }) => {
+    const image = new Image();
+    image.src = source;
+    await image.decode();
+    const canvas = document.createElement("canvas");
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    context.drawImage(image, 0, 0);
+    const pixels = context.getImageData(0, 0, image.width, image.height).data;
+    const scaleX = image.width / rootWidth;
+    const scaleY = image.height / rootHeight;
+
+    return Object.fromEntries(specs.map((spec) => {
+      const left = Math.max(0, Math.floor(spec.x * scaleX));
+      const top = Math.max(0, Math.floor(spec.y * scaleY));
+      const right = Math.min(image.width, Math.ceil((spec.x + spec.width) * scaleX));
+      const bottom = Math.min(image.height, Math.ceil((spec.y + spec.height) * scaleY));
+      let minX = Infinity;
+      let minY = Infinity;
+      let maxX = -Infinity;
+      let maxY = -Infinity;
+      let count = 0;
+      const occupiedRows = [];
+
+      for (let y = top; y < bottom; y += 1) {
+        let rowHasInk = false;
+        for (let x = left; x < right; x += 1) {
+          const offset = (y * image.width + x) * 4;
+          const red = pixels[offset];
+          const green = pixels[offset + 1];
+          const blue = pixels[offset + 2];
+          const alpha = pixels[offset + 3];
+          const matches = spec.ink === "gold"
+            ? alpha > 32 && red > 115 && green > 45 && green < 195
+              && blue < 125 && red > green + 25 && green > blue + 20
+            : alpha > 32 && red < 100 && green < 100 && blue < 100;
+          if (!matches) continue;
+          minX = Math.min(minX, x);
+          minY = Math.min(minY, y);
+          maxX = Math.max(maxX, x);
+          maxY = Math.max(maxY, y);
+          count += 1;
+          rowHasInk = true;
+        }
+        if (rowHasInk) occupiedRows.push(y);
+      }
+
+      const rowBands = [];
+      const lineGapThreshold = Math.max(2, Math.ceil(scaleY * 2));
+      for (const y of occupiedRows) {
+        const currentBand = rowBands.at(-1);
+        if (!currentBand || y - currentBand.maxY > lineGapThreshold) {
+          rowBands.push({ minY: y, maxY: y });
+        } else {
+          currentBand.maxY = y;
+        }
+      }
+
+      return [spec.name, {
+        count,
+        minX: minX / scaleX,
+        minY: minY / scaleY,
+        maxX: maxX / scaleX,
+        maxY: maxY / scaleY,
+        firstLineMaxY: rowBands.length ? rowBands[0].maxY / scaleY : -Infinity,
+        lineCount: rowBands.length,
+      }];
+    }));
+  }, {
+    source: `data:image/png;base64,${screenshot.toString("base64")}`,
+    ...screenshotGeometry,
+  });
+}
+
 test("adaptive SM favicon renders dark on light chrome and white on dark chrome", async ({ browser }) => {
   for (const [colorScheme, expectedRange] of [
     ["light", [0, 80]],
@@ -71,6 +168,8 @@ for (const [name, viewport] of viewports) {
     const readability = await page.evaluate(() => {
       const title = document.querySelector("#hero-title");
       const primaryAction = document.querySelector(".hero-actions .button-primary");
+      const readingPanel = document.querySelector(".hero-reading-panel");
+      const readingSurface = getComputedStyle(readingPanel, "::before");
       const titleRect = title.getBoundingClientRect();
       const actionRect = primaryAction.getBoundingClientRect();
       return {
@@ -79,6 +178,9 @@ for (const [name, viewport] of viewports) {
         titleRight: titleRect.right,
         actionLeft: actionRect.left,
         actionRight: actionRect.right,
+        readingSurfaceContent: readingSurface.content,
+        readingSurfaceBackground: readingSurface.backgroundColor,
+        readingSurfaceTop: readingSurface.top,
       };
     });
     expect(readability.titleFontSize).toBeGreaterThanOrEqual(52);
@@ -86,6 +188,14 @@ for (const [name, viewport] of viewports) {
     expect(readability.titleRight).toBeLessThanOrEqual(viewport.width + 1);
     expect(readability.actionLeft).toBeGreaterThanOrEqual(0);
     expect(readability.actionRight).toBeLessThanOrEqual(viewport.width + 1);
+    if (viewport.width <= 900) {
+      expect(readability.readingSurfaceContent).not.toBe("none");
+      expect(readability.readingSurfaceBackground).toBe("rgba(255, 255, 255, 0.84)");
+      expect(readability.readingSurfaceTop).toBe(viewport.width <= 640 ? "-14px" : "-18px");
+    } else {
+      expect(readability.readingSurfaceContent).toBe("none");
+      expect(readability.readingSurfaceBackground).toBe("rgba(0, 0, 0, 0)");
+    }
 
     const loopPanels = page.locator("#loop .loop-panels > img");
     await expect(loopPanels).toHaveCount(2);
@@ -115,6 +225,86 @@ for (const [name, viewport] of viewports) {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     expect(overflow, JSON.stringify(await overflowReport(page), null, 2)).toBeLessThanOrEqual(1);
     expect(runtimeErrors).toEqual([]);
+  });
+}
+
+for (const [name, viewport] of viewports) {
+  test(`${name} keeps each MCP tool name dominant and baseline-aligns its function label and icon`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+
+    const [introFontSize, loopBodyFontSize, reasonBodyFontSize] = await Promise.all([
+      page.locator(".foundation-intro").evaluate((intro) =>
+        Number.parseFloat(getComputedStyle(intro).fontSize)),
+      page.locator(".loop-heading > p:last-child").evaluate((body) =>
+        Number.parseFloat(getComputedStyle(body).fontSize)),
+      page.locator(".reason-card p").first().evaluate((body) =>
+        Number.parseFloat(getComputedStyle(body).fontSize)),
+    ]);
+    const titleRows = await page.locator(".foundation-grid h2").evaluateAll((headings) =>
+      headings.map((heading) => {
+        const name = heading.querySelector("a");
+        const functionLabel = heading.querySelector("span");
+        const headingRect = heading.getBoundingClientRect();
+        const nameRect = name.getBoundingClientRect();
+        const functionRect = functionLabel.getBoundingClientRect();
+        return {
+          titleFontSize: Number.parseFloat(getComputedStyle(name).fontSize),
+          functionFontSize: Number.parseFloat(getComputedStyle(functionLabel).fontSize),
+          titleDecoration: getComputedStyle(name).textDecorationLine,
+          left: Math.min(nameRect.left, functionRect.left),
+          right: Math.max(nameRect.right, functionRect.right),
+          rowLeft: headingRect.left,
+          rowRight: headingRect.right,
+        };
+      }));
+
+    expect(Math.abs(introFontSize - loopBodyFontSize)).toBeLessThanOrEqual(0.1);
+    expect(Math.abs(introFontSize - reasonBodyFontSize)).toBeLessThanOrEqual(0.1);
+    expect(titleRows).toHaveLength(2);
+    const alignmentRows = [];
+    for (const [index, row] of titleRows.entries()) {
+      const headingInk = await renderedInkBounds(
+        page,
+        page.locator(".foundation-grid h2").nth(index),
+        [
+          { name: "title", selector: "a", ink: "black" },
+          { name: "function", selector: "span", ink: "gold" },
+        ],
+      );
+      const articleInk = await renderedInkBounds(
+        page,
+        page.locator(".foundation-grid article").nth(index),
+        [
+          { name: "icon", selector: ".foundation-mark", ink: "black" },
+          { name: "title", selector: "h2 > a", ink: "black" },
+        ],
+      );
+
+      expect(row.titleFontSize).toBeGreaterThanOrEqual(introFontSize * 1.45);
+      expect(row.functionFontSize).toBeLessThanOrEqual(introFontSize * 0.85);
+      expect(row.titleFontSize / row.functionFontSize).toBeGreaterThanOrEqual(2);
+      expect(row.titleDecoration).toBe("none");
+      expect(headingInk.title.count).toBeGreaterThan(20);
+      expect(headingInk.function.count).toBeGreaterThan(20);
+      const baselinePixelDelta = headingInk.function.firstLineMaxY - headingInk.title.maxY;
+      expect(articleInk.icon.count).toBeGreaterThan(20);
+      expect(articleInk.title.count).toBeGreaterThan(20);
+      const iconTitlePixelTopDelta = articleInk.title.minY - articleInk.icon.minY;
+      alignmentRows.push({
+        tool: index === 0 ? "Serena" : "GitNexus",
+        goldFirstLineMinusTitleBaseline: Number(baselinePixelDelta.toFixed(2)),
+        titleMinusIconVisibleTop: Number(iconTitlePixelTopDelta.toFixed(2)),
+      });
+      expect(row.left).toBeGreaterThanOrEqual(row.rowLeft - 1);
+      expect(row.right).toBeLessThanOrEqual(row.rowRight + 1);
+    }
+    expect(
+      alignmentRows.filter((row) =>
+        Math.abs(row.goldFirstLineMinusTitleBaseline) > 1
+        || Math.abs(row.titleMinusIconVisibleTop) > 1),
+      `${name} rendered-ink deltas:\n${JSON.stringify(alignmentRows, null, 2)}`,
+    ).toEqual([]);
   });
 }
 
@@ -221,7 +411,7 @@ test("hero copy passes mouse drags through to the burn surface while navigation 
     ["title", [getComputedStyle(document.querySelector("#hero-title")).userSelect, getComputedStyle(document.querySelector("#hero-title")).pointerEvents]],
     ["eyebrow", [getComputedStyle(document.querySelector(".eyebrow")).userSelect, getComputedStyle(document.querySelector(".eyebrow")).pointerEvents]],
     ["points", [getComputedStyle(document.querySelector(".hero-points")).userSelect, getComputedStyle(document.querySelector(".hero-points")).pointerEvents]],
-    ["slogan", [getComputedStyle(document.querySelector("[data-burn-hero] > .hero-copy > .hero-tagline")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .hero-copy > .hero-tagline")).pointerEvents]],
+    ["slogan", [getComputedStyle(document.querySelector("[data-burn-hero] > .hero-copy .hero-tagline")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .hero-copy .hero-tagline")).pointerEvents]],
     ["header", [getComputedStyle(document.querySelector("[data-burn-hero] > .site-header")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .site-header")).pointerEvents]],
     ["brand", [getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .brand-wordmark")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .brand-wordmark")).pointerEvents]],
     ["nav", [getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .desktop-nav a")).userSelect, getComputedStyle(document.querySelector("[data-burn-hero] > .site-header .desktop-nav a")).pointerEvents]],
@@ -285,10 +475,13 @@ test("WebGL owns exact browser-rendered UI transition without changing the estab
     const menu = root.querySelector(".menu-toggle");
     const brandMark = root.querySelector(".brand-mark");
     const primary = root.querySelector(".button-primary");
+    const readingSurface = getComputedStyle(root.querySelector(".hero-reading-panel"), "::before");
     return {
       uiRenderer: root.dataset.burnUiRenderer,
       blurContent: getComputedStyle(copy, "::before").content,
       blurFilter: getComputedStyle(copy, "::before").filter,
+      readingSurfaceBackground: readingSurface.backgroundColor,
+      readingSurfaceOpacity: readingSurface.opacity,
       titleColor: getComputedStyle(title).color,
       titleFill: getComputedStyle(title).webkitTextFillColor,
       titleBlend: getComputedStyle(title).mixBlendMode,
@@ -304,6 +497,8 @@ test("WebGL owns exact browser-rendered UI transition without changing the estab
     uiRenderer: "foreign-object",
     blurContent: "none",
     blurFilter: "none",
+    readingSurfaceBackground: "rgba(255, 255, 255, 0.84)",
+    readingSurfaceOpacity: "0",
     titleColor: "rgba(0, 0, 0, 0)",
     titleFill: "rgba(0, 0, 0, 0)",
     titleBlend: "normal",
@@ -372,6 +567,7 @@ test("WebGL owns exact browser-rendered UI transition without changing the estab
     const menu = root.querySelector(".menu-toggle");
     const brandMark = root.querySelector(".brand-mark");
     const primary = root.querySelector(".button-primary");
+    const readingSurface = getComputedStyle(root.querySelector(".hero-reading-panel"), "::before");
     return {
       heroCopySelect: getComputedStyle(root.querySelector(":scope > .hero-copy")).userSelect,
       titleSelect: getComputedStyle(title).userSelect,
@@ -386,6 +582,8 @@ test("WebGL owns exact browser-rendered UI transition without changing the estab
       brandBlend: getComputedStyle(brandMark).mixBlendMode,
       primaryColor: getComputedStyle(primary).color,
       primaryBackground: getComputedStyle(primary).backgroundImage,
+      readingSurfaceBackground: readingSurface.backgroundColor,
+      readingSurfaceOpacity: readingSurface.opacity,
     };
   });
   expect(revealed).toEqual({
@@ -402,6 +600,8 @@ test("WebGL owns exact browser-rendered UI transition without changing the estab
     brandBlend: "normal",
     primaryColor: "rgb(23, 15, 4)",
     primaryBackground: "linear-gradient(rgb(255, 220, 135), rgb(201, 134, 34))",
+    readingSurfaceBackground: "rgba(2, 7, 11, 0.78)",
+    readingSurfaceOpacity: "1",
   });
 });
 

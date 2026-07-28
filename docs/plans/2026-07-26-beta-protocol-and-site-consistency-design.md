@@ -72,7 +72,7 @@ Build an explicit inventory of current and generated surfaces before changing co
    - Verify vendor adapters are thin routers, Serena memories are concise retrieval
      pointers, and GitNexus owns only machine-derived structure.
    - Remove or revise language that makes `CLAUDE.md`, a vendor memory system, or an
-     Enhanced integration appear co-canonical.
+     enhanced integration appear co-canonical.
 
 4. **Template and dogfood parity**
    - Compare the live root scaffold with the embedded templates in
@@ -88,7 +88,7 @@ Build an explicit inventory of current and generated surfaces before changing co
    - Separate Salvor release identity from unrelated dependency versions and
      scaffold/example versions.
 
-6. **Vendor portability and Enhanced tooling**
+6. **Vendor portability and enhanced tooling**
    - Verify the protocol can be used by any coding agent that can read repository
      Markdown.
    - Verify switching vendors does not require migrating the shared repository brain.
@@ -108,7 +108,7 @@ After implementation:
 - assert capture-class names, prompts, destinations, and ownership claims;
 - assert vendor-agnostic and vendor-portable language across canonical and public
   surfaces;
-- assert optional/highly-recommended Enhanced language across core docs and site;
+- assert optional/highly-recommended enhanced language across core docs and site;
 - assert every Salvor-owned release reference is `v1.0.0-beta`;
 - assert allowed exclusions remain unchanged;
 - assert `VERSION.md` metadata, prose, counters, and history are internally coherent;
@@ -191,7 +191,7 @@ Update this contract consistently in:
 
 Canonical wording must communicate both facts without contradiction:
 
-1. Serena and GitNexus are optional Enhanced integrations; Salvor Core works without
+1. Serena and GitNexus are optional enhanced integrations; Salvor Core works without
    either.
 2. They are highly recommended for the best results because Serena improves semantic
    symbol navigation and GitNexus improves relationship, flow, and impact grounding.
@@ -258,7 +258,7 @@ updated so no line implies the wrong sequence after wrapping.
 ### Code intelligence section
 
 - Make the `Serena` and `GitNexus` titles themselves clickable.
-- State that both are optional Enhanced integrations and highly recommended for the
+- State that both are optional enhanced integrations and highly recommended for the
   best results.
 - Explain their complementary roles without calling them canonical memory.
 - Preserve GitNexus licensing and verified-capability caveats in the linked core docs.

@@ -21,11 +21,11 @@ const rootRules = read("RULES.md");
 const core = read("core/CLAUDE.md");
 const changelog = read("CHANGELOG.md");
 
-// 1-2 — public quickstart is Core-first; Enhanced is optional -------------
+// 1-2 — public quickstart is Core-first; enhanced is optional -------------
 test("site does not tell every user to install Serena and GitNexus", () => {
   assert.doesNotMatch(site, /Install Serena and GitNexus/i);
 });
-test("public quickstart presents both Enhanced integrations as optional and highly recommended", () => {
+test("public quickstart presents both enhanced integrations as optional and highly recommended", () => {
   assert.match(
     flat("site/index.html"),
     /<li>[^<]*Serena[^<]*GitNexus[^<]*both[^<]*optional[^<]*highly recommended[^<]*best code-grounded results[^<]*<\/li>/i,
@@ -124,7 +124,23 @@ test("canonical docs define vendor-agnostic core and vendor portability separate
   }
 });
 
-test("Enhanced integrations are optional and highly recommended", () => {
+test("public docs explain the vendor-named hub as a cross-vendor implementation detail", () => {
+  for (const file of ["README.md", "docs/ARCHITECTURE.md", "docs/VENDOR_ADAPTERS.md"]) {
+    const source = flat(file);
+    assert.match(
+      source,
+      /`CLAUDE\.md`[^.]{0,100}canonical cross-vendor hub/i,
+      `${file} must frame CLAUDE.md as the cross-vendor hub rather than a Claude-only brain`,
+    );
+    assert.match(
+      source,
+      /thin[^.]{0,80}`AGENTS\.md`[^.]{0,80}`GEMINI\.md`[^.]{0,160}(route|point)[^.]{0,100}(same|shared|canonical)/i,
+      `${file} must explain how thin adapters route other supported agents to the same brain`,
+    );
+  }
+});
+
+test("enhanced integrations are optional and highly recommended", () => {
   for (const file of [
     "README.md",
     "SETUP_PROMPT.md",

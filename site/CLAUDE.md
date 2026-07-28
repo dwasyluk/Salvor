@@ -13,14 +13,17 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 - Existing mapped copy must update whenever its canonical sources change.
 - If a source change requires a new section, interaction, or visual element, synchronization must stop with design review required. Ask the operator before adding the element.
 - A source-of-truth sync is incomplete until direct Playwright runs cover desktop, tablet, Galaxy-S25-Edge-like small-phone, and 320px narrow viewports. Verify hero and copy readability, local asset loading, and zero horizontal overflow; never infer responsive health from CSS review.
+- LF1: final visual-alignment evidence comes from DPR-aware Playwright screenshot ink, not DOM/CSS box geometry. Report signed first-line glyph/label and visible SVG/title deltas and keep each within one CSS pixel across the complete six-viewport release matrix; use boxes only to delimit pixel scan regions.
 - The Salvor Loop uses two site-only 800×960 SVG panels: wide consumers display them side-by-side, while tablet and phone consumers stack them at full available width.
+- Keep the Loop protocol-only and vendor-agnostic. Tool-specific enhanced guidance belongs in the dedicated code-intelligence section, not inside the lifecycle diagram.
 - WF/early-progress hero display copy, including the slogan, is pointer-transparent and nonselectable so the burn surface receives mouse and touch drag gestures through the text. At 80% reveal progress the semantic hero copy becomes selectable while WebGL finishes the padded smoke tail. Keep CTA controls and canonical header/navigation interactive, and do not attach burn handlers to text nodes.
+- At 900px and below, the hero reading panel is part of both browser-rendered WebGL UI snapshots: translucent white in WF and translucent black in Mystic. It must burn locally with the text, retain its internal breathing room, and never alter the laptop/desktop presentation.
 - Silent public-content drift is forbidden.
 - Header, footer, burned-state, metadata, social, and loop marks use the generated regular-logo family. The browser favicon uses the generated adaptive small-logo SVG, whose internal `prefers-color-scheme` rule switches canonical ink from black to white; an unqualified black 32px PNG remains the compatibility fallback, and the Apple touch icon remains black. Run `npm run brand:check` and inspect `npm run brand:audit` evidence after brand-affecting changes. Hero background images are independent and must not change during a logo-only migration.
 
 ## Build and deploy
 - Static files live in `site/`; `.github/workflows/pages.yml` deploys that directory from `main`. `main` is the single source of truth.
 - Run the Node contract/interaction tests and Playwright browser suite before commit. A push deploys, so never push without explicit approval.
-- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:13`; derived constant: `GHPAGE_BUILD`.
+- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:15`; derived constant: `GHPAGE_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for deployment details.

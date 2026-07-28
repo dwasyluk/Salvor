@@ -35,7 +35,7 @@ test("no current-state doc claims the site lives only on a ghpages branch", () =
   }
 });
 
-// --- Item 2: GitNexus licensing / Enhanced-mode "optional" not "free" ------
+// --- Item 2: GitNexus licensing / enhanced-mode "optional" not "free" ------
 test("GitNexus is described as third-party PolyForm Noncommercial, never MIT/free", () => {
   for (const [name, doc] of [["README", readme], ["VENDOR_ADAPTERS", vendor], ["FAQ", faq]]) {
     assert.match(doc, /PolyForm\s+Noncommercial/, `${name} must state GitNexus's real license`);

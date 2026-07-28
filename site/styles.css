@@ -529,7 +529,7 @@ h1,
 }
 
 .loop-heading {
-  max-width: 760px;
+  max-width: none;
   margin-bottom: clamp(26px, 4vw, 46px);
 }
 
@@ -538,13 +538,14 @@ h1,
 }
 
 .loop-heading h2 {
+  max-width: 760px;
   margin: 0 0 14px;
   font-size: clamp(28px, 3.5vw, 52px);
   line-height: 1.05;
 }
 
 .loop-heading > p:last-child {
-  max-width: 66ch;
+  max-width: none;
   margin: 0;
   color: var(--ink-soft);
   font-size: clamp(13px, 1.08vw, 16px);
@@ -733,6 +734,10 @@ h1,
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.foundation-intro {
+  font-size: clamp(13px, 1.08vw, 16px);
+}
+
 .foundation-grid article {
   display: grid;
   min-width: 0;
@@ -744,6 +749,14 @@ h1,
 
 .foundation-grid article > div {
   min-width: 0;
+}
+
+.foundation-grid article:first-child > div {
+  padding-top: 1px;
+}
+
+.foundation-grid article:last-child > div {
+  padding-top: 7px;
 }
 
 .foundation-grid article:first-child {
@@ -764,19 +777,25 @@ h1,
 }
 
 .foundation-grid h2 {
-  margin: 0 0 12px;
-  font-size: clamp(17px, 1.4vw, 21px);
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 12px;
+  margin: 0 0 16px;
+  font-size: clamp(24px, 2vw, 30px);
+  line-height: 1;
 }
 
 .foundation-grid h2 span {
-  margin-left: 10px;
+  margin: 0;
   color: var(--gold);
-  font-size: 10px;
+  font-size: clamp(11px, 0.9vw, 13px);
   letter-spacing: 0.06em;
+  line-height: 1.05;
 }
 
 .foundation-grid p,
-.foundation-grid a {
+.foundation-grid article > div > a {
   font-size: clamp(12px, 0.94vw, 14px);
 }
 
@@ -785,7 +804,7 @@ h1,
   margin-bottom: 12px;
 }
 
-.foundation-grid a {
+.foundation-grid article > div > a {
   color: var(--gold);
   text-decoration: none;
   overflow-wrap: anywhere;
@@ -793,6 +812,7 @@ h1,
 
 .foundation-grid h2 a {
   color: inherit;
+  text-decoration: none;
 }
 
 .foundation-grid h2 a:hover {
@@ -1002,14 +1022,46 @@ h1,
     padding-top: clamp(56px, 8vh, 82px);
   }
 
-  .hero:not(.is-enhanced) > .hero-copy::before {
+  .hero-reading-panel {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .hero-reading-panel::before {
+    --panel-fill: rgba(255, 255, 255, 0.84);
+    --panel-stroke: rgba(17, 19, 22, 0.18);
     position: absolute;
-    inset: 28px -14px -24px;
+    inset: -18px -16px;
     z-index: -1;
     content: "";
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.74) 68%, transparent);
-    filter: blur(10px);
+    background:
+      linear-gradient(45deg, transparent calc(50% - 1px), var(--panel-stroke) calc(50% - 1px), var(--panel-stroke) calc(50% + 1px), transparent calc(50% + 1px)) top right / 18px 18px no-repeat,
+      linear-gradient(45deg, transparent calc(50% - 1px), var(--panel-stroke) calc(50% - 1px), var(--panel-stroke) calc(50% + 1px), transparent calc(50% + 1px)) bottom left / 18px 18px no-repeat,
+      var(--panel-fill);
+    box-shadow:
+      inset 0 0 0 1px var(--panel-stroke),
+      inset 4px 0 0 rgba(201, 132, 29, 0.72);
+    clip-path: polygon(
+      0 0,
+      calc(100% - 18px) 0,
+      100% 18px,
+      100% 100%,
+      18px 100%,
+      0 calc(100% - 18px)
+    );
     pointer-events: none;
+  }
+
+  .hero.is-enhanced:not([data-burn-state="revealed"]) > .hero-copy > .hero-reading-panel::before {
+    opacity: 0;
+  }
+
+  .hero.is-enhanced[data-burn-state="revealed"] > .hero-copy > .hero-reading-panel::before {
+    --panel-fill: rgba(2, 7, 11, 0.78);
+    --panel-stroke: rgba(255, 244, 227, 0.24);
+    box-shadow:
+      inset 0 0 0 1px var(--panel-stroke),
+      inset 4px 0 0 rgba(201, 132, 29, 0.82);
   }
 
   h1,
@@ -1129,6 +1181,10 @@ h1,
     padding-bottom: 40px;
   }
 
+  .hero-reading-panel::before {
+    inset: -14px -12px;
+  }
+
   .eyebrow {
     margin-bottom: 22px;
     font-size: 14px;
@@ -1222,9 +1278,18 @@ h1,
     height: 58px;
   }
 
+  .foundation-grid h2 {
+    column-gap: 10px;
+    font-size: clamp(22px, 6.15vw, 24px);
+  }
+
   .foundation-grid h2 span {
     display: block;
-    margin: 4px 0 0;
+    margin: 0;
+  }
+
+  .foundation-grid article:last-child > div {
+    padding-top: 5px;
   }
 
   .closing-line {
