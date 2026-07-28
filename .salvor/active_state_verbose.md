@@ -4,6 +4,56 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-07-28 — Soft-launch community routing (CORE:12 GHPAGE:16 DOCS:17)
+
+The operator selected GitHub Discussions as Salvor's initial canonical
+community hub after comparing it with X Communities, Reddit, Discord, and a
+hosted forum. GitHub Issues and PRs remain the actionable engineering system;
+the maintainer's lowercase X account `@blockchaindan` is a secondary path for
+people who do not want to use GitHub.
+
+Public routing now works as follows:
+
+- `README.md` exposes a prominent `Community & feedback` section before the
+  product overview, linking to GitHub Discussions and the lowercase X account.
+- `CONTRIBUTING.md` routes questions, suspected bugs, early ideas, adapter
+  exploration, and showcases to Discussions. Its all-caps topic prefixes are
+  `[HELP]`, `[BUG]`, `[IDEA]`, `[ADAPTER]`, and `[SHOWCASE]`.
+- Promotion into actionable GitHub work is explicit: validated bugs become
+  `[BUG]`, accepted/scoped ideas become `[FEAT]`, and actionable adapter work
+  becomes `[ADAPTER]`. `[IDEA]` intentionally does not survive promotion.
+- GitHub issue-template title prefixes are consistently uppercase.
+- GitHub Pages links directly to Discussions from desktop navigation, mobile
+  navigation, and the footer. The site intentionally does not link to X.
+
+Test-first evidence:
+
+- New static contracts failed before implementation because the README section,
+  three site links, contributor taxonomy, and uppercase issue prefixes were
+  absent, then passed after the minimal content changes.
+- A new Playwright navigation contract failed with zero Discussions links,
+  then passed after implementation. It checks link count, desktop/mobile
+  visibility, mobile menu operation, footer visibility, runtime errors, and
+  horizontal overflow.
+- `npm run test:unit`: 123/123 passed outside the macOS sandbox. The initial
+  sandboxed run's only failure was Chromium Mach-port permission denial inside
+  the deterministic brand check, not a product assertion.
+- `SALVOR_TEST_PORT=4191 npm run test:browser`: 24/24 passed on an isolated
+  localhost port, including desktop 1440×1000, compact desktop 1024×900, tablet
+  768×1024, large phone 390×844, Galaxy-S25-Edge-like 360×780, and narrow
+  320×568 rendering.
+- `npm run release:audit`: all 11 integrity gates passed; release metadata is
+  `v1.0.0-beta CORE:12 GHPAGE:16 DOCS:17`.
+
+GitNexus was current at baseline commit `479304b` and responded, but its
+pre-edit symbol lookup could not resolve static `site/index.html`, so the
+reported blast radius was `UNKNOWN`; targeted structural search, repository
+contracts, and the full responsive browser matrix supplied the verification
+fallback. No push, tag, release, deployment, or external repository setting was
+changed.
+
+---
+
 ## 2026-07-28 — LF1 rendered-pixel alignment gate
 
 - **Failure.** More than six Code Intelligence alignment revisions used CSS/DOM box geometry as the review oracle and still rendered visibly pixel-incorrect. Element/line boxes do not prove glyph baselines, and SVG boxes include whitespace that does not represent the visible stroke.

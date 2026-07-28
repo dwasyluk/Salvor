@@ -1,9 +1,9 @@
-<!-- {"version":"1.0.0-beta","core":12,"ghpage":15,"docs":16} -->
+<!-- {"version":"1.0.0-beta","core":12,"ghpage":16,"docs":17} -->
 # salvor VERSION MANIFEST
 ## Current State
 - **Project Version:** v1.0.0-beta
-- **Build IDs:** CORE:12 | GHPAGE:15 | DOCS:16
-- **Last Updated:** 2026-07-27
+- **Build IDs:** CORE:12 | GHPAGE:16 | DOCS:17
+- **Last Updated:** 2026-07-28
 
 ---
 
@@ -11,6 +11,7 @@
 
 | Date | Build IDs | Summary |
 |------|-----------|---------|
+| 2026-07-28 | CORE:12 GHPAGE:16 DOCS:17 | Established GitHub Discussions as the soft-launch community hub while keeping actionable work in Issues and PRs. Added prominent README feedback routes through Discussions or lowercase `@blockchaindan` on X; documented the all-caps `[HELP]`, `[BUG]`, `[IDEA]`, `[ADAPTER]`, and `[SHOWCASE]` discussion taxonomy plus `[IDEA]` → `[FEAT]` promotion; aligned issue-template prefixes; and added direct Community links to the GitHub Pages desktop, mobile, and footer navigation without exposing X on the site. |
 | 2026-07-27 | CORE:12 GHPAGE:15 DOCS:16 | Completed the final site hierarchy and terminology pass: closed both clipped-corner panel borders in WF and Mystic while preserving the burn-integrated small-screen treatment; replaced the capture-class bell with the approved stacked-document foundation icon; raised the code-intelligence tool-title rows clearly above body copy, expanded the Loop introduction to the full section width, and differentiated the Serena MCP/GitNexus MCP guidance with explicit optionality and token-efficiency benefits. Standardized lowercase `enhanced` prose across the installer, current protocol state, public documentation, example, site, and release history while preserving machine-state tokens such as `ENHANCED-READY` and `ENHANCED-ACTIVE`. |
 | 2026-07-27 | CORE:11 GHPAGE:14 DOCS:15 | Improved small-screen hero legibility without changing laptop/desktop presentation: a sharp, padded WF reading panel burns locally into its Mystic dark counterpart as part of the existing WebGL UI snapshots. Simplified the Salvor Loop to protocol-only language by removing the enhanced-tool pill, making symbol navigation tool-neutral, and labeling the central model `VENDOR-AGNOSTIC HUB + SPOKES`. Removed the vendor-named canonical filename from the GitHub Pages presentation while clarifying in README and vendor docs that `CLAUDE.md` is the canonical cross-vendor hub implementation and thin adapters route other supported agents to the same repository-owned brain. |
 | 2026-07-27 | CORE:11 GHPAGE:13 DOCS:14 | Completed final soft-launch visual polish: cleared the Salvor Loop center by reducing the canonical mark and moving optional Serena/GitNexus enhanced tooling outside the brain stack; replaced competing favicon media tags with a generated adaptive canonical SM SVG plus PNG fallback; made the Primary Path explicitly state that both enhanced integrations are optional and highly recommended for the best code-grounded results; raised WebGL hero backing resolution to at least CSS-pixel fidelity with Retina detail under a four-million-pixel cap, preserving the approved burn behavior, smoke, interactions, assets, and WF/M states. |

@@ -16,6 +16,10 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Initial public beta.
 
 ### Changed
+- Established GitHub Discussions as the beta community hub, with a prominent
+  README feedback route, an X fallback through lowercase `@blockchaindan`,
+  direct Community links on GitHub Pages, and documented all-caps discussion
+  and issue prefixes that promote accepted `[IDEA]` topics to `[FEAT]` work.
 - Replaced the reconstructed W10 mark family with the exact operator-authored
   `LOGO.svg` regular master and `LOGO-SM.svg` favicon master. The deterministic
   pipeline now produces geometry-identical black/white SVGs and 16–512 PNGs for

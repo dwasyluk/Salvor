@@ -5,14 +5,33 @@ should be light and fast.
 
 ## Ways to contribute
 
-- 🐛 **File an issue** — something in the `SETUP_PROMPT`, docs, or example didn't
-  work as described.
-- 💡 **Request a feature** — a new capture pattern, a `RULES` improvement, a docs fix.
-- 💬 **Start a discussion** — open-ended ideas and "how do I adopt this in X?"
+- 💬 **Start a discussion** — questions, suspected bugs, early ideas, adapter
+  exploration, and showcases belong in
+  [GitHub Discussions](https://github.com/dwasyluk/salvor/discussions).
+- 🐛 **File an issue** — a validated bug in the `SETUP_PROMPT`, docs, or example.
+- 💡 **Request a feature** — an accepted, scoped improvement that is ready for
+  concrete GitHub work.
 - 🔧 **Open a PR** — fixes, docs, and especially **new vendor adapters** (Codex,
   Gemini, Cursor…) and **example projects in other stacks**.
 
-Issues and PRs are both encouraged — no need to ask first for small changes.
+If you prefer not to use GitHub for an initial question or suggestion, reply to
+or mention [`@blockchaindan`](https://x.com/blockchaindan) on X. Issues and PRs
+are both encouraged — no need to ask first for small changes.
+
+### Discussion and issue prefixes
+
+Use these lightweight, all-caps prefixes for GitHub Discussion titles:
+
+| Prefix | Use it for | What happens next |
+|---|---|---|
+| `[HELP]` | Setup, adoption, or usage questions | Resolve in Discussions when possible. |
+| `[BUG]` | Suspected incorrect behavior | Promote to a `[BUG]` issue after validation. |
+| `[IDEA]` | Exploratory suggestions and possibilities | Promote to a `[FEAT]` issue only after acceptance and scoping. |
+| `[ADAPTER]` | Vendor integration and portability discussion | Promote to an `[ADAPTER]` issue when actionable. |
+| `[SHOWCASE]` | Workflows, examples, and things built with Salvor | Keep in Discussions for others to learn from. |
+
+GitHub Issues use the corresponding all-caps `[BUG]`, `[FEAT]`, and `[ADAPTER]`
+prefixes. An `[IDEA]` is a conversation; a `[FEAT]` is accepted, scoped work.
 
 ## Licensing
 

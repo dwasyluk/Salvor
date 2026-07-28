@@ -19,11 +19,12 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 - WF/early-progress hero display copy, including the slogan, is pointer-transparent and nonselectable so the burn surface receives mouse and touch drag gestures through the text. At 80% reveal progress the semantic hero copy becomes selectable while WebGL finishes the padded smoke tail. Keep CTA controls and canonical header/navigation interactive, and do not attach burn handlers to text nodes.
 - At 900px and below, the hero reading panel is part of both browser-rendered WebGL UI snapshots: translucent white in WF and translucent black in Mystic. It must burn locally with the text, retain its internal breathing room, and never alter the laptop/desktop presentation.
 - Silent public-content drift is forbidden.
+- Community navigation links directly to GitHub Discussions in the desktop, mobile, and footer surfaces. The site does not link to the maintainer's X account; that secondary route is documented in the canonical README.
 - Header, footer, burned-state, metadata, social, and loop marks use the generated regular-logo family. The browser favicon uses the generated adaptive small-logo SVG, whose internal `prefers-color-scheme` rule switches canonical ink from black to white; an unqualified black 32px PNG remains the compatibility fallback, and the Apple touch icon remains black. Run `npm run brand:check` and inspect `npm run brand:audit` evidence after brand-affecting changes. Hero background images are independent and must not change during a logo-only migration.
 
 ## Build and deploy
 - Static files live in `site/`; `.github/workflows/pages.yml` deploys that directory from `main`. `main` is the single source of truth.
 - Run the Node contract/interaction tests and Playwright browser suite before commit. A push deploys, so never push without explicit approval.
-- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:15`; derived constant: `GHPAGE_BUILD`.
+- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:16`; derived constant: `GHPAGE_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for deployment details.

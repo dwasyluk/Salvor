@@ -17,6 +17,18 @@
 
 ---
 
+## Community & feedback
+
+Salvor v1.0.0-beta is an intentionally early release. Bugs, rough edges,
+questions, suggestions, and real-world results are all useful.
+
+Join the shared conversation in
+[GitHub Discussions](https://github.com/dwasyluk/salvor/discussions). If GitHub
+isn't your thing, reply to or mention
+[`@blockchaindan`](https://x.com/blockchaindan) on X. Actionable bugs and scoped
+features move into [GitHub Issues](https://github.com/dwasyluk/salvor/issues);
+pull requests are welcome.
+
 ## The problem
 
 Code shows an agent what exists. It rarely preserves *why*.
@@ -293,8 +305,10 @@ it is to build the harder pieces together — issues tagged
 
 Contributions welcome beyond the roadmap too:
 
-- 🐛 **Issues** and 💡 **feature requests** — [open one](https://github.com/dwasyluk/salvor/issues).
-- 💬 **Questions / ideas** — [Discussions](https://github.com/dwasyluk/salvor/discussions).
+- 🐛 **Validated bugs and scoped features** — [open an issue](https://github.com/dwasyluk/salvor/issues).
+- 💬 **Questions, early ideas, help, and showcases** — join
+  [GitHub Discussions](https://github.com/dwasyluk/salvor/discussions), or see
+  [Community & feedback](#community--feedback) for the X option.
 - 🔧 **PRs** — especially new **vendor adapters** and **example projects** in
   other stacks. See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 

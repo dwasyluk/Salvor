@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Something in Salvor (the SETUP_PROMPT, docs, or example-project) didn't work as described
-title: "[bug] "
+title: "[BUG] "
 labels: bug
 ---
 

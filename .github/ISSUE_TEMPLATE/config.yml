@@ -1,5 +1,5 @@
 blank_issues_enabled: true
 contact_links:
-  - name: 💬 Discussions / questions
+  - name: 💬 Community discussions / questions
     url: https://github.com/dwasyluk/salvor/discussions
-    about: Open-ended questions, ideas, "how do I adopt this in X?" — start here before filing an issue.
+    about: Ask for help, report a suspected bug, explore an idea or adapter, or share a showcase.

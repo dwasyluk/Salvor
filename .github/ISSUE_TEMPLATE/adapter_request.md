@@ -1,7 +1,7 @@
 ---
 name: Vendor adapter request
 about: Request or contribute support for another LLM CLI (Codex, Gemini, Cursor, etc.)
-title: "[adapter] "
+title: "[ADAPTER] "
 labels: adapter
 ---
 

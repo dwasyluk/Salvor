@@ -165,6 +165,18 @@ for (const [name, viewport] of viewports) {
     await expect(page.locator(".burn-webgl")).toBeVisible();
     await expect(page.locator(".hero-actions .button-primary").first()).toBeVisible();
 
+    const communityHref = "https://github.com/dwasyluk/salvor/discussions";
+    await expect(page.locator(`a[href="${communityHref}"]`)).toHaveCount(3);
+    if (viewport.width > 900) {
+      await expect(page.locator(`.desktop-nav a[href="${communityHref}"]`)).toBeVisible();
+      await expect(page.locator(`.mobile-menu a[href="${communityHref}"]`)).toBeHidden();
+    } else {
+      await expect(page.locator(`.desktop-nav a[href="${communityHref}"]`)).toBeHidden();
+      await page.locator(".menu-toggle").click();
+      await expect(page.locator(`.mobile-menu a[href="${communityHref}"]`)).toBeVisible();
+      await page.locator(".menu-toggle").click();
+    }
+
     const readability = await page.evaluate(() => {
       const title = document.querySelector("#hero-title");
       const primaryAction = document.querySelector(".hero-actions .button-primary");
@@ -222,6 +234,8 @@ for (const [name, viewport] of viewports) {
       expect(Math.abs(withBox.width - withoutBox.width)).toBeLessThanOrEqual(1);
     }
 
+    await page.locator(".site-footer").scrollIntoViewIfNeeded();
+    await expect(page.locator(`.site-footer a[href="${communityHref}"]`)).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     expect(overflow, JSON.stringify(await overflowReport(page), null, 2)).toBeLessThanOrEqual(1);
     expect(runtimeErrors).toEqual([]);

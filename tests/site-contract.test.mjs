@@ -6,6 +6,49 @@ import path from "node:path";
 const root = process.cwd();
 const read = (file) => readFile(path.join(root, file), "utf8");
 
+test("the README exposes GitHub Discussions and X feedback before the product overview", async () => {
+  const readme = await read("README.md");
+  const communityIndex = readme.indexOf("## Community & feedback");
+  const problemIndex = readme.indexOf("## The problem");
+
+  assert.ok(communityIndex > 0 && communityIndex < problemIndex);
+  assert.match(readme, /\[GitHub Discussions\]\(https:\/\/github\.com\/dwasyluk\/salvor\/discussions\)/);
+  assert.match(readme, /\[`@blockchaindan`\]\(https:\/\/x\.com\/blockchaindan\)/);
+});
+
+test("the site links directly to Discussions without presenting X as a site destination", async () => {
+  const html = await read("site/index.html");
+  const discussionLinks = html.match(
+    /href="https:\/\/github\.com\/dwasyluk\/salvor\/discussions"/g,
+  ) ?? [];
+
+  assert.equal(discussionLinks.length, 3);
+  assert.equal((html.match(/>COMMUNITY ↗<\/a>/g) ?? []).length, 2);
+  assert.match(html, />Community ↗<\/a>/);
+  assert.doesNotMatch(html, /href="https:\/\/x\.com\/blockchaindan"/);
+});
+
+test("contributor routing keeps community ideas separate from actionable GitHub work", async () => {
+  const [contributing, issueConfig, bugTemplate, featureTemplate, adapterTemplate] = await Promise.all([
+    read("CONTRIBUTING.md"),
+    read(".github/ISSUE_TEMPLATE/config.yml"),
+    read(".github/ISSUE_TEMPLATE/bug_report.md"),
+    read(".github/ISSUE_TEMPLATE/feature_request.md"),
+    read(".github/ISSUE_TEMPLATE/adapter_request.md"),
+  ]);
+
+  for (const category of ["HELP", "BUG", "IDEA", "ADAPTER", "SHOWCASE"]) {
+    assert.match(contributing, new RegExp(`\\b${category}\\b`));
+  }
+  assert.match(contributing, /IDEA[\s\S]*\[FEAT\]/);
+  assert.match(contributing, /BUG[\s\S]*\[BUG\]/);
+  assert.match(contributing, /ADAPTER[\s\S]*\[ADAPTER\]/);
+  assert.match(issueConfig, /https:\/\/github\.com\/dwasyluk\/salvor\/discussions/);
+  assert.match(bugTemplate, /^title: "\[BUG\] "/m);
+  assert.match(featureTemplate, /^title: "\[FEAT\] "/m);
+  assert.match(adapterTemplate, /^title: "\[ADAPTER\] "/m);
+});
+
 test("the site is scoped to v1.0.0-beta and describes plugins only as future work", async () => {
   const html = await read("site/index.html");
   assert.match(html, /SALVOR v1\.0\.0-beta/);
@@ -269,10 +312,10 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     read(".salvor/INFRA.md"),
     read(".serena/memories/task_completion.md"),
   ]);
-  assert.match(version, /"ghpage"\s*:\s*15/);
-  assert.match(version, /GHPAGE:15/);
+  assert.match(version, /"ghpage"\s*:\s*16/);
+  assert.match(version, /GHPAGE:16/);
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
-  assert.match(l1, /GHPAGE:15/);
+  assert.match(l1, /GHPAGE:16/);
   // The responsive-check SOP lives in its canonical homes (L1, INFRA, L2), not
   // duplicated across every Serena memory — post-refresh, Serena memories are
   // concise pointers under the one-owner model.

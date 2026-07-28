@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Propose an improvement to the framework, prompt, or docs
-title: "[feat] "
+title: "[FEAT] "
 labels: enhancement
 ---
 
