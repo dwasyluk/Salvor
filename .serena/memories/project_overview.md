@@ -16,6 +16,9 @@ Salvor (v1.0.0-beta soft launch, MIT) is repo-native engineering memory plus a g
 ## One-owner canonical model
 `.salvor/` artifacts + hub/spokes own their knowledge. Serena memories are retrieval aids/pointers, never the canonical source.
 
+## Existing-repository adoption
+Setup is preservation-first: reuse existing `.serena/`, GitNexus state, hubs, spokes, rules, adapters, and vendor infrastructure in place. Do not rerun Serena initialization or migrate Serena memories into `.salvor/`. Only exact mutations, ambiguous mappings, stale-index refreshes, or real conflicts prompt for operator approval. Canonical decision: `.salvor/decisions/2026-07-30-preservation-first-existing-repository-adoption.md`.
+
 ## Primary files
 README.md, SETUP_PROMPT.md (canonical installer), docs/ARCHITECTURE.md, docs/VENDOR_ADAPTERS.md, docs/FAQ.md, CONTRIBUTING.md, LICENSE. `example-project/` is the rendered runnable demonstration + regression fixture for prompt changes. Brand routing: immutable `assets/brand/reference/LOGO.svg` owns regular uses; `LOGO-SM.svg` owns favicon/touch icons; see `assets/brand/BRAND_ASSETS.md` and `.salvor/decisions/2026-07-27-canonical-logo-svg-masters.md`.
 

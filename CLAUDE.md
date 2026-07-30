@@ -5,7 +5,7 @@
 > Deep history and context recovery: `.salvor/active_state_verbose.md`
 
 ## Project Overview
-Salvor is a prompt-and-documentation framework that gives repositories a version-controlled institutional brain shared across sessions, contributors, and LLM vendors. Its universal installer is `SETUP_PROMPT.md`; public guidance lives in `README.md` and `docs/`; the GitHub Pages site source lives in `site/` on `main` and deploys from `main` via `.github/workflows/pages.yml`. The non-obvious invariant is that repository knowledge and rationale are a vendor-agnostic canonical record, while compatible thin adapters make it vendor-portable and public surfaces stay synchronized.
+Salvor is a prompt-and-documentation framework that gives repositories a version-controlled institutional brain shared across sessions, contributors, and LLM vendors. Its universal installer is `SETUP_PROMPT.md`; public guidance lives in `README.md` and `docs/`; the GitHub Pages site source lives in `site/` on `main` and deploys from `main` via `.github/workflows/pages.yml`. The non-obvious invariant is that repository knowledge and rationale are a vendor-agnostic canonical record, while compatible thin adapters make it vendor-portable and public surfaces stay synchronized. Existing-repository setup is preservation-first: reuse mature tool state and agent infrastructure in place, and require an approved adoption map before any mutation.
 
 ## Architecture
 | Component | Stack | Spoke |

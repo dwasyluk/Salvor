@@ -18,12 +18,16 @@ without a memory migration.
 4. Three user-gated capture classes: Decision / Domain Learning, Learned Failure (LF#), and Deferred Finding.
 5. An auditable history of why; optional Strict installations add per-component version counters, while Core/Q4=NO uses the project's established version source or a minimal history artifact.
 6. Optional enhanced mode adds Serena semantic/symbolic code intelligence and GitNexus relationship/impact intelligence; Core works without either tool, but both are highly recommended for the best code-grounded results.
+7. Existing-repository setup is preservation-first: reuse existing Serena/GitNexus state, hubs, spokes, rules, adapters, and vendor infrastructure in place; list exact additions or conflicts in an adoption map and require approval before any mutation. Never auto-migrate Serena memories or duplicate equivalent rules.
 
 ## Canonical Public Sources
 
 - `README.md` — public overview, support claims, quickstart, and roadmap.
 - `SETUP_PROMPT.md` — universal installer and scaffold protocol.
 - `docs/VENDOR_ADAPTERS.md` — vendor support and adapter behavior.
+
+The approved existing-repository adoption invariant is recorded in
+`.salvor/decisions/2026-07-30-preservation-first-existing-repository-adoption.md`.
 
 The deployable GitHub Pages site in `site/` is a semantic presentation mirror of these sources, not an independent authority.
 

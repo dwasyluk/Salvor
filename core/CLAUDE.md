@@ -13,6 +13,9 @@ thin CLI-specific entrypoints.
 - Keep the installer vendor-agnostic and vendor-portable; thin adapter glue must
   never fork or take ownership of the shared brain.
 - Scope questions are user-gated. Never invent components, stacks, or parity paths.
+- Existing repositories use preservation-first adoption: reuse existing
+  Serena/GitNexus state, hubs, spokes, rules, adapters, and vendor
+  infrastructure; every exact mutation or conflict is planned and approved.
 - A prompt behavior change must be reflected in `example-project/` and user-facing documentation.
 
 ## Validation
@@ -20,6 +23,6 @@ thin CLI-specific entrypoints.
 - Scan for unresolved template tokens and verify all vendor adapters point to the same canonical core.
 
 ## Build
-- No compilation. `VERSION.md` key: `CORE`; current build `CORE:12`; derived constant: `CORE_BUILD`.
+- No compilation. `VERSION.md` key: `CORE`; current build `CORE:13`; derived constant: `CORE_BUILD`.
 
 Use Serena for repository structure, `.salvor/DOMAIN_REF.md` for product truth, and `.salvor/INFRA.md` for operational details.

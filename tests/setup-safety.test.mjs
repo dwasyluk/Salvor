@@ -9,7 +9,9 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const setup = readFileSync(join(root, "SETUP_PROMPT.md"), "utf8");
+const normalizedSetup = setup.replace(/\s+/g, " ");
 const readme = readFileSync(join(root, "README.md"), "utf8");
+const exampleReadme = readFileSync(join(root, "example-project/README.md"), "utf8");
 
 // --- Git safety -----------------------------------------------------------
 test("setup prompt never blanket-stages files", () => {
@@ -48,6 +50,107 @@ test("no silent overwrites; managed sections are delimited", () => {
 test("re-running setup is treated as update, not reinstall", () => {
   assert.match(setup, /`\.salvor\/` already exists, this is an update, not an install/i);
   assert.match(setup, /(repair|update|migrat)/i);
+});
+
+test("existing Serena state is reused without reinitialization or automatic memory migration", () => {
+  assert.match(
+    normalizedSetup,
+    /If `\.serena\/` already exists[\s\S]*reuse (?:that|the existing) project state/i,
+    "setup must reuse the existing Serena project"
+  );
+  assert.match(
+    normalizedSetup,
+    /do not (?:re-?run|run) `serena init`/i,
+    "setup must not reinitialize an existing Serena project"
+  );
+  assert.match(
+    normalizedSetup,
+    /never (?:copy|migrate|import)[^.\n]*Serena memor(?:y|ies)[^.\n]*into `\.salvor\/`/i,
+    "setup must not automatically promote Serena memories into canonical Salvor memory"
+  );
+  assert.match(
+    normalizedSetup,
+    /each proposed `\.serena\/memories\/`[^.\n]*file[^.\n]*pre-write plan[^.\n]*approval/i,
+    "every proposed Serena-memory change must be individually planned and approved"
+  );
+  assert.match(
+    normalizedSetup,
+    /case variant[^.\n]*`\.Serena\/`[^.\n]*collision/i,
+    "case-variant Serena directories must stop setup instead of creating a second tree"
+  );
+});
+
+test("existing GitNexus state is reused and only stale indexes trigger a refresh choice", () => {
+  assert.match(
+    normalizedSetup,
+    /If GitNexus is already present[\s\S]*reuse (?:its|the existing) CLI, configuration, and index/i,
+    "setup must reuse the existing GitNexus installation"
+  );
+  assert.match(
+    normalizedSetup,
+    /fresh index[^.\n]*no migration[^.\n]*no rebuild/i,
+    "a fresh existing index must remain untouched"
+  );
+  assert.match(
+    normalizedSetup,
+    /stale index[^.\n]*explicit refresh choice/i,
+    "a stale index must trigger an explicit refresh choice"
+  );
+  assert.match(
+    normalizedSetup,
+    /preserve any unrelated existing `\.gitnexusrc` keys[^.\n]*never replace the file/i,
+    "existing GitNexus configuration must be merged, not replaced"
+  );
+});
+
+test("existing agent architecture is adopted in place instead of duplicated", () => {
+  assert.match(normalizedSetup, /adoption map/i, "setup must produce an adoption map");
+  for (const category of [
+    "reuse unchanged",
+    "add Salvor-managed section",
+    "conflict — operator decision required",
+  ]) {
+    assert.ok(setup.includes(category), `adoption map must include: ${category}`);
+  }
+  assert.match(
+    normalizedSetup,
+    /existing `CLAUDE\.md`[^.\n]*(?:remains|stays)[^.\n]*canonical hub/i,
+    "an existing hub must remain the hub"
+  );
+  assert.match(
+    normalizedSetup,
+    /existing component spokes[^.\n]*(?:discover|map|reuse)[^.\n]*never create competing/i,
+    "existing spokes must be reused rather than duplicated"
+  );
+  assert.match(
+    normalizedSetup,
+    /equivalent existing rules[^.\n]*reuse[^.\n]*not duplicate/i,
+    "equivalent rules must not be duplicated"
+  );
+  assert.match(
+    normalizedSetup,
+    /conflicting rules[^.\n]*side by side[^.\n]*operator decision/i,
+    "rule conflicts must be shown explicitly instead of silently resolved"
+  );
+  assert.match(
+    normalizedSetup,
+    /existing `\.claude\/`[^.\n]*`CLAUDE\.local\.md`[^.\n]*(?:hooks|settings|agents|skills)[^.\n]*unchanged[^.\n]*exact mutation[^.\n]*approval/i,
+    "existing Claude infrastructure must remain unchanged unless an exact mutation is approved"
+  );
+});
+
+test("the worked example explains update-mode preservation", () => {
+  const normalizedExample = exampleReadme.replace(/\s+/g, " ");
+  assert.match(
+    normalizedExample,
+    /running setup again.{0,220}reuse.{0,120}`\.serena\/`.{0,120}hub.{0,120}spokes.{0,120}`RULES\.md`/i,
+    "the regression fixture must explain which existing project structures setup reuses"
+  );
+  assert.match(
+    normalizedExample,
+    /does not.{0,80}migrate.{0,80}Serena memories.{0,120}does not.{0,80}duplicate.{0,80}rules/i,
+    "the regression fixture must state the memory and rule-preservation boundary"
+  );
 });
 
 // --- Core vs enhanced mode ------------------------------------------------

@@ -14,5 +14,6 @@ future sessions honor them instead of re-litigating. Part of the
 
 | Date | Decision |
 |------|----------|
+| 2026-07-30 | [Preservation-first existing-repository adoption](./2026-07-30-preservation-first-existing-repository-adoption.md) |
 | 2026-07-27 | [Canonical logo SVG masters](./2026-07-27-canonical-logo-svg-masters.md) |
 | 2026-07-20 | [Canonical W10 brand system](./2026-07-20-canonical-w10-brand-system.md) |

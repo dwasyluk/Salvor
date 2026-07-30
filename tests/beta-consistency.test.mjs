@@ -122,14 +122,14 @@ test("agent-routing and example surfaces keep Serena memories as retrieval aids"
 
 test("soft-launch component build IDs are synchronized across current state and spokes", async () => {
   const version = await read("VERSION.md");
-  assert.match(version, /"core"\s*:\s*12/);
+  assert.match(version, /"core"\s*:\s*13/);
   assert.match(version, /"ghpage"\s*:\s*16/);
   assert.match(version, /"docs"\s*:\s*17/);
-  assert.match(version, /CORE:12 \| GHPAGE:16 \| DOCS:17/);
+  assert.match(version, /CORE:13 \| GHPAGE:16 \| DOCS:17/);
 
   const currentSurfaces = [
-    [".salvor/active_state.md", /CORE:12 GHPAGE:16 DOCS:17/],
-    ["core/CLAUDE.md", /current build `CORE:12`/],
+    [".salvor/active_state.md", /CORE:13 GHPAGE:16 DOCS:17/],
+    ["core/CLAUDE.md", /current build `CORE:13`/],
     ["site/CLAUDE.md", /current build `GHPAGE:16`/],
     ["docs/CLAUDE.md", /current build `DOCS:17`/],
   ];

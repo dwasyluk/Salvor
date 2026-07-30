@@ -60,6 +60,35 @@ Detect and report which of these already exist:
 - Third-party instruction sections in `CLAUDE.md` / `AGENTS.md` / `GEMINI.md`
   (other tools' managed blocks, hand-written project guidance)
 
+**Existing-repository adoption is preservation-first.** Before proposing any
+write, produce an **adoption map** with exactly these categories:
+`reuse unchanged`, `add Salvor-managed section`, and
+`conflict — operator decision required`.
+
+- An existing `CLAUDE.md` remains the canonical hub. Existing component spokes
+  are discovered, mapped, and reused; never create competing spokes or replace
+  a mature hub-and-spoke architecture.
+- Preserve an existing `RULES.md` verbatim. Equivalent existing rules are
+  reused, not duplicated. Show conflicting rules side by side and require an
+  operator decision; never silently choose one rule over another.
+- Keep existing `.claude/`, `CLAUDE.local.md`, hooks, settings, agents, and
+  skills unchanged unless each exact mutation is listed in the pre-write plan
+  and receives approval. Apply the same rule to `.codex/`, `.gemini/`, MCP
+  configuration, and every third-party managed section.
+- If `.serena/` already exists, reuse that project state; do not re-run
+  `serena init`. Never copy, migrate, or import Serena memories into
+  `.salvor/`. Read-only use of a responding Serena integration needs no extra
+  adoption prompt. Each proposed `.serena/memories/` file change must be named
+  in the pre-write plan, explain its merge, and wait for approval. A case
+  variant such as `.Serena/` is a collision: stop and ask rather than creating
+  a competing lowercase tree.
+- If GitNexus is already present, reuse its CLI, configuration, and index. A
+  fresh index requires no migration and no rebuild. A stale index requires an
+  explicit refresh choice. When setting `indexOnly`, preserve any unrelated
+  existing `.gitnexusrc` keys and never replace the file. Do not run
+  `gitnexus setup` or change client/global configuration without separate
+  approval.
+
 **If `.salvor/` already exists, this is an update, not an install.** Treat
 `.salvor/README.md` + Salvor-managed markers as the PRIMARY installation evidence
 (a Salvor install may exist with no `VERSION.md` when Q4=NO). Identify the installed
@@ -202,7 +231,8 @@ proceed to Step 2.
 ## Step 2 — Present the setup plan, then create the file tree
 
 **Approval gate — before writing anything**, present in one message, based on
-the Step 0 scan and my Step 1 answers:
+the Step 0 scan and my Step 1 answers. Present this as the preservation-first
+**adoption map** established in Step 0.2:
 - **Files to create** (new, no conflict). List `VERSION.md` here ONLY when the
   selected Q4 path creates or updates it (Q4=YES, or Q4=NO with the minimal
   Salvor project-history artifact when the repo has no version source). When
@@ -213,6 +243,11 @@ the Step 0 scan and my Step 1 answers:
 - **Files unchanged**
 - **Conflicts** (existing content overlapping Salvor's role) and the **merge
   strategy** for each.
+- **Existing integrations adopted in place:** name any reused `.serena/`,
+  `.gitnexus/`, `.gitnexusrc`, hub, spokes, `RULES.md`, vendor infrastructure,
+  and third-party managed sections. For every proposed `.serena/memories/`
+  change, name the exact file and wait for approval; an omitted file is
+  unchanged.
 
 Merge rule for existing instruction files (`CLAUDE.md`, `AGENTS.md`,
 `GEMINI.md`, `RULES.md`, …): Salvor content goes into a clearly delimited
@@ -1021,6 +1056,12 @@ After Steps 2–4, return a short report:
   tools were unavailable or only READY and why, and confirm no MCP-only operation
   was instructed for a non-responding MCP.
 - File list created/modified (with byte counts or LOC), plus confirmation that the completed diff was shown.
+- Adoption summary: list everything reused unchanged, every Salvor-managed
+  section added, and every conflict resolved by an explicit operator decision.
+  Confirm that existing Serena memories, hub/spokes, rules, vendor
+  infrastructure, and GitNexus configuration/index were not migrated,
+  duplicated, rebuilt, or overwritten unless the approved plan named that
+  exact action.
 - Confirmation that root `CLAUDE.md`, `RULES.md` (§0–§9, with strict defaults marked enabled/disabled per Step 1 Q4),
   L1, L2, `DOMAIN_REF`, `INFRA`, `DEFERRED_TODOS`, `decisions/README`, `postmortems/README`,
   `domain-learnings/README`, and each spoke `CLAUDE.md` exist and have project-specific placeholders filled in.

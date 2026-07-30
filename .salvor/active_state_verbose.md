@@ -4,6 +4,44 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-07-30 — Preservation-first existing-repository adoption (CORE:13)
+
+The operator approved a load-bearing setup invariant for mature repositories:
+Salvor adopts existing agent infrastructure in place instead of treating every
+repo as an empty scaffold.
+
+- Before any write, setup produces an adoption map with `reuse unchanged`,
+  `add Salvor-managed section`, and
+  `conflict — operator decision required`.
+- Existing `.serena/` state is reused automatically. Setup does not rerun
+  `serena init`, migrate/copy/import Serena memories into `.salvor/`, or modify
+  a memory file unless that exact path and merge are approved. Case variants
+  such as `.Serena/` stop as collisions.
+- Existing GitNexus CLI/config/index state is reused. Fresh indexes are not
+  rebuilt; stale indexes require an explicit refresh choice; `.gitnexusrc`
+  merges preserve unrelated keys and are never whole-file replacements.
+- An existing `CLAUDE.md` remains the hub; component spokes are discovered and
+  reused. Existing `RULES.md` is preserved, equivalent rules are not
+  duplicated, and genuine conflicts are shown side by side for operator choice.
+- Existing `.claude/`, `CLAUDE.local.md`, hooks, settings, agents, skills,
+  adapters, MCP configuration, and third-party managed sections remain
+  unchanged unless the pre-write plan names and receives approval for the exact
+  mutation.
+
+Correctly mapped read-only reuse requires no extra prompt. The prompt boundary
+is an ambiguous mapping, collision, stale-index refresh, genuine conflict, or
+concrete mutation. Contract tests failed before the installer/example changes
+and passed after them. Canonical rationale:
+`.salvor/decisions/2026-07-30-preservation-first-existing-repository-adoption.md`.
+
+Public README/docs/FAQ/CHANGELOG/GitHub Pages propagation is intentionally held
+for a separately reviewed Phase 2 content plan. The soft-launch release gate
+therefore remains NO-GO until that phase is approved, implemented, and fully
+verified. The operator authorized a local Phase 1 CORE:13 commit while reviewing
+that plan; push, tag, release, and deployment remain operator-controlled.
+
+---
+
 ## 2026-07-28 — Soft-launch community routing (CORE:12 GHPAGE:16 DOCS:17)
 
 The operator selected GitHub Discussions as Salvor's initial canonical
