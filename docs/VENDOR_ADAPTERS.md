@@ -64,6 +64,14 @@ code structure. Vendor entrypoints point to and summarize the canonical records 
 they are never a knowledge fork. See `ARCHITECTURE.md` ("One owner per durable fact")
 for the full ownership map.
 
+Existing project documentation and vendor-specific notes are preserved in
+place during setup. If the user asks Salvor to adopt their knowledge—during
+setup or later—the same section-level mapping flow proposes which material
+stays canonical where it is, which becomes an approved `.salvor/` artifact,
+and which remains untouched. One file may yield several independently approved
+artifact types; no adapter or vendor memory is bulk-copied into the canonical
+brain.
+
 That's the whole adapter. The core files it points at are identical across vendors.
 In pure index mode GitNexus injects nothing; any GitNexus code-intelligence routing
 note is a hand-authored note in the canonical `CLAUDE.md` hub — never a

@@ -11,6 +11,9 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 ## Architecture Notes
 - The repository sources above are authoritative; the site is their semantic presentation mirror.
 - Existing mapped copy must update whenever its canonical sources change.
+- The Primary Path presents existing-knowledge adoption as current beta
+  behavior: a read-only inventory during setup and the same section-level flow
+  later on demand, with originals untouched unless separately approved.
 - If a source change requires a new section, interaction, or visual element, synchronization must stop with design review required. Ask the operator before adding the element.
 - A source-of-truth sync is incomplete until direct Playwright runs cover desktop, tablet, Galaxy-S25-Edge-like small-phone, and 320px narrow viewports. Verify hero and copy readability, local asset loading, and zero horizontal overflow; never infer responsive health from CSS review.
 - LF1: final visual-alignment evidence comes from DPR-aware Playwright screenshot ink, not DOM/CSS box geometry. Report signed first-line glyph/label and visible SVG/title deltas and keep each within one CSS pixel across the complete six-viewport release matrix; use boxes only to delimit pixel scan regions.
@@ -25,6 +28,6 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 ## Build and deploy
 - Static files live in `site/`; `.github/workflows/pages.yml` deploys that directory from `main`. `main` is the single source of truth.
 - Run the Node contract/interaction tests and Playwright browser suite before commit. A push deploys, so never push without explicit approval.
-- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:16`; derived constant: `GHPAGE_BUILD`.
+- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:17`; derived constant: `GHPAGE_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for deployment details.

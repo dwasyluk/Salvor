@@ -1,8 +1,8 @@
-<!-- {"version":"1.0.0-beta","core":13,"ghpage":16,"docs":17} -->
+<!-- {"version":"1.0.0-beta","core":14,"ghpage":17,"docs":18} -->
 # salvor VERSION MANIFEST
 ## Current State
 - **Project Version:** v1.0.0-beta
-- **Build IDs:** CORE:13 | GHPAGE:16 | DOCS:17
+- **Build IDs:** CORE:14 | GHPAGE:17 | DOCS:18
 - **Last Updated:** 2026-07-30
 
 ---
@@ -11,6 +11,7 @@
 
 | Date | Build IDs | Summary |
 |------|-----------|---------|
+| 2026-07-30 | CORE:14 GHPAGE:17 DOCS:18 | Promoted preservation-first knowledge adoption from roadmap to current `v1.0.0-beta` behavior. Existing repositories now receive a read-only knowledge-source inventory during setup and can invoke the same workflow later on demand. Selected documents are analyzed at section/snippet level, allowing one source to map to multiple independently approved Salvor artifact types or remain canonical in place. Every proposed mapping names its source range, destination, canonical owner, ownership action, and exact content; originals remain untouched unless a separate mutation is approved. Synchronized the installer, worked example, README, architecture, FAQ, vendor guidance, changelog, GitHub Pages primary path, roadmap materials, contracts, and dogfooded state. |
 | 2026-07-30 | CORE:13 GHPAGE:16 DOCS:17 | Added preservation-first existing-repository adoption to the core setup protocol. Setup now presents an adoption map (`reuse unchanged` / `add Salvor-managed section` / `conflict — operator decision required`), reuses existing Serena/GitNexus state and mature hub/spoke/rules/vendor infrastructure in place, forbids automatic Serena-memory migration and duplicate equivalent rules, and requires exact pre-write approval for mutations, collisions, stale-index refreshes, ambiguity, or genuine conflicts. Added installer contracts, updated the worked example, and recorded the design decision; public README/docs/FAQ/CHANGELOG/GitHub Pages propagation remains a separately reviewed Phase 2 gate. |
 | 2026-07-28 | CORE:12 GHPAGE:16 DOCS:17 | Established GitHub Discussions as the soft-launch community hub while keeping actionable work in Issues and PRs. Added prominent README feedback routes through Discussions or lowercase `@blockchaindan` on X; documented the all-caps `[HELP]`, `[BUG]`, `[IDEA]`, `[ADAPTER]`, and `[SHOWCASE]` discussion taxonomy plus `[IDEA]` → `[FEAT]` promotion; aligned issue-template prefixes; and added direct Community links to the GitHub Pages desktop, mobile, and footer navigation without exposing X on the site. |
 | 2026-07-27 | CORE:12 GHPAGE:15 DOCS:16 | Completed the final site hierarchy and terminology pass: closed both clipped-corner panel borders in WF and Mystic while preserving the burn-integrated small-screen treatment; replaced the capture-class bell with the approved stacked-document foundation icon; raised the code-intelligence tool-title rows clearly above body copy, expanded the Loop introduction to the full section width, and differentiated the Serena MCP/GitNexus MCP guidance with explicit optionality and token-efficiency benefits. Standardized lowercase `enhanced` prose across the installer, current protocol state, public documentation, example, site, and release history while preserving machine-state tokens such as `ENHANCED-READY` and `ENHANCED-ACTIVE`. |

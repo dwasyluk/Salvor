@@ -29,6 +29,14 @@ three outcomes:
 
 The adoption rules are:
 
+- Inventory existing project knowledge sources read-only during setup and offer
+  optional analysis then; the user may invoke the same workflow later on
+  demand. Classify coherent sections/snippets rather than whole files because
+  one document may contain multiple artifact types.
+- For each candidate, show the source location, proposed destination, canonical
+  owner, ownership action, and exact content. Confirm unrelated promotions
+  independently through their applicable capture gates. Existing source files
+  remain untouched unless their mutation receives separate approval.
 - Reuse an existing `.serena/` project automatically. Do not rerun
   `serena init`; do not copy, migrate, import, or promote its memories into
   `.salvor/`. Every proposed `.serena/memories/` mutation is named file by file
@@ -70,7 +78,10 @@ Existing repository knowledge and tool state are preserved by default. No
 existing memory, rule, hub, spoke, adapter, hook, setting, skill, managed
 section, or integration configuration may be copied, migrated, duplicated,
 rebuilt, or overwritten unless the pre-write plan names the exact mutation and
-the operator approves it.
+the operator approves it. Setup-time and later on-demand knowledge adoption use
+one section-level mapping protocol; every approved durable fact has one
+canonical owner, and the original source remains untouched unless a separate
+source mutation is explicitly approved.
 
 ## Coupling / blast radius
 

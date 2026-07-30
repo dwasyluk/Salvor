@@ -18,7 +18,14 @@ without a memory migration.
 4. Three user-gated capture classes: Decision / Domain Learning, Learned Failure (LF#), and Deferred Finding.
 5. An auditable history of why; optional Strict installations add per-component version counters, while Core/Q4=NO uses the project's established version source or a minimal history artifact.
 6. Optional enhanced mode adds Serena semantic/symbolic code intelligence and GitNexus relationship/impact intelligence; Core works without either tool, but both are highly recommended for the best code-grounded results.
-7. Existing-repository setup is preservation-first: reuse existing Serena/GitNexus state, hubs, spokes, rules, adapters, and vendor infrastructure in place; list exact additions or conflicts in an adoption map and require approval before any mutation. Never auto-migrate Serena memories or duplicate equivalent rules.
+7. Existing-repository adoption is preservation-first. Reuse Serena/GitNexus
+   state, hubs, spokes, rules, adapters, and vendor infrastructure in place;
+   list exact additions or conflicts before mutation. During setup—or later on
+   demand—the same read-only knowledge-adoption workflow maps selected source
+   sections independently to one canonical owner and exact proposed content.
+   Mixed documents may yield multiple artifact types; originals remain
+   untouched unless separately approved. Never auto-migrate Serena memories or
+   duplicate equivalent rules.
 
 ## Canonical Public Sources
 

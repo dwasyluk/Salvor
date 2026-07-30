@@ -79,6 +79,13 @@ Initial public beta.
   anything, never auto-commits (you review and commit the scaffold yourself),
   and is idempotent: re-running it on an already-scaffolded repo detects
   existing Salvor files and updates rather than clobbers.
+- **Preservation-first knowledge adoption** — during setup or later on demand,
+  Salvor can inventory existing docs, READMEs, ADRs, postmortems, runbooks, and
+  agent instructions read-only; map selected sections independently to their
+  correct canonical owners; and present exact per-item approvals before any
+  durable capture. Mixed documents can yield multiple artifact types, mature
+  docs can stay canonical in place, and originals remain untouched unless their
+  mutation is separately approved.
 - **Core vs enhanced modes** — Core mode works with files and prompts alone (no
   extra tooling); enhanced mode layers in optional Serena and GitNexus
   integrations for semantic symbol navigation and code-graph analysis. Both

@@ -59,6 +59,10 @@ Detect and report which of these already exist:
   inside instruction files
 - Third-party instruction sections in `CLAUDE.md` / `AGENTS.md` / `GEMINI.md`
   (other tools' managed blocks, hand-written project guidance)
+- Existing knowledge sources: `docs/`, root and component READMEs, ADRs,
+  architecture/design notes, CHANGELOGs, postmortems/incident reports, runbooks,
+  and agent instruction files. Inventory paths and headings only at this stage;
+  do not promote their content automatically.
 
 **Existing-repository adoption is preservation-first.** Before proposing any
 write, produce an **adoption map** with exactly these categories:
@@ -107,6 +111,63 @@ them and never duplicates them; preserve Spec Kit's agent files and merge
 instructions rather than replacing them. Spec Kit governs what should be built
 and how a feature moves from specification to implementation. Salvor preserves
 the longitudinal engineering memory accumulated while the system evolves.
+
+### 0.2.1 Existing-knowledge adoption (setup-time and on demand)
+
+Existing project documentation is valuable input, not Salvor-owned material.
+During initial setup, offer a **read-only inventory** of `docs/`, READMEs, ADRs,
+architecture/design notes, CHANGELOGs, postmortems, runbooks, and agent
+instruction files. The inventory performs no writes before any write is
+approved. Do not read or classify every file blindly: list candidate paths and
+headings first, identify likely relevant material, and ask whether I want the
+knowledge-adoption analysis now. Declining does not discard the option.
+
+I can later request the same workflow on demand, for example:
+
+> "Adopt project knowledge from `docs/`, starting with
+> `docs/architecture.md` and `docs/incidents/`."
+
+Initial setup and later on-demand requests use the **same knowledge-adoption
+analysis and workflow**. Never treat one file as one artifact type. Analyze at
+**section/snippet-level** because one document can contain multiple different
+artifact types. Split unrelated material into separate candidate mappings and
+do not batch their approval.
+
+For every candidate, present a mapping row before any write with:
+
+| Required field | Meaning |
+|---|---|
+| **Source path** | Existing project-owned file |
+| **Source range** | Heading and line range or another unambiguous section locator |
+| **Summary** | Concise statement of the durable knowledge and its why |
+| **Classification** | Decision, Domain Learning, Learned Failure, current domain truth, infrastructure/operations, Deferred Finding, hub/spoke guidance, or existing canonical documentation |
+| **Proposed destination** | Exact target such as `.salvor/decisions/`, `.salvor/domain-learnings/`, `.salvor/postmortems/`, `.salvor/DOMAIN_REF.md`, `.salvor/INFRA.md`, `.salvor/DEFERRED_TODOS.md`, or a hub/spoke link |
+| **Canonical owner** | The one file or artifact that will own the durable fact after approval |
+| **Ownership action** | One of `keep canonical in place + link`, `promote with provenance`, `migrate`, or `leave untouched` |
+| **Proposed content** | Exact new or changed Markdown for review |
+
+Interpret the ownership actions exactly:
+
+- `keep canonical in place + link` — the existing project document remains the
+  authority; Salvor adds only a concise pointer or routing summary.
+- `promote with provenance` — a new Salvor artifact becomes the canonical
+  engineering record and cites the untouched source as evidence/history.
+- `migrate` — move ownership and modify the original source only after a
+  separate, explicit source-mutation approval.
+- `leave untouched` — make no Salvor or source-file change.
+
+The original source stays unchanged by default. Never delete, rewrite, move, or
+mark it non-canonical without separate explicit approval. Never create two
+co-canonical copies. If ownership is unclear or two destinations compete, mark
+the row `conflict — operator decision required`.
+
+After I review the full map, confirm each unrelated mapping or durable
+promotion one at a time. Use the existing exact capture gate that matches the
+classification: `"Record this as a design decision? (yes/no)"`,
+`"Save this as a domain learning? (yes/no)"`, the Learned Failure flow, or
+`"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`. A structural hub/spoke
+link or source migration receives its own exact diff approval. A rejected item
+leaves no partial artifact.
 
 ### 0.3 Tooling check — Core vs enhanced mode
 Salvor runs in one of these modes:
@@ -248,6 +309,11 @@ the Step 0 scan and my Step 1 answers. Present this as the preservation-first
   and third-party managed sections. For every proposed `.serena/memories/`
   change, name the exact file and wait for approval; an omitted file is
   unchanged.
+- **Existing knowledge sources:** show the read-only candidate inventory and
+  whether knowledge adoption is `review now` or `deferred by operator`. If
+  reviewing now, append the section/snippet-level mapping table from Step
+  0.2.1. This content plan is separate from the structural adoption map; no
+  mapped knowledge is written until its per-item approval gate passes.
 
 Merge rule for existing instruction files (`CLAUDE.md`, `AGENTS.md`,
 `GEMINI.md`, `RULES.md`, …): Salvor content goes into a clearly delimited

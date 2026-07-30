@@ -257,6 +257,33 @@ Salvor splits memory into two complementary layers:
 That split keeps day-to-day context cheap while preserving the deeper audit trail
 needed when an agent gets confused or a team needs to revisit a decision.
 
+## Can Salvor adopt my existing project documentation?
+
+Yes—during initial setup or later on demand. Both paths use the same
+preservation-first, section-level mapping flow. Salvor first inventories
+candidate `docs/`, READMEs, ADRs, postmortems, runbooks, and agent instructions
+without writing. You then select what it should analyze.
+
+A document is not forced into one artifact type. For example,
+`docs/architecture.md` might contain:
+
+- a database choice mapped to `.salvor/decisions/`;
+- benchmark evidence mapped to `.salvor/domain-learnings/`;
+- a failed migration mapped to `.salvor/postmortems/` and the LF registry;
+- deployment instructions mapped to `.salvor/INFRA.md`; and
+- API reference material that remains canonical in `docs/`, with Salvor adding
+  only a concise pointer.
+
+Salvor shows each source section, proposed destination, canonical owner,
+ownership action, and exact content before writing. Each unrelated durable
+promotion receives its own approval gate. The original documentation remains
+untouched unless you separately approve changing it.
+
+Existing Serena memories and vendor-specific agent notes follow the same
+preservation boundary: Salvor may propose individually reviewed captures later,
+or you can ask it at any time to preserve selected knowledge through the Salvor
+loop, but it never automatically promotes those files into canonical memory.
+
 ## Why the name Salvor instead of "brain"?
 
 The persistent-memory space is crowded with "brain" names. Salvor stands out

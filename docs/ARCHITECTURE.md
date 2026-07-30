@@ -114,6 +114,32 @@ at the root; everything else Salvor owns lives in `.salvor/`.* Tooling gets one
 predictable root, your own `docs/` stays uncluttered, and `.serena/` / `.gitnexus/`
 remain their own tools' homes (Salvor orchestrates them, it doesn't absorb them).
 
+### Adopting existing project knowledge
+
+Salvor can analyze existing project documentation during setup or later on
+demand. Both entry points use one preservation-first knowledge-adoption
+workflow: inventory candidate paths and headings read-only, analyze selected
+material at section/snippet level, then present a mapping for approval before
+writing.
+
+The unit of classification is a coherent section, not a file. A single design
+document may contain a decision, an empirical Domain Learning, a failed
+approach, current domain truth, operational knowledge, and deferred work. Each
+piece receives its own proposed destination, canonical owner, ownership action,
+exact Markdown, and applicable capture gate.
+
+Existing documentation remains project-owned and unchanged by default. It can:
+
+- stay canonical in place while Salvor links to it;
+- provide provenance for knowledge promoted into one canonical `.salvor/`
+  artifact;
+- be migrated only after separate approval to change the source; or
+- remain entirely untouched.
+
+This is adoption rather than bulk copying: Salvor never makes an entire
+`docs/` tree canonical by duplication and never silently promotes existing
+Serena memories, agent notes, or project documents.
+
 ### One owner per durable fact
 
 Salvor is not "everything in-repo is co-canonical." Each durable fact has **one

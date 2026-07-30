@@ -113,14 +113,38 @@ dogfooded adapter, not a boundary on which models can use Salvor.
 3. The agent inspects your existing files first, then asks its four setup questions
    (1. project name · 2. components + stack hints · 3. optional paired-path parity
    · 4. whether to enable optional Strict engineering defaults).
-4. It scaffolds the Salvor structure, then OFFERS a reviewed commit — it never
+4. In an existing repo, it inventories likely knowledge sources and can map
+   selected sections now—or later on demand—without changing the originals.
+5. It scaffolds the Salvor structure, then OFFERS a reviewed commit — it never
    auto-commits and never runs a blanket `git add -A`. You review, you approve.
-5. Done — your repo now carries its own reviewed engineering memory.
+6. Done — your repo now carries its own reviewed engineering memory.
 ```
 
 Setup works in **Core mode** even if no MCP tools are present — see
 [Core vs enhanced](#core-vs-enhanced-mode) below. The whole installer is one
 file: **[`SETUP_PROMPT.md`](./SETUP_PROMPT.md)**.
+
+## Adopt the knowledge you already have
+
+Existing project documentation does not need to be rewritten or moved into a
+new Salvor-owned `docs/` folder. During setup—or later, whenever you ask—Salvor
+can inventory selected `docs/`, READMEs, ADRs, postmortems, runbooks, and agent
+instructions, then propose a reviewed **section-level adoption map**.
+
+One source document may contain several kinds of knowledge. Salvor maps each
+relevant section independently: a decision can become a decision artifact, an
+empirical finding a Domain Learning, a failed approach a postmortem/LF entry,
+operational material an `INFRA.md` update, and mature project documentation can
+remain canonical exactly where it is with only a link from Salvor.
+
+Each proposed mapping shows the source section, destination, canonical owner,
+ownership action, and exact Markdown before anything is written. Unrelated
+promotions are approved individually through the existing capture gates.
+Original files remain untouched unless you separately approve their mutation.
+For example:
+
+> “Adopt project knowledge from `docs/architecture.md` and
+> `docs/incidents/`, but leave the source files unchanged.”
 
 ## See it populated
 
@@ -294,8 +318,6 @@ it is to build the harder pieces together — issues tagged
   GitNexus routing note, unsafe/unexpected `.gitnexusrc` changes, stale or missing
   index state, unexpected context-file injection, unexpected generated skills/hooks,
   and component spokes that fell behind the code.
-- **📥 Existing-repo adoption/import** — scan ADRs, READMEs, postmortems, and
-  existing agent instruction files, then propose the initial Salvor structure.
 - **🔌 More vendor adapters** — harden the Codex & Gemini entrypoints; add
   Cursor / OpenCode / others.
 - **🧩 Vendor plugins** — a Claude Code plugin (a convenience wrapper over the

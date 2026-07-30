@@ -12,6 +12,9 @@ const setup = readFileSync(join(root, "SETUP_PROMPT.md"), "utf8");
 const normalizedSetup = setup.replace(/\s+/g, " ");
 const readme = readFileSync(join(root, "README.md"), "utf8");
 const exampleReadme = readFileSync(join(root, "example-project/README.md"), "utf8");
+const architecture = readFileSync(join(root, "docs/ARCHITECTURE.md"), "utf8");
+const faq = readFileSync(join(root, "docs/FAQ.md"), "utf8");
+const roadmap = readFileSync(join(root, "docs/roadmap-issues.md"), "utf8");
 
 // --- Git safety -----------------------------------------------------------
 test("setup prompt never blanket-stages files", () => {
@@ -150,6 +153,99 @@ test("the worked example explains update-mode preservation", () => {
     normalizedExample,
     /does not.{0,80}migrate.{0,80}Serena memories.{0,120}does not.{0,80}duplicate.{0,80}rules/i,
     "the regression fixture must state the memory and rule-preservation boundary"
+  );
+});
+
+test("setup-time and later requests use the same knowledge-adoption workflow", () => {
+  assert.match(
+    normalizedSetup,
+    /(?:initial|during) setup[^.]{0,240}(?:later|on-demand)[^.]{0,240}same knowledge-adoption (?:analysis|workflow)|same knowledge-adoption (?:analysis|workflow)[^.]{0,240}(?:initial|during) setup[^.]{0,240}(?:later|on-demand)/i,
+    "initial setup and later import requests must converge on one workflow"
+  );
+  for (const source of ["`docs/`", "README", "ADR", "postmortem", "agent instruction"]) {
+    assert.ok(
+      normalizedSetup.toLowerCase().includes(source.toLowerCase()),
+      `knowledge-source inventory must include ${source}`
+    );
+  }
+  assert.match(
+    normalizedSetup,
+    /read-only (?:inventory|scan)[\s\S]{0,240}(?:no writes|before any write|without writing)/i,
+    "knowledge-source discovery must remain read-only until approval"
+  );
+});
+
+test("knowledge adoption classifies sections independently and confirms every mapping", () => {
+  assert.match(
+    normalizedSetup,
+    /(?:section|snippet)[- ]level[^.]{0,220}(?:one|single) (?:document|file)[^.]{0,180}(?:multiple|different) (?:artifact|knowledge|capture) types/i,
+    "one mixed document must be split into independently classified sections"
+  );
+  for (const field of [
+    "source path",
+    "source range",
+    "proposed destination",
+    "canonical owner",
+    "proposed content",
+  ]) {
+    assert.ok(
+      normalizedSetup.toLowerCase().includes(field),
+      `each mapping row must include ${field}`
+    );
+  }
+  for (const action of [
+    "keep canonical in place + link",
+    "promote with provenance",
+    "migrate",
+    "leave untouched",
+  ]) {
+    assert.ok(setup.includes(action), `knowledge mapping must support action: ${action}`);
+  }
+  for (const destination of [
+    ".salvor/decisions/",
+    ".salvor/domain-learnings/",
+    ".salvor/postmortems/",
+    ".salvor/DOMAIN_REF.md",
+    ".salvor/INFRA.md",
+    ".salvor/DEFERRED_TODOS.md",
+  ]) {
+    assert.ok(setup.includes(destination), `knowledge mapping must support ${destination}`);
+  }
+  assert.match(
+    normalizedSetup,
+    /original source[\s\S]{0,180}(?:unchanged|untouched)[\s\S]{0,180}(?:separate|explicit) approval/i,
+    "source documents must remain untouched unless their mutation is separately approved"
+  );
+  assert.match(
+    normalizedSetup,
+    /(?:approve|confirm)[^.]{0,120}(?:each|per-item|one at a time)[^.]{0,180}(?:mapping|promotion)|(?:each|per-item)[^.]{0,120}(?:mapping|promotion)[^.]{0,180}(?:approve|confirm)/i,
+    "durable promotions must be confirmed individually"
+  );
+});
+
+test("knowledge adoption is current beta behavior across the example and public docs", () => {
+  for (const [name, content] of [
+    ["README", readme],
+    ["architecture", architecture],
+    ["FAQ", faq],
+    ["example", exampleReadme],
+  ]) {
+    assert.match(
+      content.replace(/\s+/g, " "),
+      /(?:existing|project) (?:documentation|knowledge)[\s\S]{0,240}(?:setup|later|on-demand|adopt|import)/i,
+      `${name} must explain existing-knowledge adoption`
+    );
+  }
+  assert.match(faq, /^## Can Salvor adopt my existing project documentation\?/m);
+  assert.doesNotMatch(
+    readme,
+    /\*\*📥 Existing-repo adoption\/import\*\*/,
+    "shipped knowledge adoption must not remain in the README roadmap"
+  );
+  assert.doesNotMatch(
+    roadmap,
+    /^## \d+\. Existing-repo import\b/m,
+    "shipped knowledge adoption must not remain an unimplemented issue stub"
   );
 });
 

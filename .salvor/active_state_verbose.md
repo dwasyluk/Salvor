@@ -4,6 +4,40 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-07-30 — Existing-knowledge adoption public sync (CORE:14 GHPAGE:17 DOCS:18)
+
+Phase 2 promotes semantic existing-knowledge adoption from a roadmap concept to
+current `v1.0.0-beta` behavior and completes the public counterpart to the
+Phase 1 structural preservation work.
+
+- During setup, Salvor inventories `docs/`, READMEs, ADRs, architecture notes,
+  CHANGELOGs, postmortems, runbooks, and agent instructions read-only, then
+  asks whether the operator wants candidate content analyzed.
+- The same workflow can be invoked later on demand. Both entry points classify
+  coherent sections/snippets rather than whole files, because one document may
+  contain decisions, Domain Learnings, Learned Failures, current domain truth,
+  operations, deferred findings, and still-canonical reference material.
+- Every mapping exposes source path/range, summary, classification, exact
+  destination, canonical owner, ownership action, and proposed Markdown.
+  Unrelated promotions retain their individual Salvor capture gates.
+- Ownership actions are explicit: keep canonical in place + link, promote with
+  provenance, migrate, or leave untouched. Originals stay unchanged by default;
+  source mutation requires separate approval and no co-canonical copy is
+  permitted.
+- README, architecture, FAQ, vendor guidance, example, changelog, site Primary
+  Path, roadmap materials, component spokes, domain truth, Serena routing
+  memory, and contracts now describe the current behavior consistently.
+
+TDD evidence: new setup/site/version contracts failed against CORE:13 /
+GHPAGE:16 / DOCS:17 before implementation, then passed 49/49 after the
+CORE:14 / GHPAGE:17 / DOCS:18 implementation. Final verification passed
+131/131 unit tests, 109/109 contract tests, 24/24 Playwright checks across all
+release viewports, all 11 release-audit gates, and `git diff --check`. The
+soft-launch gate is GO for an operator-controlled push. No push, tag, release,
+or deployment was performed.
+
+---
+
 ## 2026-07-30 — Preservation-first existing-repository adoption (CORE:13)
 
 The operator approved a load-bearing setup invariant for mature repositories:

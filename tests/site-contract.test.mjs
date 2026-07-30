@@ -83,6 +83,22 @@ test("the site mirrors the canonical framework taxonomy and governance", async (
   }
 });
 
+test("the site presents preservation-first knowledge adoption as current beta behavior", async () => {
+  const html = await read("site/index.html");
+  const visibleText = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+
+  assert.match(
+    visibleText,
+    /existing project[\s\S]{0,240}(?:docs|documentation|knowledge)[\s\S]{0,180}(?:section|snippet)[- ]level/i,
+  );
+  assert.match(
+    visibleText,
+    /(?:during|at) setup[^.]{0,180}(?:later|on demand)|(?:later|on demand)[^.]{0,180}(?:during|at) setup/i,
+  );
+  assert.match(visibleText, /originals? (?:stay|remain)[^.]{0,80}(?:untouched|unchanged)/i);
+  assert.doesNotMatch(visibleText, /existing-repo adoption\/import[^.]{0,120}(?:roadmap|coming soon)/i);
+});
+
 test("the site presents six portable process steps and linked enhanced integrations", async () => {
   const html = await read("site/index.html");
   const process = html.match(
@@ -312,10 +328,10 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     read(".salvor/INFRA.md"),
     read(".serena/memories/task_completion.md"),
   ]);
-  assert.match(version, /"ghpage"\s*:\s*16/);
-  assert.match(version, /GHPAGE:16/);
+  assert.match(version, /"ghpage"\s*:\s*17/);
+  assert.match(version, /GHPAGE:17/);
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
-  assert.match(l1, /GHPAGE:16/);
+  assert.match(l1, /GHPAGE:17/);
   // The responsive-check SOP lives in its canonical homes (L1, INFRA, L2), not
   // duplicated across every Serena memory — post-refresh, Serena memories are
   // concise pointers under the one-owner model.

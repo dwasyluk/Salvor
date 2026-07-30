@@ -13,6 +13,14 @@ project, canonical hub, component spokes, and `RULES.md` in place. It does not
 migrate Serena memories into `.salvor/` and does not duplicate equivalent
 rules; any conflict or exact mutation waits for operator approval.
 
+An existing project can also ask Salvor to adopt project documentation during
+setup or later on demand. Both paths use the same read-only, section-level
+mapping flow. A mixed document may propose separate decisions, Domain
+Learnings, Learned Failures, infrastructure notes, or links to documentation
+that should remain canonical in place. Every mapping names one canonical owner
+and waits for its own approval; the original project document remains untouched
+unless its mutation is separately approved.
+
 The app itself is deliberately tiny: an in-memory **Notes** service.
 
 > The store is **in-memory** — all notes are lost when the API restarts. There is no database. That's intentional for a
