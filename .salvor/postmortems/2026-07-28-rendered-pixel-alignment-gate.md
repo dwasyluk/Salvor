@@ -1,5 +1,11 @@
 # Rendered-Pixel Alignment Gate
 
+- **ID:** PM:rendered-pixel-alignment-gate
+- **Subject:** site, visual-alignment, playwright, release-gates
+- **Claim:** Element-box geometry repeatedly accepted a visibly misaligned render; only DPR-aware screenshot ink caught it.
+- **Evidence date:** 2026-07-28
+- **Status:** live
+
 ## Summary
 
 Repeated Code Intelligence typography revisions passed DOM/CSS geometry checks
@@ -48,7 +54,7 @@ release oracle.
 
 ## Findings → follow-ups
 
-- **LF1 — Rendered pixels are the visual-alignment oracle.** DOM rectangles may
+- **`LF:rendered-pixel-alignment` — Rendered pixels are the visual-alignment oracle.** DOM rectangles may
   delimit screenshot scan regions, but they must never be used as final evidence
   that glyphs, labels, or SVG strokes are visually aligned.
 - **FIXED — DPR-aware image coordinates.** Divide the captured bitmap dimensions

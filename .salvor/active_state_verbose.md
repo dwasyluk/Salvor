@@ -126,15 +126,15 @@ changed.
 
 ---
 
-## 2026-07-28 — LF1 rendered-pixel alignment gate
+## 2026-07-28 — LF:rendered-pixel-alignment gate (captured as "LF1"; ID migrated 2026-08-05)
 
 - **Failure.** More than six Code Intelligence alignment revisions used CSS/DOM box geometry as the review oracle and still rendered visibly pixel-incorrect. Element/line boxes do not prove glyph baselines, and SVG boxes include whitespace that does not represent the visible stroke.
 - **Corrective method.** Playwright now screenshots each MCP heading/article, scales bitmap coordinates from the actual screenshot-root CSS dimensions, detects black/gold rendered ink, isolates the gold label's first contiguous line band, and reports signed title/label and icon/title pixel deltas. DOM rectangles only delimit scan regions.
 - **Evidence.** The corrected test failed 6/6 release viewports before the CSS fix. Gold first-line baselines already measured `0px`; icon/title top deltas exposed the shared-offset error from `-2.99px` to `+3.97px`. Per-card offsets derived from those measurements then passed 6/6 at 1440/1024/768/390/360/320 with both visible-ink deltas ≤1 CSS px.
-- **Invariant.** Never request visual alignment review from box geometry alone. Require the rendered-ink regression plus direct screenshot inspection. LF1 source: `.salvor/postmortems/2026-07-28-rendered-pixel-alignment-gate.md`.
+- **Invariant.** Never request visual alignment review from box geometry alone. Require the rendered-ink regression plus direct screenshot inspection. `LF:rendered-pixel-alignment` source: `.salvor/postmortems/2026-07-28-rendered-pixel-alignment-gate.md`.
 - **Independent visual check.** Direct rendered screenshots at 1440, 768, and 320px confirm the title/label baseline, icon/title visible tops, right-column containment, and wrapped narrow labels match the numeric gate.
 - **Full verification.** 120/120 unit and contract checks, 24/24 Chromium checks, the 11-gate release audit, and `git diff --check` pass. The IPv6 local server and final ngrok review URL both return HTTP 200.
-- **Gate.** Automated and internal visual verification are green. The operator approved the ngrok-reviewed LF1 rendered-pixel alignment as materially better and authorized a local commit on `main`; push remains operator-controlled.
+- **Gate.** Automated and internal visual verification are green. The operator approved the ngrok-reviewed `LF:rendered-pixel-alignment` fix as materially better and authorized a local commit on `main`; push remains operator-controlled.
 
 ---
 
@@ -300,7 +300,7 @@ Direct Playwright verification covered 1440×1000 desktop, 768×1024 tablet, 360
 
 ## 2026-07-19 — CORE:04 DOCS:04 public-launch hardening sweep
 
-Standardized the capture taxonomy on the umbrella term "capture classes" across RULES, the CLAUDE.md capture directive, docs, and the example project. The three classes: (1) Decision / Domain Learning, with subtypes Design Decision (prompt "Record this as a design decision? (yes/no)" → `.salvor/decisions/`) and Domain Learning (prompt "Save this as a domain learning? (yes/no)" → `.salvor/domain-learnings/`); (2) Learned Failure (LF#), registered through the same flow; (3) Deferred Finding (prompt "Log this to .salvor/DEFERRED_TODOS.md? (yes/no)" → `.salvor/DEFERRED_TODOS.md`). "Trigger" survives as a verb; the classes are canonical. Root RULES §2 now carries both Decision/Learning prompts, matching the example project's RULES.
+Standardized the capture taxonomy on the umbrella term "capture classes" across RULES, the CLAUDE.md capture directive, docs, and the example project. The three classes: (1) Decision / Domain Learning, with subtypes Design Decision (prompt "Record this as a design decision? (yes/no)" → `.salvor/decisions/`) and Domain Learning (prompt "Save this as a domain learning? (yes/no)" → `.salvor/domain-learnings/`); (2) Learned Failure (`LF:<slug>` since 2026-08-05; previously numbered LF#), registered through the same flow; (3) Deferred Finding (prompt "Log this to .salvor/DEFERRED_TODOS.md? (yes/no)" → `.salvor/DEFERRED_TODOS.md`). "Trigger" survives as a verb; the classes are canonical. Root RULES §2 now carries both Decision/Learning prompts, matching the example project's RULES.
 
 Renamed the RULES §1 recovery loop-breaker to "Context Recovery Procedure" in both RULES files, both CLAUDE.md hubs, and ARCHITECTURE.md, retiring the memory-loss-themed legacy name and replacing its prose everywhere with "context recovery."
 
