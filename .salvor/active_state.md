@@ -12,7 +12,7 @@
 ## Pipeline: SETUP_PROMPT protocol + README/docs truth → `site/` static presentation on `main`
 ## DEPLOYMENT: site is `site/` on `main`; `.github/workflows/pages.yml` deploys `site/` from `main` (source = GitHub Actions); pushing/deploying stay operator-controlled
 ## RELEASE-STAGING: `v1.0.0-beta` = prompt + docs + site only; Claude Code plugin stays “in active development, ships with v1.1.0,” with no shipped-plugin commands/install copy on this line
-## CAPTURE TAXONOMY: (1) Decision / Domain Learning → `.salvor/decisions/` / `.salvor/domain-learnings/`; (2) Learned Failure (LF#) → DOMAIN_REF/postmortems; (3) Deferred Finding → DEFERRED_TODOS; durable capture always requires the exact user gate
+## CAPTURE TAXONOMY: (1) Decision / Domain Learning → `.salvor/decisions/` / `.salvor/domain-learnings/`; (2) Learned Failure (`LF:<slug>`) → DOMAIN_REF/postmortems; (3) Deferred Finding → DEFERRED_TODOS; durable capture always requires the exact user gate; slug IDs + Subject/Claim headers + reconcile/audit per RULES §10
 ## RESPONSIVE SYNC SOP: every `site/` change runs Playwright at desktop, tablet, Galaxy-S25-Edge-like small-phone, and 320px narrow sizes; verify hero/readability, local assets, loop layout, 3/2/1 process layout, mouse/touch burn input, selection/controls, and zero horizontal overflow
 ## LEARNED FAILURES: LF:rendered-pixel-alignment — >6 box-aligned visual revisions stayed pixel-wrong; final alignment evidence must be DPR-aware rendered screenshot ink with signed first-line title/label + visible SVG/title deltas ≤1px across all six release viewports
 ## Open: Automate canonical public-content sync into `site/` on `main`; request design approval for new page elements

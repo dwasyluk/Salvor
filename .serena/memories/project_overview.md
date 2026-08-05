@@ -10,8 +10,10 @@ Salvor (v1.0.0-beta soft launch, MIT) is repo-native engineering memory plus a g
 
 ## Capture taxonomy (three CAPTURE CLASSES)
 1. Decision / Domain Learning
-2. Learned Failure (LF#)
+2. Learned Failure (`LF:<slug>`)
 3. Deferred Finding
+
+IDs are self-allocating slugs (`LF:`/`DL:`/`DEC:`/`PM:`/`deferred:`) with structured Subject/Claim headers; merge/pull reconcile + recurring Brain Audit per `RULES.md` §10 (canon).
 
 ## One-owner canonical model
 `.salvor/` artifacts + hub/spokes own their knowledge. Serena memories are retrieval aids/pointers, never the canonical source.

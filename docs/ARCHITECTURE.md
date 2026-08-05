@@ -147,7 +147,7 @@ canonical owner**; other shared files link to or summarize it rather than forkin
 
 - **`.salvor/` artifacts own their knowledge.** L1 (`active_state.md`) = concise
   current state; L2 (`active_state_verbose.md`) = curated recovery history;
-  `DOMAIN_REF.md` = current domain facts + the failure (`LF#`) registry;
+  `DOMAIN_REF.md` = current domain facts + the failure (`LF:`) registry;
   `decisions/` = design rationale; `domain-learnings/` = validated discoveries;
   `postmortems/` = incident/failure evidence; `DEFERRED_TODOS.md` = deferred findings.
 - Canonical engineering knowledge lives in its assigned `.salvor/` artifact.
@@ -168,12 +168,53 @@ promotion into the durable shared record is user-approved. Three distinct classe
 | Capture class | Captures | Verbatim prompt | Lands in |
 |---|---|---|---|
 | **Decision / Domain Learning** | A discovery, decision, or **design invariant** + its *why* | `"Save this as a domain learning? (yes/no)"` (a **Domain Learning**) · `"Record this as a design decision? (yes/no)"` (a **Design Decision**) | `.salvor/domain-learnings/` (learnings) or `.salvor/decisions/` (decisions + **Invariant/Coupling**) + `DOMAIN_REF.md` + L1/L2 |
-| **Learned Failure (LF#)** | A recurring/structural failure mode + root cause + fix sites | (registered through the same flow when the discovery *is* a failure) | `DOMAIN_REF.md` LF# registry + L1 shorthand |
+| **Learned Failure (`LF:<slug>`)** | A recurring/structural failure mode + root cause + fix sites | (registered through the same flow when the discovery *is* a failure) | `DOMAIN_REF.md` `LF:` registry + L1 shorthand |
 | **Deferred Finding** | An out-of-scope finding surfaced mid-task — real, but must not derail current work | `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"` | `.salvor/DEFERRED_TODOS.md` (dedupe-first; Severity + Suggested-fix) |
 
 Keeping these three *distinct* is the legibility upgrade at the heart of Salvor:
 "what we learned," "how we failed," and "what we noticed but parked" are different
 kinds of knowledge with different homes.
+
+## The distributed brain: IDs, reconcile, audit
+
+A shared brain that travels through Git has to survive *parallel* growth: two
+developers on separate branches capturing knowledge at the same time. Salvor's
+`RULES.md` §10 defines three mechanisms:
+
+**Self-allocating slug IDs (§10.1).** Every knowledge artifact is identified by
+`<CLASS>:<kebab-slug>` — `LF:stale-note-reference`, `DEC:store-returns-copies`,
+`deferred:no-persistence` — assigned at capture time. No sequential counters
+means no ID allocation ever reads shared state, so parallel branches cannot
+collide on "the next number." Every artifact opens with a structured header —
+**ID / Subject tags / Claim / Evidence date / Status** — which is what makes
+semantic comparison mechanical rather than vibes-based.
+
+**Brain Reconcile (§10.2).** Unique IDs prevent the *merge conflict*, but not
+the harder failure: two developers capturing **semantically duplicate or
+contradictory** knowledge under different names. Example: dev A captures
+`DL:polymarket-rate-limit-backoff` ("429s under burst; exponential backoff")
+while dev B captures `DL:clob-429-throttling` ("order endpoint throttles
+~10 req/s; retry with jitter") — different slugs, both merge cleanly, and the
+brain now carries the same vendor behavior twice. Worse, contradictions: A
+records "the sandbox mirrors production latency," B later measures that it
+doesn't. Reconcile runs at merge and pull points: incoming artifacts are
+**paired by subject-tag overlap** (not name similarity), their claims compared,
+and each pair classified — *distinct*, *duplicate* (merge into one),
+*overlapping* (augment), *contradictory* (operator decision; exactly one
+`Status: live` entry survives), or *supersedes* (v1 → v2). Every merge of
+durable knowledge is operator-gated, and superseded artifacts keep their ID as
+a redirect so references never dangle. L1 is never textually merged — it is
+re-synthesized from both sides after resolution — and, under Strict defaults,
+`VERSION.md` counters advance only at integration (feature branches record
+`pending`), so parallel branches never race a counter.
+
+**Brain Audit (§10.3).** Reconcile only sees what a merge brings in. A
+recurring semantic self-audit — due every 3 days by default, operator-tunable,
+tracked by the `Last Brain Audit` line in L1 — runs the same subject/claim
+comparison across the *whole* brain, catching duplicates that accreted on one
+branch, contradictions against `DOMAIN_REF.md` current truth, stale L1 lines,
+and dangling links. (The audit interval and its configurability are an area
+where beta feedback is explicitly invited.)
 
 ## Two things people conflate (don't)
 
