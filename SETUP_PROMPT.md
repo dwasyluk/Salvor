@@ -399,7 +399,7 @@ You self-identify knowledge worth persisting durably and ask me, verbatim, befor
    deliberate **Design Decision or load-bearing invariant**, ask `"Record this as a design decision? (yes/no)"` →
    `.salvor/decisions/` (with its Invariant & Coupling); for an empirical **Domain Learning**, ask
    `"Save this as a domain learning? (yes/no)"` → `.salvor/domain-learnings/`.
-2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
+2. **Learned Failure (`LF:<slug>`)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
 3. **Deferred Finding** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
 ### GitNexus — Code Intelligence (enhanced mode only; hand-authored, thin)
@@ -413,7 +413,7 @@ available skills can vary by GitNexus and coding-agent version. Inspect the prop
 them. Remove this whole section in Core mode.]
 ```
 
-### `RULES.md` (mandatory; §0–§9, tiered)
+### `RULES.md` (mandatory; §0–§10, tiered)
 
 ```markdown
 # <PROJECT_NAME> Development Rules
@@ -425,24 +425,29 @@ These rules are MANDATORY. They supplement CLAUDE.md and take precedence over de
   canonical ownership, context recovery, security, and git-safe operation. Always on; removing these breaks Salvor.
 - **[STRICT] Optional Strict Engineering Defaults** — opinionated, project-specific, fully editable: build counters
   (§0.1, §3), mirror parity (§0.5, §6.3), whole-file-read limits (§4.1), impact-analysis-before-every-edit (§4.3),
-  env-var conventions (§4.4, §6.2), container permission gates (§5.1), branch-deletion hygiene (§6.11). Tune, replace,
+  env-var conventions (§4.4, §6.2), container permission gates (§5.1), branch-deletion hygiene (§6.11), pre-merge
+  brain reconcile (§0.6, §10.2). Tune, replace,
   or disable per project — disabling them must NOT break the Core Protocol. Status (from setup Q4): **[ENABLED |
   DISABLED — [STRICT] items inactive until the team opts in]**.
 
 ---
 
-## 0. CRITICAL: Task Termination Protocol [CORE; items 1 & 5 STRICT]
+## 0. CRITICAL: Task Termination Protocol [CORE; items 1, 5 & 6 STRICT]
 Before declaring any task "Complete" or "Done," you MUST verify and execute this checklist. **No task is complete until
 spokes are synced and L1/L2 caches are updated** — plus, when strict defaults are enabled, the [STRICT] items below.
 
 1. **[STRICT] Version Check:** If any logic in a component changed, increment its build ID in `VERSION.md` and update
-   the "Last Updated" date. No hardcoded versions in source — they derive from VERSION.md at build time.
+   the "Last Updated" date. No hardcoded versions in source — they derive from VERSION.md at build time. On a feature
+   branch, record the history row with the literal build ID `pending` instead — real numbers are assigned at
+   integration (§3, §10.2).
 2. **L1 Sync (`.salvor/active_state.md`):** Dense technical shorthand. Keep under 50 lines.
 3. **L2 Sync (`.salvor/active_state_verbose.md`):** Offload full reasoning, logs, and nuance here.
 4. **Spoke Sync:** Update the changed component's spoke `CLAUDE.md`. Update `.salvor/DOMAIN_REF.md` if domain logic changed;
    `.salvor/INFRA.md` if infra changed. Do NOT edit root CLAUDE.md for component-specific changes.
 5. **[STRICT] Production/Mirror Parity (if applicable):** Keep `<MIRROR_FILE>` bit-for-bit aligned with `<LIVE_FILE>`.
    Both paths land in the SAME commit. See §6.3.
+6. **[STRICT] Brain Reconcile (feature branches):** if this task ends in a PR or a merge into the integration branch,
+   fetch the target branch and run the §10.2 Brain Reconcile ceremony against it BEFORE the merge.
 
 ## 1. Context Recovery Procedure [CORE]
 If I ask for "context recovery" — or you find yourself in a logic loop, repeating already-falsified reasoning:
@@ -456,7 +461,7 @@ Every domain discovery, hypothesis falsification, validation, vendor/model verdi
 save checkpoint**. The discovery is not the end — persisting it across the stack is.
 
 **Trigger:** any of — hypothesis tested with evidence (accepted OR falsified); multi-dataset matrix / bakeoff result;
-vendor / dependency probe with a verdict; new technique validated; Learned Failure (LF#) registered or updated; a
+vendor / dependency probe with a verdict; new technique validated; Learned Failure (`LF:<slug>`) registered or updated; a
 **deliberate design decision or load-bearing invariant** (why the code is shaped this way and what must stay true); or a
 taxonomy clarification that will outlive the refactor.
 
@@ -470,19 +475,24 @@ Non-negotiable — it is the signal that the rule is working. Do not infer the a
 into one prompt, do not defer.
 
 **On `yes` — execute the full stack update:**
-1. **Dated artifact:** create the frozen record — a **finding** in
-   `.salvor/domain-learnings/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` (hypothesis, evidence, verdict, cross-links) per
-   `.salvor/domain-learnings/README.md`, **or** a **design decision** in `.salvor/decisions/YYYY-MM-DD-[slug].md` (Context,
-   Decision, Rationale, **Invariant**, **Coupling/blast-radius**, Alternatives) per `.salvor/decisions/README.md`.
-2. **TOC update:** add a row to the matching chronological index:
+1. **Dedupe by subject first:** search the matching registry/index (and `DOMAIN_REF.md`) by **Subject tags** — not just
+   title or slug — before creating anything. If an artifact with overlapping subject and the same claim already exists,
+   surface it and ask whether to augment it instead of adding a duplicate (same contract as §7's deferred dedupe).
+2. **Dated artifact with ID + structured header:** create the frozen record — a **finding** in
+   `.salvor/domain-learnings/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` (ID `DL:<kebab-slug>`, or `LF:<kebab-slug>` for a
+   Learned Failure spec; hypothesis, evidence, verdict, cross-links) per `.salvor/domain-learnings/README.md`, **or** a
+   **design decision** in `.salvor/decisions/YYYY-MM-DD-[slug].md` (ID `DEC:<kebab-slug>`; Context, Decision, Rationale,
+   **Invariant**, **Coupling/blast-radius**, Alternatives) per `.salvor/decisions/README.md`. Every artifact opens with
+   the structured header — ID / Subject / Claim / Evidence date / Status (§10.1).
+3. **TOC update:** add a row to the matching chronological index:
    `.salvor/domain-learnings/README.md` for empirical findings, or
    `.salvor/decisions/README.md` for design decisions.
-3. **DOMAIN_REF.md:** update to reflect new authoritative state — new/updated LF# entry, parameter rationale, finding
-   status. DOMAIN_REF is current truth; the artifact is the frozen audit trail.
-4. **Stack evaluation — update if affected:** `CLAUDE.md` hub (only if project-wide context shifts); spoke `CLAUDE.md`;
+4. **DOMAIN_REF.md:** update to reflect new authoritative state — new/updated `LF:<slug>` entry, parameter rationale,
+   finding status. DOMAIN_REF is current truth; the artifact is the frozen audit trail.
+5. **Stack evaluation — update if affected:** `CLAUDE.md` hub (only if project-wide context shifts); spoke `CLAUDE.md`;
    L1 (`.salvor/active_state.md`); L2 (`.salvor/active_state_verbose.md`); Serena memories (`.serena/memories/`,
    enhanced mode — concise pointers only, per §8); per-user auto-memory (if enabled — see §8).
-5. **Confirmation report:** list which files were touched so I can verify end-to-end.
+6. **Confirmation report:** list which files were touched so I can verify end-to-end.
 
 **On `no`:** acknowledge and continue. Do not silently save a partial version.
 
@@ -500,6 +510,12 @@ decision, domain learning, learned failure, or deferred finding into the reposit
 - A change in a component bumps its own counter and gets its own history row. Mixed commits bump all affected components
   independently.
 - Each bump carries a bulleted change list. Multiple components → one block each.
+- **Counters advance only on the integration branch** (`main`, or the team's designated integration branch). Work
+  committed directly to it bumps immediately — the solo flow is unchanged. On a feature branch, add the history row
+  with the literal build ID `pending` (e.g. `| [DATE] | <COMP_ID_A>:pending | change summary |`) and leave the JSON
+  header, "Build IDs" line, L1 header, and spoke build lines untouched. The merge (§10.2 Brain Reconcile) assigns real
+  numbers — ONE bump per affected component per integration, regardless of how many branch-internal tasks contributed —
+  and rewrites the `pending` rows in the merge commit. Parallel branches therefore never race on a counter.
 
 **ALL version bumps MUST be logged in VERSION.md first. No hardcoded versions in source code.**
 
@@ -536,8 +552,8 @@ decision, domain learning, learned failure, or deferred finding into the reposit
    (slug ≠ id ≠ external-id). When in doubt, grep the API docs / proxy handler.
 8. **Cache key invariants.** Any cache key must include EVERY input that changes the output (model name, prompt-version
    hash, schema version). Adding an input without bumping the key = silent staleness.
-9. **LF# is the atomic unit of work.** Upgrading a fix (v1 → v2) updates every site listed under that LF# in DOMAIN_REF.md
-   together. A new mirror site = a new LF#-amendment commit, not a quiet one-liner.
+9. **The Learned Failure is the atomic unit of work.** Upgrading a fix (v1 → v2) updates every site listed under that
+   `LF:<slug>` entry in DOMAIN_REF.md together. A new mirror site = a new LF-amendment commit, not a quiet one-liner.
 10. **Production-affecting code requires explicit operator ack before deploy.** Any path touching money, customer data,
     external mutations, or shared infra — operator sees the diff first. Not "I think this is right, pushing."
 11. **Delete merged branches in the same step as the merge.** After merge + push: `git branch -d <name>` AND
@@ -553,13 +569,14 @@ never silently log one (I own prioritization).
 > "Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"
 
 Bundle multiple findings that emerge together into one prompt. **On `yes`:**
-1. Read `.salvor/DEFERRED_TODOS.md` first and **deduplicate** — if the finding (or a close relative) already exists, surface
-   it and ask whether to augment rather than add a duplicate.
-2. If new, append an entry with: title, **Where** (file/location), **What**, **Severity** (Low / Medium / High — judged
-   as "impact if left ~6 months," not "broken today"), and **Suggested fix**.
+1. Read `.salvor/DEFERRED_TODOS.md` first and **deduplicate by subject** — if the finding (or a close relative) already
+   exists, surface it and ask whether to augment rather than add a duplicate.
+2. If new, append an entry headed by a self-allocating slug ID — `### deferred:<kebab-slug> — <short title>` (never a
+   sequential number; §10.1) — with: **Subject** (tags), **Where** (file/location), **What**, **Severity** (Low /
+   Medium / High — judged as "impact if left ~6 months," not "broken today"), and **Suggested fix**.
 3. Do not derail the current task to fix it — capture and continue.
 
-When one is later fixed: delete its entry, and reference it in the fixing commit (`closes deferred #N` if numbered).
+When one is later fixed: delete its entry, and reference the stable ID in the fixing commit (`closes deferred:<slug>`).
 
 ## 8. Memory layers & canonical ownership [CORE]
 - **Shared and Git-tracked does not mean co-canonical. Every durable fact has one canonical owner. Other shared files
@@ -607,6 +624,72 @@ When one is later fixed: delete its entry, and reference it in the fixing commit
 3. **Git-safe operation:** never blanket-stage (no catch-all add flags, no staging `.`), never commit without explicit
    approval, never silently overwrite files or another tool's managed sections. Stage explicit path lists; show
    `git diff --cached` before any commit you were asked to make.
+
+## 10. Distributed Brain: IDs, Reconcile & Audit [CORE; §10.2 trigger 1 STRICT]
+The brain travels through Git. Parallel branches, agents, and worktrees can capture semantically duplicate or
+contradictory knowledge under different names, and shared single-file surfaces conflict textually. This section keeps
+the brain single-truth with no central ID authority.
+
+### 10.1 Knowledge IDs [CORE]
+- Every durable knowledge artifact has a **self-allocating slug ID** — `<CLASS>:<kebab-slug>` — assigned at capture
+  time: `LF:` (Learned Failure), `DL:` (Domain Learning), `DEC:` (Design Decision), `PM:` (Postmortem), `deferred:`
+  (Deferred Finding). **Never a sequential number** — no ID allocation may read shared state.
+- Every artifact opens with the **structured header** (the semantic-dedupe key):
+  **ID** · **Subject** (tags: the system/vendor/component the claim is about) · **Claim** (one-line invariant) ·
+  **Evidence date** · **Status** (`live` | `superseded-by: <id>`).
+- IDs are immutable once merged to the integration branch; renaming before merge (on the owning branch) is fine.
+- Registries/indexes enforce slug uniqueness per class. A slug collision found at reconcile time is a probable
+  duplicate (§10.4), not an error. Superseded artifacts keep their ID with `Status: superseded-by: <id>` — never
+  delete an ID from a registry; references must not dangle.
+
+### 10.2 Brain Reconcile (merge/pull ceremony)
+**Triggers:**
+1. **[STRICT] Pre-merge:** on a feature branch, before opening a PR or merging into the integration branch, fetch the
+   target and reconcile against it (§0 item 6) — dedupe lands BEFORE the textual conflict.
+2. **[CORE] Post-pull:** at session start, if incoming commits touched `.salvor/`, the version source, `RULES.md`, or
+   `.serena/memories/`, ask verbatim:
+   > "Incoming brain changes detected — run brain reconcile? (yes/no)"
+
+**Procedure:** three-way diff (merge base / ours / theirs) over the brain surfaces → semantic comparison (§10.4) →
+per-surface resolution. Every merge/augment/supersede of durable knowledge is operator-gated, verbatim:
+> "Merge these two <class> artifacts into one? (yes/no)"
+
+| Surface | Resolution rule |
+|---------|-----------------|
+| Artifacts (DL / DEC / PM / LF specs) | Winner absorbs loser with a provenance block; loser becomes a one-line redirect stub (`superseded-by:`). |
+| `DOMAIN_REF.md` | Single current truth — contradictions resolve to ONE `Status: live` entry; loser marked superseded with date + why. |
+| L1 (`active_state.md`) | NEVER textually merged — re-synthesize from both sides' L2 + artifacts after resolution (≤50 lines). |
+| L2 (`active_state_verbose.md`) | Union both sides, normalize to chronological order, collapse duplicate sections. |
+| Index READMEs + `DEFERRED_TODOS.md` | Union rows, re-sort, dedupe. (Optional `.gitattributes` `merge=union` convenience — reconcile normalizes regardless.) |
+| `RULES.md` | Governance — conflicting edits to Salvor-managed sections are ALWAYS operator-decided; never auto-merged. |
+| `.serena/memories/` | Derived views — re-derive from the reconciled canonical artifacts; never merge textually. |
+| Spoke `CLAUDE.md` | Update knowledge references to the reconciled IDs; [STRICT] build lines per §3 integration bump. |
+| Version source | [STRICT] §3 integration bump: assign real numbers to `pending` rows — one bump per component per integration. |
+
+End with the standard confirmation report (every touched file).
+
+### 10.3 Brain Audit (recurring semantic self-audit)
+Reconcile only sees what a merge brings in; duplicates also accrete on a single branch or pre-date the protocol.
+- **Cadence:** due every **3 days** — `AUDIT_INTERVAL_DAYS = 3`, operator-tunable (beta default; feedback welcome on
+  the default and its configurability). Tracked by the `## Last Brain Audit:` line in L1. At session start, if
+  overdue, ask verbatim:
+  > "Brain audit is due (last run N days ago) — run it now? (yes/no)"
+- **Sweep:** the §10.4 comparison run all-pairs across the whole brain, plus: contradiction check against DOMAIN_REF
+  current truth; missing/empty Subject/Claim headers; stale L1 lines; dangling or superseded cross-links; aging
+  deferred findings; L1 ≤50-line and L2 rotation checks.
+- Findings route through the same classification + operator gates as §10.2. Update the L1 audit line and land the run
+  as an ordinary commit.
+
+### 10.4 Semantic comparison (never filename-only)
+1. **Pair by Subject:** for each new/changed artifact, collect every existing artifact (any class, any date) sharing
+   ≥1 Subject tag. Subject overlap — not name similarity — is the pairing key.
+2. **Compare Claims** (read both artifacts in full):
+   - same claim, compatible evidence → **duplicate** — merge into one (keep the richer body, union evidence, one live ID)
+   - compatible claims, different facets → **overlapping** — augment the canonical one
+   - incompatible claims → **contradictory** — operator decision required (present both evidence dates, with a
+     newest-evidence presumption); exactly ONE `Status: live` entry survives
+   - one retests/upgrades the other → **supersedes** — v1 → v2 per §6.9 atomicity
+3. No pair → **distinct** — keep as-is.
 ```
 
 ### `VERSION.md`
@@ -631,8 +714,12 @@ component spokes and session reports.
 
 | Date | Build IDs | Summary |
 |------|-----------|---------|
-| [DATE] | <COMP_ID_A>:01 <COMP_ID_B>:01 | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9, VERSION.md, per-component spokes, DEFERRED_TODOS, domain-learnings + postmortems scaffolds. |
+| [DATE] | <COMP_ID_A>:01 <COMP_ID_B>:01 | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§10, VERSION.md, per-component spokes, DEFERRED_TODOS, domain-learnings + postmortems scaffolds. |
 ```
+
+Feature-branch note ([STRICT], §3 + §10.2): counters advance only on the integration branch. Feature-branch work
+records history rows with the literal build ID `pending`; the merge assigns the real numbers — so parallel branches
+never race on a counter.
 
 **If Q4 = NO (Core mode / Strict defaults disabled)** — do NOT impose per-component build counters or derived source
 constants, and do NOT overwrite or compete with an existing version source. Detect the repo's established version
@@ -656,7 +743,7 @@ this file is a chronological record of significant changes, not a build-counter 
 
 | Date | Summary |
 |------|---------|
-| [DATE] | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9 (strict defaults DISABLED), DEFERRED_TODOS, domain-learnings + postmortems scaffolds. |
+| [DATE] | Initial Salvor scaffold. Hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§10 (strict defaults DISABLED), DEFERRED_TODOS, domain-learnings + postmortems scaffolds. |
 ```
 
 ### `.salvor/README.md` (folder index)
@@ -678,12 +765,12 @@ the plan generated.)
 |------|-----------|
 | `active_state.md` | **L1** — ≤50-line dense current state + Learned Failures (auto-loaded) |
 | `active_state_verbose.md` | **L2** — curated deep archive (rotated past ~1,500 lines): reasoning, rejected hypotheses |
-| `DOMAIN_REF.md` | Authoritative current truth + the `LF#` learned-failure registry |
+| `DOMAIN_REF.md` | Authoritative current truth + the `LF:` learned-failure registry |
 | `INFRA.md` | Running, env vars, deployment, external APIs |
 | `DEFERRED_TODOS.md` | Deferred findings parked (out-of-scope, not yet fixed) |
 | `domain-learnings/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
 | `decisions/` | Design decisions + load-bearing invariants (why it's this way; what must stay; what depends on it) |
-| `postmortems/` | Incident write-ups feeding `LF#` + deferred findings |
+| `postmortems/` | Incident write-ups feeding `LF:` entries + deferred findings |
 
 Everything here is meant to be **read by humans and agents alike** — it's the *why*
 behind the code.
@@ -711,8 +798,9 @@ The rest of the L1 body is identical either way:
 ## Pipeline: [ONE-LINE: request/data flow, if applicable]
 ## DEPLOYED: [environment, ingress, deploy/perf notes — or "local only"]
 ## Current Delta to Published Logic: [empty initially — populate as work lands]
-## LEARNED FAILURES: [empty initially — LF# entries land here in shorthand]
+## LEARNED FAILURES: [empty initially — `LF:<slug>` entries land here in shorthand]
 ## Open: [active todos / pending decisions]
+## Last Brain Audit: [DATE] (interval 3d — RULES §10.3)
 ```
 
 ### `.salvor/active_state_verbose.md` (L2, curated)
@@ -730,12 +818,12 @@ secrets, credentials, PII, or unredacted logs here (RULES §9) — redact before
 
 ## [DATE] — Project initialized
 <!-- The scaffold line is Q4-conditional — write the variant matching the Step 1 Q4 answer:
-     Q4=YES: "Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9, VERSION.md
+     Q4=YES: "Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§10, VERSION.md
               (per-component build counters), three capture classes."
-     Q4=NO:  "Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9 (strict defaults
+     Q4=NO:  "Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§10 (strict defaults
               DISABLED), three capture classes. Versioning owned by <detected existing version source, or the
               minimal Salvor project-history file when the plan generated one> — no VERSION.md scaffolded." -->
-Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§9, VERSION.md (per-component build counters), three capture classes.
+Initial Salvor scaffold: hub-and-spoke CLAUDE.md, L1/L2 cache, RULES.md §0–§10, VERSION.md (per-component build counters), three capture classes.
 ```
 
 ### `.salvor/DOMAIN_REF.md`
@@ -749,9 +837,11 @@ what's currently true.
 ## Sections
 - [empty — populate as the project takes shape]
 
-## Learned Failures (LF#)
-[LF# entries: number, date, root cause, fix sites, cross-link to the dated artifact in `.salvor/domain-learnings/`. Update
-existing entries when a v1 fix is upgraded to v2 (RULES §6.9).]
+## Learned Failures (LF:)
+[One entry per failure mode, headed `### LF:<kebab-slug> (YYYY-MM-DD)`, opening with the structured header — Subject /
+Claim / Evidence date / Status (RULES §10.1) — then root cause, fix sites, and a cross-link to the dated artifact in
+`.salvor/domain-learnings/`. Update existing entries when a v1 fix is upgraded to v2 (RULES §6.9). Never two
+contradictory `Status: live` entries — resolve per RULES §10.4.]
 ```
 
 ### `.salvor/INFRA.md`
@@ -786,9 +876,10 @@ Out-of-scope findings intentionally **not** addressed when they surfaced — rea
 were found in. Captured here so they don't slip into "I'll remember." Severity reflects "impact if left ~6 months," not
 "broken today." See `RULES.md` §7 for the capture protocol.
 
-<!-- Template for new entries:
+<!-- Template for new entries (self-allocating slug ID — never a sequential number; RULES §10.1):
 
-### N. <short title>
+### deferred:<kebab-slug> — <short title>
+- **Subject**: <tags: system / vendor / component the finding is about>
 - **Where**: <file / location>
 - **What**: <the issue>
 - **Severity**: <Low | Medium | High>
@@ -797,7 +888,7 @@ were found in. Captured here so they don't slip into "I'll remember." Severity r
 -->
 
 ## How this file is maintained
-1. When you fix one: delete its entry, and reference it in the fixing commit (`closes deferred #N` if numbered).
+1. When you fix one: delete its entry, and reference the stable slug ID in the fixing commit (`closes deferred:<slug>`).
 2. When you discover a NEW out-of-scope risk during related work: prompt me (RULES §7), and if I agree, add it here —
    don't let it slip into chat.
 3. When something here becomes urgent (impact observed): promote it to a real ticket and link back.
@@ -808,25 +899,26 @@ were found in. Captured here so they don't slip into "I'll remember." Severity r
 ```markdown
 # Postmortems
 
-Structured write-ups of incidents and significant failures. Each becomes durable knowledge: findings here feed the LF#
-registry in `.salvor/DOMAIN_REF.md` and/or new entries in `.salvor/DEFERRED_TODOS.md`.
+Structured write-ups of incidents and significant failures. Each becomes durable knowledge: findings here feed the
+`LF:` registry in `.salvor/DOMAIN_REF.md` and/or new entries in `.salvor/DEFERRED_TODOS.md`.
 
 ## Naming
-`YYYY-MM-DD-[SHORT-SLUG].md`
+`YYYY-MM-DD-[SHORT-SLUG].md` — artifact ID `PM:<kebab-slug>` (RULES §10.1)
 
 ## Template
+- **Structured header** — ID / Subject / Claim / Evidence date / Status (RULES §10.1).
 - **Summary** — one paragraph: what broke, blast radius, duration.
 - **Timeline** — UTC-stamped sequence of events.
 - **Root cause** — the actual mechanism, not the symptom.
 - **Findings → follow-ups** — each finding tagged with where it goes:
-  `LF#` (recurring failure mode → DOMAIN_REF), `DEFERRED` (out-of-scope fix → DEFERRED_TODOS), or `FIXED` (done in this
-  pass, with commit).
+  `LF:<slug>` (recurring failure mode → DOMAIN_REF), `deferred:<slug>` (out-of-scope fix → DEFERRED_TODOS), or `FIXED`
+  (done in this pass, with commit).
 - **What would have caught it earlier** — the missing test / check / alert.
 
 ## Index
-| Date | File | One-line |
-|------|------|----------|
-| [DATE] | [link] | [takeaway] |
+| Date | ID | File | Subject | One-line |
+|------|----|------|---------|----------|
+| [DATE] | PM:[slug] | [link] | [tags] | [takeaway] |
 ```
 
 ### `.salvor/domain-learnings/README.md`
@@ -838,25 +930,27 @@ Frozen audit trail of every domain discovery, hypothesis test, vendor probe, and
 categorized, and never edited after creation (DOMAIN_REF.md carries the living truth; these are the receipts).
 
 ## Naming convention
-`YYYY-MM-DD-[CATEGORY]-[OUTCOME].md`
+`YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` — artifact ID `DL:<kebab-slug>` (or `LF:<kebab-slug>` for a Learned Failure
+spec; RULES §10.1)
 
 Categories (extend as needed):
 - `PROBE` — exploration of an external system / vendor with a verdict
 - `BAKEOFF` — A/B/N test of competing approaches with a verdict
-- `LF##` — Learned Failure spec with root cause + fix
+- `LF` — Learned Failure spec with root cause + fix (carries the `LF:<slug>` ID registered in DOMAIN_REF)
 - `ARCH` — empirical architecture probe with evidence and a verdict
 - `MIGRATION` — pre-spec for a non-trivial change
 
 ## What goes here
+- Structured header first: ID / Subject / Claim / Evidence date / Status (RULES §10.1)
 - Hypothesis stated up front, in one sentence
 - Evidence: what was tested, observed, what the data says
 - Verdict: accepted / falsified / inconclusive
 - Cross-links: spec → code commit → L1/L2 entries it updated
 
 ## Chronological index
-| Date | File | Category | One-line takeaway |
-|------|------|----------|-------------------|
-| [DATE] | [link] | [cat] | [takeaway] |
+| Date | ID | File | Category | Subject | One-line takeaway |
+|------|----|------|----------|---------|-------------------|
+| [DATE] | DL:[slug] | [link] | [cat] | [tags] | [takeaway] |
 ```
 
 ### `.salvor/decisions/README.md`
@@ -871,9 +965,10 @@ fresh session understands the rationale *before* it changes something, including
 touches an adjacent component that quietly depends on this one.
 
 ## Naming
-`YYYY-MM-DD-[short-slug].md`
+`YYYY-MM-DD-[short-slug].md` — artifact ID `DEC:<kebab-slug>` (RULES §10.1)
 
 ## Entry template
+- **Structured header** — ID / Subject / Claim (the invariant, one line) / Evidence date / Status (RULES §10.1).
 - **Context** — the situation/forces that led to the decision.
 - **Decision** — what was chosen.
 - **Rationale** — the *why* that must outlive the refactor.
@@ -884,9 +979,9 @@ touches an adjacent component that quietly depends on this one.
 - **Alternatives rejected** — and why.
 
 ## Index
-| Date | Decision | Invariant (one-line) | Touches |
-|------|----------|----------------------|---------|
-| [DATE] | [link] | [what must stay true] | [components] |
+| Date | ID | Decision | Subject | Invariant (one-line) | Touches |
+|------|----|----------|---------|----------------------|---------|
+| [DATE] | DEC:[slug] | [link] | [tags] | [what must stay true] | [components] |
 ```
 
 ### `<COMPONENT_*>/CLAUDE.md` (one per component)
@@ -1085,9 +1180,9 @@ State that you understand these at the end of the scaffold confirmation message.
 
 1. **Three capture classes, user-gated.** Decision / Domain Learning → `"Record this as a design decision? (yes/no)"`
    for a design decision/invariant (→ `.salvor/decisions/`), or `"Save this as a domain learning? (yes/no)"` for an
-   empirical finding (→ `.salvor/domain-learnings/`); Learned Failure (LF#) → registered via the same flow; Deferred
-   Finding → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`. Prompt verbatim; never infer; never batch unrelated
-   items; on yes, run the full propagation and report the file list.
+   empirical finding (→ `.salvor/domain-learnings/`); Learned Failure (`LF:<slug>`) → registered via the same flow;
+   Deferred Finding → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`. Prompt verbatim; never infer; never batch
+   unrelated items; on yes, run the full propagation and report the file list.
 2. **L1/L2 update silently** after every confirmed resolution (CLAUDE.md SYSTEM DIRECTIVE). L1 stays under 50 lines;
    L2 stays curated and secret-free (RULES §9). Routine operational state is automatic; promoting anything into the
    durable shared engineering record always asks first (rule 1).
@@ -1109,6 +1204,11 @@ State that you understand these at the end of the scaffold confirmation message.
    and non-shared — never the home of canonical knowledge.
 9. **Git-safe operation + security (RULES §9).** No blanket staging, no commits without explicit approval, no silent
    overwrites of files or managed sections; never persist secrets, credentials, or PII — redact before writing.
+10. **Distributed brain (RULES §10).** Knowledge IDs are self-allocating slugs (`LF:` / `DL:` / `DEC:` / `PM:` /
+    `deferred:`) with structured Subject/Claim headers — never sequential numbers. On incoming `.salvor/` changes, ask
+    `"Incoming brain changes detected — run brain reconcile? (yes/no)"`; [STRICT] reconcile a feature branch against
+    the integration branch before merging; when the Brain Audit is due (default every 3 days, tracked in L1), ask
+    `"Brain audit is due (last run N days ago) — run it now? (yes/no)"`.
 
 ## Step 5 — Confirmation report
 
@@ -1128,9 +1228,10 @@ After Steps 2–4, return a short report:
   infrastructure, and GitNexus configuration/index were not migrated,
   duplicated, rebuilt, or overwritten unless the approved plan named that
   exact action.
-- Confirmation that root `CLAUDE.md`, `RULES.md` (§0–§9, with strict defaults marked enabled/disabled per Step 1 Q4),
-  L1, L2, `DOMAIN_REF`, `INFRA`, `DEFERRED_TODOS`, `decisions/README`, `postmortems/README`,
-  `domain-learnings/README`, and each spoke `CLAUDE.md` exist and have project-specific placeholders filled in.
+- Confirmation that root `CLAUDE.md`, `RULES.md` (§0–§10, with strict defaults marked enabled/disabled per Step 1 Q4),
+  L1 (including its `Last Brain Audit` footer line), L2, `DOMAIN_REF`, `INFRA`, `DEFERRED_TODOS`, `decisions/README`,
+  `postmortems/README`, `domain-learnings/README`, and each spoke `CLAUDE.md` exist and have project-specific
+  placeholders filled in.
 - **Versioning (Q4-conditional):** if Q4=YES, confirm `VERSION.md` exists with per-component build IDs and that the
   [STRICT] version-check/increment/derived-constant rules are active. If Q4=NO, confirm NO per-component build
   counters were imposed — state which version mechanism the repo owns (`package.json` / `pyproject.toml` /
@@ -1142,6 +1243,6 @@ After Steps 2–4, return a short report:
 - Initialization commit hash **if I approved the commit** — otherwise note that the files are left uncommitted by design.
 - GitNexus index counts (symbols / relationships / execution flows) — only if an index was actually built this run;
   otherwise state the index status (present-and-fresh / present-but-stale / absent) rather than a fabricated count.
-- Acknowledge the 9 operating rules from Step 4.
+- Acknowledge the 10 operating rules from Step 4.
 
 After confirmation, I'll brief you on the first real task.
