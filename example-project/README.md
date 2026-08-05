@@ -36,12 +36,12 @@ The app itself is deliberately tiny: an in-memory **Notes** service.
 ## Layout
 - `CLAUDE.md` — hub (project overview, architecture table, memory + capture directives).
 - `AGENTS.md` — entrypoint adapter for `AGENTS.md`-native CLIs (Claude Code uses the `CLAUDE.md` hub).
-- `RULES.md` — §0–§9 development rules (Core Protocol + the strict profile this example demonstrates).
+- `RULES.md` — §0–§10 development rules (Core Protocol + the strict profile this example demonstrates).
 - `VERSION.md` — per-component build IDs (`API:02 | WEB:02`).
 - `api/`, `web/` — the two components, each with its own spoke `CLAUDE.md`.
 - `.salvor/` — L1 (`active_state.md`) + L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
-  and the `decisions/` + `postmortems/` + `domain-learnings/` knowledge archives (with one worked LF-1 entry threaded
-  through all of them).
+  and the `decisions/` + `postmortems/` + `domain-learnings/` knowledge archives (with one worked
+  LF:stale-note-reference entry threaded through all of them).
 - `.serena/memories/` — committed enhanced-mode retrieval aids (concise structure and command pointers); `.salvor/`
   remains the canonical engineering record.
 
@@ -77,5 +77,5 @@ curl localhost:8787/notes/1
 curl -X DELETE localhost:8787/notes/1
 ```
 
-See `.salvor/INFRA.md` for env vars and ports, and `.salvor/DOMAIN_REF.md` for the domain rules (including the LF-1 copy
+See `.salvor/INFRA.md` for env vars and ports, and `.salvor/DOMAIN_REF.md` for the domain rules (including the LF:stale-note-reference copy
 invariant that the store enforces).

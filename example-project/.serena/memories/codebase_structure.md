@@ -8,7 +8,7 @@ Worked Salvor example (Strict profile): a tiny in-memory notes service, two comp
 example-project/
 ├── CLAUDE.md            # hub (project overview, architecture table, directives)
 ├── AGENTS.md            # entrypoint adapter for AGENTS.md-native CLIs
-├── RULES.md             # §0–§9 development rules (§8 = memory layers & canonical ownership, §9 = security & git-safe operation)
+├── RULES.md             # §0–§10 development rules (§8 = memory layers & canonical ownership, §9 = security & git-safe operation, §10 = distributed brain: IDs / reconcile / audit)
 ├── VERSION.md           # per-component build IDs (API / WEB)
 ├── README.md            # what this is + how to run
 ├── api/                 # @notebook/api — Node + TS, built-in http
@@ -17,7 +17,7 @@ example-project/
 │   ├── tsconfig.json     # strict, NodeNext, ESM
 │   └── src/
 │       ├── types.ts      # Note { id, title, body, createdAt }
-│       ├── store.ts      # Map store; listNotes/getNote/createNote/deleteNote (returns COPIES — LF-1)
+│       ├── store.ts      # Map store; listNotes/getNote/createNote/deleteNote (returns COPIES — LF:stale-note-reference)
 │       └── server.ts     # http server + router for /notes and /notes/:id
 ├── web/                 # @notebook/web — TS + static HTML, plain DOM
 │   ├── CLAUDE.md         # spoke
@@ -28,25 +28,25 @@ example-project/
 ├── .salvor/             # canonical owner of approved engineering knowledge
 │   ├── active_state.md           # L1 (≤50 lines)
 │   ├── active_state_verbose.md   # L2
-│   ├── DOMAIN_REF.md             # living truth + LF# registry
+│   ├── DOMAIN_REF.md             # living truth + LF: registry
 │   ├── INFRA.md                  # local run, env vars, ports
-│   ├── DEFERRED_TODOS.md         # #1 no persistence (Medium)
+│   ├── DEFERRED_TODOS.md         # deferred:no-persistence (Medium)
 │   ├── decisions/                # captured decisions
 │   ├── postmortems/              # README + 2026-06-20 stale-note-reference
-│   └── domain-learnings/         # README + 2026-06-20 LF01 artifact
+│   └── domain-learnings/         # README + 2026-06-20 LF artifact (LF:stale-note-reference)
 └── .serena/memories/    # this file + suggested_commands.md (retrieval aids / pointers, NOT canon)
 ```
 
 ## Key invariants
-- `api/src/store.ts` returns **shallow copies** of `Note`, never live `Map` instances (LF-1).
+- `api/src/store.ts` returns **shallow copies** of `Note`, never live `Map` instances (LF:stale-note-reference).
 - Note `id` is a **string**; keep it a string at every boundary.
 - `web` mirrors `api`'s `Note` type by hand — propagate field changes to both (RULES §6.4).
-- In-memory only: state resets on api restart (DEFERRED #1).
+- In-memory only: state resets on api restart (deferred:no-persistence).
 
 ## Capture classes (RULES §2, §7) — ask before persisting
 - **Decision / Domain Learning** → `.salvor/decisions/` or `.salvor/domain-learnings/`.
-- **Learned Failure (LF#)** → registered in `.salvor/DOMAIN_REF.md` (e.g. LF-1 copy-return invariant).
-- **Deferred Finding** → `.salvor/DEFERRED_TODOS.md` (e.g. #1 no persistence).
+- **Learned Failure (`LF:<slug>`)** → registered in `.salvor/DOMAIN_REF.md` (e.g. LF:stale-note-reference copy-return invariant).
+- **Deferred Finding** → `.salvor/DEFERRED_TODOS.md` (e.g. deferred:no-persistence).
 
 ## GitNexus
 - Machine-derived code structure (symbols, call graphs, impact). Safe default: `gitnexus analyze --index-only` (pure index, v1.6.9+; no context files / skills / hooks). Older versions: `--skip-agents-md`. When GitNexus MCP tools respond, run impact before edits and change-detection before commit; otherwise use the best available structural review fallback. Core mode works without it.
