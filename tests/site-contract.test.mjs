@@ -328,10 +328,13 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     read(".salvor/INFRA.md"),
     read(".serena/memories/task_completion.md"),
   ]);
-  assert.match(version, /"ghpage"\s*:\s*17/);
-  assert.match(version, /GHPAGE:17/);
+  // Derive the ghpage build ID from VERSION.md's JSON header instead of a
+  // pinned literal (RULES §10 / integration-bump: pinned counters conflict on
+  // every parallel bump).
+  const ghpage = String(JSON.parse(version.match(/<!--\s*({[^\n]+})\s*-->/)[1]).ghpage).padStart(2, "0");
+  assert.match(version, new RegExp(`GHPAGE:${ghpage}`));
   assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
-  assert.match(l1, /GHPAGE:17/);
+  assert.match(l1, new RegExp(`GHPAGE:${ghpage}`));
   // The responsive-check SOP lives in its canonical homes (L1, INFRA, L2), not
   // duplicated across every Serena memory — post-refresh, Serena memories are
   // concise pointers under the one-owner model.

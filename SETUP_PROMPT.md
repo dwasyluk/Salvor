@@ -657,7 +657,7 @@ per-surface resolution. Every merge/augment/supersede of durable knowledge is op
 | Surface | Resolution rule |
 |---------|-----------------|
 | Artifacts (DL / DEC / PM / LF specs) | Winner absorbs loser with a provenance block; loser becomes a one-line redirect stub (`superseded-by:`). |
-| `DOMAIN_REF.md` | Single current truth — contradictions resolve to ONE `Status: live` entry; loser marked superseded with date + why. |
+| `.salvor/DOMAIN_REF.md` | Single current truth — contradictions resolve to ONE `Status: live` entry; loser marked superseded with date + why. |
 | L1 (`active_state.md`) | NEVER textually merged — re-synthesize from both sides' L2 + artifacts after resolution (≤50 lines). |
 | L2 (`active_state_verbose.md`) | Union both sides, normalize to chronological order, collapse duplicate sections. |
 | Index READMEs + `DEFERRED_TODOS.md` | Union rows, re-sort, dedupe. (Optional `.gitattributes` `merge=union` convenience — reconcile normalizes regardless.) |

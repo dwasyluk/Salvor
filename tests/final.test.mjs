@@ -71,11 +71,14 @@ test("SETUP_PROMPT uses the one-owner model, not blanket co-canonical", () => {
   assert.doesNotMatch(setup, /Shared, canonical, git-tracked \(the team brain\): everything in-repo/i);
 });
 
-// --- RULES §0–§9 (dogfood aligned to the template) ------------------------
-test("root and example RULES reach §9 (security & git-safe operation)", () => {
+// --- RULES §0–§10 (dogfood aligned to the template) -----------------------
+test("root and example RULES reach §10 (distributed brain)", () => {
   assert.match(rules, /^## 9\. /m);
   assert.match(exampleRules, /^## 9\. /m);
+  assert.match(rules, /^## 10\. Distributed Brain/m);
+  assert.match(exampleRules, /^## 10\. Distributed Brain/m);
   assert.doesNotMatch(read("example-project/README.md"), /§0[–-]§8/);
+  assert.doesNotMatch(read("example-project/README.md"), /§0[–-]§9\b/);
 });
 
 // --- Cline Memory Bank comparison ----------------------------------------
@@ -119,10 +122,11 @@ test("root Serena memory reflects the real repo (root package.json + npm scripts
   assert.match(cmds, /npm run test:unit|npm ci|npm test/);
 });
 
-test("example Serena memory reflects §0–§9 and .salvor paths", () => {
+test("example Serena memory reflects §0–§10 and .salvor paths", () => {
   const cs = read("example-project/.serena/memories/codebase_structure.md");
-  assert.match(cs, /§0[–-]§9/);
+  assert.match(cs, /§0[–-]§10/);
   assert.doesNotMatch(cs, /§0[–-]§8/);
+  assert.doesNotMatch(cs, /§0[–-]§9\b/);
 });
 
 // --- Final soft-launch ownership + optional-tool consistency ---------------
