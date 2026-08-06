@@ -409,6 +409,8 @@ roadmap item. See the
 
 ## What is the simplest one-line answer?
 
-Salvor is the version-controlled engineering memory layer for a codebase: the
-part that lets every coding agent inherit the team's accumulated reasoning, not
-just the files.
+Salvor is the version-controlled engineering brain for a codebase: every
+coding agent inherits not just the files and the facts, but the *why* — the
+team's accumulated reasoning, rationale, and learned failures — so it stops
+re-deriving decisions and stops "fixing" code that is the way it is for a
+reason.

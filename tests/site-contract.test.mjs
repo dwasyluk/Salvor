@@ -348,6 +348,16 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
   }
 });
 
+test("the hero keeps the tagline and leads with the brain + rationale framing", async () => {
+  const html = await read("site/index.html");
+  assert.match(html, /class="hero-tagline">Your repo remembers<span>\.<\/span>/);
+  const flatHtml = html.replace(/\s+/g, " ");
+  assert.match(flatHtml, /A brain, not just memory — the why, not just the what\./);
+  assert.match(flatHtml, /reviewed in Git, merging like code/);
+  assert.match(flatHtml, /starts from what the team learned\. Prompt-first\. Vendor-portable\./);
+  assert.match(flatHtml, /<meta name="description" content="The version-controlled engineering brain for coding agents — the why, not just the what\." \/>/);
+});
+
 test("the site presents the distributed brain honestly: slug IDs, reconcile, audit", async () => {
   const html = (await read("site/index.html")).replace(/\s+/g, " ");
   assert.match(html, /Collision-free slug knowledge IDs/i);

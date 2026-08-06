@@ -2,7 +2,7 @@
 
 > Serena memories are retrieval aids / pointers, not canonical truth. Canonical knowledge lives in `.salvor/` artifacts + the hub (`CLAUDE.md`) and spokes. Keep this short; verify against canon before trusting.
 
-Salvor (v1.0.0-beta soft launch, MIT) is repo-native engineering memory plus a governance protocol: a prompt/docs product that installs a disciplined, vendor-agnostic git-tracked shared knowledge structure into any repo so AI coding agents across vendors, sessions, and teammates share accumulated project knowledge under explicit rules. Compatible thin adapters make that brain vendor-portable without a memory migration. Core pieces: hub/spokes/adapters, L1/L2 persisted state (`.salvor/active_state.md` + verbose), RULES.md enforcement, user-gated capture, and versioned rationale. Framing: "Every approved capture gives the next session more context."
+Salvor (v1.0.0-beta soft launch, MIT) is a repo-native engineering brain — memory, rationale, and governance ("the why, not just the what"): a prompt/docs product that installs a disciplined, vendor-agnostic git-tracked shared knowledge structure into any repo so AI coding agents across vendors, sessions, and teammates share accumulated project knowledge under explicit rules. Compatible thin adapters make that brain vendor-portable without a memory migration. Core pieces: hub/spokes/adapters, L1/L2 persisted state (`.salvor/active_state.md` + verbose), RULES.md enforcement, user-gated capture, and versioned rationale. Framing: "Every approved capture gives the next session more context."
 
 ## Modes
 - **Core mode** — files only (hub/spokes + `.salvor/` + RULES.md). No MCP dependency.

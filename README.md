@@ -4,7 +4,7 @@
 
 # Salvor
 
-### A repo-native engineering memory and governance protocol for coding agents.
+### A repo-native engineering brain for coding agents — the why, not just the what.
 
 [![release](https://img.shields.io/static/v1?label=release&message=v1.0.0-beta&color=blue)](https://github.com/dwasyluk/salvor/releases)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
@@ -45,11 +45,14 @@ repository.
 
 ## Salvor's answer
 
-Salvor is a **repo-native engineering memory and governance protocol for
+Salvor is a **repo-native engineering brain and governance protocol for
 coding agents**. It preserves human-approved decisions, domain learnings,
-failed approaches, and deferred findings in Git — so fresh sessions and
-distributed teammates can continue from reviewed knowledge instead of
-reconstructing it.
+failed approaches, and deferred findings — *and the rationale behind each* —
+in Git, so fresh sessions and distributed teammates continue from reviewed
+knowledge instead of reconstructing it. Memory alone records *what happened*;
+the rationale is what stops an agent (or a new teammate) from "fixing" code
+that is shaped an unusual way for a good reason — a vendor quirk, a cost
+trade-off, a consciously accepted limitation.
 
 It is **prompt-first**: paste one setup prompt, answer four setup questions, and
 your project gains a hub-and-spoke context layer, a two-tier persisted memory,
