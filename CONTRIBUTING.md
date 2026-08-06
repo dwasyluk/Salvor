@@ -75,8 +75,10 @@ If your PR changes the protocol or schema, it isn't done until all of these
 are updated together in the same PR:
 
 - `SETUP_PROMPT.md` (the canonical installer)
+- `RULES.md` (the dogfooded instance of the generated rules)
 - `example-project/` (re-rendered to match)
-- `README.md` and the relevant `docs/` pages
+- `README.md` and the relevant `docs/` pages (including `docs/UPGRADING.md`
+  migration notes when the change affects installed repos)
 - Affected vendor adapters (`AGENTS.md` / `GEMINI.md` patterns, `docs/VENDOR_ADAPTERS.md`)
 - Contract tests under `tests/`
 - `CHANGELOG.md`
@@ -144,7 +146,7 @@ training-data recall — tool names, config formats, and install steps drift.
 
 - `SETUP_PROMPT.md` — the canonical, self-contained installer (single source of truth).
 - `example-project/` — the rendered, runnable demonstration (keep in sync with the prompt).
-- `docs/` — architecture, vendor adapters, the plan of record.
+- `docs/` — architecture, vendor adapters, upgrading, FAQ.
 - `README.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `LICENSE`, `.github/` — the usual.
 
 Thanks again. 🛟

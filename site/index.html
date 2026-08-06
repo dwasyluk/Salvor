@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffffff" />
-    <meta name="description" content="Version-controlled engineering memory for coding agents." />
+    <meta name="description" content="The version-controlled engineering brain for coding agents — the why, not just the what." />
     <link rel="canonical" href="https://dwasyluk.github.io/salvor/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Salvor" />
     <meta property="og:title" content="Salvor — Your repo remembers." />
-    <meta property="og:description" content="Version-controlled engineering memory for coding agents." />
+    <meta property="og:description" content="The version-controlled engineering brain for coding agents — the why, not just the what." />
     <meta property="og:url" content="https://dwasyluk.github.io/salvor/" />
     <meta property="og:image" content="https://dwasyluk.github.io/salvor/assets/social/salvor-social-card.png" />
     <meta property="og:image:secure_url" content="https://dwasyluk.github.io/salvor/assets/social/salvor-social-card.png" />
@@ -20,7 +20,7 @@
     <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Salvor — Your repo remembers." />
-    <meta name="twitter:description" content="Version-controlled engineering memory for coding agents." />
+    <meta name="twitter:description" content="The version-controlled engineering brain for coding agents — the why, not just the what." />
     <meta name="twitter:image" content="https://dwasyluk.github.io/salvor/assets/social/salvor-social-card.png" />
     <meta name="twitter:image:alt" content="Canonical Salvor logo and wordmark over the full-bleed geometric hero with the tagline Your repo remembers." />
     <meta name="twitter:creator" content="@blockchaindan" />
@@ -95,9 +95,9 @@
             <h1 id="hero-title">SALVOR</h1>
             <p class="hero-tagline">Your repo remembers<span>.</span></p>
             <ul class="hero-points">
-              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Version-controlled memory for coding agents.</span></li>
-              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Decisions, learned failures, domain knowledge, and deferred findings — reviewed in Git, available to the next session.</span></li>
-              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Prompt-first. Vendor-portable.</span></li>
+              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">A brain, not just memory — the why, not just the what.</span></li>
+              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Decisions, failures, learnings — reviewed in Git, merging like code.</span></li>
+              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Every session starts from what the team learned. Prompt-first. Vendor-portable.</span></li>
             </ul>
           </div>
           <div class="hero-actions">
@@ -139,7 +139,7 @@
                 </svg>
               </div>
               <h2>Every supported agent starts from the same reviewed truth.</h2>
-              <p>A shared, version-controlled brain across sessions, teammates, and even different vendors.</p>
+              <p>A shared, version-controlled brain across sessions, teammates, and even different vendors. Collision-free slug knowledge IDs plus a semantic reconcile at merge and pull points — and a recurring brain audit — keep parallel branches single-truth instead of silently duplicating or contradicting each other.</p>
             </article>
             <article class="reason-card">
               <div class="reason-heading">
@@ -179,12 +179,12 @@
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="m28 5 18 10v26L28 51 10 41V15Zm0 20 18-10M28 25 10 15m18 10v26"/></svg>
-              <h2>Serena + GitNexus</h2><p>Optional, highly recommended code intelligence: navigate by symbol and analyze impact before editing.</p>
+              <h2>Serena + GitNexus</h2><p>Optional code intelligence: navigate by symbol and analyze impact before editing.</p>
             </article>
           </div>
           <div class="brain-summary">
-            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred findings (<code>DEFERRED_TODOS.md</code>), postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale.</p>
-            <p>Every capture class is user-gated — durable saves need your explicit approval. For a finding, the agent asks: <q>Save this as a domain learning? (yes/no)</q></p>
+            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred findings (<code>DEFERRED_TODOS.md</code>), postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale. Every durable artifact carries a collision-free slug ID (like <code>LF:stale-note-reference</code>) with a structured Subject/Claim header, so knowledge captured on parallel branches merges semantically — duplicates and contradictions are surfaced for your decision, never shipped silently.</p>
+            <p>Every capture class is user-gated — durable saves need your explicit approval. For a finding, the agent asks: <q>Save this as a domain learning? (yes/no)</q> An experimental, off-by-default mode additionally lets agents capture provisionally for overnight and multi-agent runs — explicitly flagged, held in a lower trust tier, and ratified item-by-item by you.</p>
           </div>
         </section>
 
@@ -219,7 +219,8 @@
 ├── DEFERRED_TODOS.md
 ├── decisions/
 ├── domain-learnings/
-└── postmortems/</code></pre>
+├── postmortems/
+└── archive/</code></pre>
             <p>
               This is what the brain looks like after real work — every file reviewed in Git.<br />
               <a href="https://github.com/dwasyluk/salvor/tree/main/example-project">View a populated example <span aria-hidden="true">→</span></a>
@@ -245,7 +246,7 @@
                 <li>When GitNexus is selected, let setup detect the installed CLI's capabilities and offer the safest supported indexing mode.</li>
                 <li>Review and optionally commit only the Salvor-related changes.</li>
               </ol>
-              <p>Core works with repository files alone. Serena + GitNexus are optional enhanced integrations, but both are highly recommended for the best code-grounded results. Setup doesn't fail without them.</p>
+              <p>Core works with repository files alone; setup doesn't fail without the optional enhanced integrations. Upgrading later is the same move: paste a newer <code>SETUP_PROMPT.md</code> and setup reads the install's protocol stamp, proposing only the protocol deltas — your accumulated knowledge is never touched.</p>
               <pre><code>$ cat SETUP_PROMPT.md
 $ # copy the output; paste into your CLI
 $ # answer the setup questions
@@ -258,10 +259,10 @@ $ # Salvor scaffolds the rest</code></pre>
                 <svg class="terminal-cube" viewBox="0 0 48 48" aria-hidden="true"><path d="m24 3 18 10v22L24 45 6 35V13Zm0 20 18-10M24 23 6 13m18 10v22"/></svg>
                 <div><h2>Claude Code plugin: coming soon</h2><p class="status">ACTIVE DEVELOPMENT · SHIPS WITH v1.1.0</p></div>
               </header>
-              <p>The Claude Code plugin is in active development, ships with v1.1.0. It is not part of the v1.0.0-beta release; the universal prompt above is the supported path today.</p>
+              <p>The Claude Code plugin is in active development and is not part of the v1.0.0-beta release; the universal prompt above is the supported path today.</p>
               <p>The future plugin is a convenience wrapper over the same canonical prompt and shared files, never a replacement for the vendor-portable foundation.</p>
               <p>Codex and Gemini plugin equivalents are open for contributors.</p>
-              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/README.md#roadmap--help-wanted">Plugin roadmap <span>→</span></a>
+              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/README.md#contributing--roadmap">Plugin roadmap <span>→</span></a>
             </article>
           </div>
         </section>
@@ -276,7 +277,7 @@ $ # Salvor scaffolds the rest</code></pre>
             </article>
             <article>
               <svg class="foundation-mark" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="28"/><circle cx="36" cy="36" r="5"/><path d="M36 8v23m0 10v23M8 36h23m10 0h23M16 16l16 16m8 8 16 16M56 16 40 32m-8 8L16 56"/></svg>
-              <div><h2><a href="https://github.com/abhigyanpatwari/GitNexus">GitNexus</a> <span>IMPACT ANALYSIS</span></h2><p>Optional, highly recommended integration providing a code knowledge graph — see what breaks before you ship. A third-party project under the PolyForm Noncommercial license; review its terms for your use.</p><a href="https://github.com/abhigyanpatwari/GitNexus">github.com/abhigyanpatwari/GitNexus →</a></div>
+              <div><h2><a href="https://github.com/abhigyanpatwari/GitNexus">GitNexus</a> <span>IMPACT ANALYSIS</span></h2><p>Optional integration providing a code knowledge graph — see what breaks before you ship. A third-party project under the PolyForm Noncommercial license; review its terms for your use.</p><a href="https://github.com/abhigyanpatwari/GitNexus">github.com/abhigyanpatwari/GitNexus →</a></div>
             </article>
           </div>
         </section>

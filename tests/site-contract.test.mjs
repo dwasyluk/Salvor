@@ -53,7 +53,8 @@ test("the site is scoped to v1.0.0-beta and describes plugins only as future wor
   const html = await read("site/index.html");
   assert.match(html, /SALVOR v1\.0\.0-beta/);
   assert.match(html, /coming soon/i);
-  assert.match(html, /in active development, ships with v1\.1\.0/i);
+  assert.match(html, /SHIPS WITH v1\.1\.0/);
+  assert.match(html, /in active development and is not part of the v1\.0\.0-beta release/i);
   assert.match(html, /Codex and Gemini plugin equivalents are open for contributors/i);
   assert.doesNotMatch(html, /domain[- ]tuning/i);
   assert.doesNotMatch(html, /\/salvor:(?:init|status|capture|health)/i);
@@ -345,4 +346,40 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     assert.match(memory, /tablet/i);
     assert.match(memory, /small[- ]phone/i);
   }
+});
+
+test("the hero keeps the tagline and leads with the brain + rationale framing", async () => {
+  const html = await read("site/index.html");
+  assert.match(html, /class="hero-tagline">Your repo remembers<span>\.<\/span>/);
+  const flatHtml = html.replace(/\s+/g, " ");
+  assert.match(flatHtml, /A brain, not just memory — the why, not just the what\./);
+  assert.match(flatHtml, /reviewed in Git, merging like code/);
+  assert.match(flatHtml, /starts from what the team learned\. Prompt-first\. Vendor-portable\./);
+  assert.match(flatHtml, /<meta name="description" content="The version-controlled engineering brain for coding agents — the why, not just the what\." \/>/);
+});
+
+test("the site presents the distributed brain honestly: slug IDs, reconcile, audit", async () => {
+  const html = (await read("site/index.html")).replace(/\s+/g, " ");
+  assert.match(html, /Collision-free slug knowledge IDs/i);
+  assert.match(html, /reconcile at merge and pull points/i);
+  assert.match(html, /recurring brain audit/i);
+  assert.match(html, /LF:stale-note-reference/);
+  assert.match(html, /duplicates and contradictions are surfaced for your decision, never shipped silently/i);
+});
+
+test("the site flags agentic capture as experimental and off by default", async () => {
+  const html = (await read("site/index.html")).replace(/\s+/g, " ");
+  assert.match(html, /experimental, off-by-default mode/i);
+  assert.match(html, /ratified item-by-item by you/i);
+  // the user gate remains the headline claim
+  assert.match(html, /Every capture class is user-gated/);
+});
+
+test("the site tree includes the archive and the primary path mentions upgrades", async () => {
+  const html = await read("site/index.html");
+  assert.match(html, /├── postmortems\/\n└── archive\/<\/code>/);
+  const flatHtml = html.replace(/\s+/g, " ");
+  assert.match(flatHtml, /Upgrading later is the same move/i);
+  assert.match(flatHtml, /protocol stamp/i);
+  assert.match(flatHtml, /knowledge is never touched/i);
 });

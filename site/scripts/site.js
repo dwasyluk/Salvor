@@ -49,17 +49,30 @@ export function initMenu(root = document) {
     }
   };
 
+  // The mobile menu only exists below the 900px breakpoint; if the viewport
+  // grows past it while the menu is open, close it so it doesn't linger over
+  // the desktop layout until the next click.
+  const desktopQuery =
+    typeof window !== "undefined" && typeof window.matchMedia === "function"
+      ? window.matchMedia("(min-width: 901px)")
+      : null;
+  const onBreakpointChange = (event) => {
+    if (event.matches) setOpen(false);
+  };
+
   setOpen(false);
   toggle.addEventListener("click", onToggle);
   menu.addEventListener("click", onMenuClick);
   root.addEventListener("keydown", onKeyDown);
   root.addEventListener("pointerdown", onPointerDown);
+  desktopQuery?.addEventListener("change", onBreakpointChange);
 
   return () => {
     toggle.removeEventListener("click", onToggle);
     menu.removeEventListener("click", onMenuClick);
     root.removeEventListener("keydown", onKeyDown);
     root.removeEventListener("pointerdown", onPointerDown);
+    desktopQuery?.removeEventListener("change", onBreakpointChange);
   };
 }
 

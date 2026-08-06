@@ -4,14 +4,14 @@
 
 # Salvor
 
-### A repo-native engineering memory and governance protocol for coding agents.
+### A repo-native engineering brain for coding agents — the why, not just the what.
 
 [![release](https://img.shields.io/static/v1?label=release&message=v1.0.0-beta&color=blue)](https://github.com/dwasyluk/salvor/releases)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![works with](https://img.shields.io/badge/works%20with-Claude%20Code%20·%20Codex%20·%20Gemini%20CLI%20%2F%20Antigravity-8A2BE2)](./docs/VENDOR_ADAPTERS.md)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](./CONTRIBUTING.md)
 
-*Salvage your project's knowledge before it's lost to the next session.*
+*Salvage your knowledge before it's lost to the next session.*
 
 </div>
 
@@ -45,20 +45,25 @@ repository.
 
 ## Salvor's answer
 
-Salvor is a **repo-native engineering memory and governance protocol for
+Salvor is a **repo-native engineering brain and governance protocol for
 coding agents**. It preserves human-approved decisions, domain learnings,
-failed approaches, and deferred findings in Git — so fresh sessions and
-distributed teammates can continue from reviewed knowledge instead of
-reconstructing it.
+failed approaches, and deferred findings — *and the rationale behind each* —
+in Git, so fresh sessions and distributed teammates continue from reviewed
+knowledge instead of reconstructing it. Memory alone records *what happened*;
+the rationale is what stops an agent (or a new teammate) from "fixing" code
+that is shaped an unusual way for a good reason — a vendor quirk, a cost
+trade-off, a consciously accepted limitation.
 
 It is **prompt-first**: paste one setup prompt, answer four setup questions, and
 your project gains a hub-and-spoke context layer, a two-tier persisted memory,
 a rules protocol, and user-approved capture gates that record knowledge *and
-the reasoning behind it* as you work. The shared brain is vendor-agnostic:
+the reasoning behind it* as you work. Upgrades honor the same boundary:
+a newer setup prompt refreshes only Salvor's protocol layer — your accumulated
+knowledge is never touched. The shared brain is vendor-agnostic:
 everything lives as plain Markdown in your repo, owned by no LLM vendor and
 reviewable in PRs, diffable, and branchable. Thin adapters make that same brain
 vendor-portable, so teams can switch supported agents without migrating their
-memory. Setup generates tested entrypoints for Claude Code, Codex, and
+memory. Setup generates contract-tested entrypoints for Claude Code, Codex, and
 GEMINI.md-compatible clients; Claude Code is the most deeply dogfooded path,
 while the Codex and Google adapters are wired and documented but less exercised.
 No hosted service, no additional account.
@@ -98,7 +103,8 @@ The scaffold Salvor creates in your repo:
 ```
 
 Plus vendor entrypoints at the repo root: `CLAUDE.md` is the canonical
-cross-vendor hub, while thin `AGENTS.md` (Codex) and `GEMINI.md` adapters
+cross-vendor hub, while thin `AGENTS.md` (Codex and other AGENTS.md-compatible
+agents) and `GEMINI.md` adapters
 route other supported agents to that same shared brain. `RULES.md` provides
 the governance protocol. When the optional Strict defaults are enabled,
 Salvor also generates per-component counters in `VERSION.md`; otherwise it
@@ -112,7 +118,8 @@ dogfooded adapter, not a boundary on which models can use Salvor.
 1. Open your coding agent in the project you want to give a memory to (new or existing).
 2. Paste the contents of SETUP_PROMPT.md.
 3. The agent inspects your existing files first, then asks its four setup questions
-   (1. project name · 2. components + stack hints · 3. optional paired-path parity
+   (1. project name · 2. components + stack hints · 3. optional paired-path parity —
+   a live↔mirror file pair that must always change together
    · 4. whether to enable optional Strict engineering defaults).
 4. In an existing repo, it inventories likely knowledge sources and can map
    selected sections now—or later on demand—without changing the originals.
@@ -198,9 +205,8 @@ Full write-up of the five pillars in
 ## enhanced mode: Serena + GitNexus
 
 Two optional local tools add code intelligence to Salvor Core to pair with
-Salvor's memory. Both are highly recommended for the best code-grounded
-results. Neither is affiliated with Salvor; both run locally for their
-documented core workflows.
+Salvor's memory. Neither is affiliated with Salvor; both run locally for
+their documented core workflows.
 
 ### 🧠 Serena — semantic symbol navigation
 
@@ -251,8 +257,10 @@ protocol defines what happens when two branches grow the brain in parallel.
 - **Collision-free knowledge IDs** — every capture gets a self-allocating slug
   ID (`LF:stale-note-reference`, `DEC:store-returns-copies`,
   `deferred:no-persistence`) with a structured Subject/Claim header. No
-  sequential counters, so two developers can never allocate the same ID on
-  parallel branches (`RULES.md` §10.1).
+  sequential counters, so parallel branches never race "the next number" —
+  and if two developers do pick similar slugs for the same discovery, Brain
+  Reconcile catches the overlap by subject at merge time (`RULES.md`
+  §10.1–§10.2).
 - **Brain Reconcile** — at merge and pull points, incoming knowledge is
   compared *semantically* against what's already there: paired by subject
   tags, classified as distinct / duplicate / overlapping / contradictory /
@@ -338,8 +346,10 @@ agent and model provider may still process repository content according to
 their configuration and data-handling policies.
 
 Never store secrets, credentials, or keys in `.salvor/` — it is committed,
-shared project memory. See [`SECURITY.md`](./SECURITY.md) for reporting and
-details.
+shared project memory. And because Salvor files are agent-readable
+instructions, review PRs that touch them with the same rigor as code. See
+[`SECURITY.md`](./SECURITY.md) for the trust boundaries, prompt-injection
+guidance, and reporting details.
 
 ## Contributing & roadmap
 
@@ -367,7 +377,8 @@ it is to build the harder pieces together — issues tagged
 - **🔌 More vendor adapters** — harden the Codex & Gemini entrypoints; add
   Cursor / OpenCode / others.
 - **🧩 Vendor plugins** — a Claude Code plugin (a convenience wrapper over the
-  same universal `SETUP_PROMPT.md`) is coming soon. Always a wrapper, never a
+  same universal `SETUP_PROMPT.md`) is in active development and ships with
+  v1.1.0. Always a wrapper, never a
   replacement for the paste-anywhere floor that keeps Salvor vendor-portable.
   Codex and Gemini equivalents are open for contributors.
 
@@ -395,6 +406,7 @@ is the same idea, scaled down to your repo.
 
 - [`SETUP_PROMPT.md`](./SETUP_PROMPT.md) — the one-shot installer
 - [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — the five pillars
+- [`docs/UPGRADING.md`](./docs/UPGRADING.md) — the protocol stamp and version-aware upgrades
 - [`docs/VENDOR_ADAPTERS.md`](./docs/VENDOR_ADAPTERS.md) — Codex, Gemini, and beyond
 - [`docs/FAQ.md`](./docs/FAQ.md) — full comparisons and common questions
 

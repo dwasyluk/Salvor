@@ -43,7 +43,7 @@ cheap. Both are git-tracked.
 ### 3. RULES.md — the enforcement layer
 The documents above are inert without discipline. `RULES.md` is what makes the
 knowledge compound rather than decay:
-- **§0 Task Termination Protocol** — RULES.md keeps reviewed memory and component
+- **§0 Task Termination Protocol** — keeps reviewed memory and component
   context synchronized: nothing is "done" until L1/L2 + spokes are synced. Optional
   Strict defaults can also enforce project-specific version counters and parity
   rules (e.g. bumping `VERSION.md`); per-component versioning and `APP_NAME`
@@ -107,7 +107,8 @@ Salvor keeps a clean split so it never squats in your project's own `docs/`:
   profile is enabled — where compatible CLIs and build tooling discover them.
 - **`.salvor/` — the brain (git-committed, shared):** L1 (`active_state.md`),
   L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
-  `domain-learnings/`, `decisions/`, `postmortems/`, and a `README.md` index.
+  `domain-learnings/`, `decisions/`, `postmortems/`, the experimental `archive/`,
+  and a `README.md` index.
 
 The rule: *if a CLI or build tool auto-discovers the file at a fixed path, it stays
 at the root; everything else Salvor owns lives in `.salvor/`.* Tooling gets one

@@ -27,6 +27,6 @@ thin CLI-specific entrypoints.
 - Scan for unresolved template tokens and verify all vendor adapters point to the same canonical core.
 
 ## Build
-- No compilation. `VERSION.md` key: `CORE`; current build `CORE:17`; derived constant: `CORE_BUILD`.
+- No compilation. `VERSION.md` key: `CORE`; current build `CORE:18`; derived constant: `CORE_BUILD`.
 
 Use Serena for repository structure, `.salvor/DOMAIN_REF.md` for product truth, and `.salvor/INFRA.md` for operational details.
