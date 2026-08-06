@@ -503,7 +503,9 @@ h1,
 }
 
 .process-grid p {
-  max-width: 18ch;
+  /* Wide enough to read naturally; the grid column itself bounds the line
+     length at tablet/mobile widths (operator-tested at 38ch). */
+  max-width: 38ch;
   margin: 0 auto;
   font-size: clamp(12px, 0.92vw, 14px);
 }
