@@ -24,6 +24,6 @@ Markdown documentation comprising root `README.md` and the complete `docs/` dire
 - Check links and paths, scan for stale vendor/version claims, and inspect rendered Markdown when layout matters.
 
 ## Build
-- No compilation. `VERSION.md` key: `DOCS`; current build `DOCS:20`; derived constant: `DOCS_BUILD`.
+- No compilation. `VERSION.md` key: `DOCS`; current build `DOCS:21`; derived constant: `DOCS_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for operational details.

@@ -6,6 +6,8 @@ through its compatible entrypoint. Thin adapters make it vendor-portable
 without moving or duplicating that memory. (Governance and entrypoints live at the repo root:
 `CLAUDE.md` hub + `api`/`web` spokes, `RULES.md`, `VERSION.md`.)
 
+Salvor-Protocol: v1.0.0-beta
+
 | File | What it is |
 |------|-----------|
 | `active_state.md` | **L1** — ≤50-line dense current state + Learned Failures (auto-loaded) |

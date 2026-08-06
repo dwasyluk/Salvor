@@ -7,6 +7,8 @@ that memory.
 Governance and vendor entrypoints live at the repository root in `CLAUDE.md`,
 `AGENTS.md`, `GEMINI.md`, `RULES.md`, and `VERSION.md`.
 
+Salvor-Protocol: v1.0.0-beta
+
 | File | What it is |
 |------|------------|
 | `active_state.md` | **L1** — ≤50-line dense current state and Learned Failures |

@@ -308,6 +308,19 @@ review, diff, branch, and merge. For Salvor, that place is git — and `RULES.md
 slug IDs, a semantic Brain Reconcile at merge/pull points, and a recurring
 Brain Audit that sweeps for duplicates and contradictions.
 
+## How do I upgrade Salvor when a new version ships?
+
+Paste the newer `SETUP_PROMPT.md` into your agent from the repo root — same
+operation as installing, in any supported vendor's CLI. Step 0 detects the
+existing install via the `Salvor-Protocol:` stamp in `.salvor/README.md` and
+proposes a delta-scoped upgrade plan covering only the **protocol layer**
+(rules text, templates, adapters); your **knowledge layer** — artifacts,
+L1/L2, domain facts, deferred findings — is never touched by an upgrade. If
+you've customized generated rules, the plan is a three-way merge and conflicts
+are yours to decide. Vendor plugins (coming) wrap the identical prompt and
+path, so a prompt install and a plugin install upgrade the same way. See
+[`docs/UPGRADING.md`](./UPGRADING.md).
+
 ## Can agents add to the memory without asking me?
 
 By default, no — every durable capture requires your verbatim approval; that
