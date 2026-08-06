@@ -346,3 +346,29 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
     assert.match(memory, /small[- ]phone/i);
   }
 });
+
+test("the site presents the distributed brain honestly: slug IDs, reconcile, audit", async () => {
+  const html = (await read("site/index.html")).replace(/\s+/g, " ");
+  assert.match(html, /Collision-free slug knowledge IDs/i);
+  assert.match(html, /reconcile at merge and pull points/i);
+  assert.match(html, /recurring brain audit/i);
+  assert.match(html, /LF:stale-note-reference/);
+  assert.match(html, /duplicates and contradictions are surfaced for your decision, never shipped silently/i);
+});
+
+test("the site flags agentic capture as experimental and off by default", async () => {
+  const html = (await read("site/index.html")).replace(/\s+/g, " ");
+  assert.match(html, /experimental, off-by-default mode/i);
+  assert.match(html, /ratified item-by-item by you/i);
+  // the user gate remains the headline claim
+  assert.match(html, /Every capture class is user-gated/);
+});
+
+test("the site tree includes the archive and the primary path mentions upgrades", async () => {
+  const html = await read("site/index.html");
+  assert.match(html, /├── postmortems\/\n└── archive\/<\/code>/);
+  const flatHtml = html.replace(/\s+/g, " ");
+  assert.match(flatHtml, /Upgrading later is the same move/i);
+  assert.match(flatHtml, /protocol stamp/i);
+  assert.match(flatHtml, /knowledge is never touched/i);
+});

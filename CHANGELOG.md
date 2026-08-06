@@ -35,6 +35,13 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     only on the integration branch; feature branches record `pending` history
     rows, eliminating parallel counter races. Solo direct-to-main flow is
     unchanged.
+- **Version-aware upgrade path** — `SETUP_PROMPT.md` declares its protocol
+  version and stamps installs (`Salvor-Protocol:` in `.salvor/README.md`);
+  re-running a newer prompt proposes only the protocol deltas, three-way-merges
+  operator-customized rules (conflicts operator-decided), and never touches
+  the knowledge layer. New `docs/UPGRADING.md` with per-version migration
+  notes; prompt installs and future plugin installs share the identical
+  upgrade path.
 - **[EXPERIMENTAL] Agentic provisional capture + archive (`RULES.md`
   §10.5–§10.6, default OFF)** — opt-in `AGENT_CAPTURE = provisional` lets
   agents capture Domain Learnings / Learned Failures / Deferred Findings

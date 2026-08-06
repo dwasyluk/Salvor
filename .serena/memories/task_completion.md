@@ -15,7 +15,7 @@ Never overwrite unrelated user changes. Use `git status --short` and inspect dif
   configuration.
 
 ## Release validation workflow (v1.0.0-beta)
-- Run the test suite: `npm run test:unit` (contract + interactions + burn-field + setup-safety + ratification + final) and `npm run test:browser` (Playwright), or `npm test` for both. Exact file list per the root `package.json` scripts.
+- Run the test suite: `npm run test:unit` (beta-consistency + site-contract + interactions + burn-field + setup-safety + ratification + final + release-gate + consistency + reconcile-contract + agentic-contract + upgrade-contract) and `npm run test:browser` (Playwright), or `npm test` for both. Exact file list per the root `package.json` scripts.
 - `git diff --check` for whitespace/conflict-marker hygiene.
 - Regenerate the release package when packaging changes.
 - enhanced-mode work touching GitNexus: keep the safe default `gitnexus analyze --index-only` (v1.6.9+; `.gitnexusrc {"indexOnly": true}`), `--skip-agents-md` on older CLIs — index-only, no context/skill/hook writes into Salvor-owned entrypoints.

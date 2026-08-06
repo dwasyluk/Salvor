@@ -4,6 +4,14 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-08-05 — GH-page holistic sync + final pre-launch pass (branch `feat/ghpage-sync`, UNMERGED by operator instruction)
+
+- **Scope.** Present the three merged protocol advances (distributed brain, experimental agentic capture, upgrade path) on the public page as a semantic mirror — text-level edits inside existing sections ONLY, no new visual sections/interactions (the operator's live localhost review is the §6.3 design gate before any merge/deploy).
+- **Site edits.** Reason card 2: slug IDs + merge/pull reconcile + recurring audit keep parallel branches single-truth. Brain summary: slug-ID/Subject-Claim header sentence (`LF:stale-note-reference` example) + experimental off-by-default agentic capture with item-by-item ratification (user-gate remains the headline). Loop `.salvor/` tree: `archive/` added. Primary-path card: upgrade-is-the-same-move + protocol stamp + knowledge-never-touched.
+- **Cross-surface currency.** CHANGELOG [Unreleased] upgrade-path entry (was missing); Serena task_completion suite list refreshed (now names all 12 unit files); project_overview gains §10.5/§10.6 + issue #1 + stamp pointers. VERSION carries `GHPAGE:pending DOCS:pending` per §3 — assigned only if/when the operator merges.
+- **Tests.** +3 site-contract tests (distributed-brain honesty, experimental-off-by-default framing, archive tree + upgrade copy). 160/160 unit+contract; browser + audit run in the final verification block.
+- **Process note.** This branch is deliberately left UNMERGED with `npm run serve` running on localhost:4173 for the operator's go/no-go soft-launch call.
+
 ## 2026-08-05 — Version-aware upgrade path (merged; CORE:17 DOCS:21 assigned at integration)
 
 - **Problem (operator-raised).** A v1.0.0-beta adopter facing a v1.1.0 release had no upgrade story: nothing recorded which Salvor version scaffolded an install, the update path wasn't delta-aware, and plugin-vs-prompt install compatibility was implicit. Adoption lives or dies on this transition being easy.

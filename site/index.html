@@ -139,7 +139,7 @@
                 </svg>
               </div>
               <h2>Every supported agent starts from the same reviewed truth.</h2>
-              <p>A shared, version-controlled brain across sessions, teammates, and even different vendors.</p>
+              <p>A shared, version-controlled brain across sessions, teammates, and even different vendors. Collision-free slug knowledge IDs plus a semantic reconcile at merge and pull points — and a recurring brain audit — keep parallel branches single-truth instead of silently duplicating or contradicting each other.</p>
             </article>
             <article class="reason-card">
               <div class="reason-heading">
@@ -183,8 +183,8 @@
             </article>
           </div>
           <div class="brain-summary">
-            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred findings (<code>DEFERRED_TODOS.md</code>), postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale.</p>
-            <p>Every capture class is user-gated — durable saves need your explicit approval. For a finding, the agent asks: <q>Save this as a domain learning? (yes/no)</q></p>
+            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred findings (<code>DEFERRED_TODOS.md</code>), postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale. Every durable artifact carries a collision-free slug ID (like <code>LF:stale-note-reference</code>) with a structured Subject/Claim header, so knowledge captured on parallel branches merges semantically — duplicates and contradictions are surfaced for your decision, never shipped silently.</p>
+            <p>Every capture class is user-gated — durable saves need your explicit approval. For a finding, the agent asks: <q>Save this as a domain learning? (yes/no)</q> An experimental, off-by-default mode additionally lets agents capture provisionally for overnight and multi-agent runs — explicitly flagged, held in a lower trust tier, and ratified item-by-item by you.</p>
           </div>
         </section>
 
@@ -219,7 +219,8 @@
 ├── DEFERRED_TODOS.md
 ├── decisions/
 ├── domain-learnings/
-└── postmortems/</code></pre>
+├── postmortems/
+└── archive/</code></pre>
             <p>
               This is what the brain looks like after real work — every file reviewed in Git.<br />
               <a href="https://github.com/dwasyluk/salvor/tree/main/example-project">View a populated example <span aria-hidden="true">→</span></a>
@@ -245,7 +246,7 @@
                 <li>When GitNexus is selected, let setup detect the installed CLI's capabilities and offer the safest supported indexing mode.</li>
                 <li>Review and optionally commit only the Salvor-related changes.</li>
               </ol>
-              <p>Core works with repository files alone. Serena + GitNexus are optional enhanced integrations, but both are highly recommended for the best code-grounded results. Setup doesn't fail without them.</p>
+              <p>Core works with repository files alone. Serena + GitNexus are optional enhanced integrations, but both are highly recommended for the best code-grounded results. Setup doesn't fail without them. Upgrading later is the same move: paste a newer <code>SETUP_PROMPT.md</code> and setup reads the install's protocol stamp, proposing only the protocol deltas — your accumulated knowledge is never touched.</p>
               <pre><code>$ cat SETUP_PROMPT.md
 $ # copy the output; paste into your CLI
 $ # answer the setup questions
