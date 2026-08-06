@@ -42,6 +42,15 @@ move into a dedicated config surface — is an open beta question. If you run
 Salvor on a team or across parallel branches/worktrees, an `[IDEA]` discussion
 with your experience is especially valuable.
 
+**Agentic provisional capture (`RULES.md` §10.5–§10.6) is EXPERIMENTAL and
+off by default.** Its graduation criteria — over-capture calibration,
+rubber-stamp resistance, poisoning resistance, the 90-day archive window,
+per-class policy, and cross-vendor compliance — are tracked in
+[issue #1](https://github.com/dwasyluk/salvor/issues/1). If you enable
+`AGENT_CAPTURE = provisional`, field reports on
+any of those axes are the single most useful contribution you can make to
+this feature.
+
 ## Licensing
 
 Salvor is MIT-licensed. By contributing, you agree your contributions are

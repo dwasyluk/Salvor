@@ -16,6 +16,7 @@ without moving or duplicating that memory. (Governance and entrypoints live at t
 | `domain-learnings/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
 | `decisions/` | Design decisions + load-bearing invariants (why it's this way; what must stay; what depends on it) |
 | `postmortems/` | Incident write-ups feeding `LF:` + deferred TODOs |
+| `archive/` | EXPERIMENTAL (RULES §10.6) — parked rejected/aged agent contributions; agents don't read it unless instructed |
 
 Everything here is meant to be **read by humans and agents alike** — it's the *why*
 behind the code.

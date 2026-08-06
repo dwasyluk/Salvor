@@ -93,7 +93,8 @@ The scaffold Salvor creates in your repo:
 ├── README.md                  # explains this directory to humans
 ├── decisions/                 # user-approved design decisions
 ├── domain-learnings/          # user-approved domain learnings
-└── postmortems/               # learned-failure postmortems
+├── postmortems/               # learned-failure postmortems
+└── archive/                   # EXPERIMENTAL — parked (never discarded) unratified agent contributions
 ```
 
 Plus vendor entrypoints at the repo root: `CLAUDE.md` is the canonical
@@ -258,6 +259,27 @@ protocol defines what happens when two branches grow the brain in parallel.
 - **Review as governance** — because capture artifacts are files, a PR review
   of the memory *is* the team's approval process. Bad captures get caught the
   same way bad code does.
+
+### 🧪 Experimental: agentic provisional capture (off by default)
+
+Salvor's capture gates normally require your verbatim approval *before* any
+durable write. The experimental `AGENT_CAPTURE = provisional` mode
+(`RULES.md` §10.5) moves that approval from **before the write** to **before
+ratification**: agents may capture Domain Learnings, Learned Failures, and
+Deferred Findings autonomously — useful for overnight runs and subagent
+fleets — but everything they write is explicitly identifiable
+(`Contributed-by: agent — <vendor/model>` provenance headers, a
+`Salvor-Contribution: agent` commit trailer) and enters a visibly lower trust
+tier (`Review: unreviewed`): treated by every agent as hypothesis rather than
+invariant, unable to override ratified knowledge or touch `RULES.md`, and
+surfaced item-by-item for human ratification by the recurring Brain Audit.
+Nothing is ever silently discarded — rejected or aged-out contributions move
+to `.salvor/archive/` (default 90 days, tunable), which agents never load.
+It is **off by default**, vendor-agnostic like everything else (the trust
+state travels in the Markdown, not in any vendor's tooling), and its
+graduation criteria are tracked in
+[issue #1](https://github.com/dwasyluk/salvor/issues/1) — field reports
+welcome.
 
 ## Spec Kit coexistence
 

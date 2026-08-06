@@ -216,6 +216,21 @@ branch, contradictions against `DOMAIN_REF.md` current truth, stale L1 lines,
 and dangling links. (The audit interval and its configurability are an area
 where beta feedback is explicitly invited.)
 
+**Experimental: agentic provisional capture + archive (§10.5–§10.6, default
+OFF).** The capture gates normally put human approval *before* the write.
+`AGENT_CAPTURE = provisional` moves it to *before ratification*: agents may
+capture learnings, failures, and deferred findings autonomously, but each
+contribution carries `Contributed-by`/`Review: unreviewed` provenance in its
+header plus a `Salvor-Contribution: agent` commit trailer, is consumed by all
+vendors as hypothesis-not-invariant, can never override ratified knowledge or
+touch `RULES.md`, and is presented item-by-item for ratification by the Brain
+Audit. Design Decisions can only be *proposed*, never self-ratified. Rejected
+or aged-out contributions (default 90 days) move — content intact, ID
+preserved — to `.salvor/archive/`, which agents never read unless instructed:
+the archive optimizes loaded context, not disk, and nothing is ever silently
+discarded. The invariant survives: **nothing becomes canonical truth without
+human approval** — only the timing of the approval changes.
+
 ## Two things people conflate (don't)
 
 **Shared brain vs per-user memory.** Everything Salvor writes is **in-repo and

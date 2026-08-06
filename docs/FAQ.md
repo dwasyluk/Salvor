@@ -308,6 +308,22 @@ review, diff, branch, and merge. For Salvor, that place is git — and `RULES.md
 slug IDs, a semantic Brain Reconcile at merge/pull points, and a recurring
 Brain Audit that sweeps for duplicates and contradictions.
 
+## Can agents add to the memory without asking me?
+
+By default, no — every durable capture requires your verbatim approval; that
+gate is Salvor's defining move. An **experimental, off-by-default** mode
+(`AGENT_CAPTURE = provisional`, `RULES.md` §10.5) lets agents capture
+learnings, failures, and deferred findings autonomously for workflows where
+nobody is present to answer a gate (overnight runs, subagent fleets). The
+protection moves rather than disappears: agent contributions are explicitly
+flagged (provenance headers + a commit trailer), treated by every vendor's
+agent as hypothesis rather than truth, unable to override ratified knowledge
+or modify `RULES.md`, and queued for your item-by-item ratification via the
+recurring Brain Audit. Rejected or stale ones are parked in
+`.salvor/archive/` (never silently deleted). Nothing becomes canonical
+without a human saying yes — the yes just happens after the write instead of
+before it.
+
 ## Won't the memory go stale or drift from the code?
 
 That's the failure mode Salvor is built to *surface*, not hide. A core doctrine:

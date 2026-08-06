@@ -429,6 +429,9 @@ These rules are MANDATORY. They supplement CLAUDE.md and take precedence over de
   brain reconcile (§0.6, §10.2). Tune, replace,
   or disable per project — disabling them must NOT break the Core Protocol. Status (from setup Q4): **[ENABLED |
   DISABLED — [STRICT] items inactive until the team opts in]**.
+- **[EXPERIMENTAL] Beta features** — agentic provisional capture and the archive (§10.5–§10.6) are beta, **default
+  OFF**, opt-in only by editing their config lines, and may change based on community feedback. Never required by
+  Core or Strict behavior.
 
 ---
 
@@ -690,6 +693,53 @@ Reconcile only sees what a merge brings in; duplicates also accrete on a single 
      newest-evidence presumption); exactly ONE `Status: live` entry survives
    - one retests/upgrades the other → **supersedes** — v1 → v2 per §6.9 atomicity
 3. No pair → **distinct** — keep as-is.
+
+### 10.5 [EXPERIMENTAL] Agentic provisional capture — default OFF
+**Config: `AGENT_CAPTURE = off`** (operator-tunable: `off` | `provisional`). **Beta feature under active
+calibration** — graduation criteria are tracked publicly (see the project's CONTRIBUTING). When `off` (the default),
+nothing changes: ALL durable capture remains user-gated per §2/§7 — agents never write durable knowledge without the
+verbatim prompt.
+
+When the operator sets `provisional`:
+- **Trust tier.** Agents may create durable artifacts without the per-item gate, but every such artifact enters a
+  visibly lower trust tier: its structured header carries `Contributed-by: agent — <vendor/model>, <date>` and
+  `Review: unreviewed`. Human-gated captures carry `Contributed-by: operator-approved` and no `Review:` field (the
+  capture gate itself is the ratification). Provenance is plain Markdown data — it must survive any vendor switch and
+  never rely on vendor-specific state.
+- **Per-class policy.** Allowed provisionally: **Deferred Findings**, **Domain Learnings**, and **Learned Failures**
+  — with `Claim:` and evidence content mandatory (no evidence, no capture). **Design Decisions:** agents may only
+  file proposals (`Review: proposed`); a `DEC:` never becomes governing rationale without human ratification.
+  **RULES changes: never agentic** (§10.2 governance), under any setting.
+- **Consumption rule (all vendors).** Treat `Review: unreviewed` knowledge as *hypothesis, not invariant*: cite its
+  provenance when acting on it, never let it relax a rule, and never let it override ratified knowledge. An
+  unreviewed↔ratified contradiction resolves automatically in favor of the ratified entry pending review.
+- **L1 marking.** L1 shorthand derived from unreviewed knowledge carries a `(prov)` tag until ratification — L1 must
+  never launder provisional claims into apparent truth.
+- **Commit trailer.** Commits introducing agent contributions carry the trailer `Salvor-Contribution: agent`. Header
+  and trailer must agree — a mismatch is an audit red flag.
+- **Ratification.** The Brain Audit (§10.3) enumerates every `Review: unreviewed` / `Review: proposed` artifact by
+  scanning headers (no separate ledger — derived, conflict-free) and presents each through the §10.4 classification
+  with the verbatim gate:
+  > "Ratify this agent contribution? (yes / no / archive)"
+  `yes` → `Review: ratified`, drop the L1 `(prov)` tags; `no` → one-line redirect stub stays in place, full content
+  moves to the archive (§10.6); `archive` → moved untouched for later review. Review each item individually — bulk
+  ratification defeats the tier.
+
+### 10.6 [EXPERIMENTAL] Archive — `.salvor/archive/`
+Unreviewed knowledge is parked, never silently discarded — the same principle as deferred findings, one tier down.
+- **Layout:** mirrors the live folder structure (`archive/domain-learnings/`, `archive/decisions/`,
+  `archive/postmortems/`). An archived artifact keeps its ID and full content; the live registry keeps a one-line
+  `Status: archived` pointer (never delete an ID — §10.1).
+- **Aging:** `ARCHIVE_AFTER_DAYS = 90` (operator-tunable). The Brain Audit surfaces unreviewed contributions older
+  than the window with the verbatim gate:
+  > "Archive N stale unreviewed contributions? (yes/no)"
+  **Ratified knowledge never ages out** — it lives until superseded.
+- **Load rule:** agents never read `.salvor/archive/` unless explicitly instructed (same contract as L2). The
+  archive optimizes attention, not disk — git history retains everything regardless.
+- **Un-archive:** late ratification moves the artifact back and flips `Review:`; references never dangled because
+  the ID persisted.
+- **Offloading** (e.g. object storage) is out of core scope — community integrations welcome; Salvor itself installs
+  no hooks.
 ```
 
 ### `VERSION.md`
@@ -771,6 +821,7 @@ the plan generated.)
 | `domain-learnings/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
 | `decisions/` | Design decisions + load-bearing invariants (why it's this way; what must stay; what depends on it) |
 | `postmortems/` | Incident write-ups feeding `LF:` entries + deferred findings |
+| `archive/` | EXPERIMENTAL (§10.6) — parked rejected/aged agent contributions; agents don't read it unless instructed |
 
 Everything here is meant to be **read by humans and agents alike** — it's the *why*
 behind the code.
@@ -982,6 +1033,22 @@ touches an adjacent component that quietly depends on this one.
 | Date | ID | Decision | Subject | Invariant (one-line) | Touches |
 |------|----|----------|---------|----------------------|---------|
 | [DATE] | DEC:[slug] | [link] | [tags] | [what must stay true] | [components] |
+```
+
+### `.salvor/archive/README.md` (EXPERIMENTAL surface — always scaffolded, starts empty)
+
+```markdown
+# Archive (EXPERIMENTAL — RULES §10.6)
+
+Parked knowledge: agent contributions that were rejected or aged out unreviewed
+(`ARCHIVE_AFTER_DAYS`, RULES §10.6), kept in full rather than discarded. Layout
+mirrors the live folders (`domain-learnings/`, `decisions/`, `postmortems/`).
+Archived artifacts keep their IDs; the live registries keep `Status: archived`
+pointers, so references never dangle. Late ratification moves an artifact back.
+
+**Agents: do NOT read this folder unless explicitly instructed** (same contract
+as the L2 archive). It exists to keep unreviewed noise out of loaded context
+without ever throwing knowledge away.
 ```
 
 ### `<COMPONENT_*>/CLAUDE.md` (one per component)
@@ -1208,7 +1275,10 @@ State that you understand these at the end of the scaffold confirmation message.
     `deferred:`) with structured Subject/Claim headers — never sequential numbers. On incoming `.salvor/` changes, ask
     `"Incoming brain changes detected — run brain reconcile? (yes/no)"`; [STRICT] reconcile a feature branch against
     the integration branch before merging; when the Brain Audit is due (default every 3 days, tracked in L1), ask
-    `"Brain audit is due (last run N days ago) — run it now? (yes/no)"`.
+    `"Brain audit is due (last run N days ago) — run it now? (yes/no)"`. [EXPERIMENTAL] Agentic provisional capture
+    (§10.5) is OFF by default — never write durable knowledge without the capture gate unless the operator explicitly
+    set `AGENT_CAPTURE = provisional`, and then only with `Contributed-by`/`Review` provenance headers, the commit
+    trailer, and the hypothesis-not-invariant consumption rule.
 
 ## Step 5 — Confirmation report
 
@@ -1230,8 +1300,9 @@ After Steps 2–4, return a short report:
   exact action.
 - Confirmation that root `CLAUDE.md`, `RULES.md` (§0–§10, with strict defaults marked enabled/disabled per Step 1 Q4),
   L1 (including its `Last Brain Audit` footer line), L2, `DOMAIN_REF`, `INFRA`, `DEFERRED_TODOS`, `decisions/README`,
-  `postmortems/README`, `domain-learnings/README`, and each spoke `CLAUDE.md` exist and have project-specific
-  placeholders filled in.
+  `postmortems/README`, `domain-learnings/README`, `archive/README` (EXPERIMENTAL surface, empty), and each spoke
+  `CLAUDE.md` exist and have project-specific placeholders filled in. Confirm `AGENT_CAPTURE = off` is the generated
+  default.
 - **Versioning (Q4-conditional):** if Q4=YES, confirm `VERSION.md` exists with per-component build IDs and that the
   [STRICT] version-check/increment/derived-constant rules are active. If Q4=NO, confirm NO per-component build
   counters were imposed — state which version mechanism the repo owns (`package.json` / `pyproject.toml` /
