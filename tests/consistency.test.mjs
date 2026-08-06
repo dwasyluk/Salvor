@@ -134,7 +134,9 @@ test("public docs explain the vendor-named hub as a cross-vendor implementation 
     );
     assert.match(
       source,
-      /thin[^.]{0,80}`AGENTS\.md`[^.]{0,80}`GEMINI\.md`[^.]{0,160}(route|point)[^.]{0,100}(same|shared|canonical)/i,
+      // [\s\S] rather than [^.] — the AGENTS.md label legitimately contains
+      // dots ("Codex and other AGENTS.md-compatible agents")
+      /thin[\s\S]{0,120}`AGENTS\.md`[\s\S]{0,120}`GEMINI\.md`[\s\S]{0,200}(route|point)[\s\S]{0,120}(same|shared|canonical)/i,
       `${file} must explain how thin adapters route other supported agents to the same brain`,
     );
   }

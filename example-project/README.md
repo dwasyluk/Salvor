@@ -40,8 +40,8 @@ The app itself is deliberately tiny: an in-memory **Notes** service.
 - `VERSION.md` — per-component build IDs (`API:02 | WEB:02`).
 - `api/`, `web/` — the two components, each with its own spoke `CLAUDE.md`.
 - `.salvor/` — L1 (`active_state.md`) + L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
-  and the `decisions/` + `postmortems/` + `domain-learnings/` knowledge archives (with one worked
-  LF:stale-note-reference entry threaded through all of them).
+  the `decisions/` + `postmortems/` + `domain-learnings/` knowledge archives (with one worked
+  LF:stale-note-reference entry threaded through all of them), and the experimental `archive/`.
 - `.serena/memories/` — committed enhanced-mode retrieval aids (concise structure and command pointers); `.salvor/`
   remains the canonical engineering record.
 

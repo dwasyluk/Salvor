@@ -1,4 +1,4 @@
-# Notebook Active State — API:02 WEB:02 (2026-07-27)
+# Notebook Active State — API:02 WEB:02 (2026-08-05)
 ## Architecture: api (Node TS, built-in `http`, port 8787) + web (static TS + DOM, API_BASE→:8787). In-memory Map store, no framework, no DB.
 ## Pipeline: web GET/POST /notes → api router (server.ts) → store.ts Map → JSON back. Note id = monotonic string.
 ## DEPLOYED: local only. No deployment target. api: `npm run dev` (tsx); web: typecheck-only, serve index.html statically.

@@ -33,7 +33,9 @@ example-project/
 │   ├── DEFERRED_TODOS.md         # deferred:no-persistence (Medium)
 │   ├── decisions/                # captured decisions
 │   ├── postmortems/              # README + 2026-06-20 stale-note-reference
-│   └── domain-learnings/         # README + 2026-06-20 LF artifact (LF:stale-note-reference)
+│   ├── domain-learnings/         # README + 2026-06-20 LF artifact (LF:stale-note-reference)
+│   ├── archive/                  # EXPERIMENTAL (§10.6) — parked agent contributions; not loaded
+│   └── README.md                 # folder index + Salvor-Protocol stamp
 └── .serena/memories/    # this file + suggested_commands.md (retrieval aids / pointers, NOT canon)
 ```
 

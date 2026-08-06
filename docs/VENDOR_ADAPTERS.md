@@ -8,7 +8,8 @@
   No LLM vendor owns the shared brain. The substance lives under `.salvor/` —
   L1/L2 (`active_state.md` /
   `active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
-  `decisions/`, `domain-learnings/`, and `postmortems/`. Root `RULES.md` + the
+  `decisions/`, `domain-learnings/`, `postmortems/`, and the experimental
+  `archive/`. Root `RULES.md` + the
   vendor entrypoints provide governance and routing. `VERSION.md` is generated
   only under the optional Strict profile; with Q4=NO, Salvor references the
   repository's existing version source or creates a minimal project-history
@@ -30,8 +31,8 @@ and `GEMINI.md` adapters route other supported agents to the same shared brain.
 The vendor-named hub filename reflects the most deeply dogfooded adapter; it
 does not make the canonical repository memory Claude-only. Those adapters make
 the shared brain vendor-portable, so supported agents can be switched without
-migrating the repository memory. Setup generates tested entrypoints for Claude
-Code, Codex, and GEMINI.md-compatible clients. Claude Code is the most deeply
+migrating the repository memory. Setup generates contract-tested entrypoints for
+Claude Code, Codex, and GEMINI.md-compatible clients. Claude Code is the most deeply
 dogfooded path; the Codex and Google adapters are wired and documented but less
 exercised. Other agents can integrate through compatible thin adapters.
 
@@ -42,8 +43,8 @@ which points the agent at the shared in-repo core.
 
 | Vendor | Native entrypoint | Per-session memory | Per-turn enforcement | MCP (Serena/GitNexus) |
 |---|---|---|---|---|
-| **Claude Code** | `CLAUDE.md` (+ `@`-imports) | `~/.claude/.../memory/` (per-user, optional) | `.claude/settings.json` `custom_instructions` + hooks | ✅ native |
-| **Codex** | `AGENTS.md` | — | instruction-driven | ✅ via MCP config |
+| **Claude Code** | `CLAUDE.md` (+ `@`-imports) | `~/.claude/.../memory/` (per-user, optional) | `CLAUDE.md` directives + `.claude/settings.json` hooks | ✅ native |
+| **Codex + other AGENTS.md-compatible agents** | `AGENTS.md` | — | instruction-driven | ✅ via MCP config |
 | **Gemini CLI / Antigravity CLI** | `GEMINI.md` | — | instruction-driven | ✅ via MCP config |
 | **Cursor / others** | tool-specific rules file | varies | varies | ✅ if MCP-capable |
 
@@ -78,12 +79,11 @@ note is a hand-authored note in the canonical `CLAUDE.md` hub — never a
 GitNexus-owned block. Generated `.claude/skills/gitnexus-*` appear **only** when a
 user explicitly picks a skill-generating mode.
 
-**Gemini CLI / Antigravity CLI.** Google's coding-agent entrypoint reads the compatible
-`GEMINI.md` project-context file. Google moved consumer terminal usage from Gemini CLI to
-Antigravity CLI while keeping `GEMINI.md` compatibility; enterprise Gemini Code Assist /
-API-key users may still use Gemini CLI. Either way the `GEMINI.md` pointer is the same, so
-Salvor doesn't remove it — and it doesn't assume native Antigravity behavior beyond
-`GEMINI.md`.
+**Gemini CLI / Antigravity.** Google's coding-agent tooling reads the compatible
+`GEMINI.md` project-context file — Gemini CLI natively, and Google's newer Antigravity
+tooling keeps `GEMINI.md` compatibility. Whichever surface a Google-side teammate uses,
+the `GEMINI.md` pointer is the same, so Salvor generates it by default — and it doesn't
+assume any Google-tool behavior beyond reading `GEMINI.md`.
 
 ## What ships (all three by default)
 

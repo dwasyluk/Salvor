@@ -29,6 +29,7 @@ build/
 # Local-only handoff docs — kept on disk, NOT published
 docs/PLAN.md
 docs/roadmap-issues.md
+docs/plans/
 assets/hero-prompt.md
 
 # Local browser-test artifacts

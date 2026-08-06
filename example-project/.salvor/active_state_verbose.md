@@ -6,6 +6,18 @@ history of reasoning, rejected hypotheses, and detail pruned from L1. Update tri
 
 ---
 
+## 2026-08-05 — Protocol migration to Salvor v1.0.0-beta (API:02 WEB:02 — no component logic changed)
+
+The fixture was re-rendered against the current protocol: knowledge IDs moved
+from numeric to slug form (`LF:stale-note-reference`, `deferred:no-persistence`)
+with structured ID/Subject/Claim/Evidence-date/Status headers on all three
+artifacts and ID+Subject columns in the index tables; `RULES.md` extended to
+§0–§10, including the [EXPERIMENTAL] §10.5–§10.6 sections in their default-OFF
+state (`AGENT_CAPTURE = off`, `ARCHIVE_AFTER_DAYS = 90`); `.salvor/archive/`
+scaffolded empty; the `Salvor-Protocol: v1.0.0-beta` stamp added to
+`.salvor/README.md`; and L1 gained the `Last Brain Audit` footer. Store
+comments, spokes, README, and Serena memories updated to the slug IDs.
+
 ## 2026-07-27 — Final fixture consistency sync (API:02 WEB:02)
 
 The runnable example now demonstrates its Strict defaults without implying that

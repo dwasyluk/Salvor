@@ -14,8 +14,8 @@ Alternatives rejected.
 
 ## Index
 
-| Date | ID | Decision | Subject |
-|------|----|----------|---------|
-| 2026-07-30 | DEC:preservation-first-adoption | [Preservation-first existing-repository adoption](./2026-07-30-preservation-first-existing-repository-adoption.md) | setup, adoption, serena, gitnexus |
-| 2026-07-27 | DEC:canonical-logo-svg-masters | [Canonical logo SVG masters](./2026-07-27-canonical-logo-svg-masters.md) | brand, logo, favicon |
-| 2026-07-20 | DEC:canonical-w10-brand-system | [Canonical W10 brand system](./2026-07-20-canonical-w10-brand-system.md) | brand, logo |
+| Date | ID | Decision | Subject | Invariant (one-line) | Touches |
+|------|----|----------|---------|----------------------|---------|
+| 2026-07-30 | DEC:preservation-first-adoption | [Preservation-first existing-repository adoption](./2026-07-30-preservation-first-existing-repository-adoption.md) | setup, adoption, serena, gitnexus | Existing repo state is reused in place; originals never mutate without separate approval | core, docs |
+| 2026-07-27 | DEC:canonical-logo-svg-masters | [Canonical logo SVG masters](./2026-07-27-canonical-logo-svg-masters.md) | brand, logo, favicon | `assets/brand/reference/LOGO*.svg` are immutable masters; all derivatives generate from them | ghpage, docs |
+| 2026-07-20 | DEC:canonical-w10-brand-system | [Canonical W10 brand system](./2026-07-20-canonical-w10-brand-system.md) | brand, logo | Superseded in practice by the authored SVG masters decision above | ghpage |

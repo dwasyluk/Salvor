@@ -300,11 +300,12 @@ has no structured-question tool) BEFORE creating anything:
    history rows, component spokes, the final confirmation, and the proposed
    commit message.
 > **Vendor entrypoints are automatic — no need to choose.** Every project gets all three
-> by default: `CLAUDE.md` (the canonical hub) plus thin `AGENTS.md` (Codex) and `GEMINI.md`
+> by default: `CLAUDE.md` (the canonical hub) plus thin `AGENTS.md` (Codex and other
+> AGENTS.md-compatible agents) and `GEMINI.md`
 > (Gemini) pointer files. Salvor Core is vendor-agnostic: the shared brain is
 > repository-owned Markdown, not vendor-owned state. Thin adapters make that
 > memory vendor-portable, so supported agents can be switched without migrating
-> the shared record. Setup generates tested entrypoints for Claude Code, Codex,
+> the shared record. Setup generates contract-tested entrypoints for Claude Code, Codex,
 > and GEMINI.md-compatible clients (Claude Code is the most dogfooded; the Codex
 > and Google entrypoints are wired + documented but less exercised). Other
 > agents integrate via compatible thin adapters. Only the entrypoint glue differs
@@ -1133,7 +1134,7 @@ generates NO skills at all; the pattern stays in `.gitignore` as a harmless safe
 ### Entrypoint adapters (generate all three by default)
 
 `CLAUDE.md` is the **canonical hub** (created above). Salvor's Markdown memory format is
-vendor-portable; setup generates tested entrypoints for Claude Code, Codex, and
+vendor-portable; setup generates contract-tested entrypoints for Claude Code, Codex, and
 GEMINI.md-compatible clients (Claude Code is the most dogfooded; the Codex and Google
 entrypoints are wired + documented but less exercised). Other agents integrate via thin
 adapters. Always also create the two thin pointer files so those CLIs work out of the box:
@@ -1146,12 +1147,11 @@ adapters. Always also create the two thin pointer files so those CLIs work out o
   > Canonical engineering knowledge lives in its assigned `.salvor/` artifact and the
   > `CLAUDE.md` hub + component spokes; `.serena/memories/` contains concise enhanced-mode
   > retrieval aids only.
-- **`GEMINI.md`** (Gemini CLI / Antigravity CLI — Google coding-agent entrypoint using the
-  compatible `GEMINI.md` project-context file; Google moved consumer terminal usage from Gemini CLI
-  to Antigravity CLI while keeping `GEMINI.md` compatibility, and enterprise Gemini Code Assist /
-  API-key users may still use Gemini CLI) — the same pointer text.
-- **Claude Code** needs nothing extra: it auto-loads `CLAUDE.md` (with `@`-imports). Optionally add
-  `.claude/settings.json` `custom_instructions` reinforcing RULES §0 (ask before writing settings files).
+- **`GEMINI.md`** (Gemini CLI / Antigravity — Google's coding-agent tooling reads the
+  compatible `GEMINI.md` project-context file; Salvor assumes nothing beyond that
+  compatibility) — the same pointer text.
+- **Claude Code** needs nothing extra: it auto-loads `CLAUDE.md` (with `@`-imports). Optionally
+  reinforce RULES §0 with a `.claude/settings.json` hook (ask before writing settings files).
 
 **If any entrypoint file already exists** (Step 0 scan), do not replace it: merge the Salvor pointer text into it as a
 `<!-- salvor:start --> … <!-- salvor:end -->` managed section, preserving all existing content and other tools'

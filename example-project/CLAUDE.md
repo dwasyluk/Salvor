@@ -43,16 +43,17 @@ You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise
 - **Update Trigger:** After every confirmed resolution, milestone, or architectural shift.
 
 **L2 — active_state_verbose.md (Deep Archive)**
-- **Role:** Permanent repository for reasoning, historical logs, raw tool outputs, and rejected hypotheses.
+- **Role:** Curated repository for reasoning, condensed logs, evidence references, and rejected hypotheses.
 - **Update Trigger:** Immediately after updating L1 — offload the nuance pruned from L1.
 - **Constraint:** Detailed but curated. When L2 exceeds ~1,500 lines or at release milestones, condense the oldest
   resolved sections — keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise (never
   persist material on the `RULES.md` §9.1 never-persist list). Do NOT read unless explicitly instructed or during
-  context recovery (memory loops).
+  context recovery.
 
 **Execution Rules:**
 - Update both files autonomously and silently. Do not ask permission for L1/L2 writes.
 - On any major learning or infra nuance: update L1 instantly with shorthand and L2 with detail.
+- NEVER persist secrets, credentials, PII, or unredacted logs to any memory file (RULES §9). Redact before writing.
 
 ### SYSTEM DIRECTIVE: THREE CAPTURE CLASSES
 Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning,
@@ -67,7 +68,7 @@ worth persisting and ask me, verbatim, before persisting it. Three distinct capt
 GitNexus owns machine-derived structural knowledge (symbols, call graphs, impact analysis); Salvor owns approved
 engineering rationale in `.salvor/`. Recommended default: `gitnexus analyze --index-only` (v1.6.9+; pure index — no
 context-file injection, no generated skills, no hooks). Detect capabilities with `gitnexus analyze --help`; on older
-versions fall back to `--skip-agents-md` and gitignore any generated `.claude/skills/gitnexus-*/`. Run impact analysis
+versions fall back to `--skip-agents-md` and gitignore any generated `.claude/skills/gitnexus-*/`.
 Only when GitNexus's MCP tools actually respond in the current client, run impact
 analysis before edits and change-detection before committing; report
 HIGH/CRITICAL blast radius before proceeding. If the MCP is unavailable, state

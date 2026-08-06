@@ -53,7 +53,8 @@ test("the site is scoped to v1.0.0-beta and describes plugins only as future wor
   const html = await read("site/index.html");
   assert.match(html, /SALVOR v1\.0\.0-beta/);
   assert.match(html, /coming soon/i);
-  assert.match(html, /in active development, ships with v1\.1\.0/i);
+  assert.match(html, /SHIPS WITH v1\.1\.0/);
+  assert.match(html, /in active development and is not part of the v1\.0\.0-beta release/i);
   assert.match(html, /Codex and Gemini plugin equivalents are open for contributors/i);
   assert.doesNotMatch(html, /domain[- ]tuning/i);
   assert.doesNotMatch(html, /\/salvor:(?:init|status|capture|health)/i);
