@@ -127,6 +127,10 @@ svg {
 .hero > .site-header {
   user-select: text;
   -webkit-user-select: text;
+  /* Above .hero-copy (z-index 8) in every burn state so the mobile-menu
+     dropdown never paints behind the reading panel once the real DOM copy
+     returns after the burn completes. */
+  z-index: 9;
 }
 
 .site-header {
@@ -1070,10 +1074,6 @@ h1,
     transform: none;
   }
 
-  .hero-tagline {
-    max-width: 12ch;
-  }
-
   .reason-grid {
     grid-template-columns: 1fr;
   }
@@ -1200,7 +1200,9 @@ h1,
 
   .hero-tagline {
     margin: 28px 0 24px;
-    font-size: clamp(28px, 8.8vw, 38px);
+    /* Sized so "Your repo remembers." stays on ONE line down to 320px
+       (SF Mono ≈ 0.6em per glyph × 20 glyphs = 12em must fit the panel). */
+    font-size: clamp(20px, 6.8vw, 33px);
   }
 
   .hero-points {

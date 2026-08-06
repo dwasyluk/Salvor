@@ -673,3 +673,48 @@ test("reduced motion leaves the wireframe static", async ({ browser }) => {
   await expect(page.locator("[data-burn-hero]")).toHaveAttribute("data-burn-state", "reduced");
   await context.close();
 });
+
+test("the hero tagline stays on one line from 320px to desktop", async ({ browser }) => {
+  for (const width of [1440, 768, 495, 390, 360, 320]) {
+    const page = await browser.newPage({ viewport: { width, height: 900 } });
+    await page.goto("/");
+    const lines = await page.locator(".hero-tagline").evaluate((el) => {
+      const cs = getComputedStyle(el);
+      const lineHeight = cs.lineHeight === "normal" ? parseFloat(cs.fontSize) * 1.2 : parseFloat(cs.lineHeight);
+      return Math.round(el.getBoundingClientRect().height / lineHeight);
+    });
+    expect(lines, `tagline wraps at ${width}px`).toBe(1);
+    await page.close();
+  }
+});
+
+test("the open mobile menu paints above the hero copy after the burn reveals", async ({ browser }) => {
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await page.goto("/");
+  const hero = page.locator("[data-burn-hero]");
+  await expect(hero).toHaveAttribute("data-burn-state", "ready");
+  // Force the post-burn state the same way the selection-state test does —
+  // this is the state where the real DOM copy returns above the canvas.
+  await hero.evaluate((root) => {
+    root.dataset.burnState = "revealed";
+  });
+  await page.click(".menu-toggle");
+  const topHitIsMenu = await page.evaluate(() => {
+    const menu = document.querySelector(".mobile-menu");
+    const last = menu.querySelector("a:last-child");
+    const r = last.getBoundingClientRect();
+    return menu.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2));
+  });
+  expect(topHitIsMenu).toBe(true);
+  await page.close();
+});
+
+test("the open mobile menu closes when the viewport grows past the breakpoint", async ({ browser }) => {
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await page.goto("/");
+  await page.click(".menu-toggle");
+  await expect(page.locator(".mobile-menu")).toBeVisible();
+  await page.setViewportSize({ width: 1200, height: 900 });
+  await expect(page.locator(".mobile-menu")).toBeHidden();
+  await expect(page.locator(".menu-toggle")).toHaveAttribute("aria-expanded", "false");
+});
