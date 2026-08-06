@@ -6,6 +6,7 @@ These rules are MANDATORY. They supplement `CLAUDE.md` and take precedence over 
 
 - **Core Protocol (always on):** context loading and hub/spoke reading (§6.1), L1/L2 memory maintenance (§0.2–0.3), user-gated capture approval (§2, §7), context recovery (§1), security and git-safe operation (§9), canonical ownership and memory layers (§8), distributed-brain IDs, post-pull reconcile, and the recurring brain audit (§10), and vendor portability via thin adapters. Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
 - **Optional Strict Engineering Defaults:** these defaults are optional, editable, and project-specific; disabling them does not break Salvor Core. They cover component build counters (§0.1, §3), env-var conventions (§4.4, §6.2), the branch-deletion rule (§6.11), container permission rules (§5.1), impact analysis before every edit (§4.3), the >100-line search-before-read limit (§4.1), mirror parity (§0.5, §6.3), and the pre-merge brain reconcile (§0.6, §10.2).
+- **[EXPERIMENTAL] Beta features:** agentic provisional capture and the archive (§10.5–§10.6) are beta, **default OFF**, and opt-in only by editing their config lines. They may change based on community feedback and are never required by Core or Strict behavior.
 
 ---
 
@@ -166,3 +167,30 @@ Reconcile only sees what a merge brings in; duplicates also accrete on a single 
 1. **Pair by Subject:** for each new/changed artifact, collect every existing artifact (any class, any date) sharing ≥1 Subject tag. Subject overlap — not name similarity — is the pairing key.
 2. **Compare Claims** (read both artifacts in full): same claim, compatible evidence → **duplicate** (merge into one — keep the richer body, union evidence, one live ID); compatible claims, different facets → **overlapping** (augment the canonical one); incompatible claims → **contradictory** (operator decision required, presented with both evidence dates and a newest-evidence presumption; exactly ONE `Status: live` entry survives); one retests/upgrades the other → **supersedes** (v1 → v2 per §6.9 atomicity).
 3. No pair → **distinct** — keep as-is.
+
+### 10.5 [EXPERIMENTAL] Agentic provisional capture — default OFF
+
+**Config: `AGENT_CAPTURE = off`** (operator-tunable: `off` | `provisional`). **Beta feature under active calibration** — graduation criteria are tracked publicly (see CONTRIBUTING). When `off` (the default), nothing changes: ALL durable capture remains user-gated per §2/§7, and agents never write durable knowledge without the verbatim prompt.
+
+When the operator sets `provisional`:
+
+- **Trust tier.** Agents may create durable artifacts without the per-item gate, but every such artifact enters a visibly lower trust tier. Its structured header carries two extra provenance fields: `Contributed-by: agent — <vendor/model>, <date>` and `Review: unreviewed`. Human-gated captures carry `Contributed-by: operator-approved` and no `Review:` field (the capture gate itself is the ratification). Provenance is plain Markdown data — it must survive any vendor switch and never rely on vendor-specific state.
+- **Per-class policy.** Allowed provisionally: **Deferred Findings**, **Domain Learnings**, and **Learned Failures** — with the `Claim:` and evidence content mandatory (no evidence, no capture). **Design Decisions:** agents may only file proposals (`Review: proposed`); a `DEC:` never becomes governing rationale without human ratification. **RULES changes: never agentic** (§10.2 governance), under any setting.
+- **Consumption rule (all vendors).** Treat `Review: unreviewed` knowledge as *hypothesis, not invariant*: cite its provenance when acting on it, never let it relax a rule, and never let it override ratified knowledge. An unreviewed↔ratified contradiction resolves automatically in favor of the ratified entry pending review — no operator interrupt.
+- **L1 marking.** Any L1 shorthand derived from unreviewed knowledge carries a `(prov)` tag until ratification. L1 is auto-loaded context; it must never launder provisional claims into apparent truth.
+- **Commit trailer.** Commits introducing agent contributions carry the trailer `Salvor-Contribution: agent`. Header and trailer must agree — a mismatch is an audit red flag.
+- **Ratification.** The Brain Audit (§10.3) enumerates every `Review: unreviewed` / `Review: proposed` artifact by scanning headers (no separate ledger — derived, conflict-free) and presents each through the §10.4 classification with the verbatim gate:
+  > "Ratify this agent contribution? (yes / no / archive)"
+  `yes` → `Review: ratified`, drop the L1 `(prov)` tags; `no` → one-line redirect stub stays in place, full content moves to the archive (§10.6); `archive` → moved untouched for later review. Review each item individually — bulk ratification defeats the tier.
+
+### 10.6 [EXPERIMENTAL] Archive — `.salvor/archive/`
+
+Unreviewed knowledge is parked, never silently discarded — the same principle as deferred findings, one tier down.
+
+- **Layout:** mirrors the live folder structure (`archive/domain-learnings/`, `archive/decisions/`, `archive/postmortems/`). An archived artifact keeps its ID and full content; the live registry keeps a one-line `Status: archived` pointer (never delete an ID — §10.1).
+- **Aging:** `ARCHIVE_AFTER_DAYS = 90` (operator-tunable). The Brain Audit surfaces unreviewed contributions older than the window with the verbatim gate:
+  > "Archive N stale unreviewed contributions? (yes/no)"
+  **Ratified knowledge never ages out** — it lives until superseded.
+- **Load rule:** agents never read `.salvor/archive/` unless explicitly instructed (same contract as L2). The archive optimizes attention, not disk — git history retains everything regardless.
+- **Un-archive:** late ratification moves the artifact back and flips `Review:`; references never dangled because the ID persisted.
+- **Offloading** (e.g. object storage) is out of core scope — community integrations welcome; Salvor itself installs no hooks.

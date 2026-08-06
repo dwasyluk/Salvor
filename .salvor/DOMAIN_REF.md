@@ -31,6 +31,9 @@ without a memory migration.
    Subject/Claim headers; Brain Reconcile runs at merge/pull points and a
    recurring Brain Audit (3-day default) sweeps for semantic duplicates and
    contradictions. Exactly one `Status: live` entry per contested claim.
+   EXPERIMENTAL tier (§10.5–§10.6, default OFF): agentic provisional capture
+   with provenance headers + human ratification, and the never-discard
+   `.salvor/archive/`.
 
 ## Canonical Public Sources
 

@@ -17,5 +17,6 @@ Governance and vendor entrypoints live at the repository root in `CLAUDE.md`,
 | `decisions/` | User-approved design decisions, rationale, invariants, and coupling |
 | `domain-learnings/` | Dated, frozen empirical discoveries and validated domain knowledge |
 | `postmortems/` | Incident write-ups that feed `LF:` entries and deferred findings |
+| `archive/` | EXPERIMENTAL (RULES §10.6) — parked rejected/aged agent contributions; agents don't read it unless instructed |
 
 Everything here is intended for humans and agents alike: it preserves the why behind the repository.

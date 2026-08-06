@@ -35,6 +35,17 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     only on the integration branch; feature branches record `pending` history
     rows, eliminating parallel counter races. Solo direct-to-main flow is
     unchanged.
+- **[EXPERIMENTAL] Agentic provisional capture + archive (`RULES.md`
+  §10.5–§10.6, default OFF)** — opt-in `AGENT_CAPTURE = provisional` lets
+  agents capture Domain Learnings / Learned Failures / Deferred Findings
+  autonomously in a visibly lower trust tier: `Contributed-by`/`Review`
+  provenance headers, a `Salvor-Contribution: agent` commit trailer,
+  hypothesis-not-invariant consumption across all vendors, no authority over
+  ratified knowledge or `RULES.md`, Design Decisions proposal-only, and
+  item-by-item human ratification via the Brain Audit. Rejected or aged-out
+  contributions (`ARCHIVE_AFTER_DAYS = 90`, tunable) move — IDs and content
+  intact — to the new `.salvor/archive/`, which agents never load unless
+  instructed. Graduation criteria tracked in a public issue.
 
 ### Changed
 - Dogfooded and example brains migrated to the slug-ID scheme
