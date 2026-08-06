@@ -4,6 +4,14 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-08-05 — Version-aware upgrade path (branch `feat/upgrade-path`)
+
+- **Problem (operator-raised).** A v1.0.0-beta adopter facing a v1.1.0 release had no upgrade story: nothing recorded which Salvor version scaffolded an install, the update path wasn't delta-aware, and plugin-vs-prompt install compatibility was implicit. Adoption lives or dies on this transition being easy.
+- **Mechanism.** SETUP_PROMPT header declares `Protocol version: v1.0.0-beta` (test-synced to package.json version); Step 2 writes `Salvor-Protocol: v1.0.0-beta` into generated `.salvor/README.md`; Step 0's update-not-install flow compares stamp vs prompt version — older → delta-scoped upgrade plan (protocol surfaces only), equal → repair-only, missing → full repair plan that adds the stamp. Customized RULES upgrade as a three-way merge (theirs / old template / new template), conflicts ALWAYS operator-decided per §10.2 — upgrading Salvor is itself a brain-reconcile-shaped operation. Stamp bumps inside the applied plan; Step 5 reports the transition + deltas.
+- **Two-layer guarantee codified:** protocol layer (RULES text, templates, adapters, managed sections) = Salvor's, replaceable; knowledge layer (artifacts incl. `archive/`, L1/L2 content, DOMAIN_REF facts, deferred entries) = adopter's, NEVER touched by an upgrade. Experimental features are never enabled by an upgrade — enabling is always a separate explicit operator choice.
+- **Docs.** `docs/UPGRADING.md` (mechanism, layers, stamp, per-version migration notes — v1.0.0-beta entry covers numeric→slug ID migration for pre-stamp installs); README Quickstart upgrade paragraph; FAQ "How do I upgrade Salvor when a new version ships?"; plugin-compat invariant restated (plugins wrap the byte-identical prompt → same detect/upgrade path; prompt install ≡ plugin install).
+- **Tests.** `tests/upgrade-contract.test.mjs` (8): protocol-version declaration + package.json sync, template stamp, dogfood/example stamp sync, version-aware flow states, two-layer guarantee incl. archive in never-overwrite list, UPGRADING content, plugin-compat statements, Step 5 stamp reporting. 157/157 unit+contract.
+
 ## 2026-08-05 — [EXPERIMENTAL] Agentic provisional capture + archive (merged; CORE:16 DOCS:20 assigned at integration)
 
 - **Design intent (operator-approved ideation).** Move the human gate from before-the-write to before-ratification, default OFF: agents may capture DL/LF/deferred autonomously (overnight runs, subagent fleets) but everything enters a lower trust tier that is explicitly identifiable and human-ratified. Invariant preserved: nothing becomes canonical truth without human approval — only the timing changes.

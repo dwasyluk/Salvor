@@ -1,5 +1,10 @@
 # Salvor — one-shot setup prompt
 
+**Protocol version: v1.0.0-beta** — this same value is written into the
+generated `.salvor/README.md` as the `Salvor-Protocol:` stamp, and re-running a
+newer prompt on an installed repo uses the stamp to propose a version-aware
+upgrade (Step 0) instead of a reinstall.
+
 > **How to use this file:** copy everything below the line into your LLM coding
 > CLI (Claude Code, Codex, Gemini CLI / Antigravity CLI, …) from the root of the project you want
 > to give a memory to — new or existing. The agent runs a safety preflight, asks
@@ -7,7 +12,9 @@
 > never blanket-stages files and never commits without asking you first. Serena +
 > GitNexus MCP servers are **optional** (enhanced mode — see Step 0) but highly
 > recommended for the best code-grounded results; Salvor Core works with
-> repository files alone.
+> repository files alone. **Upgrading an existing install uses this same file**
+> — paste the newer version and Step 0 handles the rest, in any supported
+> vendor's CLI.
 
 ---
 
@@ -102,8 +109,30 @@ intentionally not generated, read the repo's established version source instead
 tags). Report it, and propose a **repair/update plan** (add missing files, refresh Salvor-managed
 sections) instead of reinstalling. Never overwrite accumulated project knowledge
 (`active_state*.md`, `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
-`decisions/`, `domain-learnings/`, `postmortems/`) and never re-seed sample or
+`decisions/`, `domain-learnings/`, `postmortems/`, `archive/`) and never re-seed sample or
 template content over real content.
+
+**Version-aware upgrade (the stamp).** Read the `Salvor-Protocol:` stamp in the
+installed `.salvor/README.md` and compare it with this prompt's **Protocol
+version** (header above):
+- **Stamp older than this prompt:** propose a delta-scoped **upgrade plan**
+  covering ONLY protocol surfaces newer than the stamp — RULES sections and
+  managed blocks, artifact-folder READMEs/templates, hub directives, vendor
+  adapters — itemized per the repair/update rules, approve-before-write.
+  Salvor's two layers make this safe: the **protocol layer** (RULES text,
+  templates, adapters — Salvor's, replaceable) upgrades; the **knowledge
+  layer** (artifacts, L1/L2 content, DOMAIN_REF facts, deferred entries —
+  yours, accumulated) is NEVER touched by an upgrade. Where the operator has
+  customized generated RULES text, treat the change as a three-way merge
+  (their version / old template / new template) and route conflicts through
+  the §10.2 governance rule — RULES conflicts are ALWAYS operator-decided.
+  Bump the stamp to this prompt's version as part of the applied plan, and
+  summarize applied deltas in the Step 5 report.
+- **Stamp equal to this prompt:** repair-only pass (add missing files, fix
+  drifted managed sections); no version deltas to apply.
+- **Stamp missing (pre-stamp install):** report that, treat the whole
+  protocol layer as potentially stale, and propose the full repair/update
+  plan — adding the stamp is part of it.
 
 **If Spec Kit is present (`.specify/` or `specs/`):** its artifacts —
 constitution, specs, plans, tasks — remain canonical *in place*. Salvor links to
@@ -811,6 +840,11 @@ to the detected version source, with no assertion that `VERSION.md` exists. Q4=N
 project-history file: `RULES.md` plus `<PROJECT_NAME> Project History` — name the exact artifact
 the plan generated.)
 
+Salvor-Protocol: v1.0.0-beta
+<!-- The protocol stamp above records which Salvor version scaffolded/last
+     upgraded this install. Re-running a newer SETUP_PROMPT reads it to propose
+     a delta-scoped upgrade (protocol layer only — never your knowledge). -->
+
 | File | What it is |
 |------|-----------|
 | `active_state.md` | **L1** — ≤50-line dense current state + Learned Failures (auto-loaded) |
@@ -1302,7 +1336,8 @@ After Steps 2–4, return a short report:
   L1 (including its `Last Brain Audit` footer line), L2, `DOMAIN_REF`, `INFRA`, `DEFERRED_TODOS`, `decisions/README`,
   `postmortems/README`, `domain-learnings/README`, `archive/README` (EXPERIMENTAL surface, empty), and each spoke
   `CLAUDE.md` exist and have project-specific placeholders filled in. Confirm `AGENT_CAPTURE = off` is the generated
-  default.
+  default and that `.salvor/README.md` carries the `Salvor-Protocol:` stamp (on upgrades: state the stamp
+  transition and the applied protocol deltas).
 - **Versioning (Q4-conditional):** if Q4=YES, confirm `VERSION.md` exists with per-component build IDs and that the
   [STRICT] version-check/increment/derived-constant rules are active. If Q4=NO, confirm NO per-component build
   counters were imposed — state which version mechanism the repo owns (`package.json` / `pyproject.toml` /

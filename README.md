@@ -125,6 +125,13 @@ Setup works in **Core mode** even if no MCP tools are present — see
 [Core vs enhanced](#core-vs-enhanced-mode) below. The whole installer is one
 file: **[`SETUP_PROMPT.md`](./SETUP_PROMPT.md)**.
 
+**Upgrading is the same move:** paste a newer `SETUP_PROMPT.md` and Step 0
+reads the `Salvor-Protocol:` stamp in your `.salvor/README.md`, then proposes
+only the protocol deltas — your accumulated knowledge is never touched, and
+customized rules are merged with your approval. Works from any supported
+vendor's CLI; future plugins wrap the same path. Details:
+**[`docs/UPGRADING.md`](./docs/UPGRADING.md)**.
+
 ## Adopt the knowledge you already have
 
 Existing project documentation does not need to be rewritten or moved into a
