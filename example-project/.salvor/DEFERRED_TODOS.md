@@ -4,9 +4,10 @@ Out-of-scope findings intentionally **not** addressed when they surfaced — rea
 were found in. Captured here so they don't slip into "I'll remember." Severity reflects "impact if left ~6 months," not
 "broken today." See `RULES.md` §7 for the capture protocol.
 
-<!-- Template for new entries:
+<!-- Template for new entries (self-allocating slug ID — never a sequential number; RULES §10.1):
 
-### N. <short title>
+### deferred:<kebab-slug> — <short title>
+- **Subject**: <tags: system / vendor / component the finding is about>
 - **Where**: <file / location>
 - **What**: <the issue>
 - **Severity**: <Low | Medium | High>
@@ -14,7 +15,8 @@ were found in. Captured here so they don't slip into "I'll remember." Severity r
 - **Why deferred**: <why it was safe to skip now>
 -->
 
-### 1. Notes are lost on API restart (no persistence)
+### deferred:no-persistence — Notes are lost on API restart
+- **Subject**: api, store, persistence
 - **Where**: `api/src/store.ts`
 - **What**: The store is a process-local in-memory `Map` with a module-level `nextId` counter. Restarting the api loses
   every note and resets ids to `1`. There is no durability of any kind.
@@ -25,7 +27,7 @@ were found in. Captured here so they don't slip into "I'll remember." Severity r
   real makes this urgent.
 
 ## How this file is maintained
-1. When you fix one: delete its entry, and reference it in the fixing commit (`closes deferred #N` if numbered).
+1. When an entry is fixed, delete it and reference the stable slug ID in the fixing commit (`closes deferred:<slug>`).
 2. When you discover a NEW out-of-scope risk during related work: prompt me (RULES §7), and if I agree, add it here —
    don't let it slip into chat.
 3. When something here becomes urgent (impact observed): promote it to a real ticket and link back.

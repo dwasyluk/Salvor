@@ -1,9 +1,10 @@
 // In-memory notes store.
 //
-// IMPORTANT (see .salvor/DOMAIN_REF.md LF-1): getNote/listNotes return SHALLOW
-// COPIES of the stored Note objects. The Map holds the canonical instances;
-// handing out the live reference let callers mutate stored state by accident.
-// The store resets on process restart — there is no durability (DEFERRED #1).
+// IMPORTANT (see .salvor/DOMAIN_REF.md LF:stale-note-reference): getNote/
+// listNotes return SHALLOW COPIES of the stored Note objects. The Map holds
+// the canonical instances; handing out the live reference let callers mutate
+// stored state by accident. The store resets on process restart — there is no
+// durability (deferred:no-persistence).
 
 import { Note } from "./types.js";
 
@@ -11,7 +12,7 @@ const notes = new Map<string, Note>();
 
 let nextId = 1;
 
-/** Return a shallow copy so callers cannot mutate the stored instance (LF-1). */
+/** Return a shallow copy so callers cannot mutate the stored instance (LF:stale-note-reference). */
 function copy(note: Note): Note {
   return { ...note };
 }

@@ -15,7 +15,7 @@ without a memory migration.
 1. Concise canonical hub with component spokes.
 2. Two-tier persisted memory: ≤50-line L1 plus a detailed-but-curated L2 (rotated at ~1,500 lines or release milestones).
 3. Mandatory `RULES.md` enforcement and termination protocol.
-4. Three user-gated capture classes: Decision / Domain Learning, Learned Failure (LF#), and Deferred Finding.
+4. Three user-gated capture classes: Decision / Domain Learning, Learned Failure (`LF:<slug>`), and Deferred Finding.
 5. An auditable history of why; optional Strict installations add per-component version counters, while Core/Q4=NO uses the project's established version source or a minimal history artifact.
 6. Optional enhanced mode adds Serena semantic/symbolic code intelligence and GitNexus relationship/impact intelligence; Core works without either tool, but both are highly recommended for the best code-grounded results.
 7. Existing-repository adoption is preservation-first. Reuse Serena/GitNexus
@@ -26,6 +26,11 @@ without a memory migration.
    Mixed documents may yield multiple artifact types; originals remain
    untouched unless separately approved. Never auto-migrate Serena memories or
    duplicate equivalent rules.
+8. Distributed-brain discipline (RULES §10): knowledge IDs are self-allocating
+   slugs (`LF:` / `DL:` / `DEC:` / `PM:` / `deferred:`) with structured
+   Subject/Claim headers; Brain Reconcile runs at merge/pull points and a
+   recurring Brain Audit (3-day default) sweeps for semantic duplicates and
+   contradictions. Exactly one `Status: live` entry per contested claim.
 
 ## Canonical Public Sources
 
@@ -47,9 +52,15 @@ every other mark placement. Black and white derivatives at supported sizes
 preserve exact geometry and uniform scaling. The outlined SALVOR wordmark
 remains separately canonical and unchanged.
 
-## Learned Failures (LF#)
+## Learned Failures (LF:)
 
-### LF1 — Rendered pixels are the visual-alignment oracle
+### LF:rendered-pixel-alignment (2026-07-28)
+
+- **ID:** LF:rendered-pixel-alignment
+- **Subject:** site, visual-alignment, playwright, release-gates
+- **Claim:** Rendered screenshot ink — not DOM/CSS box geometry — is the only valid visual-alignment oracle.
+- **Evidence date:** 2026-07-28
+- **Status:** live
 
 DOM/CSS rectangles may delimit screenshot scan regions, but they are not proof
 that glyphs or SVG strokes align visually. Final visual-alignment gates must use

@@ -1,6 +1,12 @@
-# 2026-06-20 — LF01 — Stale note reference (return copies, not live refs)
+# 2026-06-20 — LF — Stale note reference (return copies, not live refs)
 
-**Category:** LF01 (Learned Failure spec)
+- **ID:** LF:stale-note-reference
+- **Subject:** api, store, mutation-safety
+- **Claim:** getNote/listNotes must return shallow copies — returning live store references lets callers mutate persisted state.
+- **Evidence date:** 2026-06-20
+- **Status:** live
+
+**Category:** LF (Learned Failure spec)
 
 ## Hypothesis
 The list view corruption is caused by callers mutating `Note` objects that the store returned by reference — i.e. the
@@ -20,12 +26,12 @@ through `getNote`, `listNotes`, and `createNote`'s return value, so the `Map` ho
 callers get disposable copies.
 
 Shallow copy is sufficient **only while `Note` stays flat** (all primitive fields). If a nested object/array field is
-added, `copy` must become a structured clone — this is the registered **v2 trigger** for LF-1 (RULES §6.9: upgrade every
-site under the LF# together).
+added, `copy` must become a structured clone — this is the registered **v2 trigger** for LF:stale-note-reference
+(RULES §6.9: upgrade every site under the `LF:<slug>` entry together).
 
 ## Cross-links
-- **LF registry:** `.salvor/DOMAIN_REF.md` → LF-1.
+- **LF registry:** `.salvor/DOMAIN_REF.md` → LF:stale-note-reference.
 - **Postmortem:** `.salvor/postmortems/2026-06-20-stale-note-reference.md`.
 - **Code:** `api/src/store.ts` (`copy` helper; `getNote` / `listNotes` / `createNote`).
 - **State caches:** L1 `.salvor/active_state.md` (LEARNED FAILURES line); L2 `.salvor/active_state_verbose.md`
-  (2026-06-20 LF-1 detail entry).
+  (2026-06-20 LF:stale-note-reference detail entry).

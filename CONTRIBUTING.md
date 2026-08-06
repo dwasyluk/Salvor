@@ -33,6 +33,15 @@ Use these lightweight, all-caps prefixes for GitHub Discussion titles:
 GitHub Issues use the corresponding all-caps `[BUG]`, `[FEAT]`, and `[ADAPTER]`
 prefixes. An `[IDEA]` is a conversation; a `[FEAT]` is accepted, scoped work.
 
+### Beta feedback we're explicitly looking for
+
+The distributed-brain protocol (`RULES.md` §10) ships with a **3-day default
+Brain Audit interval**, operator-tunable via `AUDIT_INTERVAL_DAYS`. Whether
+that default is right — and whether the interval (and other §10 knobs) should
+move into a dedicated config surface — is an open beta question. If you run
+Salvor on a team or across parallel branches/worktrees, an `[IDEA]` discussion
+with your experience is especially valuable.
+
 ## Licensing
 
 Salvor is MIT-licensed. By contributing, you agree your contributions are

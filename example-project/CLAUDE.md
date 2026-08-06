@@ -47,7 +47,7 @@ You maintain two memory ledgers: `.salvor/active_state.md` (L1 Cache — Concise
 - **Update Trigger:** Immediately after updating L1 — offload the nuance pruned from L1.
 - **Constraint:** Detailed but curated. When L2 exceeds ~1,500 lines or at release milestones, condense the oldest
   resolved sections — keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise (never
-  persist material on the `RULES.md` §5.3 never-persist list). Do NOT read unless explicitly instructed or during
+  persist material on the `RULES.md` §9.1 never-persist list). Do NOT read unless explicitly instructed or during
   context recovery (memory loops).
 
 **Execution Rules:**
@@ -59,7 +59,7 @@ Salvor may update concise operational state as work progresses. It must ask befo
 learned failure, or deferred finding into the repository's durable shared engineering record. You self-identify knowledge
 worth persisting and ask me, verbatim, before persisting it. Three distinct capture classes (see `RULES.md` §2 and §7):
 1. **Decision / Domain Learning** — a discovery, decision, or design invariant + its *why*. `"Save this as a domain learning? (yes/no)"` (a **Domain Learning** → `.salvor/domain-learnings/`) or `"Record this as a design decision? (yes/no)"` (a **Design Decision** → `.salvor/decisions/`)
-2. **Learned Failure (LF#)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
+2. **Learned Failure (`LF:<slug>`)** (a structural failure mode) → registered in `.salvor/DOMAIN_REF.md` as part of the above.
 3. **Deferred Finding** (an out-of-scope finding surfaced mid-task) → `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"`
 
 ## GitNexus — Code Intelligence (enhanced mode)

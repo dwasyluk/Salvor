@@ -73,7 +73,7 @@ agent maintains automatically; those are working memory, not durable capture.)
 | Capture class | What it preserves | The agent asks… | Lands in |
 |---|---|---|---|
 | **Decision / Domain Learning** | **Design Decision** — an architecture or design choice + its rationale. **Domain Learning** — a validated discovery about your domain or system. | `"Record this as a design decision? (yes/no)"` · `"Save this as a domain learning? (yes/no)"` | `.salvor/decisions/` · `.salvor/domain-learnings/` |
-| **Learned Failure (LF#)** | A disproven approach or recurring failure mode + root cause — so no future session retries it. | *(via the same capture flow)* | `DOMAIN_REF.md` LF# registry + `.salvor/postmortems/` |
+| **Learned Failure (`LF:<slug>`)** | A disproven approach or recurring failure mode + root cause — so no future session retries it. | *(via the same capture flow)* | `DOMAIN_REF.md` `LF:` registry + `.salvor/postmortems/` |
 | **Deferred Finding** | An out-of-scope observation or risk — parked, not dropped. | `"Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"` | `.salvor/DEFERRED_TODOS.md` |
 
 "What we decided," "how we failed," and "what we noticed but parked" are
@@ -87,7 +87,7 @@ The scaffold Salvor creates in your repo:
 .salvor/
 ├── active_state.md            # L1 — concise current state (auto-maintained working memory)
 ├── active_state_verbose.md    # L2 — deep archive: reasoning, history, rejected hypotheses
-├── DOMAIN_REF.md              # domain reference + Learned Failure (LF#) registry
+├── DOMAIN_REF.md              # domain reference + Learned Failure (LF:) registry
 ├── INFRA.md                   # infrastructure & operations notes
 ├── DEFERRED_TODOS.md          # deferred findings, parked not dropped
 ├── README.md                  # explains this directory to humans
@@ -229,7 +229,8 @@ No account is needed for core indexing and impact analysis. (The optional
 
 ## Multi-agent & distributed teams
 
-Salvor's memory travels the same way your code does: through Git.
+Salvor's memory travels the same way your code does: through Git — and the
+protocol defines what happens when two branches grow the brain in parallel.
 
 - **Distributed teammates** — a colleague's agent in another timezone reads
   the same reviewed decisions, learned failures, and deferred findings you
@@ -239,9 +240,21 @@ Salvor's memory travels the same way your code does: through Git.
   — Google's coding-agent entrypoint using the compatible `GEMINI.md`
   project-context file — teammates all inherit one canonical hub. Switch
   vendors next year; the memory stays.
-- **Parallel agents** — capture gates keep concurrent sessions from silently
-  overwriting each other's knowledge: durable writes are explicit, reviewed,
-  and land as ordinary diffs you can merge like any other change.
+- **Collision-free knowledge IDs** — every capture gets a self-allocating slug
+  ID (`LF:stale-note-reference`, `DEC:store-returns-copies`,
+  `deferred:no-persistence`) with a structured Subject/Claim header. No
+  sequential counters, so two developers can never allocate the same ID on
+  parallel branches (`RULES.md` §10.1).
+- **Brain Reconcile** — at merge and pull points, incoming knowledge is
+  compared *semantically* against what's already there: paired by subject
+  tags, classified as distinct / duplicate / overlapping / contradictory /
+  superseding, and every merge of durable knowledge is operator-gated.
+  Contradictions must resolve to exactly one live entry — the brain never
+  carries two conflicting truths (`RULES.md` §10.2, §10.4).
+- **Brain Audit** — a recurring semantic self-audit (default every 3 days,
+  operator-tunable) sweeps the whole brain for near-duplicates,
+  contradictions, stale state, and dangling links that no single merge could
+  see (`RULES.md` §10.3).
 - **Review as governance** — because capture artifacts are files, a PR review
   of the memory *is* the team's approval process. Bad captures get caught the
   same way bad code does.
@@ -309,12 +322,16 @@ it is to build the harder pieces together — issues tagged
 - **🧬 L1/L2 as embeddings** — a pluggable vector-DB backend for
   similarity-based retrieval of prior reasoning, with Markdown remaining the
   git-shared source of truth.
-- **🌲 First-class git-worktree support** — merge-friendly conventions so
-  parallel agents across worktrees don't clobber the shared memory.
+- **🌲 First-class git-worktree support** — the `RULES.md` §10 Brain Reconcile
+  conventions now define merge-friendly behavior across branches; remaining
+  work is a helper that automates reconciliation across live worktrees.
 - **🧠 Sub-brains → master brain** — scoped per-agent ledgers that roll durable
-  learnings up to the project's shared L1/L2, gated by the same capture classes.
-- **🩺 Salvor health checks** — lint the memory for stale L1 lines, unresolved
-  LF# entries, broken links, aging deferred findings, drift in the hand-authored
+  learnings up to the project's shared L1/L2, gated by the same capture classes
+  and deduplicated through the same §10.4 semantic comparison.
+- **🩺 Salvor health checks** — a tooling wrapper for the `RULES.md` §10.3
+  Brain Audit: lint the memory for semantic duplicates/contradictions, stale L1
+  lines, unresolved
+  `LF:` entries, broken links, aging deferred findings, drift in the hand-authored
   GitNexus routing note, unsafe/unexpected `.gitnexusrc` changes, stale or missing
   index state, unexpected context-file injection, unexpected generated skills/hooks,
   and component spokes that fell behind the code.

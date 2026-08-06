@@ -11,6 +11,42 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- **Distributed brain protocol (`RULES.md` §10)** — makes the shared brain safe
+  for parallel branches, agents, and worktrees:
+  - **Self-allocating slug IDs** for every knowledge artifact
+    (`LF:<slug>` / `DL:` / `DEC:` / `PM:` / `deferred:<slug>`) replacing all
+    sequential numbering (`LF#`, `### N.` deferred entries) — no ID allocation
+    reads shared state, so parallel branches cannot collide.
+  - **Structured artifact headers** (ID / Subject tags / Claim / Evidence date /
+    Status) on every decision, domain learning, postmortem, and learned-failure
+    artifact — the machine-comparable key for semantic dedupe.
+  - **Brain Reconcile** — a merge/pull-time ceremony: three-way diff of the
+    brain, subject-tag pairing, claim comparison, and operator-gated
+    classification (distinct / duplicate / overlapping / contradictory /
+    supersedes). Contradictions must resolve to exactly one `Status: live`
+    entry; superseded artifacts keep their ID as redirects. L1 is re-synthesized
+    at merges, never textually merged.
+  - **Brain Audit** — a recurring all-pairs semantic self-audit (default every
+    3 days, operator-tunable; tracked by a `Last Brain Audit` line in L1). The
+    default interval and its configurability are explicitly open for beta
+    community feedback.
+  - **Integration-bump versioning** ([STRICT]) — `VERSION.md` counters advance
+    only on the integration branch; feature branches record `pending` history
+    rows, eliminating parallel counter races. Solo direct-to-main flow is
+    unchanged.
+
+### Changed
+- Dogfooded and example brains migrated to the slug-ID scheme
+  (`LF1`/`LF-1`/`LF01` → `LF:<slug>`); index tables gained ID + Subject
+  columns; the README "Multi-agent & distributed teams" section now describes
+  the real reconcile/audit mechanism instead of a merge-it-like-code claim.
+
+### Fixed
+- Dangling `RULES.md` "§5.3" never-persist references now point to §9.1.
+- The root repo's learned failure gained its previously missing cross-linked
+  `domain-learnings/` artifact.
+
 ## [1.0.0-beta] — 2026-07-27
 
 Initial public beta.
@@ -93,7 +129,8 @@ Initial public beta.
   either way.
 - **Three capture classes** (user-gated, verbatim-prompted, with defined
   propagation paths) — **Decision/Domain Learning** (rationale behind choices),
-  **Learned Failure** (`LF#`, what didn't work and why), and **Deferred
+  **Learned Failure** (what didn't work and why; numbered `LF#` in this
+  release, slug IDs since), and **Deferred
   Finding** (out-of-scope findings, filed to `.salvor/DEFERRED_TODOS.md`).
 - **Canonical ownership** — every piece of knowledge has exactly one canonical
   home (`CLAUDE.md` hub, spokes, or `.salvor/`); vendor adapters stay thin

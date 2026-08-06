@@ -4,6 +4,15 @@ L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at releas
 
 ---
 
+## 2026-08-05 — Distributed-brain protocol (merged; CORE:15 DOCS:19 assigned at integration)
+
+- **Problem.** Salvor claimed distributed-team readiness but had zero mechanism: LF# was a hand-allocated global integer (shipping in three inconsistent formats — `LF1` root, `LF-1`/`LF01` example, `LF##` template), deferred findings used positional `### N.` renumbered by delete-on-fix, VERSION counters were monotonic integers in dual representation mirrored into 7+ files and pinned as literals in 3 test files, and L1/L2/index tables conflicted same-line by construction. Semantically duplicate or contradictory captures under different names would merge silently — the harder failure, since a fresh session could then load falsified knowledge as truth.
+- **Design (operator-approved).** (1) Slug IDs for every artifact class (`LF:`/`DL:`/`DEC:`/`PM:`/`deferred:`) — self-allocating, immutable after integration; slug collision at reconcile = probable duplicate, not error. (2) Structured header (ID / Subject tags / Claim / Evidence date / Status `live|superseded-by:`) as the machine-comparable semantic-dedupe key — operator explicitly rejected slug-collision-alone as sufficient dedupe (naming too subjective). (3) Brain Reconcile at merge/pull points: three-way diff → §10.4 subject-tag pairing → claim comparison → distinct/duplicate/overlapping/contradictory/supersedes, all knowledge merges operator-gated verbatim; contradictions resolve to exactly ONE live entry; L1 re-synthesized never text-merged; `.serena/memories/` re-derived; RULES conflicts always operator-decided. (4) Recurring Brain Audit, `AUDIT_INTERVAL_DAYS = 3` operator-tunable (beta community-feedback item per operator), tracked by the L1 `## Last Brain Audit:` footer, all-pairs sweep + header/link/staleness checks. (5) VERSION integration bump: counters advance only on the integration branch; feature branches write `pending` history rows; merge assigns one bump per component per integration (dogfooded: the branch carried `CORE:pending DOCS:pending`; the merge to `main` assigned CORE:15 DOCS:19 in the merge commit).
+- **Files.** SETUP_PROMPT templates (all artifact READMEs, DOMAIN_REF, DEFERRED, L1 footer, RULES §0/§2/§3/§6.9/§7 + new §10, VERSION note, step 4 rule 10, step 5); root + example RULES/CLAUDE; dogfood brain (LF1→`LF:rendered-pixel-alignment`, missing DL artifact created, index ID+Subject columns); example brain (LF-1/LF01→`LF:stale-note-reference`, `DEFERRED #1`→`deferred:no-persistence`, artifact renamed via git mv w/ history); README teams section rewritten around the real mechanism; ARCHITECTURE distributed-brain section w/ worked duplicate+contradiction example; FAQ/CONTRIBUTING/CHANGELOG; §5.3→§9.1 in 4 files.
+- **Tests.** New `tests/reconcile-contract.test.mjs` (11 tests). Un-pinned build-ID literals in beta-consistency + site-contract (now derived from the VERSION.md JSON header — pinned literals made every parallel bump a test conflict). final.test.mjs extended to §10. 140/140 unit+contract, 24/24 Playwright, 11/11 audit gates.
+- **Dry-run evidence.** Two throwaway branches each captured an overlapping DL (`DL:polymarket-rate-limit-backoff` vs `DL:clob-429-throttling`, shared subject tags) + a `pending` VERSION row. Merge produced ZERO artifact-file conflicts (slug filenames), textual conflicts only in the index table + VERSION exactly as §10 predicts, resolved by the documented union rule; subject pairing classified the pair duplicate; redirect-stub supersede mechanics verified; 2 pending rows → 1 integration bump. Branches deleted.
+- **Intentionally deferred (operator-directed).** No `site/` changes this pass — separate design-review pass after the team-friendly work completes. Historical records (VERSION.md history rows, L2 dated entries, CHANGELOG beta entry, `docs/PLAN.md` which self-declares period-accurate terminology) intentionally keep period-accurate `LF#` wording; living surfaces are fully migrated.
+
 ## 2026-07-30 — Existing-knowledge adoption public sync (CORE:14 GHPAGE:17 DOCS:18)
 
 Phase 2 promotes semantic existing-knowledge adoption from a roadmap concept to
@@ -126,15 +135,15 @@ changed.
 
 ---
 
-## 2026-07-28 — LF1 rendered-pixel alignment gate
+## 2026-07-28 — LF:rendered-pixel-alignment gate (captured as "LF1"; ID migrated 2026-08-05)
 
 - **Failure.** More than six Code Intelligence alignment revisions used CSS/DOM box geometry as the review oracle and still rendered visibly pixel-incorrect. Element/line boxes do not prove glyph baselines, and SVG boxes include whitespace that does not represent the visible stroke.
 - **Corrective method.** Playwright now screenshots each MCP heading/article, scales bitmap coordinates from the actual screenshot-root CSS dimensions, detects black/gold rendered ink, isolates the gold label's first contiguous line band, and reports signed title/label and icon/title pixel deltas. DOM rectangles only delimit scan regions.
 - **Evidence.** The corrected test failed 6/6 release viewports before the CSS fix. Gold first-line baselines already measured `0px`; icon/title top deltas exposed the shared-offset error from `-2.99px` to `+3.97px`. Per-card offsets derived from those measurements then passed 6/6 at 1440/1024/768/390/360/320 with both visible-ink deltas ≤1 CSS px.
-- **Invariant.** Never request visual alignment review from box geometry alone. Require the rendered-ink regression plus direct screenshot inspection. LF1 source: `.salvor/postmortems/2026-07-28-rendered-pixel-alignment-gate.md`.
+- **Invariant.** Never request visual alignment review from box geometry alone. Require the rendered-ink regression plus direct screenshot inspection. `LF:rendered-pixel-alignment` source: `.salvor/postmortems/2026-07-28-rendered-pixel-alignment-gate.md`.
 - **Independent visual check.** Direct rendered screenshots at 1440, 768, and 320px confirm the title/label baseline, icon/title visible tops, right-column containment, and wrapped narrow labels match the numeric gate.
 - **Full verification.** 120/120 unit and contract checks, 24/24 Chromium checks, the 11-gate release audit, and `git diff --check` pass. The IPv6 local server and final ngrok review URL both return HTTP 200.
-- **Gate.** Automated and internal visual verification are green. The operator approved the ngrok-reviewed LF1 rendered-pixel alignment as materially better and authorized a local commit on `main`; push remains operator-controlled.
+- **Gate.** Automated and internal visual verification are green. The operator approved the ngrok-reviewed `LF:rendered-pixel-alignment` fix as materially better and authorized a local commit on `main`; push remains operator-controlled.
 
 ---
 
@@ -300,7 +309,7 @@ Direct Playwright verification covered 1440×1000 desktop, 768×1024 tablet, 360
 
 ## 2026-07-19 — CORE:04 DOCS:04 public-launch hardening sweep
 
-Standardized the capture taxonomy on the umbrella term "capture classes" across RULES, the CLAUDE.md capture directive, docs, and the example project. The three classes: (1) Decision / Domain Learning, with subtypes Design Decision (prompt "Record this as a design decision? (yes/no)" → `.salvor/decisions/`) and Domain Learning (prompt "Save this as a domain learning? (yes/no)" → `.salvor/domain-learnings/`); (2) Learned Failure (LF#), registered through the same flow; (3) Deferred Finding (prompt "Log this to .salvor/DEFERRED_TODOS.md? (yes/no)" → `.salvor/DEFERRED_TODOS.md`). "Trigger" survives as a verb; the classes are canonical. Root RULES §2 now carries both Decision/Learning prompts, matching the example project's RULES.
+Standardized the capture taxonomy on the umbrella term "capture classes" across RULES, the CLAUDE.md capture directive, docs, and the example project. The three classes: (1) Decision / Domain Learning, with subtypes Design Decision (prompt "Record this as a design decision? (yes/no)" → `.salvor/decisions/`) and Domain Learning (prompt "Save this as a domain learning? (yes/no)" → `.salvor/domain-learnings/`); (2) Learned Failure (`LF:<slug>` since 2026-08-05; previously numbered LF#), registered through the same flow; (3) Deferred Finding (prompt "Log this to .salvor/DEFERRED_TODOS.md? (yes/no)" → `.salvor/DEFERRED_TODOS.md`). "Trigger" survives as a verb; the classes are canonical. Root RULES §2 now carries both Decision/Learning prompts, matching the example project's RULES.
 
 Renamed the RULES §1 recovery loop-breaker to "Context Recovery Procedure" in both RULES files, both CLAUDE.md hubs, and ARCHITECTURE.md, retiring the memory-loss-themed legacy name and replacing its prose everywhere with "context recovery."
 

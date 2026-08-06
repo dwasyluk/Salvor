@@ -4,8 +4,8 @@ These rules are MANDATORY. They supplement `CLAUDE.md` and take precedence over 
 
 ## Protocol Tiers
 
-- **Core Protocol (always on):** context loading and hub/spoke reading (§6.1), L1/L2 memory maintenance (§0.2–0.3), user-gated capture approval (§2, §7), context recovery (§1), security and git-safe operation (§9), canonical ownership and memory layers (§8), and vendor portability via thin adapters. Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
-- **Optional Strict Engineering Defaults:** these defaults are optional, editable, and project-specific; disabling them does not break Salvor Core. They cover component build counters (§0.1, §3), env-var conventions (§4.4, §6.2), the branch-deletion rule (§6.11), container permission rules (§5.1), impact analysis before every edit (§4.3), the >100-line search-before-read limit (§4.1), and mirror parity (§0.5, §6.3).
+- **Core Protocol (always on):** context loading and hub/spoke reading (§6.1), L1/L2 memory maintenance (§0.2–0.3), user-gated capture approval (§2, §7), context recovery (§1), security and git-safe operation (§9), canonical ownership and memory layers (§8), distributed-brain IDs, post-pull reconcile, and the recurring brain audit (§10), and vendor portability via thin adapters. Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
+- **Optional Strict Engineering Defaults:** these defaults are optional, editable, and project-specific; disabling them does not break Salvor Core. They cover component build counters (§0.1, §3), env-var conventions (§4.4, §6.2), the branch-deletion rule (§6.11), container permission rules (§5.1), impact analysis before every edit (§4.3), the >100-line search-before-read limit (§4.1), mirror parity (§0.5, §6.3), and the pre-merge brain reconcile (§0.6, §10.2).
 
 ---
 
@@ -13,11 +13,12 @@ These rules are MANDATORY. They supplement `CLAUDE.md` and take precedence over 
 
 Before declaring any task complete, verify and execute this checklist. No task is complete until `VERSION.md` is bumped when required, spokes are synced, and L1/L2 are updated.
 
-1. **Version Check:** If logic or owned content in a component changed, increment its build ID in `VERSION.md`, update the date, and add a component-specific history entry. Versions derive from `VERSION.md`; do not hardcode them in source.
+1. **Version Check:** If logic or owned content in a component changed, increment its build ID in `VERSION.md`, update the date, and add a component-specific history entry. Versions derive from `VERSION.md`; do not hardcode them in source. On a feature branch, record the history row with the literal build ID `pending` instead — real numbers are assigned at integration (§3, §10.2).
 2. **L1 Sync:** Update `.salvor/active_state.md` in dense shorthand and keep it under 50 lines.
-3. **L2 Sync:** Update `.salvor/active_state_verbose.md` immediately after L1 with full reasoning, logs, and nuance. L2 is detailed but curated, not unbounded: when it exceeds ~1,500 lines or at release milestones, condense the oldest resolved sections — keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise. Never persist material listed in §5.3.
+3. **L2 Sync:** Update `.salvor/active_state_verbose.md` immediately after L1 with full reasoning, logs, and nuance. L2 is detailed but curated, not unbounded: when it exceeds ~1,500 lines or at release milestones, condense the oldest resolved sections — keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise. Never persist material listed in §9.1.
 4. **Spoke Sync:** Update the changed component's `CLAUDE.md`; update `.salvor/DOMAIN_REF.md` for domain logic and `.salvor/INFRA.md` for infrastructure. Do not put component-specific detail in root `CLAUDE.md`.
 5. **Repository ↔ Website Parity:** Canonical public claims live in `README.md`, `SETUP_PROMPT.md`, and `docs/VENDOR_ADAPTERS.md`. The deployable static site is `site/` on `main`; `.github/workflows/pages.yml` deploys it from `main` via GitHub Actions. Before deploying site changes, run direct Playwright checks at desktop, tablet, small-phone, and 320px sizes; new page sections/interactions/visual elements require explicit operator design approval. Pushing/deploying remain operator-controlled. See §6.3.
+6. **Brain Reconcile (feature branches):** if this task ends in a PR or a merge into the integration branch, fetch the target branch and run the §10.2 Brain Reconcile ceremony against it BEFORE the merge.
 
 ## 1. Context Recovery Procedure
 
@@ -30,7 +31,7 @@ If the operator requests context recovery or a logic loop occurs:
 
 ## 2. Continued Learning Protocol
 
-This protocol covers the first two capture classes: **Decision / Domain Learning** and **Learned Failure (LF#)**. (The third class, **Deferred Finding**, is covered by §7.) Its shared record is vendor-agnostic repository Markdown; thin adapters make it vendor-portable without forking that record.
+This protocol covers the first two capture classes: **Decision / Domain Learning** and **Learned Failure (`LF:<slug>`)**. (The third class, **Deferred Finding**, is covered by §7.) Its shared record is vendor-agnostic repository Markdown; thin adapters make it vendor-portable without forking that record.
 
 Every domain discovery, hypothesis falsification, validation, vendor/model verdict, parameter learning, evidence-backed bakeoff, dependency probe, technique validation, Learned Failure, deliberate design decision or load-bearing invariant, or durable taxonomy clarification is a mandatory save checkpoint.
 
@@ -44,13 +45,14 @@ Do not infer the answer, batch unrelated discoveries, or defer the prompt.
 
 On `yes`:
 
-1. Create `.salvor/domain-learnings/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` following its README, including hypothesis, evidence, datasets, verdict, and cross-links — or, for a design decision, `.salvor/decisions/YYYY-MM-DD-[slug].md` (Context, Decision, Rationale, Invariant, Coupling, Alternatives).
-2. **TOC update:** add it to the matching chronological index:
+1. **Dedupe by subject first:** search the matching registry/index (and `DOMAIN_REF.md`) by Subject tags — not just title or slug. If an artifact with overlapping subject and the same claim exists, surface it and ask whether to augment instead of duplicating (same contract as §7).
+2. Create `.salvor/domain-learnings/YYYY-MM-DD-[CATEGORY]-[OUTCOME].md` (ID `DL:<kebab-slug>`, or `LF:<kebab-slug>` for a Learned Failure spec) following its README, including hypothesis, evidence, datasets, verdict, and cross-links — or, for a design decision, `.salvor/decisions/YYYY-MM-DD-[slug].md` (ID `DEC:<kebab-slug>`; Context, Decision, Rationale, Invariant, Coupling, Alternatives). Every artifact opens with the structured header — ID / Subject / Claim / Evidence date / Status (§10.1).
+3. **TOC update:** add it to the matching chronological index:
    `.salvor/domain-learnings/README.md` for empirical findings, or
    `.salvor/decisions/README.md` for design decisions.
-3. Update `.salvor/DOMAIN_REF.md` as current truth, including any new or revised LF#.
-4. Update affected root context, component spoke, L1, L2, and `.serena/memories/`.
-5. Report every touched file for end-to-end verification.
+4. Update `.salvor/DOMAIN_REF.md` as current truth, including any new or revised `LF:<slug>` entry.
+5. Update affected root context, component spoke, L1, L2, and `.serena/memories/`.
+6. Report every touched file for end-to-end verification.
 
 On `no`, acknowledge and continue without saving any partial artifact.
 
@@ -64,6 +66,7 @@ On `no`, acknowledge and continue without saving any partial artifact.
 
 - A change bumps its owning component and receives its own history entry. Mixed changes bump every affected component independently.
 - Each bump carries a bulleted change list.
+- **Counters advance only on the integration branch** (`main`). Work committed directly to it bumps immediately — the solo flow is unchanged. On a feature branch, add the history row with the literal build ID `pending` (e.g. `| 2026-08-05 | CORE:pending | change summary |`) and leave the JSON header, "Build IDs" line, L1 header, and spoke build lines untouched. The merge (§10.2 Brain Reconcile) assigns real numbers — one bump per affected component per integration — and rewrites the `pending` rows in the merge commit, so parallel branches never race on a counter.
 - All version bumps are logged in `VERSION.md` first. No hardcoded component versions in source.
 
 ## 4. Search & Tools
@@ -89,7 +92,7 @@ On `no`, acknowledge and continue without saving any partial artifact.
 6. Verify long-running and observability processes are alive (`ps`, `kill -0`, `wc -l`) before trusting output; use mid-run checkpoints for long jobs.
 7. At external API boundaries, pass the domain-correct identifier (`slug` ≠ `id` ≠ `external-id`); consult documentation or proxy handlers when uncertain.
 8. Every cache key includes every input that changes output, including model name, prompt-version hash, and schema version.
-9. LF# is the atomic unit of work. Upgrade every registered fix site together; record new mirror sites as LF# amendments.
+9. The Learned Failure is the atomic unit of work. Upgrade every fix site registered under an `LF:<slug>` entry together; record new mirror sites as LF amendments.
 10. Production-affecting changes involving money, customer data, external mutations, or shared infrastructure require operator diff acknowledgement before deployment.
 11. Delete merged branches locally and remotely in the same task after merge and push; long-lived integration branches require operator confirmation.
 
@@ -99,7 +102,7 @@ This is the third capture class: **Deferred Finding**. When work surfaces an unr
 
 > "Log this to .salvor/DEFERRED_TODOS.md? (yes/no)"
 
-Bundle only findings that emerge together. On `yes`, read the ledger and deduplicate first. If new, record title, location, issue, six-month severity, suggested fix, and reason deferred. Do not derail the current task. When fixed, delete the entry and reference it in the fixing commit.
+Bundle only findings that emerge together. On `yes`, read the ledger and deduplicate by subject first. If new, record it under a self-allocating slug ID (`### deferred:<kebab-slug> — <short title>`; never a sequential number, §10.1) with subject tags, location, issue, six-month severity, suggested fix, and reason deferred. Do not derail the current task. When fixed, delete the entry and reference the stable ID in the fixing commit (`closes deferred:<slug>`).
 
 ## 8. Memory layers & canonical ownership [CORE]
 
@@ -111,3 +114,55 @@ Bundle only findings that emerge together. On `yes`, read the ledger and dedupli
 1. **NEVER persist** to any memory/knowledge file: API keys, passwords, tokens, private keys, cookies, `.env` contents, credential-bearing URLs, customer PII, production datasets, unredacted logs, dependency dumps, large build output, or hidden model reasoning. **Redact before writing.** Summarize command output — keep evidence, conclusions, and commit/test/issue IDs; drop the noise.
 2. `.gitignore` does not remove already-committed data. If credentials were ever committed: revoke them AND remediate git history — ignoring the file afterward is not a fix.
 3. **Git-safe operation:** never blanket-stage (no catch-all add flags, no staging `.`), never commit without explicit approval, never silently overwrite files or another tool's managed sections. Stage explicit path lists; show `git diff --cached` before any commit you were asked to make.
+
+## 10. Distributed Brain: IDs, Reconcile & Audit [CORE; §10.2 trigger 1 STRICT]
+
+The brain travels through Git. Parallel branches, agents, and worktrees can capture semantically duplicate or contradictory knowledge under different names, and shared single-file surfaces conflict textually. This section keeps the brain single-truth with no central ID authority.
+
+### 10.1 Knowledge IDs [CORE]
+
+- Every durable knowledge artifact has a **self-allocating slug ID** — `<CLASS>:<kebab-slug>` — assigned at capture time: `LF:` (Learned Failure), `DL:` (Domain Learning), `DEC:` (Design Decision), `PM:` (Postmortem), `deferred:` (Deferred Finding). **Never a sequential number** — no ID allocation may read shared state.
+- Every artifact opens with the **structured header** (the semantic-dedupe key): **ID** · **Subject** (tags: the system/vendor/component the claim is about) · **Claim** (one-line invariant) · **Evidence date** · **Status** (`live` | `superseded-by: <id>`).
+- IDs are immutable once merged to the integration branch; renaming before merge (on the owning branch) is fine.
+- Registries/indexes enforce slug uniqueness per class. A slug collision found at reconcile time is a probable duplicate (§10.4), not an error. Superseded artifacts keep their ID with `Status: superseded-by: <id>` — never delete an ID from a registry; references must not dangle.
+
+### 10.2 Brain Reconcile (merge/pull ceremony)
+
+**Triggers:** (1) **[STRICT] Pre-merge** — on a feature branch, before opening a PR or merging into `main`, fetch the target and reconcile against it (§0.6), so dedupe lands BEFORE the textual conflict. (2) **[CORE] Post-pull** — at session start, if incoming commits touched `.salvor/`, `VERSION.md`, `RULES.md`, or `.serena/memories/`, ask verbatim:
+
+> "Incoming brain changes detected — run brain reconcile? (yes/no)"
+
+**Procedure:** three-way diff (merge base / ours / theirs) over the brain surfaces → semantic comparison (§10.4) → per-surface resolution. Every merge/augment/supersede of durable knowledge is operator-gated, verbatim:
+
+> "Merge these two <class> artifacts into one? (yes/no)"
+
+| Surface | Resolution rule |
+|---------|-----------------|
+| Artifacts (DL / DEC / PM / LF specs) | Winner absorbs loser with a provenance block; loser becomes a one-line redirect stub (`superseded-by:`). |
+| `.salvor/DOMAIN_REF.md` | Single current truth — contradictions resolve to ONE `Status: live` entry; loser marked superseded with date + why. |
+| L1 (`.salvor/active_state.md`) | NEVER textually merged — re-synthesize from both sides' L2 + artifacts after resolution (≤50 lines). |
+| L2 (`.salvor/active_state_verbose.md`) | Union both sides, normalize to chronological order, collapse duplicate sections. |
+| Index READMEs + `DEFERRED_TODOS.md` | Union rows, re-sort, dedupe. (Optional `.gitattributes` `merge=union` convenience — reconcile normalizes regardless.) |
+| `RULES.md` | Governance — conflicting edits to Salvor-managed sections are ALWAYS operator-decided; never auto-merged. |
+| `.serena/memories/` | Derived views — re-derive from the reconciled canonical artifacts; never merge textually. |
+| Spoke `CLAUDE.md` | Update knowledge references to the reconciled IDs; [STRICT] build lines per §3 integration bump. |
+| `VERSION.md` | [STRICT] §3 integration bump: assign real numbers to `pending` rows — one bump per component per integration. |
+
+End with the standard confirmation report (every touched file).
+
+### 10.3 Brain Audit (recurring semantic self-audit)
+
+Reconcile only sees what a merge brings in; duplicates also accrete on a single branch or pre-date the protocol.
+
+- **Cadence:** due every **3 days** — `AUDIT_INTERVAL_DAYS = 3`, operator-tunable (beta default; feedback welcome on the default and its configurability). Tracked by the `## Last Brain Audit:` line in L1. At session start, if overdue, ask verbatim:
+
+> "Brain audit is due (last run N days ago) — run it now? (yes/no)"
+
+- **Sweep:** the §10.4 comparison run all-pairs across the whole brain, plus: contradiction check against DOMAIN_REF current truth; missing/empty Subject/Claim headers; stale L1 lines; dangling or superseded cross-links; aging deferred findings; L1 ≤50-line and L2 rotation checks.
+- Findings route through the same classification + operator gates as §10.2. Update the L1 audit line and land the run as an ordinary commit.
+
+### 10.4 Semantic comparison (never filename-only)
+
+1. **Pair by Subject:** for each new/changed artifact, collect every existing artifact (any class, any date) sharing ≥1 Subject tag. Subject overlap — not name similarity — is the pairing key.
+2. **Compare Claims** (read both artifacts in full): same claim, compatible evidence → **duplicate** (merge into one — keep the richer body, union evidence, one live ID); compatible claims, different facets → **overlapping** (augment the canonical one); incompatible claims → **contradictory** (operator decision required, presented with both evidence dates and a newest-evidence presumption; exactly ONE `Status: live` entry survives); one retests/upgrades the other → **supersedes** (v1 → v2 per §6.9 atomicity).
+3. No pair → **distinct** — keep as-is.

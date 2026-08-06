@@ -303,22 +303,28 @@ No. These layers can coexist:
 - Use Salvor for canonical engineering memory inside the repo.
 
 The boundary matters. Canonical project truth belongs somewhere the team can
-review, diff, branch, and merge. For Salvor, that place is git.
+review, diff, branch, and merge. For Salvor, that place is git — and `RULES.md`
+§10 defines how parallel branches merge the *knowledge* itself: collision-free
+slug IDs, a semantic Brain Reconcile at merge/pull points, and a recurring
+Brain Audit that sweeps for duplicates and contradictions.
 
 ## Won't the memory go stale or drift from the code?
 
 That's the failure mode Salvor is built to *surface*, not hide. A core doctrine:
 preserve not just what's **known**, but what's **stale, contradicted, or missing**.
-`DEFERRED_TODOS.md` parks open risks instead of dropping them, the `LF#` registry
+`DEFERRED_TODOS.md` parks open risks instead of dropping them, the `LF:` registry
 records what *didn't* work, and L1 carries a "current delta vs. published behavior."
 The Task Termination Protocol (RULES §0) makes updating L1/L2 + spokes + versioning
-part of *finishing* work, so the memory stays tied to the code.
+part of *finishing* work, so the memory stays tied to the code. And the recurring
+**Brain Audit** (RULES §10.3 — due every 3 days by default, operator-tunable)
+semantically sweeps the whole brain for near-duplicate artifacts, contradictions
+against `DOMAIN_REF` current truth, stale L1 lines, and dangling links.
 
-A first-class **`salvor health`** pass — flagging stale L1 lines, unresolved `LF#`s,
-aging deferred TODOs, drift in the hand-authored GitNexus routing note,
+A first-class **`salvor health`** tooling pass — wrapping that Brain Audit and
+additionally flagging drift in the hand-authored GitNexus routing note,
 unsafe/unexpected `.gitnexusrc` changes, stale or missing index state, unexpected
-context-file injection, unexpected generated skills/hooks, and `DOMAIN_REF` ↔ L1 ↔ L2
-contradictions — is the top roadmap item. See the
+context-file injection, and unexpected generated skills/hooks — is the top
+roadmap item. See the
 [Roadmap](../README.md#contributing--roadmap) for the full list.
 
 ## What is the simplest one-line answer?

@@ -121,17 +121,20 @@ test("agent-routing and example surfaces keep Serena memories as retrieval aids"
 });
 
 test("soft-launch component build IDs are synchronized across current state and spokes", async () => {
+  // Derive the expected IDs from VERSION.md's JSON header (the single source of
+  // truth) instead of pinning literals — pinned literals turn every legitimate
+  // bump on any branch into a test conflict (RULES §10 / integration-bump).
   const version = await read("VERSION.md");
-  assert.match(version, /"core"\s*:\s*14/);
-  assert.match(version, /"ghpage"\s*:\s*17/);
-  assert.match(version, /"docs"\s*:\s*18/);
-  assert.match(version, /CORE:14 \| GHPAGE:17 \| DOCS:18/);
+  const header = JSON.parse(version.match(/<!--\s*({[^\n]+})\s*-->/)[1]);
+  const pad = (n) => String(n).padStart(2, "0");
+  const [core, ghpage, docs] = [pad(header.core), pad(header.ghpage), pad(header.docs)];
+  assert.match(version, new RegExp(`CORE:${core} \\| GHPAGE:${ghpage} \\| DOCS:${docs}`));
 
   const currentSurfaces = [
-    [".salvor/active_state.md", /CORE:14 GHPAGE:17 DOCS:18/],
-    ["core/CLAUDE.md", /current build `CORE:14`/],
-    ["site/CLAUDE.md", /current build `GHPAGE:17`/],
-    ["docs/CLAUDE.md", /current build `DOCS:18`/],
+    [".salvor/active_state.md", new RegExp(`CORE:${core} GHPAGE:${ghpage} DOCS:${docs}`)],
+    ["core/CLAUDE.md", new RegExp("current build `CORE:" + core + "`")],
+    ["site/CLAUDE.md", new RegExp("current build `GHPAGE:" + ghpage + "`")],
+    ["docs/CLAUDE.md", new RegExp("current build `DOCS:" + docs + "`")],
   ];
   for (const [file, expected] of currentSurfaces) {
     assert.match(await read(file), expected, file);
@@ -140,7 +143,8 @@ test("soft-launch component build IDs are synchronized across current state and 
 
 test("canonical-logo work ships in the beta changelog instead of Unreleased", async () => {
   const changelog = await read("CHANGELOG.md");
-  assert.match(changelog, /## \[Unreleased\]\s+## \[1\.0\.0-beta\] — 2026-07-27/);
+  const unreleased = changelog.split("## [Unreleased]")[1].split("## [1.0.0-beta]")[0];
+  assert.doesNotMatch(unreleased, /LOGO\.svg|favicon|brand/i, "logo/brand work belongs in the beta entry, not Unreleased");
   const betaEntry = changelog.split("## [1.0.0-beta]")[1];
   assert.match(betaEntry, /operator-authored\s+`LOGO\.svg` regular master and `LOGO-SM\.svg` favicon master/);
   assert.match(betaEntry, /system-theme-aware canonical SM SVG favicon/);

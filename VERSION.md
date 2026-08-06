@@ -1,9 +1,9 @@
-<!-- {"version":"1.0.0-beta","core":14,"ghpage":17,"docs":18} -->
+<!-- {"version":"1.0.0-beta","core":15,"ghpage":17,"docs":19} -->
 # salvor VERSION MANIFEST
 ## Current State
 - **Project Version:** v1.0.0-beta
-- **Build IDs:** CORE:14 | GHPAGE:17 | DOCS:18
-- **Last Updated:** 2026-07-30
+- **Build IDs:** CORE:15 | GHPAGE:17 | DOCS:19
+- **Last Updated:** 2026-08-05
 
 ---
 
@@ -11,6 +11,7 @@
 
 | Date | Build IDs | Summary |
 |------|-----------|---------|
+| 2026-08-05 | CORE:15 DOCS:19 | **Distributed-brain protocol (merged from `feat/distributed-brain`; the branch carried `pending` rows and this integration assigned the build IDs per §3/§10.2 — the rule's first dogfooded application).** Knowledge IDs became self-allocating slugs (`LF:`/`DL:`/`DEC:`/`PM:`/`deferred:`) with structured ID/Subject/Claim/Evidence-date/Status headers, retiring all sequential numbering (`LF#`, `### N.` deferred entries). New RULES §10: Brain Reconcile (pre-merge [STRICT] + post-pull [CORE] verbatim gates, three-way diff, subject-tag pairing, five-way classification, single-live-truth contradiction rule, L1 re-synthesis, Serena re-derivation) and the recurring Brain Audit (`AUDIT_INTERVAL_DAYS = 3`, operator-tunable, tracked by the L1 `Last Brain Audit` line — beta feedback invited). §3 integration-bump rule: counters advance only on the integration branch; feature branches record `pending` rows (this row dogfoods it). Dogfooded + example brains migrated (`LF1`/`LF-1`/`LF01` → `LF:<slug>`; missing root LF domain-learning artifact created); README teams section rewritten around the real mechanism; ARCHITECTURE gained the distributed-brain section with the worked duplicate/contradiction example; new `tests/reconcile-contract.test.mjs` (11 tests); build-ID test literals un-pinned (derived from the VERSION.md JSON header); dangling `§5.3` never-persist refs fixed to §9.1. |
 | 2026-07-30 | CORE:14 GHPAGE:17 DOCS:18 | Promoted preservation-first knowledge adoption from roadmap to current `v1.0.0-beta` behavior. Existing repositories now receive a read-only knowledge-source inventory during setup and can invoke the same workflow later on demand. Selected documents are analyzed at section/snippet level, allowing one source to map to multiple independently approved Salvor artifact types or remain canonical in place. Every proposed mapping names its source range, destination, canonical owner, ownership action, and exact content; originals remain untouched unless a separate mutation is approved. Synchronized the installer, worked example, README, architecture, FAQ, vendor guidance, changelog, GitHub Pages primary path, roadmap materials, contracts, and dogfooded state. |
 | 2026-07-30 | CORE:13 GHPAGE:16 DOCS:17 | Added preservation-first existing-repository adoption to the core setup protocol. Setup now presents an adoption map (`reuse unchanged` / `add Salvor-managed section` / `conflict — operator decision required`), reuses existing Serena/GitNexus state and mature hub/spoke/rules/vendor infrastructure in place, forbids automatic Serena-memory migration and duplicate equivalent rules, and requires exact pre-write approval for mutations, collisions, stale-index refreshes, ambiguity, or genuine conflicts. Added installer contracts, updated the worked example, and recorded the design decision; public README/docs/FAQ/CHANGELOG/GitHub Pages propagation remains a separately reviewed Phase 2 gate. |
 | 2026-07-28 | CORE:12 GHPAGE:16 DOCS:17 | Established GitHub Discussions as the soft-launch community hub while keeping actionable work in Issues and PRs. Added prominent README feedback routes through Discussions or lowercase `@blockchaindan` on X; documented the all-caps `[HELP]`, `[BUG]`, `[IDEA]`, `[ADAPTER]`, and `[SHOWCASE]` discussion taxonomy plus `[IDEA]` → `[FEAT]` promotion; aligned issue-template prefixes; and added direct Community links to the GitHub Pages desktop, mobile, and footer navigation without exposing X on the site. |
