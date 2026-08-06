@@ -511,9 +511,11 @@ h1,
 }
 
 .brain-summary {
+  /* Stacked full-width paragraphs: the second paragraph depends on the
+     first, so side-by-side columns read out of order. */
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
-  gap: clamp(18px, 3vw, 42px);
+  grid-template-columns: 1fr;
+  gap: clamp(14px, 1.8vw, 24px);
   margin-top: clamp(34px, 5vw, 64px);
   padding: clamp(22px, 3vw, 36px);
   border: 1px solid var(--line);
@@ -1116,10 +1118,6 @@ h1,
 
   .process-grid article::after {
     display: none;
-  }
-
-  .brain-summary {
-    grid-template-columns: 1fr;
   }
 
   .terminal-grid,
