@@ -32,6 +32,14 @@ docs/roadmap-issues.md
 docs/plans/
 assets/hero-prompt.md
 
+# Local design sources + recovered artwork — operator-held, never shipped
+# (enforced here so no staging command can ever commit them into public history)
+*.ai
+*.psd
+*.psb
+assets/brand/reference/salvor-mystic-artifact-*.png
+assets/brand/reference/keep-the-outer-*.png
+
 # Local browser-test artifacts
 playwright-report/
 test-results/
