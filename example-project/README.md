@@ -35,11 +35,12 @@ The app itself is deliberately tiny: an in-memory **Notes** service.
 
 ## Layout
 - `CLAUDE.md` — hub (project overview, architecture table, memory + capture directives).
-- `AGENTS.md` — entrypoint adapter for `AGENTS.md`-native CLIs (Claude Code uses the `CLAUDE.md` hub).
+- `AGENTS.md` — entrypoint adapter for Codex and other `AGENTS.md`-compatible CLIs (Claude Code uses the `CLAUDE.md` hub).
+- `GEMINI.md` — entrypoint adapter for Gemini CLI / Antigravity (`GEMINI.md`-compatible tooling) — the same thin pointer.
 - `RULES.md` — §0–§10 development rules (Core Protocol + the strict profile this example demonstrates).
 - `VERSION.md` — per-component build IDs (`API:02 | WEB:02`).
 - `api/`, `web/` — the two components, each with its own spoke `CLAUDE.md`.
-- `.salvor/` — L1 (`active_state.md`) + L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
+- `.salvor/` — the brain: its `README.md` index (+ `Salvor-Protocol` stamp), L1 (`active_state.md`) + L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
   the `decisions/` + `postmortems/` + `domain-learnings/` knowledge archives (with one worked
   LF:stale-note-reference entry threaded through all of them), and the experimental `archive/`.
 - `.serena/memories/` — committed enhanced-mode retrieval aids (concise structure and command pointers); `.salvor/`
