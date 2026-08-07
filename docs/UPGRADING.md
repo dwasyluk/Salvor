@@ -13,14 +13,14 @@ install, so nothing about how you installed constrains how you upgrade.
 
 | Layer | Contents | On upgrade |
 |---|---|---|
-| **Protocol** | `RULES.md` text, artifact-folder READMEs/templates, hub directives, vendor adapters, Salvor-managed sections | Refreshed — Salvor owns it |
+| **Protocol** | [`RULES.md`](../RULES.md) text, artifact-folder READMEs/templates, hub directives, vendor adapters, Salvor-managed sections | Refreshed — Salvor owns it |
 | **Knowledge** | Your artifacts (`decisions/`, `domain-learnings/`, `postmortems/`, `archive/`), L1/L2 content, `DOMAIN_REF.md` facts, deferred entries | **Never touched** — you own it |
 
 An upgrade replaces Salvor's instructions, never your team's accumulated
 memory. Where you have customized generated RULES text (Strict defaults are
 explicitly editable), the upgrade is proposed as a three-way merge — your
 version vs the old template vs the new template — and any conflict is yours to
-decide, per the `RULES.md` §10.2 governance rule. Nothing is written without
+decide, per the [`RULES.md`](../RULES.md) §10.2 governance rule. Nothing is written without
 your approval of the plan.
 
 ## The protocol stamp
@@ -46,7 +46,7 @@ First stamped release. If you are upgrading an install scaffolded from a
 pre-beta copy of the prompt, the notable protocol migrations the upgrade plan
 will propose:
 
-- **Slug knowledge IDs** (`RULES.md` §10.1): numeric Learned-Failure IDs
+- **Slug knowledge IDs** ([`RULES.md`](../RULES.md) §10.1): numeric Learned-Failure IDs
   (`LF1` / `LF-1` / `LF01`) become `LF:<kebab-slug>` registry entries, and
   positional deferred entries (`### 1.`) become `deferred:<kebab-slug>`
   headings. Your artifact *content* is untouched; registry headings, index
