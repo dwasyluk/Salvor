@@ -21,9 +21,10 @@ const pages = read(".github/workflows/pages.yml");
 const gemini = read("GEMINI.md");
 const security = read("SECURITY.md");
 
-// --- Item 1: Pages topology deploys site/ from main -----------------------
-test("Pages workflow deploys site/ from main, not a separate branch", () => {
-  assert.match(pages, /branches:\s*\["main"\]/);
+// --- Item 1: Pages topology deploys site/ via operator dispatch -----------
+test("Pages workflow deploys site/ via operator dispatch, not a separate branch", () => {
+  assert.match(pages, /workflow_dispatch/);
+  assert.doesNotMatch(pages, /\n\s*push:/, "deploys are operator-dispatched, never push-triggered");
   assert.match(pages, /path:\s*\.\/site/);
   assert.doesNotMatch(pages, /ghpages\/v1\.0\.0/);
 });
