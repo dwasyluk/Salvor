@@ -138,6 +138,22 @@ use, with the canonical memory living in git so the whole team inherits it. They
 operate at a different layer — you could even back Salvor's retrieval with one
 someday (that's the embeddings roadmap).
 
+## How does Salvor relate to MCP, Agent Skills, and the Agent Plugins standard?
+
+They standardize **capabilities**; Salvor governs **knowledge**. MCP connects
+an agent to tools, Agent Skills package reusable instructions, and the new
+cross-vendor [Agent Plugins](https://agent-plugins.org/specification) format
+(OpenAI, Microsoft, AWS, Cursor, Google, Vercel) wraps skills + MCP servers in
+one portable folder — all answering "what can this agent *do*?" None of them
+say anything about memory, knowledge files, or context: "what has this team
+*learned*, and *why* is the code the way it is?" That's Salvor's layer — a
+repo-owned, human-governed brain with slug IDs, merge semantics, and capture
+gates — and it's deliberately complementary: Salvor's optional tooling already
+rides MCP (Serena, GitNexus), and the upcoming v1.1 plugin will evaluate
+shipping in the Agent Plugins format so one package serves every supporting
+client. Different layers, no conflict: they move the agent's hands; Salvor
+carries the team's mind.
+
 ## Isn't this just Serena + GitNexus with extra steps?
 
 Serena and GitNexus are the substrate: they tell the agent about your code *as it

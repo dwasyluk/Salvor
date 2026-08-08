@@ -380,6 +380,10 @@ it is to build the harder pieces together — issues tagged
   same universal `SETUP_PROMPT.md`) is in active development and ships with
   v1.1.0. Always a wrapper, never a
   replacement for the paste-anywhere floor that keeps Salvor vendor-portable.
+  It will also evaluate packaging per the emerging cross-vendor
+  [Agent Plugins](https://agent-plugins.org/specification) standard (skills +
+  MCP servers in one portable folder), so a single package could serve Claude
+  Code alongside ChatGPT, Codex, Cursor, Copilot, Kiro, and VS Code.
   Codex and Gemini equivalents are open for contributors.
 
 Contributions welcome beyond the roadmap too:
