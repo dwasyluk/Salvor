@@ -141,15 +141,18 @@ def check_redis_from_container() -> Check:
     C2/C3 agents degrade into two isolated solos while still being labelled
     cooperative, and the coordination result is meaningless.
     """
+    port = os.environ.get("SALVORBENCH_REDIS_PORT", "6399")
+    image = os.environ.get("SALVORBENCH_REDIS_IMAGE", "redis:alpine")
     code, out = _run([
         "docker", "run", "--rm", "--add-host=host.docker.internal:host-gateway",
-        "redis:8-alpine", "redis-cli", "-h", "host.docker.internal", "ping",
+        image, "redis-cli", "-h", "host.docker.internal", "-p", port, "ping",
     ], timeout=120)
     if code != 0 or "PONG" not in out.upper():
         return Check("redis_from_container", FAIL,
-                     "no PONG from inside a container; start redis bound to a "
-                     f"container-reachable interface: {out[-160:]}")
-    return Check("redis_from_container", OK, "PONG from inside a container")
+                     f"no PONG from inside a container on :{port}; start redis with "
+                     f"`redis-server --port {port} --bind 0.0.0.0 --protected-mode no "
+                     f"--daemonize yes`: {out[-140:]}")
+    return Check("redis_from_container", OK, f"PONG from inside a container on :{port}")
 
 
 # ------------------------------------------------------------------- adapters
