@@ -46,3 +46,11 @@ test-results/
 
 # Internal self-scaffold planning/spec docs (Codex working notes) — kept on disk, NOT published
 docs/superpowers/
+
+# Benchmark subsystem (benchmarks/) — local-only runtime state and secrets
+benchmarks/.env
+benchmarks/.venv/
+benchmarks/runs/
+benchmarks/vendor/CooperBench/dataset/
+benchmarks/**/__pycache__/
+benchmarks/.pytest_cache/

@@ -1,0 +1,60 @@
+[project]
+name = "salvorbench"
+version = "0.1.0"
+description = "Clean-room benchmark harness measuring the recommended Salvor stack (Salvor + Serena + GitNexus) against matched baselines."
+readme = "README.md"
+requires-python = ">=3.12,<3.14"
+license = { text = "MIT" }
+
+dependencies = [
+  # Upstream benchmark harnesses, pinned to immutable commits/versions.
+  # CooperBench v0.0.29 == 4913c4ebb84d2606cdb5628936b88529f3e181df
+  # (>=0.0.29 is required: every release before 2026-08-14 shipped 24
+  #  non-gradeable features, including one that passed on an untouched tree.)
+  "cooperbench @ git+https://github.com/cooperbench/CooperBench@4913c4ebb84d2606cdb5628936b88529f3e181df",
+  "swebench>=5.0.1,<6",
+
+  "docker>=7.0",
+  "redis>=5.0",
+  "pydantic>=2.0",
+  "pyyaml>=6.0",
+  "rich>=13.0",
+  "typer>=0.12",
+  "tenacity>=8.0",
+  "httpx>=0.27",
+  "huggingface-hub>=0.24",
+]
+
+[project.optional-dependencies]
+# S2 (ported SWE-Bench-CL semantic memory) embedding backend. Kept optional so
+# the harness core installs without a multi-GB torch download when only the
+# CooperBench arms are being run.
+memory = [
+  "faiss-cpu>=1.8",
+  "sentence-transformers>=3.0",
+]
+dev = [
+  "pytest>=8.0",
+  "pytest-timeout>=2.3",
+]
+
+[project.scripts]
+salvorbench = "salvorbench.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+# Required because `cooperbench` is pinned to an immutable commit SHA via a
+# direct git reference. A tag or version range would let upstream move under us
+# mid-run and silently change `_build_claude_command`, the submission prompt, or
+# the eval semantics - any of which would invalidate cross-condition parity.
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/salvorbench"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
