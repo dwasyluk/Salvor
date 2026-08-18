@@ -13,6 +13,10 @@ dependencies = [
   #  non-gradeable features, including one that passed on an untouched tree.)
   "cooperbench @ git+https://github.com/cooperbench/CooperBench@4913c4ebb84d2606cdb5628936b88529f3e181df",
   "swebench>=5.0.1,<6",
+  # swebench needs a modern `datasets`; without this floor the resolver
+  # back-solves to datasets 1.1.1 (2020), which calls pyarrow.PyExtensionType -
+  # removed in pyarrow 25 - and every dataset load dies on import.
+  "datasets>=3.0",
 
   "docker>=7.0",
   "redis>=5.0",
