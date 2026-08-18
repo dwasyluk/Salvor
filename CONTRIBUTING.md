@@ -35,14 +35,14 @@ prefixes. An `[IDEA]` is a conversation; a `[FEAT]` is accepted, scoped work.
 
 ### Beta feedback we're explicitly looking for
 
-The distributed-brain protocol (`RULES.md` §10) ships with a **3-day default
+The distributed-brain protocol ([`RULES.md`](./RULES.md) §10) ships with a **3-day default
 Brain Audit interval**, operator-tunable via `AUDIT_INTERVAL_DAYS`. Whether
 that default is right — and whether the interval (and other §10 knobs) should
 move into a dedicated config surface — is an open beta question. If you run
 Salvor on a team or across parallel branches/worktrees, an `[IDEA]` discussion
 with your experience is especially valuable.
 
-**Agentic provisional capture (`RULES.md` §10.5–§10.6) is EXPERIMENTAL and
+**Agentic provisional capture ([`RULES.md`](./RULES.md) §10.5–§10.6) is EXPERIMENTAL and
 off by default.** Its graduation criteria — over-capture calibration,
 rubber-stamp resistance, poisoning resistance, the 90-day archive window,
 per-class policy, and cross-vendor compliance — are tracked in
@@ -75,7 +75,7 @@ If your PR changes the protocol or schema, it isn't done until all of these
 are updated together in the same PR:
 
 - `SETUP_PROMPT.md` (the canonical installer)
-- `RULES.md` (the dogfooded instance of the generated rules)
+- [`RULES.md`](./RULES.md) (the dogfooded instance of the generated rules)
 - `example-project/` (re-rendered to match)
 - `README.md` and the relevant `docs/` pages (including `docs/UPGRADING.md`
   migration notes when the change affects installed repos)

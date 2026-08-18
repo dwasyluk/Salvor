@@ -124,7 +124,15 @@ test("CI and Pages workflows use current supported GitHub Action majors", () => 
   assert.match(ci, /actions\/checkout@v7/);
   assert.match(ci, /actions\/setup-node@v7/);
   assert.match(pages, /actions\/checkout@v7/);
-  assert.match(pages, /actions\/configure-pages@v5/);
+  assert.match(pages, /actions\/configure-pages@v6/);
   assert.match(pages, /actions\/upload-pages-artifact@v5/);
-  assert.match(pages, /actions\/deploy-pages@v4/);
+  assert.match(pages, /actions\/deploy-pages@v5/);
+});
+
+test("Pages deploys are operator-dispatched only, and CI covers dev", () => {
+  const pages = read(".github/workflows/pages.yml");
+  assert.match(pages, /workflow_dispatch/);
+  assert.doesNotMatch(pages, /\n\s*push:/, "pages.yml must not auto-deploy on push");
+  const ci = read(".github/workflows/ci.yml");
+  assert.match(ci, /branches: \["main", "dev"\]/);
 });

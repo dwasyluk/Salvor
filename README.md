@@ -105,7 +105,7 @@ The scaffold Salvor creates in your repo:
 Plus vendor entrypoints at the repo root: `CLAUDE.md` is the canonical
 cross-vendor hub, while thin `AGENTS.md` (Codex and other AGENTS.md-compatible
 agents) and `GEMINI.md` adapters
-route other supported agents to that same shared brain. `RULES.md` provides
+route other supported agents to that same shared brain. [`RULES.md`](./RULES.md) provides
 the governance protocol. When the optional Strict defaults are enabled,
 Salvor also generates per-component counters in `VERSION.md`; otherwise it
 uses the project's established version source or a minimal history artifact.
@@ -259,18 +259,18 @@ protocol defines what happens when two branches grow the brain in parallel.
   `deferred:no-persistence`) with a structured Subject/Claim header. No
   sequential counters, so parallel branches never race "the next number" —
   and if two developers do pick similar slugs for the same discovery, Brain
-  Reconcile catches the overlap by subject at merge time (`RULES.md`
+  Reconcile catches the overlap by subject at merge time ([`RULES.md`](./RULES.md)
   §10.1–§10.2).
 - **Brain Reconcile** — at merge and pull points, incoming knowledge is
   compared *semantically* against what's already there: paired by subject
   tags, classified as distinct / duplicate / overlapping / contradictory /
   superseding, and every merge of durable knowledge is operator-gated.
   Contradictions must resolve to exactly one live entry — the brain never
-  carries two conflicting truths (`RULES.md` §10.2, §10.4).
+  carries two conflicting truths ([`RULES.md`](./RULES.md) §10.2, §10.4).
 - **Brain Audit** — a recurring semantic self-audit (default every 3 days,
   operator-tunable) sweeps the whole brain for near-duplicates,
   contradictions, stale state, and dangling links that no single merge could
-  see (`RULES.md` §10.3).
+  see ([`RULES.md`](./RULES.md) §10.3).
 - **Review as governance** — because capture artifacts are files, a PR review
   of the memory *is* the team's approval process. Bad captures get caught the
   same way bad code does.
@@ -279,14 +279,14 @@ protocol defines what happens when two branches grow the brain in parallel.
 
 Salvor's capture gates normally require your verbatim approval *before* any
 durable write. The experimental `AGENT_CAPTURE = provisional` mode
-(`RULES.md` §10.5) moves that approval from **before the write** to **before
+([`RULES.md`](./RULES.md) §10.5) moves that approval from **before the write** to **before
 ratification**: agents may capture Domain Learnings, Learned Failures, and
 Deferred Findings autonomously — useful for overnight runs and subagent
 fleets — but everything they write is explicitly identifiable
 (`Contributed-by: agent — <vendor/model>` provenance headers, a
 `Salvor-Contribution: agent` commit trailer) and enters a visibly lower trust
 tier (`Review: unreviewed`): treated by every agent as hypothesis rather than
-invariant, unable to override ratified knowledge or touch `RULES.md`, and
+invariant, unable to override ratified knowledge or touch [`RULES.md`](./RULES.md), and
 surfaced item-by-item for human ratification by the recurring Brain Audit.
 Nothing is ever silently discarded — rejected or aged-out contributions move
 to `.salvor/archive/` (default 90 days, tunable), which agents never load.
@@ -361,13 +361,13 @@ it is to build the harder pieces together — issues tagged
 - **🧬 L1/L2 as embeddings** — a pluggable vector-DB backend for
   similarity-based retrieval of prior reasoning, with Markdown remaining the
   git-shared source of truth.
-- **🌲 First-class git-worktree support** — the `RULES.md` §10 Brain Reconcile
+- **🌲 First-class git-worktree support** — the [`RULES.md`](./RULES.md) §10 Brain Reconcile
   conventions now define merge-friendly behavior across branches; remaining
   work is a helper that automates reconciliation across live worktrees.
 - **🧠 Sub-brains → master brain** — scoped per-agent ledgers that roll durable
   learnings up to the project's shared L1/L2, gated by the same capture classes
   and deduplicated through the same §10.4 semantic comparison.
-- **🩺 Salvor health checks** — a tooling wrapper for the `RULES.md` §10.3
+- **🩺 Salvor health checks** — a tooling wrapper for the [`RULES.md`](./RULES.md) §10.3
   Brain Audit: lint the memory for semantic duplicates/contradictions, stale L1
   lines, unresolved
   `LF:` entries, broken links, aging deferred findings, drift in the hand-authored
@@ -380,6 +380,10 @@ it is to build the harder pieces together — issues tagged
   same universal `SETUP_PROMPT.md`) is in active development and ships with
   v1.1.0. Always a wrapper, never a
   replacement for the paste-anywhere floor that keeps Salvor vendor-portable.
+  It will also evaluate packaging per the emerging cross-vendor
+  [Agent Plugins](https://agent-plugins.org/specification) standard (skills +
+  MCP servers in one portable folder), so a single package could serve Claude
+  Code alongside ChatGPT, Codex, Cursor, Copilot, Kiro, and VS Code.
   Codex and Gemini equivalents are open for contributors.
 
 Contributions welcome beyond the roadmap too:

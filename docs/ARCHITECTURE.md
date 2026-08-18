@@ -41,7 +41,7 @@ L1 is what the agent reads constantly; L2 is where the nuance lives so L1 can st
 cheap. Both are git-tracked.
 
 ### 3. RULES.md — the enforcement layer
-The documents above are inert without discipline. `RULES.md` is what makes the
+The documents above are inert without discipline. [`RULES.md`](../RULES.md) is what makes the
 knowledge compound rather than decay:
 - **§0 Task Termination Protocol** — keeps reviewed memory and component
   context synchronized: nothing is "done" until L1/L2 + spokes are synced. Optional
@@ -103,7 +103,7 @@ and the ownership contract: `VENDOR_ADAPTERS.md`.)
 Salvor keeps a clean split so it never squats in your project's own `docs/`:
 
 - **Root — governance + entrypoints:** the `CLAUDE.md` hub + component spokes,
-  `AGENTS.md`/`GEMINI.md`, `RULES.md`, and `VERSION.md` when the optional Strict
+  `AGENTS.md`/`GEMINI.md`, [`RULES.md`](../RULES.md), and `VERSION.md` when the optional Strict
   profile is enabled — where compatible CLIs and build tooling discover them.
 - **`.salvor/` — the brain (git-committed, shared):** L1 (`active_state.md`),
   L2 (`active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
@@ -180,7 +180,7 @@ kinds of knowledge with different homes.
 
 A shared brain that travels through Git has to survive *parallel* growth: two
 developers on separate branches capturing knowledge at the same time. Salvor's
-`RULES.md` §10 defines three mechanisms:
+[`RULES.md`](../RULES.md) §10 defines three mechanisms:
 
 **Self-allocating slug IDs (§10.1).** Every knowledge artifact is identified by
 `<CLASS>:<kebab-slug>` — `LF:stale-note-reference`, `DEC:store-returns-copies`,
@@ -224,7 +224,7 @@ capture learnings, failures, and deferred findings autonomously, but each
 contribution carries `Contributed-by`/`Review: unreviewed` provenance in its
 header plus a `Salvor-Contribution: agent` commit trailer, is consumed by all
 vendors as hypothesis-not-invariant, can never override ratified knowledge or
-touch `RULES.md`, and is presented item-by-item for ratification by the Brain
+touch [`RULES.md`](../RULES.md), and is presented item-by-item for ratification by the Brain
 Audit. Design Decisions can only be *proposed*, never self-ratified. Rejected
 or aged-out contributions (default 90 days) move — content intact, ID
 preserved — to `.salvor/archive/`, which agents never read unless instructed:

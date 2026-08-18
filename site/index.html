@@ -73,7 +73,7 @@
           <nav class="desktop-nav" aria-label="Primary navigation">
             <a href="#why">WHY</a>
             <a href="#use">USE</a>
-            <a href="#claude">PLUGINS</a>
+            <a href="#claude">ROADMAP</a>
             <a href="https://github.com/dwasyluk/salvor/discussions">COMMUNITY ↗</a>
             <a href="https://github.com/dwasyluk/salvor">GITHUB ↗</a>
           </nav>
@@ -83,7 +83,7 @@
           <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" hidden>
             <a href="#why">WHY</a>
             <a href="#use">USE</a>
-            <a href="#claude">PLUGINS</a>
+            <a href="#claude">ROADMAP</a>
             <a href="https://github.com/dwasyluk/salvor/discussions">COMMUNITY ↗</a>
             <a href="https://github.com/dwasyluk/salvor">GITHUB ↗</a>
           </nav>
@@ -183,7 +183,7 @@
             </article>
           </div>
           <div class="brain-summary">
-            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred findings (<code>DEFERRED_TODOS.md</code>), postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale. Every durable artifact carries a collision-free slug ID (like <code>LF:stale-note-reference</code>) with a structured Subject/Claim header, so knowledge captured on parallel branches merges semantically — duplicates and contradictions are surfaced for your decision, never shipped silently.</p>
+            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred findings (<code>DEFERRED_TODOS.md</code>), postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale. Every durable artifact carries a self-allocating slug ID (like <code>LF:stale-note-reference</code>) with a structured Subject/Claim header, so knowledge captured on parallel branches merges semantically — duplicates and contradictions are surfaced for your decision, never shipped silently.</p>
             <p>Every capture class is user-gated — durable saves need your explicit approval. For a finding, the agent asks: <q>Save this as a domain learning? (yes/no)</q> An experimental, off-by-default mode additionally lets agents capture provisionally for overnight and multi-agent runs — explicitly flagged, held in a lower trust tier, and ratified item-by-item by you.</p>
           </div>
         </section>
@@ -217,13 +217,14 @@
 ├── DOMAIN_REF.md
 ├── INFRA.md
 ├── DEFERRED_TODOS.md
+├── README.md
 ├── decisions/
 ├── domain-learnings/
 ├── postmortems/
 └── archive/</code></pre>
             <p>
               This is what the brain looks like after real work — every file reviewed in Git.<br />
-              <a href="https://github.com/dwasyluk/salvor/tree/main/example-project">View a populated example <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/dwasyluk/salvor/tree/v1.0.0-beta/example-project">View a populated example <span aria-hidden="true">→</span></a>
             </p>
           </div>
         </section>
@@ -298,7 +299,7 @@ $ # Salvor scaffolds the rest</code></pre>
           <a href="https://github.com/dwasyluk/salvor">GitHub ↗</a>
           <a href="https://github.com/dwasyluk/salvor/tree/v1.0.0-beta/docs">Docs</a>
           <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/SETUP_PROMPT.md">SETUP_PROMPT.md</a>
-          <a href="https://github.com/dwasyluk/salvor/blob/main/TRADEMARKS.md">Brand policy</a>
+          <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/TRADEMARKS.md">Brand policy</a>
         </nav>
       </div>
     </footer>
