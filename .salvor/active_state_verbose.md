@@ -1,3 +1,89 @@
+
+## 2026-08-18 — Benchmark subsystem (`feat/salvor-bench`) + dev-first branching SOP
+
+### Branching SOP (`RULES.md` §6.12, merged to `dev` as 4ab0ee1)
+Operator-specified cycle, introduced without violating itself (built on
+`chore/dev-first-branch-flow`, merged, branch deleted by the reviewer role):
+branch from `dev` → implement → **sync `dev` in and resolve conflicts before
+review** → PR to `dev` → adjacent dev approves → **the reviewer merges and
+deletes** → `dev` promotes to `main` in controlled feature groups.
+
+Step 3 turned out to be the same moment as the existing §0.6/§10.2 pre-merge
+Brain Reconcile, so §6.12 names that rather than describing it twice. §3's
+integration branch became `dev`; §6.11 gained explicit reviewer ownership of
+deletion; §10.2's target was renamed. Canonical rule in `RULES.md`, pointer in
+`.serena/memories/branching_and_pr_sop.md`, rationale in
+`DEC:dev-first-branch-flow`. Deliberately NOT added to `SETUP_PROMPT.md`'s
+template or `example-project/RULES.md` — imposing a dev/main topology on every
+adopter would be wrong. 162/162 unit + 140/140 contract stayed green, confirming
+no root↔example parity test objected.
+
+Correction worth keeping: the first draft put this in per-user Claude
+auto-memory. That is barred by §8 (per-user memory must never hold team truth)
+and would not travel with the repository. Repo SOP belongs in the repo.
+
+### Upstream verification (done before building on it)
+Rather than trusting the design doc, each load-bearing assumption was checked
+against the installed source:
+- `_build_claude_command` exists at `agents/claude_code/adapter.py:199` → imported, never forked, so all six arms share one flag surface.
+- `backend = config.get("backend", "docker")` at `:446` → the Docker backend is the default; no Modal account needed.
+- `COOPERBENCH_EXTERNAL_AGENTS` at `agents/registry.py:93` → the documented adapter hook; no fork required.
+- Upstream's `parsers.py` reads only the terminal `result` event and the scalar `cache_creation_input_tokens`, and uses `total_cost_usd`. This confirmed the dual-extraction design: a timed-out unit emits no `result` event, so upstream bills it as **zero** — exactly the runs most likely to be expensive.
+
+Curriculum parsed directly: pytest = 19 tasks, 19 distinct base commits, and the
+order is difficulty-tiered rather than globally chronological (positions 1–5 all
+`<15 min fix` 2019-05→2020-06; 17–19 `1-4 hours` 2019-08→2022-10). A regression
+test now fails if that order is ever silently re-sorted by date.
+
+### Pricing — the operator's correction was right, and verified
+Rev-1 assumed Sonnet 5 would rise to $3/$15 on 2026-09-01 and billed
+projections at that "standard" rate. The official pricing page states verbatim
+that the $2/$10 introductory rate **is now the standard price** and the
+scheduled increase **will not occur**. Rates pinned: $2 input, $10 output,
+$2.50 5m-cache-write, $4.00 1h-cache-write, $0.20 cache-read. That is a 33%
+lower cost basis than assumed, materially improving the odds the full 50-pair
+CooperBench set fits under the $250 cap. Conservatism now comes from mechanisms
+(measured probe, p95 admission, 30% contingency, $12 reserve, in-flight
+watchdog) rather than from an inflated rate.
+
+### Dependency repairs
+- Hatchling rejected the pinned-SHA git dependency until `allow-direct-references = true`; a tag ref was rejected deliberately, since upstream moving mid-run could silently change the submission prompt or eval semantics.
+- The resolver back-solved `datasets` to **1.1.1 (2020)**, which calls `pyarrow.PyExtensionType` — removed in pyarrow 25 — so every dataset import died. Floored to `datasets>=3.0`; resolved to 5.0.1.
+- `scripts/pull-swebench-images.sh` used `mapfile`, absent from macOS bash 3.2. Rewritten with a portable read loop.
+
+### Test that caught its own wrong invariant
+`test_smaller_n_is_a_prefix_by_state_depth` failed because `choose()` returns a
+sorted list, so "first per state" in sorted order is not the depth-0 pick. The
+property that actually matters is **monotone nesting** — shrinking N must drop
+pairs, never swap them — so a 20-pair run is a strict subset of the 25-pair run
+and the two stay comparable. Test rewritten to assert that; the algorithm was
+correct.
+
+### Environment blocker (unresolved, well-diagnosed)
+Registry link degraded. Symptoms, in the order they were isolated:
+1. Daemon pull fails with `EOF`; host `curl` to `registry-1.docker.io` returns a healthy 401 → not host connectivity.
+2. A *container* reaches the registry (401), but the *daemon's* pull path fails → the fault is on the daemon's proxy path (`http.docker.internal:3128`), which containers bypass. Five `utun` VPN interfaces are up, one at MTU 1414.
+3. ghcr.io fails too, and gets through the manifest before dying on the **blob** → small requests succeed, large transfers die. MTU/TLS fragmentation signature.
+4. `docker pull hello-world` **succeeds**, and alpine succeeds on retry → flaky, not blocked. Retry is the correct mitigation.
+5. Measured host throughput to the registry: **166–348 KB/s**; general host throughput 0.15–1.3 MB/s.
+
+Result: 1/19 eval images in 24 minutes (~3.84 GB each); 20 GB total is not
+reachable on this link tonight. A 40-attempt retry loop continues in background.
+
+**Not** treated as a Docker-restart candidate: `novacast-ai-redis-1` (another
+project) is live, and RULES §5.1 protects parallel sessions. Starting a *new*
+Redis for the benchmark on :6399 is in scope and was verified not to disturb it.
+
+Everything else is preflight-green, including the execution-path bake-off:
+arm64 SWE-bench images **do not exist** (Docker Hub 404; x86_64 only, confirmed
+via the Hub API), amd64 emulation works, and the measured penalty is **~1.3×**
+(679 ms vs 513 ms on an identical loop) — Rosetta, not QEMU's 5–20×. So the
+amd64 path is correct and viable; only the download is blocked.
+
+**No inference has run. No results exist. README and site are deliberately
+unpopulated** — `summary.json` absent means the two result-derived contract
+tests skip, and an incomplete run must never reach a public surface.
+
 # salvor Active State — VERBOSE ARCHIVE
 
 L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at release milestones, condense the oldest resolved sections — keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise. Deep history of reasoning, rejected hypotheses, and detail pruned from L1. Update immediately after every L1 update. Read only when explicitly instructed or during context recovery.
