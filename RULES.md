@@ -5,7 +5,7 @@ These rules are MANDATORY. They supplement `CLAUDE.md` and take precedence over 
 ## Protocol Tiers
 
 - **Core Protocol (always on):** context loading and hub/spoke reading (§6.1), L1/L2 memory maintenance (§0.2–0.3), user-gated capture approval (§2, §7), context recovery (§1), security and git-safe operation (§9), canonical ownership and memory layers (§8), distributed-brain IDs, post-pull reconcile, and the recurring brain audit (§10), and vendor portability via thin adapters. Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record.
-- **Optional Strict Engineering Defaults:** these defaults are optional, editable, and project-specific; disabling them does not break Salvor Core. They cover component build counters (§0.1, §3), env-var conventions (§4.4, §6.2), the branch-deletion rule (§6.11), container permission rules (§5.1), impact analysis before every edit (§4.3), the >100-line search-before-read limit (§4.1), mirror parity (§0.5, §6.3), and the pre-merge brain reconcile (§0.6, §10.2).
+- **Optional Strict Engineering Defaults:** these defaults are optional, editable, and project-specific; disabling them does not break Salvor Core. They cover component build counters (§0.1, §3), env-var conventions (§4.4, §6.2), the branch-deletion rule (§6.11), the dev-first branch flow (§6.12), container permission rules (§5.1), impact analysis before every edit (§4.3), the >100-line search-before-read limit (§4.1), mirror parity (§0.5, §6.3), and the pre-merge brain reconcile (§0.6, §10.2).
 - **[EXPERIMENTAL] Beta features:** agentic provisional capture and the archive (§10.5–§10.6) are beta, **default OFF**, and opt-in only by editing their config lines. They may change based on community feedback and are never required by Core or Strict behavior.
 
 ---
@@ -67,7 +67,7 @@ On `no`, acknowledge and continue without saving any partial artifact.
 
 - A change bumps its owning component and receives its own history entry. Mixed changes bump every affected component independently.
 - Each bump carries a bulleted change list.
-- **Counters advance only on the integration branch** (`main`). Work committed directly to it bumps immediately — the solo flow is unchanged. On a feature branch, add the history row with the literal build ID `pending` (e.g. `| 2026-08-05 | CORE:pending | change summary |`) and leave the JSON header, "Build IDs" line, L1 header, and spoke build lines untouched. The merge (§10.2 Brain Reconcile) assigns real numbers — one bump per affected component per integration — and rewrites the `pending` rows in the merge commit, so parallel branches never race on a counter.
+- **Counters advance only on the integration branch** (`dev`; see §6.12). `main` is the release branch and receives promoted feature groups, not direct feature work. Work committed directly to the integration branch bumps immediately — the solo flow is unchanged. On a feature branch, add the history row with the literal build ID `pending` (e.g. `| 2026-08-05 | CORE:pending | change summary |`) and leave the JSON header, "Build IDs" line, L1 header, and spoke build lines untouched. The merge (§10.2 Brain Reconcile) assigns real numbers — one bump per affected component per integration — and rewrites the `pending` rows in the merge commit, so parallel branches never race on a counter.
 - All version bumps are logged in `VERSION.md` first. No hardcoded component versions in source.
 
 ## 4. Search & Tools
@@ -95,7 +95,20 @@ On `no`, acknowledge and continue without saving any partial artifact.
 8. Every cache key includes every input that changes output, including model name, prompt-version hash, and schema version.
 9. The Learned Failure is the atomic unit of work. Upgrade every fix site registered under an `LF:<slug>` entry together; record new mirror sites as LF amendments.
 10. Production-affecting changes involving money, customer data, external mutations, or shared infrastructure require operator diff acknowledgement before deployment.
-11. Delete merged branches locally and remotely in the same task after merge and push; long-lived integration branches require operator confirmation.
+11. Merged branches are deleted locally and remotely in the same task as the merge. Deletion is the **reviewer/merger's** responsibility, not the author's (§6.12 step 6). Long-lived integration branches (`dev`, `main`) require operator confirmation and are never deleted.
+12. **Branch flow [STRICT].** Work branches from `dev`, never from `main`.
+    1. Branch from `dev`. Name it `feat/<slug>` or `bug/<slug>` with a meaningful slug. Once a branch represents a GitHub issue, the name carries the issue ID: `feat/3_evaluate-agent-plugins-1.0`.
+    2. Implement on the branch.
+    3. **Before requesting review, sync `dev` into the branch and resolve conflicts there.** This is the §0.6 / §10.2 pre-merge Brain Reconcile trigger: the author reconciles knowledge before a reviewer sees it, so dedupe lands before the textual conflict.
+    4. Open a PR back to base branch `dev`.
+    5. An adjacent developer reviews and approves.
+    6. The **reviewer** merges into `dev` and deletes the merged branch (§6.11). When one person is both author and reviewer, that responsibility travels with the reviewer role.
+    7. `dev` promotes to `main` in controlled feature groups. `main` = release branch; `dev` = integration branch (§3).
+
+    If asked to merge a feature branch directly into `main`, do not proceed. Ask verbatim:
+
+    > "SOP is feature → dev → main. Merge into dev instead? (yes / no — override)"
+
 
 ## 7. Out-of-Scope Finding Capture (Deferred Finding)
 
@@ -129,7 +142,7 @@ The brain travels through Git. Parallel branches, agents, and worktrees can capt
 
 ### 10.2 Brain Reconcile (merge/pull ceremony)
 
-**Triggers:** (1) **[STRICT] Pre-merge** — on a feature branch, before opening a PR or merging into `main`, fetch the target and reconcile against it (§0.6), so dedupe lands BEFORE the textual conflict. (2) **[CORE] Post-pull** — at session start, if incoming commits touched `.salvor/`, `VERSION.md`, `RULES.md`, or `.serena/memories/`, ask verbatim:
+**Triggers:** (1) **[STRICT] Pre-merge** — on a feature branch, before opening a PR or merging into the integration branch (`dev`, §6.12), sync that branch into yours, resolve conflicts, and reconcile against it (§0.6), so dedupe lands BEFORE the textual conflict. (2) **[CORE] Post-pull** — at session start, if incoming commits touched `.salvor/`, `VERSION.md`, `RULES.md`, or `.serena/memories/`, ask verbatim:
 
 > "Incoming brain changes detected — run brain reconcile? (yes/no)"
 
