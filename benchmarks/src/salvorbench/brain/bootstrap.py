@@ -90,7 +90,6 @@ test -f CLAUDE.md && test -f RULES.md
 test -f .salvor/active_state.md && test -f .salvor/active_state_verbose.md
 test -f .salvor/DOMAIN_REF.md && test -f .salvor/INFRA.md
 test -d .salvor/decisions && test -d .salvor/domain-learnings
-test -f .gitnexusrc
 echo TERMINAL_OK
 """
 
@@ -214,10 +213,37 @@ def bootstrap_state(
         # The installer prompt, verbatim from the shipped release.
         write_file_in_container(env, "/tmp/salvor-setup-prompt.md", setup_prompt.read_text())
 
+        # Terminal = structural tree + protocol stamp, PLUS either GitNexus's
+        # Option-A artifact (.gitnexusrc) or a SETTLED knowledge layer (same
+        # content hash two turns running). The second arm exists because the
+        # product legitimately completes setup with GitNexus degraded to
+        # Core mode on images where its binary cannot run (go_chi-56: musl,
+        # gcompat insufficient) — an outcome the setup classifies honestly
+        # and this harness must not fail.
+        settled: dict[str, Any] = {"prev": None, "count": 0}
+
         def is_terminal(e: Any) -> bool:
             check = e.execute({"command": TERMINAL_CHECK.format(repo=shlex.quote(repo_path))},
                               timeout=60)
-            return "TERMINAL_OK" in (check.get("output") or "")
+            if "TERMINAL_OK" not in (check.get("output") or ""):
+                settled["prev"], settled["count"] = None, 0
+                return False
+            rc = e.execute({"command":
+                f"cd {shlex.quote(repo_path)} && test -f .gitnexusrc && echo RC"},
+                timeout=30)
+            if "RC" in (rc.get("output") or ""):
+                return True
+            h = e.execute({"command":
+                f"cd {shlex.quote(repo_path)} && "
+                "find .salvor CLAUDE.md RULES.md AGENTS.md GEMINI.md -type f "
+                "2>/dev/null | sort | xargs cat 2>/dev/null | sha256sum"},
+                timeout=60)
+            digest = (h.get("output") or "").strip()
+            if digest and digest == settled["prev"]:
+                settled["count"] += 1
+            else:
+                settled["prev"], settled["count"] = digest, 0
+            return settled["count"] >= 1   # unchanged across two consecutive checks
 
         def on_capture(gate: str, text: str) -> str:
             decision = ratifier.decide(
@@ -279,6 +305,14 @@ def bootstrap_state(
         # Serena memories are a REPORTED fact, not a gate: SETUP_PROMPT treats
         # onboarding as status to classify (line 219), not a mandated write —
         # a fresh repo may legitimately finish setup with an empty memories dir.
+        gnx = env.execute({"command":
+            f"cd {shlex.quote(repo_path)} && "
+            "test -f .gitnexusrc && echo RC; test -d .gitnexus && echo IDX"},
+            timeout=30)
+        gitnexus_mode = ("indexed" if "IDX" in (gnx.get("output") or "")
+                         else "configured" if "RC" in (gnx.get("output") or "")
+                         else "degraded-core-mode")
+
         mem = env.execute({"command":
             f"ls -A {shlex.quote(repo_path)}/.serena/memories 2>/dev/null | wc -l"},
             timeout=30)
@@ -336,6 +370,7 @@ def bootstrap_state(
             "ratifier_decisions": result.ratifier_decisions,
             "usefulness_ok": result.usefulness_ok,
             "serena_memories": serena_memories if "serena_memories" in dir() else None,
+            "gitnexus_mode": gitnexus_mode if "gitnexus_mode" in dir() else None,
             "usefulness_answer": result.usefulness,
         }
         if result.drive:
