@@ -21,8 +21,7 @@ from dataclasses import dataclass, field
 from typing import Any, Callable
 
 from ..cost.pricing import TokenUsage
-from .gates import (GENERIC_APPROVAL, Gate, MAX_NUDGES, NUDGE, find_reply,
-                    looks_like_question, match_capture_gate)
+from .gates import (GENERIC_APPROVAL, Gate, find_reply, match_capture_gate)
 
 CLAUDE_CONFIG_DIR = "/tmp/claude-cfg"
 
@@ -169,17 +168,18 @@ def drive(
                 used.add(gate.name)
                 reply = gate.reply
                 result.gates_answered.append({"gate": gate.name, "reply": reply})
-            elif looks_like_question(text + "\n" + final):
-                # Unmatched but the agent is waiting on a choice: the fixed
-                # standing-policy reply (never counts against nudges).
-                reply = GENERIC_APPROVAL
-                result.gates_answered.append({"gate": "generic_approval", "reply": reply})
-            elif nudges < MAX_NUDGES:
-                nudges += 1
-                reply = NUDGE
-                result.gates_answered.append({"gate": f"nudge:{nudges}", "reply": reply})
             else:
-                result.error = "no gate matched and nudges exhausted"
+                # Any unmatched turn gets the fixed standing-policy reply.
+                # Probe evidence: regex question-detection missed phrasings
+                # like "Reply **yes** to scaffold" and "Which would you
+                # like? (A is my recommendation...)", and the blind NUDGE
+                # that fired instead pushed the agent into a commit attempt.
+                # The generic reply carries every standing answer, so it is
+                # always safe; the outer-turn budget bounds the loop.
+                reply = GENERIC_APPROVAL
+                nudges += 1
+                result.gates_answered.append(
+                    {"gate": f"generic_approval:{nudges}", "reply": reply})
                 return result
 
         from cooperbench.agents._coop.runtime import write_file_in_container
