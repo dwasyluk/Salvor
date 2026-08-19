@@ -180,6 +180,54 @@ slightly lower than fully independent bootstrapping would produce.
 
 ---
 
+## 5b. Lifecycle roles: the working agent authors, the ratifier only reviews
+
+Operator-ratified refinement (2026-08-19). The unattended benchmark simulates
+Salvor's human-in-the-loop approval gates, and the simulation is honest only if
+the division of labour matches the product:
+
+* **The working/task agent is the author.** After reaching its code-submission
+  state, the *same session* (resumed where technically possible) executes
+  Salvor's normal stable termination procedure: it reviews its own work,
+  identifies candidate durable knowledge, authors any proposed
+  DL/LF/DEC/docs/TODO content through the normal capture gates, and performs
+  ordinary L1/L2 maintenance. If resuming the exact session is technically
+  impossible, the closest valid continuation is used and the deviation is
+  documented — the ratifier is never silently promoted into a knowledge author.
+* **The benchmark ratifier is a reviewer, nothing more.** It receives only the
+  proposed capture, permitted evidence from that session, and the current brain
+  state; applies the fixed published rubric; and returns approve/reject. It
+  never authors, rewrites, improves, trims, suggests replacement wording, or
+  searches for additional knowledge. A second model whose job was to synthesise
+  project knowledge after each task would be a confound, not a simulation.
+
+**Provenance separates generation from ratification.** Every durable capture
+records: the task/session that produced the candidate; the exact candidate text
+before ratification; the evidence the working agent cited; the ratifier's
+per-criterion rubric verdicts; the approve/reject outcome; and the final
+persisted artifact hash if approved. That the ratifier never created knowledge
+is therefore mechanically inspectable, not asserted.
+
+All termination and ratifier inference is billed to the Salvor arm and reported
+as a separate lifecycle-overhead line.
+
+### C3 termination is not causal and is not pretended to be
+
+C3's question is whether two agents on one pair benefit from a live shared
+brain **during** the pair. The pair's brain is destroyed afterwards, so
+post-pair synthesis can neither improve the already-submitted code nor benefit
+any future pair. Consequently:
+
+* during the pair: silent L1/L2 operational updates flow under stable CORE
+  rules and are visible to the adjacent agent; durable-capture gates reached
+  naturally during work go to the ratifier; cross-agent reads/writes are
+  telemetry;
+* at pair end: the brain is hashed and archived for audit, then the volume is
+  destroyed. No gratuitous post-pair memory-authoring pass is run. If a
+  termination action is required for lifecycle completeness it is billed and
+  reported separately, and is never represented as causal to the scored
+  outcome.
+
 ## 6. S3 is a chain; C3 is a live shared brain
 
 **S3** carries one brain across the 19-task sequence: the knowledge layer
@@ -358,6 +406,20 @@ affordable incremental cost.
 
 **CooperBench is unaffected.** Its solo baseline measured 55.1%, far from
 ceiling, so the coordination experiment retains full discriminating power.
+
+## 10c. Causality discipline in reporting
+
+Four inferences are disallowed in every published surface, however tempting:
+
+1. post-task termination did **not** cause the already-finished task to succeed;
+2. brain **size** does not prove brain usefulness;
+3. later sequence position alone does not prove learning — the upstream order
+   is difficulty-tiered, so raw position curves are confounded by construction;
+4. tool-invocation counts do not prove value.
+
+Evidence takes the form of paired outcomes and efficiency deltas on identical
+tasks, plus inspectable retrieval/capture provenance. Descriptive curves are
+labelled descriptive.
 
 ## 11. Result integrity
 

@@ -21,10 +21,43 @@ from decimal import Decimal
 
 from .ledger import Ledger
 
-CAP_USD = Decimal("250.00")
-RESERVE_USD = Decimal("12.00")     # never spend the last ~5%
+# Suite-level budget controls (operator-ratified 2026-08-19).
+#
+# SALVORBENCH_* is the harness's existing env namespace (REDIS_PORT, REDIS_IMAGE),
+# so the budget joins it rather than the provider-credential namespace: OUR
+# ledger enforces this cap - Anthropic never sees it - and the suite semantics
+# (bootstraps, ratifier, retries, every arm) are broader than "API spend at one
+# provider". Multi-provider child caps can nest under this later; none exist now.
+#
+# The env is read ONCE per run via resolve_budget(); the resolved values and
+# their source are frozen into the manifest and recorded as a BUDGET_SET event
+# in the hash-chained state log, so a mid-run env change has no effect and any
+# raise is an explicit, auditable act.
+CAP_USD = Decimal("250.00")        # default when SALVORBENCH_BUDGET_USD unset
+RESERVE_USD = Decimal("12.00")     # default when SALVORBENCH_BUDGET_RESERVE_USD unset
 PROBE_CEILING_USD = Decimal("18.00")
 MIN_OBSERVATIONS = 5               # before trusting empirical p95 over the probe
+
+
+def resolve_budget() -> tuple[Decimal, Decimal, str]:
+    """Resolve (cap, reserve, source) from the environment, once, at run start."""
+    import os
+
+    def _read(name: str, default: Decimal) -> tuple[Decimal, bool]:
+        raw = os.environ.get(name, "").strip()
+        if not raw:
+            return default, False
+        value = Decimal(raw)          # a malformed value should fail loudly here
+        if value <= 0:
+            raise ValueError(f"{name} must be positive, got {raw!r}")
+        return value, True
+
+    cap, cap_env = _read("SALVORBENCH_BUDGET_USD", CAP_USD)
+    reserve, res_env = _read("SALVORBENCH_BUDGET_RESERVE_USD", RESERVE_USD)
+    if reserve >= cap:
+        raise ValueError(f"reserve {reserve} must be below the cap {cap}")
+    source = "env" if (cap_env or res_env) else "default"
+    return cap, reserve, source
 
 
 class BudgetExceeded(RuntimeError):

@@ -112,3 +112,24 @@ def test_watchdog_detects_in_flight_overrun(tmp_path: Path) -> None:
     book(led, "u0", 4_000_000)               # $40 booked
     assert gov.would_exceed(Decimal("11"))   # a live unit at $11 crosses $50
     assert not gov.would_exceed(Decimal("5"))
+
+
+def test_budget_resolves_from_env_and_defaults(monkeypatch) -> None:
+    from salvorbench.cost.governor import resolve_budget
+
+    monkeypatch.delenv("SALVORBENCH_BUDGET_USD", raising=False)
+    monkeypatch.delenv("SALVORBENCH_BUDGET_RESERVE_USD", raising=False)
+    cap, reserve, source = resolve_budget()
+    assert (cap, reserve, source) == (Decimal("250.00"), Decimal("12.00"), "default")
+
+    monkeypatch.setenv("SALVORBENCH_BUDGET_USD", "100")
+    cap, reserve, source = resolve_budget()
+    assert (cap, source) == (Decimal("100"), "env")
+
+
+def test_budget_rejects_nonsense(monkeypatch) -> None:
+    from salvorbench.cost.governor import resolve_budget
+    monkeypatch.setenv("SALVORBENCH_BUDGET_USD", "10")
+    monkeypatch.setenv("SALVORBENCH_BUDGET_RESERVE_USD", "12")
+    with pytest.raises(ValueError, match="below the cap"):
+        resolve_budget()
