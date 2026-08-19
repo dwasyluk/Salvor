@@ -180,7 +180,6 @@ def drive(
                 nudges += 1
                 result.gates_answered.append(
                     {"gate": f"generic_approval:{nudges}", "reply": reply})
-                return result
 
         from cooperbench.agents._coop.runtime import write_file_in_container
         reply_path = f"/tmp/reply-{uuid.uuid4().hex[:8]}.txt"
