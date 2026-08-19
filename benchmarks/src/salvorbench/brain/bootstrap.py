@@ -58,6 +58,11 @@ if ! uv --version >/dev/null 2>&1; then
 fi
 uv --version
 export PATH="$HOME/.local/bin:$PATH"
+# musl images (go_chi/typst are Alpine): psutil has no musl wheel — serena's
+# install builds it from source, which needs a toolchain.
+if [ "$LIBC" = musl ] && command -v apk >/dev/null 2>&1; then
+  apk add gcc python3-dev musl-dev linux-headers
+fi
 command -v serena >/dev/null 2>&1 || uv tool install "serena-agent=={serena_pin}"
 command -v gitnexus >/dev/null 2>&1 || npm install -g "gitnexus@{gitnexus_pin}"
 serena --version >/dev/null 2>&1 || true
