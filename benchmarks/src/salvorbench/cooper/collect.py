@@ -105,3 +105,43 @@ def collect_unit(result_path: Path, *, condition: str) -> dict[str, Any]:
 def collect(cooper_dir: Path, run_name: str, condition: str) -> list[dict[str, Any]]:
     return [collect_unit(p, condition=condition)
             for p in iter_results(cooper_dir, run_name)]
+
+
+def attach_eval(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Attach upstream's evaluator verdict to each collected unit.
+
+    Uses the per-unit eval.json rather than the runner's console summary: that
+    summary counts only the units a given invocation processed, so re-running
+    `cooperbench eval` reports a different denominator for the same arm. The
+    per-unit artifacts are the complete record.
+
+    Upstream's own field name (`both_passed`) is preserved rather than renamed
+    to something like "merged success" - the evaluator's semantics are its own
+    to describe, and paraphrasing them would misstate what was measured.
+    """
+    for row in rows:
+        eval_path = Path(row["log_dir"]) / "eval.json"
+        if not eval_path.exists():
+            # No verdict: the agent never produced a scoreable run. Classified
+            # as infrastructure, so it is excluded from denominators rather
+            # than counted as a failure the model is responsible for.
+            row["evaluated"] = False
+            row["both_passed"] = None
+            row["outcome"] = "infra_failed" if row.get("agent_status") == "Error" else "benchmark_failed"
+            continue
+        e = json.loads(eval_path.read_text())
+        row["evaluated"] = True
+        row["both_passed"] = bool(e.get("both_passed"))
+        row["feature1_passed"] = bool((e.get("feature1") or {}).get("passed"))
+        row["feature2_passed"] = bool((e.get("feature2") or {}).get("passed"))
+        row["merge"] = e.get("merge")
+        row["outcome"] = "completed"
+    return rows
+
+
+def write_records(rows: list[dict[str, Any]], run_dir: Path, condition: str) -> Path:
+    out = run_dir / "records" / condition
+    out.mkdir(parents=True, exist_ok=True)
+    path = out / "units.json"
+    path.write_text(json.dumps(rows, indent=2))
+    return path
