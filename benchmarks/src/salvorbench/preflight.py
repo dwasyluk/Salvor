@@ -141,7 +141,7 @@ def check_redis_from_container() -> Check:
     C2/C3 agents degrade into two isolated solos while still being labelled
     cooperative, and the coordination result is meaningless.
     """
-    port = os.environ.get("SALVORBENCH_REDIS_PORT", "6399")
+    port = os.environ.get("SALVORBENCH_REDIS_PORT", "6379")
     image = os.environ.get("SALVORBENCH_REDIS_IMAGE", "redis:alpine")
     code, out = _run([
         "docker", "run", "--rm", "--add-host=host.docker.internal:host-gateway",
