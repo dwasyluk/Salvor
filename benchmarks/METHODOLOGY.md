@@ -421,6 +421,48 @@ Evidence takes the form of paired outcomes and efficiency deltas on identical
 tasks, plus inspectable retrieval/capture provenance. Descriptive curves are
 labelled descriptive.
 
+## 10d. Pre-registered construct validity: what a clean-room T0 cannot carry
+
+*Recorded 2026-08-19, BEFORE any C3 or S2/S3 unit had run — this section is a
+pre-registered interpretive frame, not a post-hoc explanation of any observed
+number, and it binds symmetrically: it may not be stretched to dismiss an
+unfavourable result, nor trimmed to inflate a favourable one.*
+
+Salvor's product claim has two separable parts, and this benchmark can test
+only one of them.
+
+**Tested here: the coordination channel.** C2 measured a 40-point collapse
+against C1 solo (54.0% → 14.0%), with the mechanism visible in the artifacts
+(36/49 pairs merge-conflicted). C3 asks whether a shared, git-shaped knowledge
+substrate — the same T0 brain mounted live in both agents — recovers any of
+that. This is a fair, clean test: the brains are task-blind, byte-identical
+per state, and frozen before the first pair runs.
+
+**Not testable here: the compounding channel.** A T0 brain is minutes old and
+contains only knowledge derivable from the repository checkout itself. It
+structurally cannot contain the artifacts that carry most of Salvor's
+real-world value, because in a clean room their sources do not exist yet:
+
+- **learned failures** distilled from real debugging sessions that went wrong
+  before they went right;
+- **design decisions** whose rationale contradicts what the code superficially
+  suggests (the "don't 'fix' this odd-looking thing" marker);
+- **domain learnings** accumulated across weeks of work, contributors, and
+  vendors — the compounding term that grows with team size and time.
+
+Any bench brain populated with such artifacts would constitute leakage or
+fabrication; their absence is a validity requirement, not an oversight. The
+single probe of compounding in this design — the S3 nineteen-task chain — has
+its resolution axis capped by the measured S1 = 100% ceiling (§10b), leaving
+only efficiency and non-inferiority readable.
+
+Consequently: a null or negative C3 delta is evidence about *single-shot pair
+coordination with a fresh repo-derived brain*, and about nothing else. A
+positive C3 delta likewise does not license claims about the compounding
+channel. Measuring compounding honestly requires longitudinal designs
+(multi-week traces, real failure archives, cross-vendor teams) that are out of
+scope for this beta and noted on the post-beta roadmap.
+
 ## 11. Result integrity
 
 Completion is gated on **benchmark completeness, not on Salvor winning**.
