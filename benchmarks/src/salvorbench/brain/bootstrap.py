@@ -41,17 +41,22 @@ KNOWLEDGE_LAYER = (".salvor", ".serena/memories", "CLAUDE.md", "RULES.md",
 TOOLS_INSTALL = """\
 set -ex
 export PATH="$HOME/.local/bin:$PATH"
-# uv (for serena): cached binary per arch, else visible download, then cache it
-if ! command -v uv >/dev/null 2>&1; then
-  ARCH=$(uname -m)
-  if [ -x "/opt/uvbin/uv-$ARCH" ]; then
-    cp "/opt/uvbin/uv-$ARCH" /usr/local/bin/uv
+# uv (for serena): a PRESENT uv can still be broken (go_chi ships one whose
+# ELF interpreter is missing), so select by EXECUTION not presence. Cache is
+# keyed by arch+libc; the astral installer picks the right musl/gnu build.
+ARCH=$(uname -m)
+LIBC=$(ls /lib/ld-musl-* >/dev/null 2>&1 && echo musl || echo gnu)
+CACHED="/opt/uvbin/uv-$ARCH-$LIBC"
+if ! uv --version >/dev/null 2>&1; then
+  if [ -x "$CACHED" ] && "$CACHED" --version >/dev/null 2>&1; then
+    cp "$CACHED" /usr/local/bin/uv
   else
     curl -LSf https://astral.sh/uv/install.sh | sh
     export PATH="$HOME/.local/bin:$PATH"
-    mkdir -p /opt/uvbin && cp "$(command -v uv)" "/opt/uvbin/uv-$ARCH" || true
+    mkdir -p /opt/uvbin && cp "$(command -v uv)" "$CACHED" || true
   fi
 fi
+uv --version
 export PATH="$HOME/.local/bin:$PATH"
 command -v serena >/dev/null 2>&1 || uv tool install "serena-agent=={serena_pin}"
 command -v gitnexus >/dev/null 2>&1 || npm install -g "gitnexus@{gitnexus_pin}"
