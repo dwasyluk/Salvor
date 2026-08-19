@@ -217,11 +217,36 @@ errors it saw, approaches it watched fail — may become persistent knowledge. T
 evaluator runs strictly downstream of, and invisible to, every arm. Anything else
 would let hidden ground truth leak backwards into the treatment.
 
-S2's lifecycle is **reproduced from the pinned upstream source**, not assumed. If
-upstream retains attempted as well as successful solutions, that behaviour is
-preserved, labelled only by what the agent could observe. It is published as
-**"Ported SWE-Bench-CL semantic memory"** — never "native" or "untouched",
-because an integration through a different agent scaffold necessarily differs.
+S2's lifecycle is **reproduced from the pinned upstream source, and that source
+was read rather than assumed.** `eval_v2_agent/eval_procedure.py` shows the
+write policy is *not* write-on-success:
+
+```python
+status_prefix = "[SUCCESSFUL SOLUTION]" if solution_data.get("tests_passed") \
+                else "[ATTEMPTED SOLUTION]"
+```
+
+Upstream stores **both** successful and attempted solutions, distinguished only
+by a label. Crucially, `tests_passed` is the agent's own in-loop test result —
+not the external evaluator's verdict — so the port preserves both the retention
+policy and the boundary this methodology requires. The port therefore:
+
+* stores every attempt, successful or not, exactly as upstream does;
+* labels entries `[SUCCESSFUL SOLUTION]` / `[ATTEMPTED SOLUTION]` from the
+  agent's own observed test outcome;
+* retrieves the `k = 3` nearest entries (upstream's default) by similarity over
+  the task text, and rebuilds the index on each write, as upstream does;
+* stores upstream's content shape: solution summary, rationale, code changes.
+
+**Documented deviation:** upstream embeds with `ollama/nomic-embed-text` via a
+local Ollama daemon. The port uses a local sentence-transformers model instead,
+avoiding a second runtime daemon inside the task container. The retrieval
+mechanism, `k`, write policy and content shape are unchanged; only the embedding
+backend differs, and it is identical across every S2 unit.
+
+Published as **"Ported SWE-Bench-CL semantic memory"** — never "native" or
+"untouched", because an integration through a different agent scaffold
+necessarily differs.
 
 ---
 
