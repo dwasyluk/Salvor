@@ -22,5 +22,34 @@ except Exception:                                    # noqa: BLE001
     )
 
 
-def build(task: Task) -> str:
-    return f"{task.problem_statement}\n\n---\n\n{SUBMISSION}\n"
+# Ported from upstream's AgentSolution structured output (eval_v2_agent.py:751-755):
+# the same four fields, requested as a labeled final block since Claude Code has
+# no with_structured_output. The write-back parser reads exactly these labels and
+# applies upstream's own tests_passed inference heuristic to the agent's
+# SELF-REPORTED status - never any external evaluator verdict.
+FINAL_REPORT_BLOCK = (
+    "After writing the patch, end your final message with this exact block:\n"
+    "SOLUTION SUMMARY: <concise summary of the implemented solution>\n"
+    "CODE CHANGES: <key code changes; file paths, one per line prefixed with '- '>\n"
+    "TESTS PASSED STATUS: <status of tests after your solution, based on tests "
+    "you ran yourself (e.g. 'All tests passed', 'Some tests failed', "
+    "'Tests not run'); include details if tests failed>\n"
+    "FINAL RATIONALE: <why this solution is correct>\n"
+)
+
+
+def build(task: Task, *, wrapped_problem: str | None = None,
+          final_report: bool = False) -> str:
+    """Assemble the instruction.
+
+    ``wrapped_problem`` (S2) is the problem statement already wrapped by the
+    ported ``build_context`` (statement + retrieved past experiences), matching
+    upstream where the memory block frames the problem rather than trailing it.
+    ``final_report`` (S2) appends the ported structured-output request that
+    feeds the memory write-back.
+    """
+    parts = [wrapped_problem or task.problem_statement]
+    parts.append(f"---\n\n{SUBMISSION}")
+    if final_report:
+        parts.append(FINAL_REPORT_BLOCK)
+    return "\n\n".join(parts) + "\n"

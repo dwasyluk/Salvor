@@ -51,6 +51,16 @@ tasks = load_sequence(ROOT / "vendor" / "swebench-cl-curriculum.json")
 if args.limit:
     tasks = tasks[: args.limit]
 
+# S2: the ported semantic memory persists across the chain (resume-safe),
+# starting EMPTY per the ratified design. Retrieval/write-back live inside
+# run_task; evaluator outcomes never touch it.
+memory = None
+memory_path = run_dir / "records" / "S2" / "semantic_memory.json"
+if args.condition == "S2":
+    from salvorbench.swecl.memory import SemanticMemory
+    memory = SemanticMemory.load(memory_path) if memory_path.exists() else SemanticMemory()
+    print(f"S2 memory: {len(memory.entries)} entries loaded", flush=True)
+
 done = {u for u, d in state.units().items() if d.get("last_event") == "unit_finished"}
 state.append(Event.PHASE_STARTED, phase=f"tasks:{args.condition}")
 print(f"{args.condition}: {len(tasks)} tasks | ledger ${ledger.total():.2f} "
@@ -72,7 +82,9 @@ for task in tasks:
     state.append(Event.UNIT_STARTED, unit_id=unit, condition=args.condition)
     result = run_task(task, condition=args.condition, model=MODEL, run_dir=run_dir,
                       max_turns=MAX_TURNS, env_exports={"ANTHROPIC_API_KEY": key},
-                      brain=(args.condition == "S3"), timeout_s=5400)
+                      brain=(args.condition == "S3"), memory=memory, timeout_s=5400)
+    if memory is not None:
+        memory.save(memory_path)
 
     usd = cost_usd(result.run.usage, MODEL)
     ledger.append(unit_id=unit, condition=args.condition, phase="tasks", attempt=1,

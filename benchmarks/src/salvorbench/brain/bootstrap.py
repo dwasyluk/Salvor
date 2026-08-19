@@ -68,6 +68,8 @@ test -f CLAUDE.md && test -f RULES.md
 test -f .salvor/active_state.md && test -f .salvor/active_state_verbose.md
 test -f .salvor/DOMAIN_REF.md && test -f .salvor/INFRA.md
 test -d .salvor/decisions && test -d .salvor/domain-learnings
+test -f .gitnexusrc
+test -n "$(ls -A .serena/memories 2>/dev/null)"
 echo TERMINAL_OK
 """
 
@@ -155,13 +157,6 @@ def bootstrap_state(
         write_file_in_container(env, f"{CLAUDE_CONFIG_DIR}/.claude.json",
                                 json.dumps(mcp, indent=2))
 
-        # Brain paths never enter a scored patch.
-        env.execute({"command":
-            f"cd {shlex.quote(repo_path)} && mkdir -p .git/info && "
-            "for p in .salvor .serena .gitnexus .gitnexusrc CLAUDE.md RULES.md AGENTS.md GEMINI.md; do "
-            "grep -qxF \"$p\" .git/info/exclude 2>/dev/null || echo \"$p\" >> .git/info/exclude; done"},
-            timeout=60)
-
         if stack_hint is None:
             stack_hint = _detect_stack(env, repo_path)
 
@@ -194,6 +189,15 @@ def bootstrap_state(
         if not result.drive.terminal:
             raise RuntimeError(f"bootstrap did not reach terminal state: {result.drive.error}")
 
+        # Brain paths never enter a scored patch (task-time hygiene; written
+        # AFTER the drive so the setup agent does not find unexplained
+        # pre-existing exclude state and pause on it).
+        env.execute({"command":
+            f"cd {shlex.quote(repo_path)} && mkdir -p .git/info && "
+            "for p in .salvor .serena .gitnexus .gitnexusrc CLAUDE.md RULES.md AGENTS.md GEMINI.md; do "
+            "grep -qxF \"$p\" .git/info/exclude 2>/dev/null || echo \"$p\" >> .git/info/exclude; done"},
+            timeout=60)
+
         # Derived layer: index at this exact revision.
         env.execute({"command":
             f'cd {shlex.quote(repo_path)} && PATH=$HOME/.local/bin:$PATH '
@@ -206,6 +210,7 @@ def bootstrap_state(
             f"export ANTHROPIC_API_KEY={shlex.quote(api_key)}; "
             f"export ANTHROPIC_MODEL={MODEL}; "
             f"export CLAUDE_CONFIG_DIR={CLAUDE_CONFIG_DIR}; "
+            "export IS_SANDBOX=1; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1; "
             f"cd {shlex.quote(repo_path)} && "
             f'claude --verbose --output-format=stream-json --permission-mode=bypassPermissions '
             f'--max-turns 8 --print -- "$(cat /tmp/usefulness.md)" 2>&1 | tee {probe_stream}'},

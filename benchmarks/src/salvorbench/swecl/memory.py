@@ -114,11 +114,68 @@ class SemanticMemory:
         return mem
 
 
+MAX_CONTEXT_TOKENS = 8000   # upstream MCPContextManager default (whitespace heuristic)
+
+
 def build_context(base_prompt: str, memories: list[dict]) -> str:
-    """Upstream's MCPContextManager framing, preserved verbatim in shape."""
-    if not memories:
-        return base_prompt
-    out = base_prompt + "\n\n--- Relevant Past Experiences (from Semantic Memory) ---\n"
-    for m in memories:
-        out += f"- Task {m['task_id']}: {m['content']} (Relevance Score: {m['score']:.2f})\n"
+    """Upstream's MCPContextManager.build_context, preserved verbatim in shape —
+    including its quirks: the whitespace-split token heuristic, truncation at
+    8000 "tokens", and the End-of-Past-Experiences marker being appended even
+    when no memories were retrieved."""
+    out = base_prompt
+    if memories:
+        out += "\n\n--- Relevant Past Experiences (from Semantic Memory) ---\n"
+        count = len(out.split())
+        for m in memories:
+            mem_text = f"- Task {m['task_id']}: {m['content']} (Relevance Score: {m['score']:.2f})\n"
+            n = len(mem_text.split())
+            if count + n <= MAX_CONTEXT_TOKENS:
+                out += mem_text
+                count += n
+            else:
+                break
     return out + "\n--- End of Past Experiences ---\n"
+
+
+# --- S2 write-back: parse the agent's self-reported final block -------------
+
+import re as _re
+
+_LABELS = ("SOLUTION SUMMARY", "CODE CHANGES", "TESTS PASSED STATUS",
+           "FINAL RATIONALE")
+
+
+def parse_final_report(text: str) -> dict[str, str]:
+    """Extract the four ported AgentSolution fields from the agent's final
+    message. Missing fields come back empty — upstream's ``.get(..., "")``
+    defaults behave identically."""
+    out: dict[str, str] = {}
+    for i, label in enumerate(_LABELS):
+        nxt = "|".join(_re.escape(x) for x in _LABELS[i + 1:])
+        stop = f"(?=(?:{nxt}):|\\Z)" if nxt else r"(?=\Z)"
+        m = _re.search(rf"{_re.escape(label)}:\s*(.*?)\s*{stop}",
+                       text, _re.S | _re.I)
+        if m:
+            out[label] = m.group(1).strip()
+    return out
+
+
+def infer_tests_passed(status: str) -> bool:
+    """Upstream's inference heuristic, verbatim (eval_v2_agent.py:1121-1122) —
+    applied to the agent's own self-reported status, never to any external
+    evaluator verdict."""
+    low = status.lower()
+    return "all tests passed" in low or ("passed" in low and "failed" not in low)
+
+
+def entry_from_report(task_id: str, report: dict[str, str]) -> tuple[str, bool]:
+    """Compose the stored entry exactly as upstream's add_solution_to_memory."""
+    tests_passed = infer_tests_passed(report.get("TESTS PASSED STATUS", ""))
+    changes = [c.strip() for c in report.get("CODE CHANGES", "").splitlines() if c.strip()]
+    content = format_entry(
+        task_id,
+        summary=report.get("SOLUTION SUMMARY", ""),
+        rationale=report.get("FINAL RATIONALE", ""),
+        code_changes=changes,
+        tests_passed=tests_passed)
+    return content, tests_passed

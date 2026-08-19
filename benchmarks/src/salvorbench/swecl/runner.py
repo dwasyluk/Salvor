@@ -42,6 +42,9 @@ class TaskResult:
     outcome: Outcome
     reason: str
     brain_paths_in_patch: list[str] = field(default_factory=list)
+    memory_retrieved: int = 0
+    memory_written: bool = False
+    agent_reported_tests_passed: bool | None = None
 
     @property
     def unit_id(self) -> str:
@@ -60,6 +63,9 @@ class TaskResult:
             "elapsed_s": round(self.run.elapsed_s, 1),
             "patch_lines": len((self.run.patch or "").splitlines()),
             "brain_paths_in_patch": self.brain_paths_in_patch,
+            "memory_retrieved": self.memory_retrieved,
+            "memory_written": self.memory_written,
+            "agent_reported_tests_passed": self.agent_reported_tests_passed,
             "tokens": {
                 "input": u.input, "output": u.output,
                 "cache_write_5m": u.cache_write_5m, "cache_write_1h": u.cache_write_1h,
@@ -79,10 +85,25 @@ def run_task(
     max_turns: int,
     env_exports: dict[str, str],
     brain: bool = False,
+    memory=None,
     timeout_s: int = 7200,
 ) -> TaskResult:
-    """Run one task to completion and classify the outcome."""
-    instruction = prompt_mod.build(task)
+    """Run one task to completion and classify the outcome.
+
+    ``memory`` (S2 only): a ported SemanticMemory. Retrieval wraps the problem
+    statement before the run; after the run the agent's self-reported final
+    block is parsed and written back per the pinned upstream lifecycle. The
+    external evaluator's verdict never touches it.
+    """
+    if memory is not None:
+        from .memory import build_context
+        retrieved = memory.retrieve_relevant(task.problem_statement)
+        wrapped = build_context(task.problem_statement, retrieved)
+        instruction = prompt_mod.build(task, wrapped_problem=wrapped,
+                                       final_report=True)
+    else:
+        retrieved = []
+        instruction = prompt_mod.build(task)
     unit_dir = run_dir / condition / f"{task.position:02d}-{task.instance_id}"
 
     run = run_in_container(
@@ -115,6 +136,36 @@ def run_task(
     # comparison at once, so it is checked on every unit, not just Salvor arms.
     leaked = patch_touches_brain(run.patch)
 
+    memory_written = False
+    agent_reported_tests_passed = None
+    if memory is not None:
+        from .memory import entry_from_report, parse_final_report
+        report = parse_final_report(_final_assistant_text(stream_text))
+        content, tests_passed = entry_from_report(task.instance_id, report)
+        memory.add_entry(task.instance_id, content, tests_passed=tests_passed)
+        memory_written = True
+        agent_reported_tests_passed = tests_passed
+
     return TaskResult(task=task, condition=condition, run=run,
                       outcome=cls.outcome, reason=cls.reason,
-                      brain_paths_in_patch=leaked)
+                      brain_paths_in_patch=leaked,
+                      memory_retrieved=len(retrieved),
+                      memory_written=memory_written,
+                      agent_reported_tests_passed=agent_reported_tests_passed)
+
+
+def _final_assistant_text(stream_text: str) -> str:
+    """Concatenated text of the LAST assistant message in the stream."""
+    import json as _json
+    last = ""
+    for line in stream_text.splitlines():
+        try:
+            ev = _json.loads(line)
+        except Exception:                                   # noqa: BLE001
+            continue
+        if ev.get("type") == "assistant":
+            texts = [b.get("text", "") for b in ev.get("message", {}).get("content", [])
+                     if b.get("type") == "text"]
+            if any(t.strip() for t in texts):
+                last = "\n".join(texts)
+    return last

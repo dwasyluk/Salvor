@@ -77,7 +77,8 @@ def main() -> int:
     brains_dir = run_dir / "brains"
 
     done = {u.removeprefix("t0/") for u, d in state_log.units().items()
-            if u.startswith("t0/") and d.get("last_event") == "unit_finished"}
+            if u.startswith("t0/") and d.get("last_event") == "unit_finished"
+            and d.get("usefulness_ok")}
 
     built = 0
     for sk in states:
@@ -96,8 +97,9 @@ def main() -> int:
             state_log.append(Event.BUDGET_HALT, unit_id=unit, reason=str(exc))
             return 3
 
+        attempt = 1 + sum(1 for e in ledger._read() if e["unit_id"] == unit)
         state_log.append(Event.UNIT_STARTED, unit_id=unit, phase="t0_bootstrap",
-                         image=image)
+                         image=image, attempt=attempt)
         print(f"  BOOTSTRAP {sk}  image={image}", flush=True)
         res = bootstrap_state(
             state_key=sk,
@@ -115,21 +117,29 @@ def main() -> int:
         # Bill everything observed: drive turns + usefulness probe + ratifier.
         if res.drive:
             ledger.append(unit_id=unit, condition="T0", phase="t0_bootstrap",
-                          attempt=1, model=MODEL, usage=res.drive.usage, ts=utc())
+                          attempt=attempt, model=MODEL, usage=res.drive.usage, ts=utc())
         if res.probe_usage is not None and res.probe_usage.total:
             ledger.append(unit_id=f"{unit}#probe", condition="T0",
-                          phase="t0_bootstrap", attempt=1, model=MODEL,
+                          phase="t0_bootstrap", attempt=attempt, model=MODEL,
                           usage=res.probe_usage, ts=utc())
         rat_usage = _ratifier_usage(out_dir / "ratifier")
         if rat_usage is not None:
             ledger.append(unit_id=f"{unit}#ratifier", condition="T0",
-                          phase="t0_bootstrap", attempt=1, model=MODEL,
+                          phase="t0_bootstrap", attempt=attempt, model=MODEL,
                           usage=rat_usage, ts=utc())
         unit_usd = sum(
             (Decimal(e["cost_usd"]) for e in ledger._read()
              if e["unit_id"] in (unit, f"{unit}#probe", f"{unit}#ratifier")), Decimal("0"))
         gov.release(unit, unit_usd)
 
+        if res.ok and not res.usefulness_ok:
+            state_log.append(Event.UNIT_FAILED, unit_id=unit, phase="t0_bootstrap",
+                             error="usefulness probe failed (rebuild once per plan)")
+            print(f"    BUILT BUT USEFULNESS FAIL — will rebuild on next invocation",
+                  flush=True)
+            if args.probe:
+                return 2
+            continue
         if res.ok:
             state_log.append(Event.UNIT_FINISHED, unit_id=unit,
                              phase="t0_bootstrap", brain_image=res.image,
