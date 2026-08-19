@@ -43,3 +43,14 @@ def test_unit_view_tracks_latest_state(tmp_path: Path) -> None:
     units = log.units()
     assert units["S1/swecl/pytest/1"]["last_event"] == "unit_finished"
     assert units["S1/swecl/pytest/1"]["outcome"] == "completed"
+
+
+def test_reserved_field_names_are_refused(tmp_path: Path) -> None:
+    """A caller field named `sha256` would be signed then stripped at verify
+    time, producing a false tamper report indistinguishable from a real one."""
+    import pytest
+    log = StateLog(tmp_path)
+    with pytest.raises(ValueError, match="reserved"):
+        log.append(Event.SUBSET_FROZEN, sha256="deadbeef")
+    log.append(Event.SUBSET_FROZEN, subset_sha256="deadbeef")   # the correct spelling
+    assert log.verify_chain() == (True, None)

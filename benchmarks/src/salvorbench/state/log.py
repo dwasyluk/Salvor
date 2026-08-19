@@ -52,7 +52,19 @@ class StateLog:
         self.path = self.dir / "state.jsonl"
         self.snapshot_path = self.dir / "state.json"
 
+    #: Keys owned by the chain itself. A caller field with one of these names
+    #: would be signed at write time and stripped at verify time, producing a
+    #: false tamper report - which is exactly how a real one would look, so the
+    #: collision is refused rather than silently tolerated.
+    RESERVED = ("sha256", "prev_sha256", "seq", "ts", "event")
+
     def append(self, event: Event, **fields: Any) -> dict[str, Any]:
+        clash = sorted(set(fields) & set(self.RESERVED))
+        if clash:
+            raise ValueError(
+                f"field name(s) {clash} are reserved by the state chain; "
+                f"rename them (e.g. subset_sha256) so the digest stays verifiable"
+            )
         entries = self.read()
         prev = entries[-1]["sha256"] if entries else GENESIS
         payload = {"seq": len(entries), "ts": utcnow(), "event": event.value, **fields}

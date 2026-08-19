@@ -26,6 +26,10 @@ def verify(run_dir: Path, summary: dict[str, Any]) -> tuple[bool, list[str], lis
         failures.append(f"cost ledger chain broken: {err}")
     ok, err = StateLog(run_dir).verify_chain()
     if not ok:
+        # Deliberately NOT downgraded to a warning and never repaired by
+        # rewriting the log: a tamper-evident record that gets edited to make
+        # itself verify is worthless. A known-cause break is documented in the
+        # report and still blocks publication.
         failures.append(f"run state chain broken: {err}")
 
     conditions = summary.get("conditions") or {}

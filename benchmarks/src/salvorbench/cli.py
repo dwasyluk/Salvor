@@ -108,6 +108,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_subset)
 
+    p = sub.add_parser("report", help="generate summary.json + REPORT.md and verify")
+    p.add_argument("--run-id", default="beta")
+    p.add_argument("--cooper-pairs", type=int, default=50)
+    p.set_defaults(func=cmd_report)
+
     p = sub.add_parser("budget", help="show the cap and the verified rate card")
     p.set_defaults(func=cmd_budget)
 
@@ -117,3 +122,25 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+def cmd_report(args: argparse.Namespace) -> int:
+    """Generate summary.json + REPORT.md from a run, then verify publishability."""
+    from .report import markdown, verify as verify_mod
+    from .report.summary import write as write_summary
+
+    run_dir = ROOT / "runs" / args.run_id
+    if not run_dir.exists():
+        print(f"no run at {run_dir}", file=sys.stderr)
+        return 1
+
+    results = ROOT / "results" / args.run_id
+    summary_path = results / "summary.json"
+    summary = write_summary(run_dir, summary_path, expected_cooper=args.cooper_pairs)
+    markdown.write(summary_path, results / "REPORT.md")
+
+    publishable, failures, warnings = verify_mod.verify(run_dir, summary)
+    print(f"summary: {summary_path}")
+    print(f"report:  {results / 'REPORT.md'}\n")
+    print(verify_mod.render(publishable, failures, warnings))
+    return 0 if publishable else 1
