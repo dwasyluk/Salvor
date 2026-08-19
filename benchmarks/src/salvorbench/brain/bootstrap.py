@@ -39,13 +39,22 @@ KNOWLEDGE_LAYER = (".salvor", ".serena/memories", "CLAUDE.md", "RULES.md",
                    "AGENTS.md", "GEMINI.md", ".gitnexusrc")
 
 TOOLS_INSTALL = """\
-set -e
+set -ex
 export PATH="$HOME/.local/bin:$PATH"
-# uv (for serena) — pinned installer, quiet
-command -v uv >/dev/null 2>&1 || curl -LsSf https://astral.sh/uv/install.sh | sh >/dev/null 2>&1
+# uv (for serena): cached binary per arch, else visible download, then cache it
+if ! command -v uv >/dev/null 2>&1; then
+  ARCH=$(uname -m)
+  if [ -x "/opt/uvbin/uv-$ARCH" ]; then
+    cp "/opt/uvbin/uv-$ARCH" /usr/local/bin/uv
+  else
+    curl -LSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$PATH"
+    mkdir -p /opt/uvbin && cp "$(command -v uv)" "/opt/uvbin/uv-$ARCH" || true
+  fi
+fi
 export PATH="$HOME/.local/bin:$PATH"
-command -v serena >/dev/null 2>&1 || uv tool install --quiet "serena-agent=={serena_pin}"
-command -v gitnexus >/dev/null 2>&1 || npm install -g --silent "gitnexus@{gitnexus_pin}"
+command -v serena >/dev/null 2>&1 || uv tool install "serena-agent=={serena_pin}"
+command -v gitnexus >/dev/null 2>&1 || npm install -g "gitnexus@{gitnexus_pin}"
 serena --version >/dev/null 2>&1 || true
 gitnexus --version
 """
@@ -134,7 +143,8 @@ def bootstrap_state(
         # clean; cache state is infrastructure, identical for every state.
         extra = ["-v", "salvorbench-uv-cache:/root/.cache/uv",
                  "-v", "salvorbench-npm-cache:/root/.npm",
-                 "-v", "salvorbench-apt-cache:/var/cache/apt/archives"]
+                 "-v", "salvorbench-apt-cache:/var/cache/apt/archives",
+                 "-v", "salvorbench-uvbin-cache:/opt/uvbin"]
         if platform:
             extra = ["--platform", platform, *extra]
         env = build_environment(image, backend="docker", extra_run_args=extra)
