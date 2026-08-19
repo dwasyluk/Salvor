@@ -129,7 +129,15 @@ def bootstrap_state(
     env = None
     structural = None
     try:
-        extra = ["--platform", platform] if platform else None
+        # Shared package caches across bootstraps: the fleet downloads each
+        # package once instead of 20 times over a possibly-degraded network.
+        # Volumes are never captured by docker commit, so brain images stay
+        # clean; cache state is infrastructure, identical for every state.
+        extra = ["-v", "salvorbench-uv-cache:/root/.cache/uv",
+                 "-v", "salvorbench-npm-cache:/root/.npm",
+                 "-v", "salvorbench-apt-cache:/var/cache/apt/archives"]
+        if platform:
+            extra = ["--platform", platform, *extra]
         env = build_environment(image, backend="docker", extra_run_args=extra)
 
         # STRUCTURAL PROOF: no task text exists anywhere in this container.
@@ -146,7 +154,7 @@ def bootstrap_state(
             for attempt in (1, 2):
                 out = env.execute({"command":
                     f"(set -x; {cmd}) > /tmp/{name}.log 2>&1 && echo {sentinel}"},
-                    timeout=1200)
+                    timeout=2400)
                 if sentinel in (out.get("output") or ""):
                     return
                 # Failure diagnostics come from SEPARATE execs so a flaky
