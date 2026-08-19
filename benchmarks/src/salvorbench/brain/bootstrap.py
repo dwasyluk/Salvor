@@ -154,7 +154,8 @@ def bootstrap_state(
         extra = ["-v", "salvorbench-uv-cache:/root/.cache/uv",
                  "-v", "salvorbench-npm-cache:/root/.npm",
                  "-v", "salvorbench-apt-cache:/var/cache/apt/archives",
-                 "-v", "salvorbench-uvbin-cache:/opt/uvbin"]
+                 "-v", "salvorbench-uvbin-cache:/opt/uvbin",
+                 "-v", "salvorbench-nodegyp-cache:/root/.cache/node-gyp"]
         if platform:
             extra = ["--platform", platform, *extra]
         env = build_environment(image, backend="docker", extra_run_args=extra)
