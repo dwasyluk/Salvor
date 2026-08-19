@@ -145,12 +145,21 @@ def bootstrap_state(
             last = ""
             for attempt in (1, 2):
                 out = env.execute({"command":
-                    f"({cmd}) > /tmp/{name}.log 2>&1 && echo {sentinel}; "
-                    f"tail -c 1500 /tmp/{name}.log"}, timeout=1200)
-                last = out.get("output") or ""
-                if sentinel in last:
+                    f"(set -x; {cmd}) > /tmp/{name}.log 2>&1 && echo {sentinel}"},
+                    timeout=1200)
+                if sentinel in (out.get("output") or ""):
                     return
-            raise RuntimeError(f"{name} install failed after 2 attempts: {last[-800:]}")
+                # Failure diagnostics come from SEPARATE execs so a flaky
+                # transport on the install exec cannot blank the evidence.
+                log = read_file_from_container(env, f"/tmp/{name}.log") or ""
+                inv = env.execute({"command":
+                    "for t in node npm claude uv serena gitnexus; do "
+                    "printf '%s=%s ' $t $(command -v $t || echo MISSING); done"},
+                    timeout=60)
+                last = (f"log tail: {log[-900:]!r} | tools: "
+                        f"{(inv.get('output') or '').strip()}")
+                (out_dir / f"{name}-install-fail-{attempt}.log").write_text(log)
+            raise RuntimeError(f"{name} install failed after 2 attempts: {last}")
 
         if claude_code_setup:
             write_file_in_container(env, "/tmp/cc-setup.sh", claude_code_setup)
@@ -291,8 +300,8 @@ def bootstrap_state(
         }
         if result.drive:
             (out_dir / "drive-turns.json").write_text(json.dumps(
-                [{"n": i, "text": (t.text or "")[-6000:],
-                  "final": (t.final or "")[-2000:],
+                [{"n": i, "text": (t.assistant_text or "")[-6000:],
+                  "final": (t.result_text or "")[-2000:],
                   "tokens": t.usage.total}
                  for i, t in enumerate(result.drive.turns)], indent=2))
         path = out_dir / "provenance.json"
