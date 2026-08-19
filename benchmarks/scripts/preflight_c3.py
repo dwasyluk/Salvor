@@ -38,8 +38,8 @@ def sh(*cmd: str, check: bool = True) -> str:
 
 
 def in_vol(image: str, vol: str, script: str) -> str:
-    return sh("docker", "run", "--rm", "-v", f"{vol}:{SALVOR}", image,
-              "/bin/bash", "-c", script)
+    return sh("docker", "run", "--rm", "--entrypoint", "/bin/bash",
+              "-v", f"{vol}:{SALVOR}", image, "-c", script)
 
 
 def main() -> int:
@@ -57,8 +57,9 @@ def main() -> int:
         sh("docker", "volume", "create", vol)
         # seed exactly as the adapter does: mount at /seed so the image's own
         # .salvor is visible as the copy source
-        sh("docker", "run", "--rm", "-v", f"{vol}:/seed", image,
-           "/bin/bash", "-c", f"cp -a {SALVOR}/. /seed/ && echo seeded")
+        sh("docker", "run", "--rm", "--entrypoint", "/bin/bash",
+           "-v", f"{vol}:/seed", image,
+           "-c", f"cp -a {SALVOR}/. /seed/ && echo seeded")
 
         # 1. A writes through the agent-visible interface
         in_vol(image, vol,
@@ -74,8 +75,8 @@ def main() -> int:
 
         # 3a. concurrent distinct-artifact writes
         procs = [subprocess.Popen(
-            ["docker", "run", "--rm", "-v", f"{vol}:{SALVOR}", image,
-             "/bin/bash", "-c",
+            ["docker", "run", "--rm", "--entrypoint", "/bin/bash",
+             "-v", f"{vol}:{SALVOR}", image, "-c",
              f"for i in $(seq 1 25); do "
              f"printf 'x%.0s' {{1..100}} > {SALVOR}/domain-learnings/{token}-{n}-$i.md; done"])
             for n in ("a", "b")]
@@ -87,8 +88,8 @@ def main() -> int:
 
         # 3b. contended single-file append (L1-shaped hazard) — recorded, not hidden
         procs = [subprocess.Popen(
-            ["docker", "run", "--rm", "-v", f"{vol}:{SALVOR}", image,
-             "/bin/bash", "-c",
+            ["docker", "run", "--rm", "--entrypoint", "/bin/bash",
+             "-v", f"{vol}:{SALVOR}", image, "-c",
              f"for i in $(seq 1 50); do echo '{n}-line' >> {SALVOR}/{token}-contended.md; done"])
             for n in ("a", "b")]
         for p in procs:

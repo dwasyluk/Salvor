@@ -100,8 +100,8 @@ def _ensure_seeded_volumes(repo: str, task_id: int, feature_str: str) -> list[st
             _sh(["docker", "volume", "create", vol], 60)
             # marker-guarded one-time seed from the brain image
             code, seeded = _sh([
-                "docker", "run", "--rm", "-v", f"{vol}:/seed", image,
-                "/bin/bash", "-c",
+                "docker", "run", "--rm", "--entrypoint", "/bin/bash",
+                "-v", f"{vol}:/seed", image, "-c",
                 f"if [ ! -f /seed/.salvorbench-seeded ]; then "
                 f"  cp -a {cpath}/. /seed/ 2>/dev/null || true; "
                 f"  echo '{image}' > /seed/.salvorbench-seeded; "
