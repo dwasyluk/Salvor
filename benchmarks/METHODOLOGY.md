@@ -313,6 +313,52 @@ Stated plainly rather than buried:
 
 ---
 
+## 10b. Measured limitation: the single-agent benchmark is saturated
+
+Reported here because it materially limits what the single-agent experiment can
+show, and it was discovered by running it rather than by reasoning about it.
+
+**S1 (stateless baseline) resolved 19/19 — 100.0%** of the SWE-Bench-CL pytest
+curriculum, including all three `1-4 hours` tasks, with every patch applying and
+zero infrastructure failures.
+
+A baseline at ceiling leaves no headroom. S2 and S3 cannot exceed 100%, so the
+single-agent **resolution** comparison cannot discriminate between arms
+regardless of how good Salvor is. Reporting "all three arms at 100%" would be a
+non-result presented as a finding.
+
+What this does *not* mean:
+
+* It is not a harness fault. The pipeline validated end to end — 19/19 gold
+  patches, agent → patch → harvest → official scoring, zero infra failures.
+* It is not a claim that Salvor has no effect. It is a claim that **this
+  sequence cannot measure one** on resolution rate.
+
+What retains headroom:
+
+| Metric | S1 baseline | Discriminating? |
+|---|---|---|
+| Resolution rate | 100.0% | **No — ceiling** |
+| Turns per task | mean 19.8 (range 6–57) | Yes |
+| Tokens per task | mean 915,250 | Yes |
+| Cost per task | $0.3111 | Yes |
+| Wall clock per task | 129 s | Yes |
+
+Efficiency at equal resolution — "the same tasks solved in materially fewer turns
+and tokens" — remains a legitimate and checkable claim, and is arguably closer to
+what a repo-native brain promises than a pass-rate delta. It is, however, a
+*different* claim than this protocol set out to test, and is labelled as such
+wherever it appears.
+
+The cause is benchmark selection, not the harness: `pytest` (19 tasks) was chosen
+as the **smallest** SWE-Bench-CL sequence purely to bound cost, and measured cost
+($0.31/task) later showed that constraint to be unnecessary. Harder sequences
+exist in the same dataset — `django` (50), `sympy` (50), `sphinx` (44) — at an
+affordable incremental cost.
+
+**CooperBench is unaffected.** Its solo baseline measured 55.1%, far from
+ceiling, so the coordination experiment retains full discriminating power.
+
 ## 11. Result integrity
 
 Completion is gated on **benchmark completeness, not on Salvor winning**.
