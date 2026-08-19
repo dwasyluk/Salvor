@@ -93,10 +93,22 @@ def swebench_setup_script(*, brain: bool) -> str:
     reports tracked changes - but excluding it explicitly costs nothing and
     removes the failure mode entirely.
     """
+    # Docker's `-w /workspace/repo` CREATES that path as an empty directory before
+    # this script runs, so a `[ -e ] || ln -s` guard silently skips the symlink.
+    # The agent then finds an empty dir, works in /testbed, and writes its patch to
+    # the empty /workspace/repo - which harvest never reads. That failure is
+    # invisible in the result: it looks exactly like an agent that solved nothing.
+    # So replace an EMPTY directory, and only ever refuse if it has real content.
     lines = [
         "set -e",
         f"mkdir -p $(dirname {CONTAINER_REPO_PATH})",
-        f"[ -e {CONTAINER_REPO_PATH} ] || ln -s {SWEBENCH_REPO_PATH} {CONTAINER_REPO_PATH}",
+        f'if [ -L {CONTAINER_REPO_PATH} ]; then :;',
+        f'elif [ -d {CONTAINER_REPO_PATH} ] && [ -z "$(ls -A {CONTAINER_REPO_PATH} 2>/dev/null)" ]; then',
+        f'  rmdir {CONTAINER_REPO_PATH} && ln -s {SWEBENCH_REPO_PATH} {CONTAINER_REPO_PATH};',
+        f'elif [ ! -e {CONTAINER_REPO_PATH} ]; then',
+        f'  ln -s {SWEBENCH_REPO_PATH} {CONTAINER_REPO_PATH};',
+        f'else echo "REFUSING: {CONTAINER_REPO_PATH} exists with content" >&2; exit 1; fi',
+        f'test "$(cd {CONTAINER_REPO_PATH} && pwd -P)" = "{SWEBENCH_REPO_PATH}"',
     ]
     if brain:
         lines += [
@@ -114,7 +126,14 @@ def harvest(env: Any, *, repo_path: str, run_dir: Path, label: str) -> tuple[str
     run_dir.mkdir(parents=True, exist_ok=True)
 
     patch = None
-    raw = read_file_from_container(env, f"{repo_path}/patch.txt")
+    raw = None
+    # The submission block names /workspace/repo; the SWE-bench checkout is
+    # /testbed. These are the same path once the symlink is in place, but read
+    # both so a plumbing regression surfaces as a patch rather than a silent zero.
+    for candidate in (f"{repo_path}/patch.txt", f"{CONTAINER_REPO_PATH}/patch.txt"):
+        raw = read_file_from_container(env, candidate)
+        if raw is not None:
+            break
     if raw is not None:
         patch = normalize_patch(raw)
         (run_dir / f"{label}.patch").write_text(patch)
