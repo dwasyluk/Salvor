@@ -58,10 +58,13 @@ if ! uv --version >/dev/null 2>&1; then
 fi
 uv --version
 export PATH="$HOME/.local/bin:$PATH"
-# musl images (go_chi/typst are Alpine): psutil has no musl wheel — serena's
-# install builds it from source, which needs a toolchain.
+# Native builds happen twice here: psutil (serena dep; no musl wheel) and
+# gitnexus's node module (node-gyp wants gcc/g++/make on every libc).
 if [ "$LIBC" = musl ] && command -v apk >/dev/null 2>&1; then
-  apk add gcc python3-dev musl-dev linux-headers
+  apk add gcc g++ make python3-dev musl-dev linux-headers
+elif ! command -v make >/dev/null 2>&1; then
+  apt-get install -y --no-install-recommends make g++ 2>/dev/null || \
+    yum install -y make gcc-c++ 2>/dev/null || true
 fi
 command -v serena >/dev/null 2>&1 || uv tool install "serena-agent=={serena_pin}"
 command -v gitnexus >/dev/null 2>&1 || npm install -g "gitnexus@{gitnexus_pin}"
