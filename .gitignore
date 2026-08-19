@@ -54,3 +54,4 @@ benchmarks/runs/
 benchmarks/vendor/CooperBench/dataset/
 benchmarks/**/__pycache__/
 benchmarks/.pytest_cache/
+benchmarks/dataset/
