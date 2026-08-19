@@ -7,6 +7,11 @@
 # manifest either way.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+# NOTE: do not pass a host.docker.internal redis URL. ensure_redis() pings the
+# URL from the HOST, where that name does not resolve, so it reports "Failed to
+# start Redis" even after successfully starting one. Upstream rewrites its own
+# URL for containers (rewrite_comm_url_for_container), so let it manage Redis
+# unless REDIS_URL is set to something the host can actually reach.
 set -a; . ./.env; set +a
 
 ARM="${1:?usage: run_cooper.sh C1|C2|C3}"
@@ -22,7 +27,7 @@ uv run cooperbench run \
   -n "$NAME" -s flash --setting "$SETTING" \
   -a "$AGENT" -m claude-sonnet-5 \
   --backend docker --concurrency "${CONCURRENCY:-4}" \
-  --redis "redis://host.docker.internal:${SALVORBENCH_REDIS_PORT:-6399}/9" \
+  ${REDIS_URL:+--redis "$REDIS_URL"} \
   --agent-config conf/agent.yaml \
   --dataset-dir dataset \
   --log-dir "runs/beta/cooper" \
