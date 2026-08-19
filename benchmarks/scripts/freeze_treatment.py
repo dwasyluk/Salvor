@@ -28,6 +28,8 @@ FROZEN_FILES = [
     "src/salvorbench/brain/driver.py",
     "src/salvorbench/brain/bootstrap.py",
     "src/salvorbench/cooper/adapter.py",
+    "src/salvorbench/brain/chain.py",
+    "src/salvorbench/brain/taint.py",
     "scripts/build_brains.py",
     "conf/agent.yaml",
     "../SETUP_PROMPT.md",

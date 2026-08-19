@@ -21,7 +21,8 @@ from dataclasses import dataclass, field
 from typing import Any, Callable
 
 from ..cost.pricing import TokenUsage
-from .gates import Gate, MAX_NUDGES, NUDGE, find_reply, match_capture_gate
+from .gates import (GENERIC_APPROVAL, Gate, MAX_NUDGES, NUDGE, find_reply,
+                    looks_like_question, match_capture_gate)
 
 CLAUDE_CONFIG_DIR = "/tmp/claude-cfg"
 
@@ -123,10 +124,15 @@ def drive(
     max_outer_turns: int = 14,
     inner_max_turns: int = 120,
     turn_timeout: int = 3600,
+    resume: str | None = None,
 ) -> DriveResult:
-    """Run the gate loop until terminal, out of turns, or out of script."""
+    """Run the gate loop until terminal, out of turns, or out of script.
+
+    ``resume``: session id to resume on the FIRST turn — used by the S3
+    termination pass so close-out runs inside the work session's own context.
+    """
     exports = "".join(f"export {k}={shlex.quote(v)}; " for k, v in env_exports.items())
-    result = DriveResult(session_id=None)
+    result = DriveResult(session_id=resume)
     used: set[str] = set()
     nudges = 0
     prompt_path = initial_prompt_path
@@ -163,6 +169,11 @@ def drive(
                 used.add(gate.name)
                 reply = gate.reply
                 result.gates_answered.append({"gate": gate.name, "reply": reply})
+            elif looks_like_question(text + "\n" + final):
+                # Unmatched but the agent is waiting on a choice: the fixed
+                # standing-policy reply (never counts against nudges).
+                reply = GENERIC_APPROVAL
+                result.gates_answered.append({"gate": "generic_approval", "reply": reply})
             elif nudges < MAX_NUDGES:
                 nudges += 1
                 reply = NUDGE

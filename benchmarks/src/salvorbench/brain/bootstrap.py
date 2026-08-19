@@ -278,6 +278,12 @@ def bootstrap_state(
             "usefulness_ok": result.usefulness_ok,
             "usefulness_answer": result.usefulness,
         }
+        if result.drive:
+            (out_dir / "drive-turns.json").write_text(json.dumps(
+                [{"n": i, "text": (t.text or "")[-6000:],
+                  "final": (t.final or "")[-2000:],
+                  "tokens": t.usage.total}
+                 for i, t in enumerate(result.drive.turns)], indent=2))
         path = out_dir / "provenance.json"
         path.write_text(json.dumps(prov, indent=2))
         result.provenance_path = path

@@ -57,6 +57,30 @@ def setup_gates(project_name: str, stack_hint: str) -> list[Gate]:
 NUDGE = "Continue with the setup exactly as specified. Do not wait for further input beyond the answers already given."
 MAX_NUDGES = 2
 
+# Outside RULES' three verbatim capture gates, the setup agent phrases its
+# questions freely (per-item adoption approvals, plan confirmation, option
+# menus). The scripted operator therefore carries ONE fixed standing-policy
+# reply for any unmatched question - the ratified "generic approval reply per
+# item". It encodes policy, not blanket assent: recommended option, adoption
+# items approved, never commit. Nothing in it varies by task or repository.
+GENERIC_APPROVAL = (
+    "Proceed with your recommended option. Any pending knowledge-adoption "
+    "items are approved as you proposed them. Standing answers: do not commit "
+    "anything - leave all files uncommitted; use pure index mode for GitNexus "
+    "(Option A) and continue through Step 3 to completion."
+)
+
+_QUESTION_TAIL = re.compile(
+    r"(\?\s*$)|(yes\s*/\s*no)|(\(a\)\s*or\s*\(b\))|(which do you want)|"
+    r"(let me know)|(your call)",
+    re.I | re.M)
+
+
+def looks_like_question(text: str) -> bool:
+    """Does the assistant's final message end waiting on a choice?"""
+    tail = text.strip()[-600:]
+    return bool(_QUESTION_TAIL.search(tail))
+
 
 def match_capture_gate(text: str) -> str | None:
     for name, pattern in CAPTURE_GATES:

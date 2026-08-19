@@ -31,7 +31,19 @@ def container_setup(*, brain: bool) -> str:
         upstream = (resources.files("cooperbench.agents.claude_code") / "setup.sh").read_text()
     except Exception:                                  # noqa: BLE001
         upstream = "#!/bin/bash\nset -e\nnpm install -g --silent @anthropic-ai/claude-code@latest\n"
-    return upstream + "\n" + swebench_setup_script(brain=brain)
+    script = upstream + "\n" + swebench_setup_script(brain=brain)
+    if brain:
+        from ..brain.bootstrap import (CLAUDE_CODE_PIN, GITNEXUS_PIN, MCP_CONFIG,
+                                       SERENA_PIN, TOOLS_INSTALL)
+        import json as _json
+        mcp = _json.dumps(MCP_CONFIG).replace("{repo}", SWEBENCH_REPO_PATH)
+        script = (f"export CLAUDE_CODE_VERSION={CLAUDE_CODE_PIN}\n" + script + "\n"
+                  + TOOLS_INSTALL.format(serena_pin=SERENA_PIN,
+                                         gitnexus_pin=GITNEXUS_PIN)
+                  + "\nmkdir -p /tmp/claude-cfg\n"
+                  + "cat > /tmp/claude-cfg/.claude.json <<'SALVOR_MCP_EOF'\n"
+                  + mcp + "\nSALVOR_MCP_EOF\n")
+    return script
 
 
 @dataclass

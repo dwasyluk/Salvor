@@ -174,8 +174,18 @@ def run_in_container(
     env_exports: dict[str, str] | None = None,
     timeout_s: int = 7200,
     platform: str = "linux/amd64",
+    pre_run=None,
+    post_run=None,
 ) -> AgentRun:
-    """Run one agent invocation to completion inside a fresh container."""
+    """Run one agent invocation to completion inside a fresh container.
+
+    ``pre_run(env)`` runs after setup, before the instruction is written —
+    S3 seeds the carried knowledge layer here. ``post_run(env, stream_path)``
+    runs after harvest, before teardown, returning a dict merged into
+    ``meta`` — S3 runs the resumed-session termination pass and knowledge
+    extraction here. A post_run exception is recorded, never raised: the
+    work result stands on its own.
+    """
     started = time.monotonic()
     env = None
     try:
@@ -186,7 +196,10 @@ def run_in_container(
         )
         if setup:
             write_file_in_container(env, CONTAINER_SETUP_PATH, setup)
-            env.execute({"command": f"bash {shlex.quote(CONTAINER_SETUP_PATH)}"}, timeout=600)
+            env.execute({"command": f"bash {shlex.quote(CONTAINER_SETUP_PATH)}"}, timeout=1800)
+
+        if pre_run is not None:
+            pre_run(env)
 
         write_file_in_container(env, CONTAINER_INSTRUCTION_PATH, instruction)
 
@@ -211,6 +224,13 @@ def run_in_container(
         patch, stream_path = harvest(env, repo_path=repo_path, run_dir=run_dir, label=label)
         usage = extract(stream_path) if stream_path else TokenUsage()
 
+        post_meta: dict[str, Any] = {}
+        if post_run is not None:
+            try:
+                post_meta = post_run(env, stream_path) or {}
+            except Exception as exc:                  # noqa: BLE001
+                post_meta = {"post_run_error": f"{type(exc).__name__}: {exc}"}
+
         return AgentRun(
             status="completed" if not timed_out else "timeout",
             patch=patch,
@@ -219,7 +239,8 @@ def run_in_container(
             exit_code=exit_code,
             stream_log=stream_path,
             timed_out=timed_out,
-            meta={"image": image, "platform": platform, "repo_path": repo_path},
+            meta={"image": image, "platform": platform, "repo_path": repo_path,
+                  **post_meta},
         )
     except Exception as exc:                          # noqa: BLE001
         return AgentRun(

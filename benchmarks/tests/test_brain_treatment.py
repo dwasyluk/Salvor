@@ -133,3 +133,33 @@ def test_env_seam_applies_context_mounts():
     finally:
         A._CTX.current = None
         A._ORIG_BUILD_ENV = orig
+
+
+# --- generic-approval fallback ----------------------------------------------
+
+def test_question_detector_on_observed_agent_phrasings():
+    # Phrasings captured verbatim from bootstrap probe #1/#2 drive streams.
+    assert G.looks_like_question("Two ways forward — which do you want?")
+    assert G.looks_like_question(
+        "Let me know on 1 and 2, and I'll fold the approved ones into the plan.")
+    assert G.looks_like_question("it changes what gets committed later, so I want "
+                                 "your call. Which do you want, (a) or (b)?")
+    assert not G.looks_like_question("All files scaffolded successfully.")
+
+
+def test_generic_approval_is_policy_not_blanket_yes():
+    low = G.GENERIC_APPROVAL.lower()
+    assert "do not commit" in low
+    assert "uncommitted" in low
+    assert "option a" in low
+    # never a bare yes that could approve arbitrary side effects
+    assert not low.startswith("yes")
+
+
+def test_capture_gate_outranks_generic_approval():
+    """A message containing BOTH a capture gate and a free-form question must
+    route to the ratifier, never the generic approval (probe #1 turn 2 shape)."""
+    text = ('1. "Record this as a design decision? (yes/no)" — for item #1\n'
+            "2. Add the pointer line — yes/no?\nLet me know on 1 and 2.")
+    assert G.match_capture_gate(text) == "design_decision"
+    assert G.looks_like_question(text)   # and it IS also a question — priority decides
