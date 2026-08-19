@@ -1,4 +1,91 @@
 
+## 2026-08-19 (early hours) — Benchmark matrix executed: baselines complete, coordination penalty replicated
+
+### Results
+| Arm | Result | Spend |
+|---|---|---|
+| S1 stateless (SWE-Bench-CL pytest x19) | 19/19 = 100.0% | $5.91 |
+| C1 solo (CooperBench flash x50) | 27/49 = 55.1% | $16.34 |
+| C2 two-agent cooperative (flash x50) | 7/49 = 14.3% | $31.10 |
+
+**Coordination gap -40.8pp**, against upstream's published ~-21pp for Sonnet 4.5.
+Mechanism is in the data rather than inferred: **36 of 49 pairs ended in merge
+conflicts**. Two agents editing overlapping code produce patches that do not
+compose. That is precisely the failure a shared brain targets, so C3 carries the
+largest clean signal in the matrix.
+
+Total spend $53.35 of $250; ledger hash chain verifies over 119 units.
+
+### The saturation limitation (the reason the single-agent arm can't help)
+S1 resolved everything - all difficulty tiers, all three `1-4 hours` tasks, every
+patch applying, zero infra failures. A baseline at ceiling means S2/S3 cannot
+discriminate on resolution rate whatever Salvor does. Cause is benchmark
+selection: pytest was chosen as the SMALLEST sequence purely to bound cost, and
+the measured $0.31/task shows that constraint was unnecessary. django(50),
+sympy(50), sphinx(44) sit in the same dataset; django x 3 arms is about $46.
+Recorded in METHODOLOGY §10b as a limitation, not buried in a status note.
+Efficiency metrics (mean 19.8 turns, 915k tokens, $0.31, 129s per task) retain
+headroom, but "same tasks, fewer turns" is a DIFFERENT claim and is labelled as
+one wherever it appears.
+
+### Four self-caught bugs, each of which would have published a wrong number
+1. **Silent patch loss.** Docker's `-w /workspace/repo` creates that path as an
+   empty directory BEFORE the setup script runs, so `[ -e ] || ln -s` skipped the
+   symlink. The agent found /testbed itself, solved the task correctly (verified
+   fix, 77 tests passing) and wrote its diff to the empty dir; harvest read
+   /testbed. Scored `empty_patch`. Would have zeroed all 57 S-arm units while
+   looking exactly like a capability finding. Fixed with an assertion that
+   `pwd -P` resolves to /testbed.
+2. **Silent zero-scoring.** score() globbed report_dir for the harness summary,
+   whose filename varies by version. The glob missed and the run reported 0/19
+   resolved on a run where all 19 had resolved. Now aggregates from the
+   per-instance report.json files, which are the ground truth the summary derives
+   from. Same lesson twice: per-unit artifacts beat console aggregates - which
+   recurred a third time when re-running `cooperbench eval` printed 61.5% for an
+   arm the per-unit files showed at 55.1%, because its summary counts only the
+   units that invocation processed.
+3. **False tamper report.** The subset-freeze call passed a field literally named
+   `sha256`, colliding with the chain's own key: signed with it present, verified
+   with it stripped. Reserved names now refused at append. Deliberately did NOT
+   rewrite state.jsonl to make it verify - a tamper-evident log edited to pass is
+   worthless, so the known-bad entry stays and keeps blocking publication.
+4. **False infra failures.** Four S1 units were classified rate_limited/
+   overloaded/auth - and all four had RESOLVED. Claude Code retries transient API
+   errors internally and recovers, so those strings appear in successful runs.
+   The classifier now puts success signals ahead of error-string matching. This
+   one mattered doubly: it fabricated a 21.1pp condition-correlated infra spread,
+   the exact statistic that is supposed to invalidate a comparison.
+
+### Upstream cost figures are ~50% high for Sonnet 5
+Identical unit: ours $0.1633, upstream's reported $0.2449. Ratio 1.4997 = exactly
+$3/$15 divided by $2/$10 - its litellm table prices Sonnet 5 at Sonnet 4.5 rates.
+Concrete vindication of computing cost from token categories against a rate card
+read from the official pricing page rather than trusting a reported figure.
+
+### Gates and infrastructure notes
+- 19/19 gold patches resolved BEFORE any inference spend (zero-cost gate).
+- Execution path frozen: arm64 SWE-bench images do not exist (Hub 404); amd64
+  emulation measured ~1.3x (Rosetta, not QEMU's 5-20x) and scores correctly.
+- N=50 frozen with sha256 and timestamp before any C-phase run - full Flash set,
+  no subsetting needed once the real rate card lowered the projection to $172.
+- Isolation by observation: zero MCP namespaces across all 100 baseline cooper
+  units, i.e. proven from artifacts rather than asserted from configuration.
+- CooperBench's ensure_redis() pings the supplied URL from the HOST, so a
+  host.docker.internal URL fails there even though it is correct for containers;
+  upstream rewrites its own URL, so let it manage Redis. Verified PONG from both
+  host and container - an unreachable channel would silently degrade C2/C3 into
+  isolated solos still labelled cooperative.
+- Registry throughput recovered on the operator's wifi reconnect (348 KB/s ->
+  47.8 MB/s). My earlier VPN-MTU diagnosis was WRONG: the default route is en0 at
+  MTU 1500 and the tunnel was not carrying it.
+
+### Deliberately not attempted
+The T0 brain bootstrap (Serena + GitNexus baked into images, SETUP_PROMPT driven
+non-interactively through a scripted operator, provenance and usefulness probes).
+A half-working bootstrap yields INVALID Salvor results, which is worse than none,
+so it was not started unsupervised. It gates S2/S3/C3.
+
+
 ## 2026-08-18 — Benchmark subsystem (`feat/salvor-bench`) + dev-first branching SOP
 
 ### Branching SOP (`RULES.md` §6.12, merged to `dev` as 4ab0ee1)
