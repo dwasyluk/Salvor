@@ -85,6 +85,8 @@ class TaskResult:
                 "source": u.source, "discrepancy_pct": u.discrepancy_pct,
             },
             "error": self.run.error,
+            "meta": {k: v for k, v in self.run.meta.items()
+                     if isinstance(v, (str, int, float, bool, type(None), list))},
         }
 
 
@@ -98,6 +100,8 @@ def run_task(
     env_exports: dict[str, str],
     brain: bool = False,
     memory=None,
+    pre_run=None,
+    post_run=None,
     timeout_s: int = 7200,
 ) -> TaskResult:
     """Run one task to completion and classify the outcome.
@@ -128,6 +132,8 @@ def run_task(
         max_turns=max_turns,
         setup=container_setup(brain=brain),
         env_exports=env_exports,
+        pre_run=pre_run,
+        post_run=post_run,
         timeout_s=timeout_s,
     )
 

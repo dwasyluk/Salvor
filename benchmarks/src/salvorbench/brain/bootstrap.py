@@ -138,18 +138,29 @@ def bootstrap_state(
             timeout=60)
         structural = (pre.get("output") or "").strip()
 
-        # Tool install (claude via upstream's own setup, then serena+gitnexus, pinned).
+        # Tool install (claude via upstream's own setup, then serena+gitnexus,
+        # pinned). Both steps log to files, are result-checked, and retry once
+        # — a transient network stall must not burn a bootstrap attempt.
+        def _install(name: str, cmd: str, sentinel: str) -> None:
+            last = ""
+            for attempt in (1, 2):
+                out = env.execute({"command":
+                    f"({cmd}) > /tmp/{name}.log 2>&1 && echo {sentinel}; "
+                    f"tail -c 1500 /tmp/{name}.log"}, timeout=1200)
+                last = out.get("output") or ""
+                if sentinel in last:
+                    return
+            raise RuntimeError(f"{name} install failed after 2 attempts: {last[-800:]}")
+
         if claude_code_setup:
             write_file_in_container(env, "/tmp/cc-setup.sh", claude_code_setup)
-            env.execute({"command":
-                f"export CLAUDE_CODE_VERSION={CLAUDE_CODE_PIN}; bash /tmp/cc-setup.sh"},
-                timeout=900)
+            _install("cc-setup",
+                     f"export CLAUDE_CODE_VERSION={CLAUDE_CODE_PIN}; bash /tmp/cc-setup.sh",
+                     "CC_SETUP_OK")
         write_file_in_container(env, "/tmp/tools.sh",
                                 TOOLS_INSTALL.format(serena_pin=SERENA_PIN,
                                                      gitnexus_pin=GITNEXUS_PIN))
-        tools = env.execute({"command": "bash /tmp/tools.sh"}, timeout=900)
-        if tools.get("returncode") not in (0, None):
-            raise RuntimeError("tool install failed: " + (tools.get("output") or "")[:800])
+        _install("tools", "bash /tmp/tools.sh", "TOOLS_OK")
 
         # MCP registration (CooperBench's own mechanism, byte-for-byte location).
         env.execute({"command": f"mkdir -p {CLAUDE_CONFIG_DIR}"}, timeout=30)

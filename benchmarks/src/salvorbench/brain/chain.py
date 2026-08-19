@@ -123,3 +123,40 @@ def terminate_session(
         max_outer_turns=max_outer_turns,
         resume=session_id,
     )
+
+
+def session_id_from_stream(stream_path: Path) -> str | None:
+    """The work session's id, from the stream's init event (host-side file)."""
+    import json
+    try:
+        for line in Path(stream_path).read_text(errors="replace").splitlines():
+            try:
+                ev = json.loads(line)
+            except Exception:                           # noqa: BLE001
+                continue
+            if ev.get("type") == "system" and ev.get("subtype") == "init":
+                return ev.get("session_id")
+            if ev.get("session_id"):
+                return ev["session_id"]
+    except OSError:
+        return None
+    return None
+
+
+def knowledge_texts(tarball: Path) -> dict[str, str]:
+    """Text contents of the knowledge layer from an extracted link tarball."""
+    import io
+    import tarfile
+    out: dict[str, str] = {}
+    with tarfile.open(fileobj=io.BytesIO(tarball.read_bytes())) as tf:
+        for m in tf.getmembers():
+            if not m.isfile():
+                continue
+            f = tf.extractfile(m)
+            if f is None:
+                continue
+            try:
+                out[m.name] = f.read().decode("utf-8", errors="replace")
+            except Exception:                           # noqa: BLE001
+                continue
+    return out

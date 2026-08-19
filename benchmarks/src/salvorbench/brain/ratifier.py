@@ -179,3 +179,25 @@ class Ratifier:
                            cache_read=t.cache_read + d.usage.cache_read,
                            turns=t.turns + 1, source="result_event")
         return t
+
+
+def usage_from_dir(provenance_dir: Path) -> TokenUsage | None:
+    """Sum token usage across a directory of decision logs (for billing)."""
+    files = sorted(Path(provenance_dir).glob("decision-*.json"))
+    if not files:
+        return None
+    tot = TokenUsage(source="result_event")
+    n = 0
+    for f in files:
+        d = json.loads(f.read_text())
+        u = (d.get("decision") or {}).get("tokens") or {}
+        if not u:
+            continue
+        tot = TokenUsage(input=tot.input + int(u.get("input", 0)),
+                         output=tot.output + int(u.get("output", 0)),
+                         cache_write_5m=tot.cache_write_5m,
+                         cache_write_1h=tot.cache_write_1h,
+                         cache_read=tot.cache_read,
+                         turns=tot.turns + 1, source="result_event")
+        n += 1
+    return tot if n else None

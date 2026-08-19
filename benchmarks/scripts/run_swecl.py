@@ -61,6 +61,69 @@ if args.condition == "S2":
     memory = SemanticMemory.load(memory_path) if memory_path.exists() else SemanticMemory()
     print(f"S2 memory: {len(memory.entries)} entries loaded", flush=True)
 
+# S3: longitudinal brain chain. Link k seeds from link k-1's knowledge
+# tarball (T0 for the first task); after the work run the SAME session is
+# resumed for the product-faithful close-out, capture gates going to the
+# reviewer-only ratifier; the taint audit clears every future-task shingle
+# overlap against the repo checkout or fails the link.
+chain_dir = run_dir / "brains-swecl"
+s3_futures = {t.instance_id: t.problem_statement for t in tasks}
+if args.condition == "S3":
+    t0_tar = chain_dir / "t0" / "brain.tar.gz"
+    if not t0_tar.exists():
+        raise SystemExit("S3 requires the T0 brain: run scripts/build_swecl_t0.py first")
+
+def s3_hooks(task, prev_tar, out_tar, rat_dir):
+    from salvorbench.brain.chain import (extract_knowledge, knowledge_texts,
+                                         regenerate_derived, seed_knowledge,
+                                         session_id_from_stream,
+                                         terminate_session)
+    from salvorbench.brain.ratifier import Ratifier
+    from salvorbench.brain.taint import container_source_contains, scan
+    from salvorbench.agent.invoke import SWEBENCH_REPO_PATH
+
+    ratifier = Ratifier(rat_dir)
+
+    def pre(env):
+        seed_knowledge(env, SWEBENCH_REPO_PATH, prev_tar)
+        regenerate_derived(env, SWEBENCH_REPO_PATH)
+
+    def post(env, stream_path):
+        meta = {}
+        sid = session_id_from_stream(stream_path) if stream_path else None
+        meta["work_session_id"] = sid
+        if sid:
+            def on_capture(gate, text):
+                d = ratifier.decide(gate_question=gate, candidate=text[-4000:],
+                                    evidence=text[-8000:], brain_listing="",
+                                    context=f"s3-terminate:{task.instance_id}")
+                return "yes" if d.approve else "no"
+            term = terminate_session(
+                env, session_id=sid, repo_path=SWEBENCH_REPO_PATH,
+                env_exports={"ANTHROPIC_API_KEY": key,
+                             "ANTHROPIC_MODEL": MODEL},
+                on_capture_gate=on_capture)
+            meta["termination_terminal"] = term.terminal
+            meta["termination_turns"] = len(term.turns)
+            meta["termination_tokens"] = term.usage.total
+            meta["termination_usage"] = term.usage
+            meta["ratifier_decisions"] = len(ratifier.decisions)
+        sha = extract_knowledge(env, SWEBENCH_REPO_PATH, out_tar)
+        meta["brain_sha256"] = sha
+        future = {tid: txt for tid, txt in s3_futures.items()
+                  if tid != task.instance_id
+                  and s3_positions[tid] > task.position}
+        report = scan(knowledge_texts(out_tar), future,
+                      container_source_contains(env, SWEBENCH_REPO_PATH))
+        (out_tar.parent / f"taint-{task.position:02d}.json").write_text(
+            json.dumps(report.to_dict(), indent=2))
+        meta["taint_passed"] = report.passed
+        meta["taint_hits"] = len(report.hits)
+        return meta
+    return pre, post
+
+s3_positions = {t.instance_id: t.position for t in tasks}
+
 done = {u for u, d in state.units().items() if d.get("last_event") == "unit_finished"}
 state.append(Event.PHASE_STARTED, phase=f"tasks:{args.condition}")
 print(f"{args.condition}: {len(tasks)} tasks | ledger ${ledger.total():.2f} "
@@ -80,15 +143,36 @@ for task in tasks:
         break
 
     state.append(Event.UNIT_STARTED, unit_id=unit, condition=args.condition)
+    pre = post = None
+    if args.condition == "S3":
+        prev_tar = (chain_dir / "t0" / "brain.tar.gz" if task.position == tasks[0].position
+                    else chain_dir / f"link-{task.position - 1:02d}.tar.gz")
+        out_tar = chain_dir / f"link-{task.position:02d}.tar.gz"
+        pre, post = s3_hooks(task, prev_tar, out_tar,
+                             chain_dir / f"ratifier-{task.position:02d}")
     result = run_task(task, condition=args.condition, model=MODEL, run_dir=run_dir,
                       max_turns=MAX_TURNS, env_exports={"ANTHROPIC_API_KEY": key},
-                      brain=(args.condition == "S3"), memory=memory, timeout_s=5400)
+                      brain=(args.condition == "S3"), memory=memory,
+                      pre_run=pre, post_run=post, timeout_s=5400)
     if memory is not None:
         memory.save(memory_path)
 
     usd = cost_usd(result.run.usage, MODEL)
     ledger.append(unit_id=unit, condition=args.condition, phase="tasks", attempt=1,
                   model=MODEL, usage=result.run.usage, ts=utcnow())
+    term_usage = result.run.meta.pop("termination_usage", None)
+    if term_usage is not None and term_usage.total:
+        ledger.append(unit_id=f"{unit}#terminate", condition=args.condition,
+                      phase="tasks", attempt=1, model=MODEL,
+                      usage=term_usage, ts=utcnow())
+        usd += cost_usd(term_usage, MODEL)
+    if args.condition == "S3":
+        from salvorbench.brain.ratifier import usage_from_dir
+        ru = usage_from_dir(chain_dir / f"ratifier-{task.position:02d}")
+        if ru is not None and ru.total:
+            ledger.append(unit_id=f"{unit}#ratifier", condition=args.condition,
+                          phase="tasks", attempt=1, model=MODEL, usage=ru,
+                          ts=utcnow())
     gov.release(unit, usd)
 
     if result.brain_paths_in_patch:
