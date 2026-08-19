@@ -67,9 +67,17 @@ elif ! command -v make >/dev/null 2>&1; then
     yum install -y make gcc-c++ 2>/dev/null || true
 fi
 command -v serena >/dev/null 2>&1 || uv tool install "serena-agent=={serena_pin}"
-command -v gitnexus >/dev/null 2>&1 || npm install -g "gitnexus@{gitnexus_pin}"
+# GitNexus cannot RUN under musl regardless (glibc binary; gcompat is not
+# enough — proven by the go_chi-56 setup agent's own diagnosis), so on musl
+# its install is best-effort and the product's honest Core-mode
+# classification carries the state.
+if [ "$LIBC" = musl ]; then
+  command -v gitnexus >/dev/null 2>&1 || npm install -g "gitnexus@{gitnexus_pin}" || echo "gitnexus install skipped (musl)"
+else
+  command -v gitnexus >/dev/null 2>&1 || npm install -g "gitnexus@{gitnexus_pin}"
+  gitnexus --version
+fi
 serena --version >/dev/null 2>&1 || true
-gitnexus --version
 """
 
 MCP_CONFIG = {
