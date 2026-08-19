@@ -69,7 +69,6 @@ test -f .salvor/active_state.md && test -f .salvor/active_state_verbose.md
 test -f .salvor/DOMAIN_REF.md && test -f .salvor/INFRA.md
 test -d .salvor/decisions && test -d .salvor/domain-learnings
 test -f .gitnexusrc
-test -n "$(ls -A .serena/memories 2>/dev/null)"
 echo TERMINAL_OK
 """
 
@@ -253,6 +252,14 @@ def bootstrap_state(
         result.probe_usage = probe_usage
         result.probe_usage_total = probe_usage.total
 
+        # Serena memories are a REPORTED fact, not a gate: SETUP_PROMPT treats
+        # onboarding as status to classify (line 219), not a mandated write —
+        # a fresh repo may legitimately finish setup with an empty memories dir.
+        mem = env.execute({"command":
+            f"ls -A {shlex.quote(repo_path)}/.serena/memories 2>/dev/null | wc -l"},
+            timeout=30)
+        serena_memories = int((mem.get("output") or "0").strip() or 0)
+
         # SNAPSHOT: docker commit + knowledge-layer tarball + sha256.
         cid = getattr(env, "container_id", None)
         if not cid:
@@ -304,6 +311,7 @@ def bootstrap_state(
             "probe_tokens": result.probe_usage_total,
             "ratifier_decisions": result.ratifier_decisions,
             "usefulness_ok": result.usefulness_ok,
+            "serena_memories": serena_memories if "serena_memories" in dir() else None,
             "usefulness_answer": result.usefulness,
         }
         if result.drive:
