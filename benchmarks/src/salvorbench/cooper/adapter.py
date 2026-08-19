@@ -97,9 +97,11 @@ def _ensure_seeded_volumes(repo: str, task_id: int, feature_str: str) -> list[st
     # zero inference). The warm npm cache (populated by the 20 bootstraps)
     # plus prefer_offline makes that reinstall local. Identical claude
     # version either way; agents never see these paths.
+    # npm's cacache is concurrent-safe; apt's archives dir carries its LOCK
+    # file, so sharing it across parallel pairs deadlocks apt ("Could not
+    # get lock") — apt stays per-container.
     mount_args: list[str] = [
         "-v", "salvorbench-npm-cache:/root/.npm",
-        "-v", "salvorbench-apt-cache:/var/cache/apt/archives",
         "-e", "npm_config_prefer_offline=true",
     ]
     for suffix, cpath in _KNOWLEDGE_MOUNTS:
