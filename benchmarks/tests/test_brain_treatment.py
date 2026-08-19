@@ -163,3 +163,41 @@ def test_capture_gate_outranks_generic_approval():
             "2. Add the pointer line — yes/no?\nLet me know on 1 and 2.")
     assert G.match_capture_gate(text) == "design_decision"
     assert G.looks_like_question(text)   # and it IS also a question — priority decides
+
+
+# --- S3 chain helpers -------------------------------------------------------
+
+def test_session_id_from_stream(tmp_path):
+    from salvorbench.brain.chain import session_id_from_stream
+    p = tmp_path / "stream.jsonl"
+    p.write_text('{"type":"system","subtype":"init","session_id":"abc-123"}\n'
+                 '{"type":"assistant","message":{}}\n')
+    assert session_id_from_stream(p) == "abc-123"
+    p2 = tmp_path / "empty.jsonl"
+    p2.write_text("not json\n")
+    assert session_id_from_stream(p2) is None
+
+
+def test_knowledge_texts_roundtrip(tmp_path):
+    import io
+    import tarfile
+    from salvorbench.brain.chain import knowledge_texts
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w:gz") as tf:
+        data = b"ID: DL:x\nClaim: y\n"
+        info = tarfile.TarInfo(".salvor/domain-learnings/x.md")
+        info.size = len(data)
+        tf.addfile(info, io.BytesIO(data))
+    tarball = tmp_path / "brain.tar.gz"
+    tarball.write_bytes(buf.getvalue())
+    texts = knowledge_texts(tarball)
+    assert texts == {".salvor/domain-learnings/x.md": "ID: DL:x\nClaim: y\n"}
+
+
+def test_termination_prompt_is_task_blind():
+    from salvorbench.brain.chain import TERMINATION_PROMPT
+    low = TERMINATION_PROMPT.lower()
+    for banned in ("pytest", "cooperbench", "swe-bench", "feature", "issue", "bug"):
+        assert banned not in low
+    assert "active_state.md" in TERMINATION_PROMPT
+    assert "do not modify source code" in low
