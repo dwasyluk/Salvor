@@ -1,0 +1,20 @@
+diff --git a/changelog/6303.bugfix.rst b/changelog/6303.bugfix.rst
+new file mode 100644
+index 000000000..3da299d92
+--- /dev/null
++++ b/changelog/6303.bugfix.rst
+@@ -0,0 +1 @@
++Fix ``Item.location`` and test IDs being incorrect when a parametrized test ID contains the substring ``.[``, which was previously stripped by an obsolete workaround in ``PyobjMixin.getmodpath``.
+diff --git a/src/_pytest/python.py b/src/_pytest/python.py
+index b8b365ad3..5f2af31e2 100644
+--- a/src/_pytest/python.py
++++ b/src/_pytest/python.py
+@@ -286,7 +286,7 @@ class PyobjMixin(PyobjContext):
+             parts.append(name)
+         parts.reverse()
+         s = ".".join(parts)
+-        return s.replace(".[", "[")
++        return s
+ 
+     def reportinfo(self):
+         # XXX caching?

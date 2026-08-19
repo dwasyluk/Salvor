@@ -1,0 +1,19 @@
+diff --git a/changelog/7529.bugfix.rst b/changelog/7529.bugfix.rst
+new file mode 100644
+index 000000000..b49e5e26d
+--- /dev/null
++++ b/changelog/7529.bugfix.rst
+@@ -0,0 +1 @@
++Fixed regression where ``capfd`` and ``capfdbinary`` fixtures converted ``\r`` characters written to file descriptors 1 and 2 into ``\n``.
+diff --git a/src/_pytest/capture.py b/src/_pytest/capture.py
+index 3f9c60fb9..f538b67ec 100644
+--- a/src/_pytest/capture.py
++++ b/src/_pytest/capture.py
+@@ -388,6 +388,7 @@ class FDCaptureBinary:
+                 TemporaryFile(buffering=0),  # type: ignore[arg-type]
+                 encoding="utf-8",
+                 errors="replace",
++                newline="",
+                 write_through=True,
+             )
+             if targetfd in patchsysdict:

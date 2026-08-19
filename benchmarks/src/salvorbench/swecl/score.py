@@ -51,9 +51,42 @@ def score(predictions: Path, instance_ids: list[str], run_id: str, report_dir: P
         modal=False,
         report_dir=str(report_dir),
     )
+    # The harness's summary file location varies by version, but it ALWAYS
+    # writes an authoritative per-instance report.json under
+    # logs/run_evaluation/<run_id>/<model>/<instance>/. Aggregate from those:
+    # they are the ground truth the summary is derived from, and relying on the
+    # summary's filename silently produced "0 resolved" on a run where every
+    # instance had in fact resolved.
     for candidate in sorted(report_dir.glob(f"*{run_id}*.json")):
         return json.loads(candidate.read_text())
-    raise FileNotFoundError(f"no report written for run_id={run_id} in {report_dir}")
+    return aggregate_from_logs(run_id)
+
+
+def aggregate_from_logs(run_id: str, logs_root: Path | None = None) -> dict:
+    """Build a report from the harness's per-instance report.json files."""
+    root = (logs_root or Path("logs/run_evaluation")) / run_id
+    resolved, unresolved, errored = [], [], []
+    for report in sorted(root.glob("*/*/report.json")):
+        for instance_id, r in json.loads(report.read_text()).items():
+            if r.get("infra_failure"):
+                errored.append(instance_id)
+            elif r.get("resolved"):
+                resolved.append(instance_id)
+            else:
+                unresolved.append(instance_id)
+    total = len(resolved) + len(unresolved) + len(errored)
+    if not total:
+        raise FileNotFoundError(f"no per-instance reports under {root}")
+    return {
+        "total_instances": total,
+        "resolved_instances": len(resolved),
+        "unresolved_instances": len(unresolved),
+        "error_instances": len(errored),
+        "resolved_ids": resolved,
+        "unresolved_ids": unresolved,
+        "error_ids": errored,
+        "source": "aggregated from per-instance report.json",
+    }
 
 
 def resolved_ids(report: dict) -> set[str]:
