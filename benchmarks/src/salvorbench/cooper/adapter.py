@@ -91,7 +91,17 @@ def _ensure_seeded_volumes(repo: str, task_id: int, feature_str: str) -> list[st
         raise RuntimeError(f"brain image missing for C3: {image} — run build_brains first")
 
     _LOCK_DIR.mkdir(parents=True, exist_ok=True)
-    mount_args: list[str] = []
+    # Setup-provisioning caches, NOT treatment: upstream's setup.sh reinstalls
+    # the pinned claude-code inside its 600s exec budget, which a degraded
+    # network can blow (observed: both smoke agents dead at exactly 600s,
+    # zero inference). The warm npm cache (populated by the 20 bootstraps)
+    # plus prefer_offline makes that reinstall local. Identical claude
+    # version either way; agents never see these paths.
+    mount_args: list[str] = [
+        "-v", "salvorbench-npm-cache:/root/.npm",
+        "-v", "salvorbench-apt-cache:/var/cache/apt/archives",
+        "-e", "npm_config_prefer_offline=true",
+    ]
     for suffix, cpath in _KNOWLEDGE_MOUNTS:
         vol = _volume_name(repo, task_id, feature_str, suffix)
         lock_path = _LOCK_DIR / f"{vol}.lock"
