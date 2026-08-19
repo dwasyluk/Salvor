@@ -1,20 +1,68 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-19T02:19:20.879Z",
+  "generated_at": "2026-08-19T03:42:08.989Z",
   "complete": false,
   "model": "claude-sonnet-5",
-  "conditions": {},
-  "derived": {},
+  "conditions": {
+    "S1": {
+      "expected": 19,
+      "completed": 19,
+      "evaluated": 19,
+      "resolved": 19,
+      "benchmark_failed": 0,
+      "limits_exceeded": 0,
+      "infra_errors": 0,
+      "complete": true,
+      "success_rate": 100.0,
+      "tokens_total": 17389750,
+      "cost_usd": "5.9108",
+      "wall_clock_s": 2451.7,
+      "cost_per_resolved_usd": "0.3111"
+    },
+    "C1": {
+      "expected": 50,
+      "completed": 49,
+      "evaluated": 49,
+      "resolved": 27,
+      "benchmark_failed": 0,
+      "limits_exceeded": 0,
+      "infra_errors": 1,
+      "complete": false,
+      "success_rate": 55.1,
+      "tokens_total": 44276794,
+      "cost_usd": "16.3367",
+      "wall_clock_s": 6078.0,
+      "cost_per_resolved_usd": "0.6051"
+    },
+    "C2": {
+      "expected": 50,
+      "completed": 50,
+      "evaluated": 49,
+      "resolved": 7,
+      "benchmark_failed": 1,
+      "limits_exceeded": 0,
+      "infra_errors": 0,
+      "complete": false,
+      "success_rate": 14.3,
+      "tokens_total": 90443319,
+      "cost_usd": "31.1027",
+      "wall_clock_s": 6927.4,
+      "cost_per_resolved_usd": "4.4432"
+    }
+  },
+  "derived": {
+    "coordination_gap_pp": -40.8
+  },
   "spend": {
-    "total_usd": "3.3836",
-    "units_billed": 13
+    "total_usd": "53.3502",
+    "units_billed": 119
   },
   "integrity": {
     "ledger_chain_verified": true,
     "ledger_chain_error": null,
     "state_chain_verified": false,
     "state_chain_error": "state entry 16: content altered after write",
-    "condition_correlated_infra_spread_pp": 0.0,
+    "condition_correlated_infra_spread_pp": 2.0,
     "condition_correlated_infra_warning": false
   },
   "disclosures": {

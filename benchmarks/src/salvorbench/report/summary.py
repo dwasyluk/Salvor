@@ -92,9 +92,15 @@ def load_arm(run_dir: Path, condition: str, expected: int) -> ArmSummary | None:
             s.limits_exceeded += 1
         else:
             s.infra_errors += 1
+        # Two benchmark shapes: SWE-bench units carry `resolved`; CooperBench
+        # units carry `evaluated` + `both_passed` (upstream's own field name,
+        # preserved rather than paraphrased).
         if "resolved" in r:
             s.evaluated += 1
             s.resolved += bool(r["resolved"])
+        elif r.get("evaluated"):
+            s.evaluated += 1
+            s.resolved += bool(r.get("both_passed"))
         t = r.get("tokens") or {}
         s.tokens += sum(int(t.get(k, 0) or 0) for k in
                         ("input", "output", "cache_write_5m", "cache_write_1h", "cache_read"))

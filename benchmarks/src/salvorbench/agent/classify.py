@@ -73,6 +73,21 @@ def classify(
                               "required MCP server absent/unreachable at health check",
                               max_retries=1)
 
+    # SUCCESS SIGNALS TAKE PRECEDENCE over error-string matches.
+    #
+    # Claude Code retries transient API errors internally and recovers, so
+    # "rate_limit_error" or "overloaded_error" routinely appears in the stream of
+    # a run that then succeeded. Matching those strings first mis-labelled four
+    # S1 units as infrastructure failures even though all four resolved - which
+    # both understates the arm and fabricates a condition-correlated infra
+    # signal, the very thing that is supposed to invalidate a comparison.
+    #
+    # A unit that produced a non-empty patch and exited cleanly is a completed
+    # unit, whatever appeared in its log along the way.
+    produced_output = bool(patch and patch.strip())
+    if produced_output and exit_code in (0, None) and not timed_out:
+        return Classification(Outcome.COMPLETED, "completed")
+
     haystack = f"{exception or ''}\n{stream_text[-20000:]}"
     for pattern, reason, retries, abort in _INFRA_PATTERNS:
         if re.search(pattern, haystack, re.IGNORECASE):
