@@ -22,3 +22,16 @@ def test_real_auth_failure_with_no_output_is_still_infra() -> None:
 def test_empty_patch_with_clean_exit_is_a_real_negative() -> None:
     c = classify(exit_code=0, result_subtype="success", stream_text="", patch="")
     assert c.outcome is Outcome.BENCHMARK_FAILED
+
+
+def test_missing_cli_binary_is_infrastructure() -> None:
+    # S2 task 1: npm `latest` moved to a build whose native-binary postinstall
+    # fails under amd64 emulation - claude never ran; that is infra, never a
+    # benchmark negative.
+    from salvorbench.agent.classify import classify
+    c = classify(exit_code=1, result_subtype=None,
+                 stream_text="Error: claude native binary not installed.\n"
+                             "Either postinstall did not run (--ignore-scripts...)",
+                 patch=None, timed_out=False, exception=None)
+    assert c.outcome.value == "infra_failed"
+    assert c.reason == "cli_install"

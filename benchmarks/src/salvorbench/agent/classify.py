@@ -49,6 +49,9 @@ _INFRA_PATTERNS: tuple[tuple[str, str, int, bool], ...] = (
     (r"rate_limit_error|429\b", "api_rate_limited", 2, False),
     (r"manifest unknown|pull access denied|no such image", "image_pull", 2, False),
     (r"Cannot connect to the Docker daemon|docker: error", "docker", 2, False),
+    # The CLI itself failed to provision (npm postinstall / native binary
+    # missing) - the agent never ran; S2 task 1 hit this via a moved `latest`.
+    (r"claude native binary not installed|postinstall did not run", "cli_install", 2, False),
     (r"Connection refused.*6379|redis.*(refused|timed out)", "redis", 2, False),
 )
 

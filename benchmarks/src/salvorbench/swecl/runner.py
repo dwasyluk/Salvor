@@ -161,6 +161,11 @@ def run_task(
 
     memory_written = False
     agent_reported_tests_passed = None
+    # Upstream stores entries produced by an agent's actual attempt (successful
+    # OR attempted). An infra failure means the agent never ran - writing an
+    # empty ATTEMPTED entry would poison the chain with a non-attempt.
+    if memory is not None and cls.outcome.value == "infra_failed":
+        memory = None
     if memory is not None:
         from .memory import entry_from_report, parse_final_report
         report = parse_final_report(_final_assistant_text(stream_text))
