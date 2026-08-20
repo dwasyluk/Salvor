@@ -421,6 +421,16 @@ Evidence takes the form of paired outcomes and efficiency deltas on identical
 tasks, plus inspectable retrieval/capture provenance. Descriptive curves are
 labelled descriptive.
 
+### CLI version parity note (recorded 2026-08-19)
+
+Claude Code CLI versions per arm: C1/C2/C3 verifiably ran 2.1.235 (the
+version field in every unit's init event). S1 installed npm `latest` on the
+same day, but its CLI build predates the stream version field, so its exact
+version is UNRECORDED — almost certainly 2.1.234/2.1.235, stated here rather
+than asserted. S2/S3 are pinned to 2.1.235 (npm `latest` had moved to a
+build whose native-binary postinstall fails under amd64 emulation — an
+infra fact, and an unpinned install would have broken parity silently).
+
 ## 10d. Pre-registered construct validity: what a clean-room T0 cannot carry
 
 *Recorded 2026-08-19, BEFORE any C3 or S2/S3 unit had run — this section is a
