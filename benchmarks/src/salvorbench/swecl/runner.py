@@ -35,8 +35,21 @@ def container_setup(*, brain: bool) -> str:
     # actually ran (2.1.235, verified in its streams), and npm's moving
     # `latest` broke under amd64 emulation (native-binary postinstall).
     from ..brain.bootstrap import CLAUDE_CODE_PIN
+    # The pinned npm install's postinstall DOWNLOADS a native binary; under
+    # emulation on a flaky network that download can fail even though npm
+    # exits 0 (S2 task 8: 'claude native binary not installed' with the pin
+    # in place). Verify by EXECUTION and retry the postinstall directly.
+    verify = (
+        "for i in 1 2 3; do\n"
+        "  claude --version && break\n"
+        "  echo \"claude native binary missing - retrying postinstall ($i)\"\n"
+        "  node /usr/lib/node_modules/@anthropic-ai/claude-code/install.cjs || \\\n"
+        "    npm install -g --force \"@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}\"\n"
+        "  sleep 5\n"
+        "done\n"
+        "claude --version\n")
     script = (f"export CLAUDE_CODE_VERSION={CLAUDE_CODE_PIN}\n"
-              + upstream + "\n" + swebench_setup_script(brain=brain))
+              + upstream + "\n" + verify + swebench_setup_script(brain=brain))
     if brain:
         from ..brain.bootstrap import (GITNEXUS_PIN, MCP_CONFIG,
                                        SERENA_PIN, TOOLS_INSTALL)

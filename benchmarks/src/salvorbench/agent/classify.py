@@ -52,6 +52,9 @@ _INFRA_PATTERNS: tuple[tuple[str, str, int, bool], ...] = (
     # The CLI itself failed to provision (npm postinstall / native binary
     # missing) - the agent never ran; S2 task 1 hit this via a moved `latest`.
     (r"claude native binary not installed|postinstall did not run", "cli_install", 2, False),
+    # The task container died out from under the run (external kill, daemon
+    # restart) - the agent never ran or was cut off by infrastructure.
+    (r"No such container|is not running|container .* is not running", "container_died", 2, False),
     (r"Connection refused.*6379|redis.*(refused|timed out)", "redis", 2, False),
 )
 
