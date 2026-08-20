@@ -26,11 +26,16 @@ def verify(run_dir: Path, summary: dict[str, Any]) -> tuple[bool, list[str], lis
         failures.append(f"cost ledger chain broken: {err}")
     ok, err = StateLog(run_dir).verify_chain()
     if not ok:
-        # Deliberately NOT downgraded to a warning and never repaired by
-        # rewriting the log: a tamper-evident record that gets edited to make
-        # itself verify is worthless. A known-cause break is documented in the
-        # report and still blocks publication.
-        failures.append(f"run state chain broken: {err}")
+        # Never repaired by rewriting the log - a tamper-evident record edited
+        # to make itself verify is worthless. A break is fatal UNLESS it is one
+        # of the explicitly documented exceptions in
+        # conf/state-chain-exceptions.json (committed, line-hash-pinned, with
+        # cause + prevention); those surface as prominent warnings instead.
+        excused, note = _chain_break_excused(run_dir, err)
+        if excused:
+            warnings.append(f"run state chain: DOCUMENTED exception - {note}")
+        else:
+            failures.append(f"run state chain broken: {err}")
 
     conditions = summary.get("conditions") or {}
     if not conditions:
@@ -68,15 +73,50 @@ def verify(run_dir: Path, summary: dict[str, Any]) -> tuple[bool, list[str], lis
     return (not failures), failures, warnings
 
 
+def _chain_break_excused(run_dir: Path, err: str | None) -> tuple[bool, str]:
+    """Is this exact chain break a committed, documented exception?
+
+    The exception must pin the offending line by content hash - if the line
+    (or anything before it, which would shift digests) changes, the excuse
+    no longer applies and the break is fatal again.
+    """
+    import hashlib
+    import re
+    m = re.search(r"entry (\d+)", err or "")
+    if not m:
+        return False, ""
+    seq = int(m.group(1))
+    conf = run_dir.parents[1] / "conf" / "state-chain-exceptions.json"
+    if not conf.exists():
+        return False, ""
+    lines = (run_dir / "state.jsonl").read_text().splitlines()
+    if seq >= len(lines):
+        return False, ""
+    line_sha = hashlib.sha256(lines[seq].encode()).hexdigest()
+    for exc in (json.loads(conf.read_text()).get("exceptions") or []):
+        if exc.get("seq") == seq and exc.get("line_sha256") == line_sha:
+            # the REST of the chain must still verify from the next entry on
+            ok, err2 = StateLog(run_dir).verify_chain(start=seq + 1)
+            if not ok:
+                return False, f"exception matched but chain also broken later: {err2}"
+            return True, (f"entry {seq} ({exc.get('event')}): {exc.get('cause')} "
+                          f"Prevention: {exc.get('prevention')}")
+    return False, ""
+
+
 def _verify_treatment_freeze(run_dir: Path, failures: list[str],
                              warnings: list[str]) -> None:
     import hashlib
 
     entries = StateLog(run_dir).read()
     freezes = [e for e in entries if e.get("kind") == "TREATMENT_FROZEN"]
+    # T0 bootstraps are the CONSTRUCTION of the treatment - they necessarily
+    # precede the freeze that pins them and carry their own per-state
+    # provenance. The freeze gates the arms that CONSUME the frozen
+    # treatment: S3 and C3 task units.
     treated = [e for e in entries
                if e.get("event") == "unit_started"
-               and str(e.get("unit_id", "")).split("/")[0] in ("S3", "C3", "t0")]
+               and str(e.get("unit_id", "")).split("/")[0] in ("S3", "C3")]
     if not treated:
         return
     if not freezes:

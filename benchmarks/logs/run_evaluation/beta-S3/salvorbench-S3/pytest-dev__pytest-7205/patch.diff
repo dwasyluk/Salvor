@@ -1,0 +1,24 @@
+diff --git a/src/_pytest/setuponly.py b/src/_pytest/setuponly.py
+index c9cc589ff..a6cd2fc0b 100644
+--- a/src/_pytest/setuponly.py
++++ b/src/_pytest/setuponly.py
+@@ -1,4 +1,6 @@
+ import pytest
++from _pytest.compat import ascii_escaped
++from _pytest.compat import STRING_TYPES
+ 
+ 
+ def pytest_addoption(parser):
+@@ -66,7 +68,11 @@ def _show_fixture_action(fixturedef, msg):
+             tw.write(" (fixtures used: {})".format(", ".join(deps)))
+ 
+     if hasattr(fixturedef, "cached_param"):
+-        tw.write("[{}]".format(fixturedef.cached_param))
++        if isinstance(fixturedef.cached_param, STRING_TYPES):
++            param = ascii_escaped(fixturedef.cached_param)
++        else:
++            param = fixturedef.cached_param
++        tw.write("[{}]".format(param))
+ 
+     tw.flush()
+ 

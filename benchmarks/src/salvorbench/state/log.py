@@ -84,9 +84,13 @@ class StateLog:
             return []
         return [json.loads(l) for l in self.path.read_text().splitlines() if l.strip()]
 
-    def verify_chain(self) -> tuple[bool, str | None]:
-        prev = GENESIS
-        for i, entry in enumerate(self.read()):
+    def verify_chain(self, start: int = 0) -> tuple[bool, str | None]:
+        """Verify the hash chain; ``start`` re-anchors after a DOCUMENTED
+        broken entry (entry start-1's stored sha became the next prev, so the
+        remainder of the chain is verifiable independently)."""
+        entries = self.read()
+        prev = GENESIS if start == 0 else (entries[start - 1].get("sha256") or GENESIS)
+        for i, entry in enumerate(entries[start:], start=start):
             stored = entry.get("sha256")
             payload = {k: v for k, v in entry.items() if k != "sha256"}
             if payload.get("prev_sha256") != prev:

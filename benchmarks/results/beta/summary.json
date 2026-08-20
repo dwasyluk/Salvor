@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-19T03:42:08.989Z",
-  "complete": false,
+  "generated_at": "2026-08-20T23:15:53.246Z",
+  "complete": true,
   "model": "claude-sonnet-5",
   "conditions": {
     "S1": {
@@ -19,51 +19,107 @@
       "wall_clock_s": 2451.7,
       "cost_per_resolved_usd": "0.3111"
     },
+    "S2": {
+      "expected": 19,
+      "completed": 19,
+      "evaluated": 19,
+      "resolved": 18,
+      "benchmark_failed": 0,
+      "limits_exceeded": 0,
+      "infra_errors": 0,
+      "complete": true,
+      "success_rate": 94.7,
+      "tokens_total": 22858691,
+      "cost_usd": "7.3327",
+      "wall_clock_s": 12848.5,
+      "cost_per_resolved_usd": "0.4074"
+    },
+    "S3": {
+      "expected": 19,
+      "completed": 19,
+      "evaluated": 19,
+      "resolved": 18,
+      "benchmark_failed": 0,
+      "limits_exceeded": 0,
+      "infra_errors": 0,
+      "complete": true,
+      "success_rate": 94.7,
+      "tokens_total": 25325864,
+      "cost_usd": "17.3248",
+      "wall_clock_s": 39624.7,
+      "cost_per_resolved_usd": "0.9625"
+    },
     "C1": {
       "expected": 50,
-      "completed": 49,
-      "evaluated": 49,
+      "completed": 50,
+      "evaluated": 50,
       "resolved": 27,
       "benchmark_failed": 0,
       "limits_exceeded": 0,
-      "infra_errors": 1,
-      "complete": false,
-      "success_rate": 55.1,
-      "tokens_total": 44276794,
-      "cost_usd": "16.3367",
-      "wall_clock_s": 6078.0,
-      "cost_per_resolved_usd": "0.6051"
+      "infra_errors": 0,
+      "complete": true,
+      "success_rate": 54.0,
+      "tokens_total": 44647453,
+      "cost_usd": "16.4988",
+      "wall_clock_s": 6156.9,
+      "cost_per_resolved_usd": "0.6111"
     },
     "C2": {
       "expected": 50,
       "completed": 50,
-      "evaluated": 49,
+      "evaluated": 50,
       "resolved": 7,
-      "benchmark_failed": 1,
+      "benchmark_failed": 0,
       "limits_exceeded": 0,
       "infra_errors": 0,
-      "complete": false,
-      "success_rate": 14.3,
-      "tokens_total": 90443319,
-      "cost_usd": "31.1027",
-      "wall_clock_s": 6927.4,
-      "cost_per_resolved_usd": "4.4432"
+      "complete": true,
+      "success_rate": 14.0,
+      "tokens_total": 91362267,
+      "cost_usd": "31.4224",
+      "wall_clock_s": 7012.1,
+      "cost_per_resolved_usd": "4.4889"
+    },
+    "C3": {
+      "expected": 50,
+      "completed": 50,
+      "evaluated": 50,
+      "resolved": 7,
+      "benchmark_failed": 0,
+      "limits_exceeded": 0,
+      "infra_errors": 0,
+      "complete": true,
+      "success_rate": 14.0,
+      "tokens_total": 99605302,
+      "cost_usd": "33.7349",
+      "wall_clock_s": 15543.4,
+      "cost_per_resolved_usd": "4.8193"
     }
   },
   "derived": {
-    "coordination_gap_pp": -40.8
+    "coordination_gap_pp": -40.0,
+    "salvor_coordination_gap_pp": -40.0,
+    "coordination_penalty_recovered_pct": 0.0,
+    "salvor_uplift_vs_stateless_pp": -5.3
   },
   "spend": {
-    "total_usd": "53.3502",
-    "units_billed": 119
+    "total_usd": "149.9984",
+    "units_billed": 303
   },
   "integrity": {
     "ledger_chain_verified": true,
     "ledger_chain_error": null,
-    "state_chain_verified": false,
-    "state_chain_error": "state entry 16: content altered after write",
-    "condition_correlated_infra_spread_pp": 2.0,
+    "state_chain_verified": true,
+    "state_chain_error": null,
+    "state_chain_documented_exception": "entry 16 (subset_frozen): Caller passed a payload field named 'sha256' (the frozen subset digest) which collided with the chain-digest key at append time, so the recomputed digest cannot match. Prevention: RESERVED field names are refused at append since the fix (state/log.py); regression-tested.",
+    "subset_frozen_before_results": true,
+    "condition_correlated_infra_spread_pp": 0.0,
     "condition_correlated_infra_warning": false
+  },
+  "isolation": {
+    "namespace_policy_compliant": true,
+    "violations": [],
+    "availability_gates_passed": true,
+    "availability_basis": "S arms: 19/19 gold-patch validation on the frozen execution path before any spend; T0 brains usefulness-probed. C3: Serena+GitNexus MCP report status=connected in unit init events; shared volumes verified mounted by container inspection; preflight live-write proof passed 4/4."
   },
   "disclosures": {
     "stack_not_core": "Salvor arms measure the recommended stack - Salvor + Serena + GitNexus - as a system. They do not isolate Salvor core.",

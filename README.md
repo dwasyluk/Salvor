@@ -68,6 +68,47 @@ GEMINI.md-compatible clients; Claude Code is the most deeply dogfooded path,
 while the Codex and Google adapters are wired and documented but less exercised.
 No hosted service, no additional account.
 
+## Measured honestly: the beta benchmark
+
+Salvor ships with a [clean-room benchmark harness](benchmarks/) that measures
+the **recommended Salvor stack** (Salvor + Serena + GitNexus) against matched
+baselines on two third-party benchmarks, scored only by their own official
+evaluators. The methodology is [written to be attacked](benchmarks/METHODOLOGY.md):
+frozen task populations, tamper-evident cost/state ledgers, task-blind
+bootstrap with provenance audits, and pre-registered interpretation rules.
+Full results: [`benchmarks/results/beta/REPORT.md`](benchmarks/results/beta/REPORT.md).
+
+**Beta results (one run per condition, single vendor/model — differences
+within noise are not effects):**
+
+| Arm | Setup | Result |
+|---|---|---|
+| S1 | Stateless single agent, 19-task pytest curriculum (official SWE-bench scoring) | **100.0%** |
+| S2 | + ported SWE-Bench-CL semantic memory | 94.7% |
+| S3 | + Salvor stack (brain chain, product-faithful close-out) | 94.7% |
+| C1 | Solo agent, CooperBench flash (50 pairs) | 54.0% |
+| C2 | Two coordinating agents (upstream coop) | 14.0% |
+| C3 | Two agents + live shared Salvor brain | 14.0% |
+
+**What this shows, stated plainly:** a strong 2026 coding agent **saturates
+short single-agent benchmarks** (S1 = 100% leaves no headroom for any memory
+treatment to demonstrate resolution gains — both treatments tied within
+single-run noise while costing more tokens). And in the two-agent arms, the
+benchmark reproduces upstream's finding that **coordination itself collapses
+performance** (−40 points) — while our treatment telemetry shows the agents
+made essentially **zero calls to the knowledge and coordination tools
+available to them**. Availability is not utilization; a drop-in optional
+brain is not how Salvor is used in practice.
+
+**What this cannot show:** Salvor's core claim is *compounding* — learned
+failures, decisions, and rationale accumulated over weeks of real work. A
+clean-room brain built minutes earlier from the repository itself contains
+none of that by design (anything more would be leakage). That construct needs
+longitudinal benchmarks, which do not yet exist in usable form — see the
+[advanced benchmarking RFC](https://github.com/dwasyluk/salvor/issues/5)
+proposing a neutral harness where any persistent-context protocol, Salvor
+included, can be tested and falsified as projects age.
+
 ## The three capture classes
 
 Salvor's defining move: the agent **notices** knowledge worth keeping and

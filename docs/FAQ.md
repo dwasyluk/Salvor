@@ -423,6 +423,59 @@ context-file injection, and unexpected generated skills/hooks — is the top
 roadmap item. See the
 [Roadmap](../README.md#contributing--roadmap) for the full list.
 
+## Were the benchmark brains preloaded with answers?
+
+No. Every T0 brain is built inside the task container by the shipped
+`SETUP_PROMPT.md`, driven by a fixed scripted operator, reading only the
+repository checkout itself — before any task text exists anywhere in the
+container. Provenance for each brain records a structural scan, drive
+transcript, ratifier decisions, and a content hash. Every chain link is
+additionally shingle-audited against all *future* task texts; an overlap that
+cannot be traced to the repository fails the run. See
+[`benchmarks/METHODOLOGY.md`](../benchmarks/METHODOLOGY.md).
+
+## Why not start the benchmark brains empty?
+
+An empty brain unrealistically handicaps a persistent-memory system (no real
+project starts a session with zero context), while a hand-curated "mature"
+brain invites the accusation that answers were planted. The repository-derived
+T0 is the defensible middle: task-blind, machine-built, usefulness-probed, and
+auditable. The genuinely mature-brain case — knowledge earned across many
+sessions — needs longitudinal benchmarks
+([RFC #5](https://github.com/dwasyluk/salvor/issues/5)).
+
+## Do the baseline arms get Serena and GitNexus too?
+
+No — and that is disclosed rather than hidden: the Salvor arms measure the
+**recommended stack as a system** (Salvor + Serena + GitNexus), not Salvor
+core isolated. Component ablation is on the post-beta roadmap. Each arm's
+allowed/forbidden MCP namespaces are a committed policy
+([`benchmarks/conf/mcp-policy.yaml`](../benchmarks/conf/mcp-policy.yaml)),
+enforced by verification, with one deliberate nuance: S2's memory server is
+its *treatment*, so S2 is never described as an MCP-clean baseline.
+
+## Why did Salvor not beat the baselines in the beta benchmark?
+
+Two pre-registered reasons, recorded before the runs. Single-agent: the
+baseline scored 100%, so no treatment could demonstrate resolution gains on
+that curriculum (ceiling saturation, METHODOLOGY §10b). Two-agent: telemetry
+shows the unmodified benchmark agents made essentially zero calls to the
+tools and knowledge available to them — availability is not utilization, and
+a drop-in optional sidecar is not how Salvor enters real sessions. What the
+beta *cannot* measure either way is compounding — knowledge accumulated over
+weeks of real engineering (§10d). We publish the null results as measured
+rather than reframing them.
+
+## Were any benchmark runs cherry-picked or rerun until favorable?
+
+No. Every attempted unit is preserved (failed attempts are archived in the
+run tree, not deleted), every attempt is billed in a tamper-evident hash-chained
+cost ledger, infrastructure failures are classified separately from benchmark
+negatives under committed rules, and deterministic benchmark failures are
+never retried. `summary.json` is stamped incomplete until every arm's frozen
+population is fully evaluated, and the public surfaces are contract-tested to
+show nothing until it is.
+
 ## What is the simplest one-line answer?
 
 Salvor is the version-controlled engineering brain for a codebase: every

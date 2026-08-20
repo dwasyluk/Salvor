@@ -1,0 +1,20 @@
+diff --git a/changelog/8398.bugfix.rst b/changelog/8398.bugfix.rst
+new file mode 100644
+index 000000000..a551c725f
+--- /dev/null
++++ b/changelog/8398.bugfix.rst
+@@ -0,0 +1 @@
++Fixed the ``setUpClass``/``setup_method`` xunit-style fixtures created for ``unittest.TestCase`` classes being displayed by ``pytest --fixtures`` even without passing ``-v``, restoring the pre-6.2.0 behavior of treating them as private fixtures.
+diff --git a/src/_pytest/unittest.py b/src/_pytest/unittest.py
+index 719eb4e88..3f88d7a9e 100644
+--- a/src/_pytest/unittest.py
++++ b/src/_pytest/unittest.py
+@@ -144,7 +144,7 @@ def _make_xunit_fixture(
+         scope=scope,
+         autouse=True,
+         # Use a unique name to speed up lookup.
+-        name=f"unittest_{setup_name}_fixture_{obj.__qualname__}",
++        name=f"_unittest_{setup_name}_fixture_{obj.__qualname__}",
+     )
+     def fixture(self, request: FixtureRequest) -> Generator[None, None, None]:
+         if _is_skipped(self):

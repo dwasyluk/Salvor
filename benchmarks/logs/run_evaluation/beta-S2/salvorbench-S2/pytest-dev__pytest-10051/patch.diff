@@ -1,0 +1,31 @@
+diff --git a/changelog/9877.bugfix.rst b/changelog/9877.bugfix.rst
+new file mode 100644
+index 000000000..1d2264c61
+--- /dev/null
++++ b/changelog/9877.bugfix.rst
+@@ -0,0 +1 @@
++Ensure ``caplog.get_records(when)`` returns current/correct data after invoking ``caplog.clear()``.
+diff --git a/src/_pytest/logging.py b/src/_pytest/logging.py
+index a4f4214b1..1c5b64b7b 100644
+--- a/src/_pytest/logging.py
++++ b/src/_pytest/logging.py
+@@ -345,6 +345,10 @@ class LogCaptureHandler(logging_StreamHandler):
+         self.records = []
+         self.stream = StringIO()
+ 
++    def clear(self) -> None:
++        self.records.clear()
++        self.stream = StringIO()
++
+     def handleError(self, record: logging.LogRecord) -> None:
+         if logging.raiseExceptions:
+             # Fail the test if the log message is bad (emit failed).
+@@ -440,7 +444,7 @@ class LogCaptureFixture:
+ 
+     def clear(self) -> None:
+         """Reset the list of log records and the captured log text."""
+-        self.handler.reset()
++        self.handler.clear()
+ 
+     def set_level(self, level: Union[int, str], logger: Optional[str] = None) -> None:
+         """Set the level of a logger for the duration of a test.

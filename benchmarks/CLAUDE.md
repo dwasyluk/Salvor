@@ -43,8 +43,12 @@ the root `package.json`, and nothing installed by normal Salvor setup.
 ## Validation
 - `uv run pytest` — harness units (cost extraction, ledger tamper-evidence,
   subset determinism, isolation policy, curriculum ordering).
-- `uv run salvorbench verify` — completeness, hash chains, cross-arm parity.
-- `uv run salvorbench verify-isolation --phase all` — per-arm namespace compliance.
+- `uv run salvorbench report` — regenerates `summary.json` + `REPORT.md`, then
+  runs the publishability verifier: completeness per arm, ledger/state hash
+  chains (documented exceptions in `conf/state-chain-exceptions.json` surface
+  as warnings, anything else blocks), treatment-freeze ordering, and per-arm
+  MCP namespace compliance computed from observed unit telemetry into
+  `summary.isolation`.
 
 ## Build
 - No compilation. `VERSION.md` key: `BENCH`; current build `BENCH:00`; derived constant: `BENCH_BUILD`.
