@@ -1,0 +1,26 @@
+diff --git a/changelog/6906.bugfix.rst b/changelog/6906.bugfix.rst
+new file mode 100644
+index 000000000..84c894191
+--- /dev/null
++++ b/changelog/6906.bugfix.rst
+@@ -0,0 +1 @@
++Fix ``--setup-show`` to use ``saferepr`` when displaying fixture parameter values, avoiding a ``BytesWarning`` (or other issues) when a fixture is parametrized with ``bytes`` and the interpreter is run with ``-bb``.
+diff --git a/src/_pytest/setuponly.py b/src/_pytest/setuponly.py
+index c9cc589ff..9e4cd9519 100644
+--- a/src/_pytest/setuponly.py
++++ b/src/_pytest/setuponly.py
+@@ -1,4 +1,5 @@
+ import pytest
++from _pytest._io.saferepr import saferepr
+ 
+ 
+ def pytest_addoption(parser):
+@@ -66,7 +67,7 @@ def _show_fixture_action(fixturedef, msg):
+             tw.write(" (fixtures used: {})".format(", ".join(deps)))
+ 
+     if hasattr(fixturedef, "cached_param"):
+-        tw.write("[{}]".format(fixturedef.cached_param))
++        tw.write("[{}]".format(saferepr(fixturedef.cached_param, maxsize=42)))
+ 
+     tw.flush()
+ 

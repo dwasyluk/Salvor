@@ -1,3 +1,176 @@
+
+## 2026-08-19 (early hours) — Benchmark matrix executed: baselines complete, coordination penalty replicated
+
+### Results
+| Arm | Result | Spend |
+|---|---|---|
+| S1 stateless (SWE-Bench-CL pytest x19) | 19/19 = 100.0% | $5.91 |
+| C1 solo (CooperBench flash x50) | 27/49 = 55.1% | $16.34 |
+| C2 two-agent cooperative (flash x50) | 7/49 = 14.3% | $31.10 |
+
+**Coordination gap -40.8pp**, against upstream's published ~-21pp for Sonnet 4.5.
+Mechanism is in the data rather than inferred: **36 of 49 pairs ended in merge
+conflicts**. Two agents editing overlapping code produce patches that do not
+compose. That is precisely the failure a shared brain targets, so C3 carries the
+largest clean signal in the matrix.
+
+Total spend $53.35 of $250; ledger hash chain verifies over 119 units.
+
+### The saturation limitation (the reason the single-agent arm can't help)
+S1 resolved everything - all difficulty tiers, all three `1-4 hours` tasks, every
+patch applying, zero infra failures. A baseline at ceiling means S2/S3 cannot
+discriminate on resolution rate whatever Salvor does. Cause is benchmark
+selection: pytest was chosen as the SMALLEST sequence purely to bound cost, and
+the measured $0.31/task shows that constraint was unnecessary. django(50),
+sympy(50), sphinx(44) sit in the same dataset; django x 3 arms is about $46.
+Recorded in METHODOLOGY §10b as a limitation, not buried in a status note.
+Efficiency metrics (mean 19.8 turns, 915k tokens, $0.31, 129s per task) retain
+headroom, but "same tasks, fewer turns" is a DIFFERENT claim and is labelled as
+one wherever it appears.
+
+### Four self-caught bugs, each of which would have published a wrong number
+1. **Silent patch loss.** Docker's `-w /workspace/repo` creates that path as an
+   empty directory BEFORE the setup script runs, so `[ -e ] || ln -s` skipped the
+   symlink. The agent found /testbed itself, solved the task correctly (verified
+   fix, 77 tests passing) and wrote its diff to the empty dir; harvest read
+   /testbed. Scored `empty_patch`. Would have zeroed all 57 S-arm units while
+   looking exactly like a capability finding. Fixed with an assertion that
+   `pwd -P` resolves to /testbed.
+2. **Silent zero-scoring.** score() globbed report_dir for the harness summary,
+   whose filename varies by version. The glob missed and the run reported 0/19
+   resolved on a run where all 19 had resolved. Now aggregates from the
+   per-instance report.json files, which are the ground truth the summary derives
+   from. Same lesson twice: per-unit artifacts beat console aggregates - which
+   recurred a third time when re-running `cooperbench eval` printed 61.5% for an
+   arm the per-unit files showed at 55.1%, because its summary counts only the
+   units that invocation processed.
+3. **False tamper report.** The subset-freeze call passed a field literally named
+   `sha256`, colliding with the chain's own key: signed with it present, verified
+   with it stripped. Reserved names now refused at append. Deliberately did NOT
+   rewrite state.jsonl to make it verify - a tamper-evident log edited to pass is
+   worthless, so the known-bad entry stays and keeps blocking publication.
+4. **False infra failures.** Four S1 units were classified rate_limited/
+   overloaded/auth - and all four had RESOLVED. Claude Code retries transient API
+   errors internally and recovers, so those strings appear in successful runs.
+   The classifier now puts success signals ahead of error-string matching. This
+   one mattered doubly: it fabricated a 21.1pp condition-correlated infra spread,
+   the exact statistic that is supposed to invalidate a comparison.
+
+### Upstream cost figures are ~50% high for Sonnet 5
+Identical unit: ours $0.1633, upstream's reported $0.2449. Ratio 1.4997 = exactly
+$3/$15 divided by $2/$10 - its litellm table prices Sonnet 5 at Sonnet 4.5 rates.
+Concrete vindication of computing cost from token categories against a rate card
+read from the official pricing page rather than trusting a reported figure.
+
+### Gates and infrastructure notes
+- 19/19 gold patches resolved BEFORE any inference spend (zero-cost gate).
+- Execution path frozen: arm64 SWE-bench images do not exist (Hub 404); amd64
+  emulation measured ~1.3x (Rosetta, not QEMU's 5-20x) and scores correctly.
+- N=50 frozen with sha256 and timestamp before any C-phase run - full Flash set,
+  no subsetting needed once the real rate card lowered the projection to $172.
+- Isolation by observation: zero MCP namespaces across all 100 baseline cooper
+  units, i.e. proven from artifacts rather than asserted from configuration.
+- CooperBench's ensure_redis() pings the supplied URL from the HOST, so a
+  host.docker.internal URL fails there even though it is correct for containers;
+  upstream rewrites its own URL, so let it manage Redis. Verified PONG from both
+  host and container - an unreachable channel would silently degrade C2/C3 into
+  isolated solos still labelled cooperative.
+- Registry throughput recovered on the operator's wifi reconnect (348 KB/s ->
+  47.8 MB/s). My earlier VPN-MTU diagnosis was WRONG: the default route is en0 at
+  MTU 1500 and the tunnel was not carrying it.
+
+### Deliberately not attempted
+The T0 brain bootstrap (Serena + GitNexus baked into images, SETUP_PROMPT driven
+non-interactively through a scripted operator, provenance and usefulness probes).
+A half-working bootstrap yields INVALID Salvor results, which is worse than none,
+so it was not started unsupervised. It gates S2/S3/C3.
+
+
+## 2026-08-18 — Benchmark subsystem (`feat/salvor-bench`) + dev-first branching SOP
+
+### Branching SOP (`RULES.md` §6.12, merged to `dev` as 4ab0ee1)
+Operator-specified cycle, introduced without violating itself (built on
+`chore/dev-first-branch-flow`, merged, branch deleted by the reviewer role):
+branch from `dev` → implement → **sync `dev` in and resolve conflicts before
+review** → PR to `dev` → adjacent dev approves → **the reviewer merges and
+deletes** → `dev` promotes to `main` in controlled feature groups.
+
+Step 3 turned out to be the same moment as the existing §0.6/§10.2 pre-merge
+Brain Reconcile, so §6.12 names that rather than describing it twice. §3's
+integration branch became `dev`; §6.11 gained explicit reviewer ownership of
+deletion; §10.2's target was renamed. Canonical rule in `RULES.md`, pointer in
+`.serena/memories/branching_and_pr_sop.md`, rationale in
+`DEC:dev-first-branch-flow`. Deliberately NOT added to `SETUP_PROMPT.md`'s
+template or `example-project/RULES.md` — imposing a dev/main topology on every
+adopter would be wrong. 162/162 unit + 140/140 contract stayed green, confirming
+no root↔example parity test objected.
+
+Correction worth keeping: the first draft put this in per-user Claude
+auto-memory. That is barred by §8 (per-user memory must never hold team truth)
+and would not travel with the repository. Repo SOP belongs in the repo.
+
+### Upstream verification (done before building on it)
+Rather than trusting the design doc, each load-bearing assumption was checked
+against the installed source:
+- `_build_claude_command` exists at `agents/claude_code/adapter.py:199` → imported, never forked, so all six arms share one flag surface.
+- `backend = config.get("backend", "docker")` at `:446` → the Docker backend is the default; no Modal account needed.
+- `COOPERBENCH_EXTERNAL_AGENTS` at `agents/registry.py:93` → the documented adapter hook; no fork required.
+- Upstream's `parsers.py` reads only the terminal `result` event and the scalar `cache_creation_input_tokens`, and uses `total_cost_usd`. This confirmed the dual-extraction design: a timed-out unit emits no `result` event, so upstream bills it as **zero** — exactly the runs most likely to be expensive.
+
+Curriculum parsed directly: pytest = 19 tasks, 19 distinct base commits, and the
+order is difficulty-tiered rather than globally chronological (positions 1–5 all
+`<15 min fix` 2019-05→2020-06; 17–19 `1-4 hours` 2019-08→2022-10). A regression
+test now fails if that order is ever silently re-sorted by date.
+
+### Pricing — the operator's correction was right, and verified
+Rev-1 assumed Sonnet 5 would rise to $3/$15 on 2026-09-01 and billed
+projections at that "standard" rate. The official pricing page states verbatim
+that the $2/$10 introductory rate **is now the standard price** and the
+scheduled increase **will not occur**. Rates pinned: $2 input, $10 output,
+$2.50 5m-cache-write, $4.00 1h-cache-write, $0.20 cache-read. That is a 33%
+lower cost basis than assumed, materially improving the odds the full 50-pair
+CooperBench set fits under the $250 cap. Conservatism now comes from mechanisms
+(measured probe, p95 admission, 30% contingency, $12 reserve, in-flight
+watchdog) rather than from an inflated rate.
+
+### Dependency repairs
+- Hatchling rejected the pinned-SHA git dependency until `allow-direct-references = true`; a tag ref was rejected deliberately, since upstream moving mid-run could silently change the submission prompt or eval semantics.
+- The resolver back-solved `datasets` to **1.1.1 (2020)**, which calls `pyarrow.PyExtensionType` — removed in pyarrow 25 — so every dataset import died. Floored to `datasets>=3.0`; resolved to 5.0.1.
+- `scripts/pull-swebench-images.sh` used `mapfile`, absent from macOS bash 3.2. Rewritten with a portable read loop.
+
+### Test that caught its own wrong invariant
+`test_smaller_n_is_a_prefix_by_state_depth` failed because `choose()` returns a
+sorted list, so "first per state" in sorted order is not the depth-0 pick. The
+property that actually matters is **monotone nesting** — shrinking N must drop
+pairs, never swap them — so a 20-pair run is a strict subset of the 25-pair run
+and the two stay comparable. Test rewritten to assert that; the algorithm was
+correct.
+
+### Environment blocker (unresolved, well-diagnosed)
+Registry link degraded. Symptoms, in the order they were isolated:
+1. Daemon pull fails with `EOF`; host `curl` to `registry-1.docker.io` returns a healthy 401 → not host connectivity.
+2. A *container* reaches the registry (401), but the *daemon's* pull path fails → the fault is on the daemon's proxy path (`http.docker.internal:3128`), which containers bypass. Five `utun` VPN interfaces are up, one at MTU 1414.
+3. ghcr.io fails too, and gets through the manifest before dying on the **blob** → small requests succeed, large transfers die. MTU/TLS fragmentation signature.
+4. `docker pull hello-world` **succeeds**, and alpine succeeds on retry → flaky, not blocked. Retry is the correct mitigation.
+5. Measured host throughput to the registry: **166–348 KB/s**; general host throughput 0.15–1.3 MB/s.
+
+Result: 1/19 eval images in 24 minutes (~3.84 GB each); 20 GB total is not
+reachable on this link tonight. A 40-attempt retry loop continues in background.
+
+**Not** treated as a Docker-restart candidate: `novacast-ai-redis-1` (another
+project) is live, and RULES §5.1 protects parallel sessions. Starting a *new*
+Redis for the benchmark on :6399 is in scope and was verified not to disturb it.
+
+Everything else is preflight-green, including the execution-path bake-off:
+arm64 SWE-bench images **do not exist** (Docker Hub 404; x86_64 only, confirmed
+via the Hub API), amd64 emulation works, and the measured penalty is **~1.3×**
+(679 ms vs 513 ms on an identical loop) — Rosetta, not QEMU's 5–20×. So the
+amd64 path is correct and viable; only the download is blocked.
+
+**No inference has run. No results exist. README and site are deliberately
+unpopulated** — `summary.json` absent means the two result-derived contract
+tests skip, and an incomplete run must never reach a public surface.
+
 # salvor Active State — VERBOSE ARCHIVE
 
 L2 cache. Detailed but curated: when this file exceeds ~1,500 lines or at release milestones, condense the oldest resolved sections — keep durable conclusions, evidence references, and commit/test/issue IDs; drop raw noise. Deep history of reasoning, rejected hypotheses, and detail pruned from L1. Update immediately after every L1 update. Read only when explicitly instructed or during context recovery.
@@ -377,3 +550,15 @@ Where earlier entries in this file say the "web component is metadata-only on `m
 Tagline change ratified: the Salvor Loop value-proposition line changed from "Every request makes the next one smarter." to "Every approved capture gives the next session more context." across `site/index.html`, both `site/assets/salvor-loop*.svg` copies (`<text>` and the `salvor-loop-with.svg` `<desc>`), and the canonical `assets/salvor-loop.svg`. The new string is longer, so the SVG value-prop `<text>` font-size dropped 20 → 16 to stay within the 800-wide panel (rendered span ≈ x117–x683, comfortable margins); all copies kept in sync.
 
 Additional launch-ratification wording locked in this sweep: GitNexus positioned as license/optional (an optional local tool, not called "free"/MIT); Gemini terminology reconciled to "Gemini CLI / Antigravity" via the compatible `GEMINI.md`; the one-owner canonical model (single canonical CLAUDE.md hub, thin adapters); Core-vs-Strict protocol reconciliation (Core Protocol vs Optional Strict Engineering Defaults); root version set to v1.0.0-beta. L1 build counters advanced to CORE:05 / GHPAGE:03 / DOCS:05.
+
+## 2026-08-20 — Beta benchmark matrix COMPLETE (L1 prune preservation)
+
+Final numbers (all official evaluators): S1 19/19=100.0% · S2 18/19=94.7% (miss #19 pytest-10356) · S3 18/19=94.7% (miss #4 pytest-7205) · C1 27/50=54.0% · C2 7/50=14.0% (36 merge-conflicts) · C3 7/50=14.0% (34 merge-conflicts; 5/7 winner overlap with C2). Spend $150/$250, 302 ledger units, chains verified (one documented exception below).
+
+**T0 fleet (20 cooper states + 1 swecl state, all usefulness-PASSED)**: built by driving the shipped SETUP_PROMPT.md with a scripted operator (fixed task-blind answers; the three §2/§7 capture gates routed to a reviewer-only ratifier, rubric sha-pinned). Ten probe iterations to green, each fixing a real harness defect: IS_SANDBOX missing in usefulness probe; pre-drive .git/info/exclude confusing the setup agent (moved post-drive); weak-then-overstrict terminal conditions (final: tree+stamp AND (.gitnexusrc OR settled knowledge layer — go_chi-56's musl image cannot run GitNexus and the setup agent's honest Core-mode downgrade must not fail the harness)); verbatim gate matchers replaced by an unconditional standing-policy reply (free-form setup questions; a blind NUDGE once pushed the agent into a commit attempt); stray `return` ending drives at turn 3; serena's 7.3GB dep tree blowing install timeouts (fixed with shared uv/npm/apt/uvbin/node-gyp cache volumes — volumes never enter docker commit); presence-checked uv broken on go_chi (ELF interpreter missing → select by execution, cache keyed arch+libc); musl needs gcc/g++/make for psutil + gitnexus native builds.
+
+**C3 mechanism finding (pre-registered availability≠utilization)**: every pair ran from its brain image, shared pair-scoped .salvor + .serena/memories volumes verified by container inspection, Serena+GitNexus MCP status=connected in every init event — yet across 100 agent invocations: 1 brain read, 0 brain writes, 0 MCP calls. C2's own Redis messaging was similarly under-used upstream. §10d (committed BEFORE any treated run) separates this coordination-channel null from the untested compounding channel; RFC #5 (created, cross-linked to #4) proposes the neutral longitudinal harness (SWE-Chain fresh-session/persistent-code substrate verified ideal; ChainSWE the persistent-context contrast).
+
+**S2/S3 execution notes**: S2 port is upstream-faithful incl. quirks (8000-token whitespace cap, end-marker-on-empty, ATTEMPTED-vs-SUCCESSFUL self-report heuristic verbatim); no memory writes on infra failures (agent-never-ran must not poison the chain). npm `latest` moved mid-beta to a build whose native-binary postinstall fails under amd64 emulation → all S arms pinned to 2.1.235 (C arms verified 2.1.235 from streams; S1's exact version unrecorded — its CLI predates the stream version field; stated in METHODOLOGY parity note). S3 chain: per-link knowledge tarballs sha256'd, derived layer regenerated per base commit, product-faithful termination by resuming the work session (17/19 reached terminal; bounded), taint audits 19/19 PASS (zero untraceable future-task shingles), 4 ratifier decisions, 0 brain paths in patches. S3 cost ≈3x S1 including per-task provisioning+termination overhead (separated in REPORT).
+
+**Integrity mechanics added at publish**: conf/state-chain-exceptions.json — committed, line-hash-pinned documented exception for state entry 16 (historical sha256 field collision; RESERVED-names fix regression-tested); verify() re-anchors the chain after an excused entry and surfaces the exception verbatim in summary.integrity (never silently true). Freeze gate scoped to S3/C3 consumers (T0 construction precedes its own freeze by design; per-state provenance separately auditable); the single C3 pair that predated the final freeze (provisioning-only re-freezes: entrypoint, cache mounts) was re-run under the final freeze — both attempts billed and archived. summary.isolation carries namespace-policy compliance computed from observed per-unit namespaces + the availability evidence basis.

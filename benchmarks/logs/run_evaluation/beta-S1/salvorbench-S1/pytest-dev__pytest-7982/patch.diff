@@ -1,0 +1,20 @@
+diff --git a/changelog/8016.bugfix.rst b/changelog/8016.bugfix.rst
+new file mode 100644
+index 000000000..9e3af3b63
+--- /dev/null
++++ b/changelog/8016.bugfix.rst
+@@ -0,0 +1 @@
++Fixed a regression in pytest 6.1.0 where symlinked directories were no longer followed during collection.
+diff --git a/src/_pytest/pathlib.py b/src/_pytest/pathlib.py
+index f0bdb1481..b96cba069 100644
+--- a/src/_pytest/pathlib.py
++++ b/src/_pytest/pathlib.py
+@@ -558,7 +558,7 @@ def visit(
+     entries = sorted(os.scandir(path), key=lambda entry: entry.name)
+     yield from entries
+     for entry in entries:
+-        if entry.is_dir(follow_symlinks=False) and recurse(entry):
++        if entry.is_dir() and recurse(entry):
+             yield from visit(entry.path, recurse)
+ 
+ 

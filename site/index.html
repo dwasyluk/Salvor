@@ -72,6 +72,7 @@
           </a>
           <nav class="desktop-nav" aria-label="Primary navigation">
             <a href="#why">WHY</a>
+            <a href="#measured">BENCH</a>
             <a href="#use">USE</a>
             <a href="#claude">ROADMAP</a>
             <a href="https://github.com/dwasyluk/salvor/discussions">COMMUNITY ↗</a>
@@ -82,6 +83,7 @@
           </button>
           <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" hidden>
             <a href="#why">WHY</a>
+            <a href="#measured">BENCH</a>
             <a href="#use">USE</a>
             <a href="#claude">ROADMAP</a>
             <a href="https://github.com/dwasyluk/salvor/discussions">COMMUNITY ↗</a>
@@ -151,6 +153,36 @@
               <h2>Vendor-agnostic. Vendor-portable.</h2>
               <p>No hosted service, no account, and no vendor-owned shared brain. Repository Markdown stays canonical while compatible thin adapters let you switch supported agents without migrating your memory.</p>
             </article>
+          </div>
+        </section>
+
+        <section class="section reasons" id="measured" aria-labelledby="measured-title">
+          <p class="section-label" id="measured-title">// MEASURED HONESTLY</p>
+          <div class="reason-grid">
+            <article class="reason-card">
+              <div class="reason-heading">
+                <span class="reason-number">1</span>
+              </div>
+              <h2>Frontier agents saturate short benchmarks.</h2>
+              <p>The stateless baseline resolved 100.0% of a 19-task curriculum under official SWE-bench scoring — leaving no headroom for any memory treatment (Salvor stack: 94.7%, generic memory: 94.7%, within single-run noise). Ceiling saturation was pre-registered in the methodology before the runs.</p>
+            </article>
+            <article class="reason-card">
+              <div class="reason-heading">
+                <span class="reason-number">2</span>
+              </div>
+              <h2>Coordination is the real bottleneck.</h2>
+              <p>Two coordinating agents collapsed from 54.0% to 14.0% on CooperBench — and treatment telemetry shows unmodified benchmark agents made essentially zero calls to the knowledge and coordination tools available to them. Availability is not utilization.</p>
+            </article>
+            <article class="reason-card">
+              <div class="reason-heading">
+                <span class="reason-number">3</span>
+              </div>
+              <h2>Compounding is the untested claim.</h2>
+              <p>A clean-room brain built minutes earlier cannot contain weeks of learned failures and rationale — by design; anything more would be leakage. Measuring accumulated engineering cognition needs longitudinal benchmarks, proposed in the public RFC.</p>
+            </article>
+          </div>
+          <div class="brain-summary">
+            <p>The beta benchmark is a clean room built to be attacked: frozen task populations, tamper-evident hash-chained cost and state ledgers, task-blind machine-built brains with shingle-level leakage audits, third-party evaluators only, one run per condition — and null results published as measured. Read the <a href="https://github.com/dwasyluk/salvor/blob/main/benchmarks/METHODOLOGY.md">methodology</a>, the <a href="https://github.com/dwasyluk/salvor/blob/main/benchmarks/results/beta/REPORT.md">full report</a>, and the <a href="https://github.com/dwasyluk/salvor/issues/5">advanced benchmarking RFC</a>.</p>
           </div>
         </section>
 

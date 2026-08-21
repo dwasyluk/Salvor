@@ -13,6 +13,7 @@ Salvor is a prompt-and-documentation framework that gives repositories a version
 | core | Markdown prompt protocol | @core/CLAUDE.md |
 | ghpage | Static GitHub Pages v1.0.0-beta presentation mirror | @site/CLAUDE.md |
 | docs | Markdown | @docs/CLAUDE.md |
+| bench | Python (uv) clean-room benchmark harness | @benchmarks/CLAUDE.md |
 
 ## Documentation Map
 | Document | Purpose | When to Read |

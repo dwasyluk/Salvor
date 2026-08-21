@@ -1,0 +1,60 @@
+# Per-arm MCP namespace policy.
+#
+# Isolation is expressed as ALLOWED vs FORBIDDEN tool namespaces, never as
+# "MCP present at all". S2 is DEFINED as the ported semantic-memory arm and
+# therefore legitimately runs an MCP server; describing it as an MCP-clean
+# baseline would be false.
+#
+# Enforcement (isolation/mcpcheck.py + isolation/attest.py):
+#   * image-level  — a forbidden server must not be registered, and its binary
+#                    must not be installed, in that arm's image.
+#   * run-level    — every MCP tool call in Claude Code's stream-json is named
+#                    `mcp__<server>__<tool>`. A call in a forbidden namespace is
+#                    a hard failure for that unit.
+#
+# AVAILABILITY is gated (pre-task health checks must pass). UTILISATION is
+# telemetry: an arm that never calls an available tool is valid model behaviour
+# and is recorded, never failed and never coerced with synthetic calls.
+
+version: 1
+
+arms:
+  S1:
+    label: "Stateless"
+    allowed: []
+    forbidden: ["mcp__salvor*", "mcp__serena__*", "mcp__gitnexus__*", "mcp__clmem__*"]
+    benchmark_native: []
+
+  S2:
+    label: "Ported SWE-Bench-CL semantic memory"
+    allowed: ["mcp__clmem__*"]
+    forbidden: ["mcp__salvor*", "mcp__serena__*", "mcp__gitnexus__*"]
+    benchmark_native: []
+    note: "Generic-memory TREATMENT arm, not a baseline. Its memory MCP is the mechanism under test."
+
+  S3:
+    label: "Salvor recommended stack"
+    allowed: ["mcp__serena__*", "mcp__gitnexus__*"]
+    forbidden: ["mcp__clmem__*"]
+    benchmark_native: []
+
+  C1:
+    label: "Solo"
+    allowed: []
+    forbidden: ["mcp__salvor*", "mcp__serena__*", "mcp__gitnexus__*", "mcp__clmem__*"]
+    benchmark_native: []
+    note: "CooperBench solo mode starts no Redis and mounts no shared volume."
+
+  C2:
+    label: "Two-agent cooperative baseline"
+    allowed: []
+    forbidden: ["mcp__salvor*", "mcp__serena__*", "mcp__gitnexus__*", "mcp__clmem__*"]
+    benchmark_native: ["coop-send", "coop-recv"]
+    note: "Benchmark-native Redis coordination is part of the condition and always permitted."
+
+  C3:
+    label: "Two-agent cooperative + Salvor recommended stack"
+    allowed: ["mcp__serena__*", "mcp__gitnexus__*"]
+    forbidden: ["mcp__clmem__*"]
+    benchmark_native: ["coop-send", "coop-recv"]
+    note: "Differs from C2 ONLY by the Salvor/Serena/GitNexus servers and the live shared brain volume."

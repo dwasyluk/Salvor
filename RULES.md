@@ -64,6 +64,7 @@ On `no`, acknowledge and continue without saving any partial artifact.
 | core | `SETUP_PROMPT.md` | `VERSION.md` → `CORE:XX` | `CORE_BUILD` |
 | ghpage | `site/` static site, deployed from `main` via `.github/workflows/pages.yml` | `VERSION.md` → `GHPAGE:XX` | `GHPAGE_BUILD` |
 | docs | `README.md` and `docs/` | `VERSION.md` → `DOCS:XX` | `DOCS_BUILD` |
+| bench | `benchmarks/` benchmark subsystem (isolated; not installed by normal setup) | `VERSION.md` → `BENCH:XX` | `BENCH_BUILD` |
 
 - A change bumps its owning component and receives its own history entry. Mixed changes bump every affected component independently.
 - Each bump carries a bulleted change list.

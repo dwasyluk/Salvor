@@ -1,0 +1,21 @@
+diff --git a/changelog/6194.bugfix.rst b/changelog/6194.bugfix.rst
+new file mode 100644
+index 000000000..5246c6154
+--- /dev/null
++++ b/changelog/6194.bugfix.rst
+@@ -0,0 +1 @@
++Fix issue where a leading ``.`` character before a parametrized test's ``[...]`` id (for example an id containing ``".["``) was incorrectly stripped from the reported test name.
+diff --git a/src/_pytest/python.py b/src/_pytest/python.py
+index b8b365ad3..734a92f9b 100644
+--- a/src/_pytest/python.py
++++ b/src/_pytest/python.py
+@@ -285,8 +285,7 @@ class PyobjMixin(PyobjContext):
+                     break
+             parts.append(name)
+         parts.reverse()
+-        s = ".".join(parts)
+-        return s.replace(".[", "[")
++        return ".".join(parts)
+ 
+     def reportinfo(self):
+         # XXX caching?
