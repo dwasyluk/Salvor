@@ -1,58 +1,71 @@
 <div align="center">
 
-<img src="assets/brand/generated/salvor-readme-lockup.png" width="520" alt="SALVOR — canonical logo and wordmark"/>
+<h1><img src="assets/brand/generated/salvor-readme-lockup.png" width="520" alt="Salvor"/></h1>
 
-# Salvor
-
-### A repo-native engineering brain for coding agents — the why, not just the what.
+**A repo-native engineering knowledge layer for coding agents and software teams.**
 
 [![release](https://img.shields.io/static/v1?label=release&message=v1.0.0-beta&color=blue)](https://github.com/dwasyluk/salvor/releases)
 [![license: MIT](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 [![works with](https://img.shields.io/badge/works%20with-Claude%20Code%20·%20Codex%20·%20Gemini%20CLI%20%2F%20Antigravity-8A2BE2)](./docs/VENDOR_ADAPTERS.md)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](./CONTRIBUTING.md)
 
-*Salvage your knowledge before it's lost to the next session.*
+*Git preserves what changed. Salvor preserves what the project learned.*
 
 </div>
 
 ---
 
-## Community & feedback
+## The engineering problem
 
-Salvor v1.0.0-beta is an intentionally early release. Bugs, rough edges,
-questions, suggestions, and real-world results are all useful.
+The models are getting very good at coding. Re-teaching every fresh session
+what the project already learned is still a terrible engineering workflow.
 
-Join the shared conversation in
-[GitHub Discussions](https://github.com/dwasyluk/salvor/discussions). If GitHub
-isn't your thing, reply to or mention
-[`@blockchaindan`](https://x.com/blockchaindan) on X. Actionable bugs and scoped
-features move into [GitHub Issues](https://github.com/dwasyluk/salvor/issues);
-pull requests are welcome.
+A new agent can inspect functions, dependencies, commits, and tests. It can
+still miss that a plausible approach failed three sessions ago, an odd-looking
+implementation protects a vendor quirk, an architectural constraint must
+survive the next refactor, or a teammate already investigated the same issue.
+Context rotation, subagents, handoffs, parallel branches, new contributors, and
+vendor changes all create another opportunity to rediscover, re-litigate, or
+quietly lose that knowledge. Fresh sessions often lack a reviewed, team-shared
+record of the project's accumulated reasoning.
 
-## The problem
-
-Code shows an agent what exists. It rarely preserves *why*.
-
-A fresh coding-agent session can rediscover functions and dependencies. It
-cannot reliably recover why an architecture was chosen, which plausible
-approaches already failed, what a teammate validated earlier, or what was
-intentionally deferred. Fresh sessions often lack a reviewed, team-shared
-record of the project's accumulated reasoning — and re-derive, re-litigate,
-or quietly lose it.
-
-Salvor gives that engineering knowledge a durable, reviewable home in the
-repository.
+**Source state and engineering knowledge are different forms of project state.**
+Git is excellent at preserving code, commits, patches, branches, and file
+history. Those artifacts do not reliably preserve why implementation A won
+over B, which failure should never be retried, what was learned from an
+incident, which constraint was established experimentally, or what work was
+deliberately deferred. Salvor gives that engineering knowledge a durable,
+reviewable home alongside the source it explains.
 
 ## Salvor's answer
 
-Salvor is a **repo-native engineering brain and governance protocol for
-coding agents**. It preserves human-approved decisions, domain learnings,
-failed approaches, and deferred findings — *and the rationale behind each* —
-in Git, so fresh sessions and distributed teammates continue from reviewed
-knowledge instead of reconstructing it. Memory alone records *what happened*;
-the rationale is what stops an agent (or a new teammate) from "fixing" code
-that is shaped an unusual way for a good reason — a vendor quirk, a cost
-trade-off, a consciously accepted limitation.
+Salvor is a **repo-native engineering knowledge layer and governance protocol
+for coding agents** — an institutional brain that lives with the code. It
+preserves human-approved decisions, domain learnings, failed approaches,
+operational lessons, SOPs, and deferred findings, including the rationale
+behind them. Fresh sessions, subagents, and distributed teammates can continue
+from reviewed project knowledge instead of reconstructing the project's mental
+model from source and chat fragments.
+
+That is broader than generic agent memory. Agent memory is generally
+optimized to retain and recall prior information. We use **persistent
+engineering cognition** to describe the durable, governed project knowledge
+that lets humans and agents carry forward not just what happened, but what the
+project learned — decisions, rationale, failures, constraints, rules, and
+provenance — across sessions, contributors, branches, and models. It governs
+which project knowledge remains authoritative, why it matters, how it changes,
+and how it survives the people or agents that first learned it. Salvor
+externalizes that project cognition; it does not modify an agent's intrinsic
+reasoning or intelligence.
+
+Broadly, RAG retrieves external information, agent memory retains prior
+experience, and context engineering curates what enters the active context.
+Salvor focuses additionally on what durable project knowledge should exist, who
+may promote it, how it is reviewed and reconciled, and which version remains
+authoritative. That lifecycle includes provenance, rationale, branch and team
+propagation, contradiction handling, supersession, and retrieval by later
+sessions. This is an emerging field; “persistent engineering cognition” is
+Salvor's term for the capability, not an asserted industry standard.
 
 It is **prompt-first**: paste one setup prompt, answer four setup questions, and
 your project gains a hub-and-spoke context layer, a two-tier persisted memory,
@@ -63,58 +76,53 @@ knowledge is never touched. The shared brain is vendor-agnostic:
 everything lives as plain Markdown in your repo, owned by no LLM vendor and
 reviewable in PRs, diffable, and branchable. Thin adapters make that same brain
 vendor-portable, so teams can switch supported agents without migrating their
-memory. Setup generates contract-tested entrypoints for Claude Code, Codex, and
-GEMINI.md-compatible clients; Claude Code is the most deeply dogfooded path,
-while the Codex and Google adapters are wired and documented but less exercised.
-No hosted service, no additional account.
+project knowledge. Setup generates contract-tested entrypoints for Claude Code,
+Codex, and GEMINI.md-compatible clients. Claude Code remains the most deeply
+dogfooded path; Codex and Google entrypoints are covered by the shared adapter
+contracts and documented for the beta, with less real-project dogfooding to
+date. No hosted service, no additional account.
 
-## Measured honestly: the beta benchmark
+The ecosystem is increasingly recognizing the durable-project-context
+problem. Salvor does not claim to be the first or only answer. It is one
+opinionated attempt to make the repository-knowledge layer coherent:
+repository-local canonical truth, Git-native review, structured knowledge
+classes, governed capture, explicit merge/reconcile semantics, thin vendor
+adapters, and a clean boundary between canonical knowledge, retrieval aids,
+and machine-derived code intelligence. The claims are meant to stay
+inspectable — and falsifiable.
 
-Salvor ships with a [clean-room benchmark harness](benchmarks/) that measures
-the **recommended Salvor stack** (Salvor + Serena + GitNexus) against matched
-baselines on two third-party benchmarks, scored only by their own official
-evaluators. The methodology is [written to be attacked](benchmarks/METHODOLOGY.md):
-frozen task populations, tamper-evident cost/state ledgers, task-blind
-bootstrap with provenance audits, and pre-registered interpretation rules.
-Full results: [`benchmarks/results/beta/REPORT.md`](benchmarks/results/beta/REPORT.md).
+## Salvor compounds
 
-**Beta results (one run per condition, single vendor/model — differences
-within noise are not effects):**
+**Salvor is only as useful as the engineering knowledge available to it.** Its
+value depends on the maturity of the project brain, not simply how long Salvor
+has been installed:
 
-| Arm | Setup | Result |
-|---|---|---|
-| S1 | Stateless single agent, 19-task pytest curriculum (official SWE-bench scoring) | **100.0%** |
-| S2 | + ported SWE-Bench-CL semantic memory | 94.7% |
-| S3 | + Salvor stack (brain chain, product-faithful close-out) | 94.7% |
-| C1 | Solo agent, CooperBench flash (50 pairs) | 54.0% |
-| C2 | Two coordinating agents (upstream coop) | 14.0% |
-| C3 | Two agents + live shared Salvor brain | 14.0% |
+- **Greenfield project** — Salvor starts thin and grows alongside the code as
+  architecture decisions, implementation choices, failures, SOPs, and domain
+  discoveries emerge. Knowledge begins compounding from the first real work.
+- **Mature repository, deliberate adoption** — existing READMEs, documentation,
+  ADRs, changelogs, postmortems, runbooks, and project instructions can seed the
+  brain immediately. Setup inventories committed sources, proposes reviewed
+  section-level mappings, preserves source ownership, and asks before promotion
+  or mutation. The operator can supply missing context during that review.
+- **Mature repository, minimal adoption** — Salvor begins with what setup can
+  legitimately derive from repository structure and what future work teaches
+  it. Undocumented historical rationale remains undocumented until someone
+  supplies it or engineering work rediscovers it.
 
-**What this shows, stated plainly:** a strong 2026 coding agent **saturates
-short single-agent benchmarks** (S1 = 100% leaves no headroom for any memory
-treatment to demonstrate resolution gains — both treatments tied within
-single-run noise while costing more tokens). And in the two-agent arms, the
-benchmark reproduces upstream's finding that **coordination itself collapses
-performance** (−40 points) — while our treatment telemetry shows the agents
-made essentially **zero calls to the knowledge and coordination tools
-available to them**. Availability is not utilization; a drop-in optional
-brain is not how Salvor is used in practice.
+**Structure can often be derived. Rationale needs evidence. Salvor cannot
+preserve knowledge it has never been given or had a chance to learn.**
 
-**What this cannot show:** Salvor's core claim is *compounding* — learned
-failures, decisions, and rationale accumulated over weeks of real work. A
-clean-room brain built minutes earlier from the repository itself contains
-none of that by design (anything more would be leakage). That construct needs
-longitudinal benchmarks, which do not yet exist in usable form — see the
-[advanced benchmarking RFC](https://github.com/dwasyluk/salvor/issues/5)
-proposing a neutral harness where any persistent-context protocol, Salvor
-included, can be tested and falsified as projects age.
+[Adopt the knowledge your project already has →](#adopt-the-knowledge-you-already-have)
 
 ## The three capture classes
 
-Salvor's defining move: the agent **notices** knowledge worth keeping and
-**asks you, verbatim, before saving it**. Durable capture is user-approved —
-never silent, never automatic. (Routine L1/L2 operational state updates the
-agent maintains automatically; those are working memory, not durable capture.)
+Salvor's defining move: the agent **notices** knowledge worth keeping and,
+in the default mode, **asks you, verbatim, before ratifying it as durable
+project knowledge**. Routine L1/L2 operational state updates are maintained
+automatically as working memory. The experimental provisional mode described
+later may write explicitly unreviewed captures, but they do not become
+authoritative without human ratification.
 
 | Capture class | What it preserves | The agent asks… | Lands in |
 |---|---|---|---|
@@ -156,7 +164,7 @@ dogfooded adapter, not a boundary on which models can use Salvor.
 ## Quickstart
 
 ```text
-1. Open your coding agent in the project you want to give a memory to (new or existing).
+1. Open your coding agent in the project where you want to add Salvor (new or existing).
 2. Paste the contents of SETUP_PROMPT.md.
 3. The agent inspects your existing files first, then asks its four setup questions
    (1. project name · 2. components + stack hints · 3. optional paired-path parity —
@@ -166,7 +174,8 @@ dogfooded adapter, not a boundary on which models can use Salvor.
    selected sections now—or later on demand—without changing the originals.
 5. It scaffolds the Salvor structure, then OFFERS a reviewed commit — it never
    auto-commits and never runs a blanket `git add -A`. You review, you approve.
-6. Done — your repo now carries its own reviewed engineering memory.
+6. Done — your repo now carries the Salvor knowledge layer and can begin
+   accumulating reviewed engineering knowledge as the project evolves.
 ```
 
 Setup works in **Core mode** even if no MCP tools are present — see
@@ -184,8 +193,9 @@ vendor's CLI; future plugins wrap the same path. Details:
 
 Existing project documentation does not need to be rewritten or moved into a
 new Salvor-owned `docs/` folder. During setup—or later, whenever you ask—Salvor
-can inventory selected `docs/`, READMEs, ADRs, postmortems, runbooks, and agent
-instructions, then propose a reviewed **section-level adoption map**.
+can inventory selected `docs/`, READMEs, ADRs, architecture/design notes,
+CHANGELOGs, postmortems/incident reports, runbooks, and agent instructions,
+then propose a reviewed **section-level adoption map**.
 
 One source document may contain several kinds of knowledge. Salvor maps each
 relevant section independently: a decision can become a decision artifact, an
@@ -214,10 +224,11 @@ code for the enhanced-mode tools to index.
 
 | | What it is | What you get |
 |---|---|---|
-| **Salvor Core** | Repository files + vendor entrypoints only. No MCP servers required. | Persistent, Git-reviewed engineering memory: capture classes, L1/L2 state, hub-and-spoke context, rules protocol. Optional per-component versioning when the Strict defaults profile is enabled. |
+| **Salvor Core** | Repository files + vendor entrypoints only. No MCP servers required. | Persistent, Git-reviewed engineering knowledge: capture classes, L1/L2 state, hub-and-spoke context, rules protocol. Optional per-component versioning when the Strict defaults profile is enabled. |
 | **Salvor enhanced** | Core **plus** [Serena](https://github.com/oraios/serena) and [GitNexus](https://github.com/abhigyanpatwari/GitNexus). | Adds semantic symbol navigation (Serena) and graph impact analysis before edits (GitNexus). |
 
-Every memory and governance claim in this README holds in **Core** mode.
+Every claim about Salvor's engineering knowledge and governance in this README
+holds in **Core** mode.
 Claims about symbol-level navigation, "what breaks if I change this?" impact
 analysis, and code-graph awareness require **enhanced** mode. Serena and
 GitNexus are optional, but both are highly recommended for the best
@@ -225,14 +236,19 @@ code-grounded results.
 
 ## Lifecycle: the Salvor Loop
 
+At the product level, Salvor's loop is: adopt existing knowledge, learn through
+engineering work, preserve ratified knowledge as repository state, retrieve it
+for future sessions, and supersede or reconcile it when the truth changes —
+without erasing provenance.
+
 Each session starts by loading the hub and L1 state — the compressed,
 reviewed "now" of the project. As work proceeds, the agent navigates code
 (enhanced mode adds symbol- and graph-level intelligence), and when it
 surfaces something durable, a capture gate asks you before anything is saved.
 Finishing a task means updating L1/L2, the affected component spoke, and the
-configured project-history or version artifact when applicable — so the memory
-stays tied to the code it describes. Salvor is designed so the next session
-starts from reviewed knowledge instead of reconstruction.
+configured project-history or version artifact when applicable — so the
+project knowledge stays tied to the code it describes. Salvor is designed so
+the next session starts from reviewed knowledge instead of reconstruction.
 
 <p align="center">
   <img src="assets/salvor-loop.svg" width="900" alt="The Salvor Loop: nine phases build context, act, and feed durable knowledge back into the repository brain, contrasted with an agent that starts cold without Salvor."/>
@@ -243,11 +259,116 @@ starts from reviewed knowledge instead of reconstruction.
 Full write-up of the five pillars in
 **[`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md)**.
 
+## Salvor on Salvor
+
+This repository carries its own Salvor brain. That is an inspectable
+dogfooding example, not a benchmark or an independent performance claim. It
+shows the practical handoff Salvor is designed to preserve:
+
+| Engineering event | Durable project knowledge | What a later session inherits |
+|---|---|---|
+| A feature was merged directly to the release branch and inverted the intended promotion flow. | [`RULES.md`](./RULES.md) now carries the dev-first branch/PR SOP; [`DEC:dev-first-branch-flow`](./.salvor/decisions/2026-08-18-dev-first-branch-flow.md) preserves why. | Branch from `dev`, reconcile before review, merge back to `dev`, and let the reviewer delete the branch — without rediscovering the policy. |
+| Installing into a mature repository risked overwriting the knowledge Salvor was meant to protect. | The [preservation-first adoption decision](./.salvor/decisions/2026-07-30-preservation-first-existing-repository-adoption.md) records the approved invariant. | Reuse existing hubs, rules, Serena/GitNexus state, and docs in place; show an adoption map before mutation. |
+| GitNexus versions differed in whether analysis injected context files or generated skills. | [`SETUP_PROMPT.md`](./SETUP_PROMPT.md) and the project hub retain the tested capability-detection and index-only rationale. | Detect `--index-only`; use pure indexing when supported; never let a derived code index silently rewrite the canonical brain. |
+| The beta benchmark exposed leakage, scoring, cost, and saturation traps while it was being built. | [`benchmarks/METHODOLOGY.md`](./benchmarks/METHODOLOGY.md) preserves the anti-contamination rules, rejected shortcuts, and interpretation limits. | Future runs inherit the safeguards instead of rebuilding — or repeating — the same methodological failures. |
+
+These examples matter not because Salvor knew them at installation, but because
+the repository accumulated them through actual engineering work and later
+sessions inherited them.
+
+The pattern is the product: engineering work produces a decision, learning, or
+failure; the repository keeps its reviewed rationale; the next agent receives
+it when relevant. That reduces rediscovery and regression risk. It does not, by
+itself, prove a universal performance uplift.
+
+## Current validation: the beta benchmark
+
+Salvor ships with an auditable [clean-room benchmark harness](benchmarks/). We
+built it to test the hypothesis rather than assume the product works, and to
+publish null or negative results without hiding them. It measures the
+**recommended Salvor stack** (Salvor + Serena + GitNexus), not Salvor Core in
+isolation, against matched treatments on two third-party benchmarks. The
+SWE-Bench-CL curriculum supplies sequencing and difficulty metadata only;
+patches are scored by the official SWE-bench harness against
+SWE-bench_Verified, and the upstream SWE-Bench-CL evaluator is never run.
+CooperBench uses its own deterministic, test-based evaluator. The
+[`methodology is designed for scrutiny`](benchmarks/METHODOLOGY.md); the
+canonical numbers come from
+[`summary.json`](benchmarks/results/beta/summary.json) and the
+[`full report`](benchmarks/results/beta/REPORT.md).
+
+**Beta results — one run per condition, one vendor/model
+(`claude-sonnet-5`), no confidence intervals:**
+
+| Arm | Setup | Resolved | Cost |
+|---|---|---:|---:|
+| S1 | Stateless single agent, 19-task pytest curriculum (official SWE-bench scoring) | **19/19 (100.0%)** | $5.91 |
+| S2 | Ported SWE-Bench-CL semantic-memory treatment | 18/19 (94.7%) | $7.33 |
+| S3 | Salvor stack, persistent brain chain | 18/19 (94.7%) | $17.32 |
+| C1 | Solo agent, CooperBench `flash` | **27/50 (54.0%)** | $16.50 |
+| C2 | Two-agent cooperative baseline | 7/50 (14.0%) | $31.42 |
+| C3 | Two agents + live shared Salvor brain | 7/50 (14.0%) | $33.73 |
+
+The [`canonical report`](benchmarks/results/beta/REPORT.md) and
+[`summary`](benchmarks/results/beta/summary.json) publish the complete arm-level
+totals and timing. The [`methodology`](benchmarks/METHODOLOGY.md) documents how
+the harness retains token categories, per-task records and trajectories, raw
+evaluator output, and bootstrap/lifecycle overhead.
+
+### What the single-agent result says
+
+The stateless S1 condition resolved 100% of the selected curriculum. S2 and S3
+each resolved 18/19, missed different tasks, and used more inference. With one
+run per condition, that observed one-task difference is not enough to estimate
+a reliable treatment effect. The stateless arm saturated the curriculum, so
+the task set has essentially no useful headroom for demonstrating positive
+resolution uplift at this model capability. It is not evidence that Salvor
+helps, and it is not evidence that Salvor never can.
+
+### What the multi-agent result says
+
+CooperBench retained headroom and produced a clear result. Solo performance was
+27/50 (54.0%); both the cooperative baseline and the Salvor treatment resolved
+7/50 (14.0%). The coordination gap was **-40.0 percentage points**, and Salvor
+recovered **0%** of it. For the 49 pairs with merge-conflict telemetry, 36 C2
+pairs and 34 C3 pairs conflicted. C3 also used more tokens, cost more, and took
+longer.
+
+The treatment was available — shared volumes were mounted and Serena/GitNexus
+reported connected — but telemetry shows the agents scarcely used it: one brain
+read, zero writes, and no MCP calls across 100 C3 invocations. **Availability is
+not utilization.** That is important context for what this run actually
+exercised, but it does not change the scored result: C3 matched C2 at 7/50.
+
+### What this benchmark cannot say
+
+Short coding benchmarks can demonstrate memory effects when earlier knowledge
+is deliberately made relevant to later tasks. This beta's clean-room brain was
+minutes old and task-blind, however, so it could not contain the part of the
+product that grows only through real project history: an old learned failure
+becoming relevant again, architectural rationale surviving many refactors,
+SOPs evolving across contributors, or vendor/runtime knowledge earned
+experimentally over weeks and months. Most standard coding benchmarks do not
+naturally create that mature, longitudinal project history. These cold-start
+conditions also do not model project aging, context rotation, changing
+requirements, external dependencies, distributed contributors, or
+multi-vendor teams.
+
+The scored null and negative results remain binding for the treatment that was
+run. They answer the experiment we ran; they do not answer the longitudinal
+question Salvor is designed to address. The open, post-beta
+[`advanced benchmarking RFC`](https://github.com/dwasyluk/salvor/issues/5)
+proposes a protocol-neutral longitudinal harness to test whether accumulated
+engineering knowledge improves fresh-agent performance as real projects evolve
+across releases, sessions, requirements, dependencies, and collaborating
+agents. It is research, not a shipped capability, and the beta does not wait
+for it.
+
 ## enhanced mode: Serena + GitNexus
 
 Two optional local tools add code intelligence to Salvor Core to pair with
-Salvor's memory. Neither is affiliated with Salvor; both run locally for
-their documented core workflows.
+Salvor's knowledge layer. Neither is affiliated with Salvor; both run locally
+for their documented core workflows.
 
 ### 🧠 Serena — semantic symbol navigation
 
@@ -284,8 +405,9 @@ No account is needed for core indexing and impact analysis. (The optional
 
 ## Multi-agent & distributed teams
 
-Salvor's memory travels the same way your code does: through Git — and the
-protocol defines what happens when two branches grow the brain in parallel.
+Salvor's project knowledge travels the same way your code does: through Git —
+and the protocol defines what happens when two branches grow the brain in
+parallel.
 
 - **Distributed teammates** — a colleague's agent in another timezone reads
   the same reviewed decisions, learned failures, and deferred findings you
@@ -294,8 +416,8 @@ protocol defines what happens when two branches grow the brain in parallel.
   generated by default, so Claude Code, Codex, and Gemini CLI / Antigravity CLI
   — Google's coding-agent entrypoint using the compatible `GEMINI.md`
   project-context file — teammates all inherit one canonical hub. Switch
-  vendors next year; the memory stays.
-- **Collision-free knowledge IDs** — every capture gets a self-allocating slug
+  vendors next year; the project knowledge stays.
+- **Self-allocating knowledge IDs** — every capture gets a self-allocating slug
   ID (`LF:stale-note-reference`, `DEC:store-returns-copies`,
   `deferred:no-persistence`) with a structured Subject/Claim header. No
   sequential counters, so parallel branches never race "the next number" —
@@ -313,8 +435,8 @@ protocol defines what happens when two branches grow the brain in parallel.
   contradictions, stale state, and dangling links that no single merge could
   see ([`RULES.md`](./RULES.md) §10.3).
 - **Review as governance** — because capture artifacts are files, a PR review
-  of the memory *is* the team's approval process. Bad captures get caught the
-  same way bad code does.
+  of the project knowledge *is* the team's approval process. Bad captures get
+  caught the same way bad code does.
 
 ### 🧪 Experimental: agentic provisional capture (off by default)
 
@@ -342,7 +464,7 @@ welcome.
 [GitHub Spec Kit](https://github.com/github/spec-kit) and Salvor solve
 adjacent problems and work well together: Spec Kit governs the future-facing
 spec → plan → tasks → implement workflow for *what should be built*; Salvor
-preserves the longitudinal engineering memory accumulated while the system
+preserves the longitudinal engineering knowledge accumulated while the system
 evolves. Use Spec Kit to drive a feature forward; use Salvor so the reasoning,
 failures, and validated learnings from building it survive into every later
 session. More in **[`docs/FAQ.md`](./docs/FAQ.md)**.
@@ -354,11 +476,11 @@ person or a runtime; Salvor serves a repository. By job-to-be-done:
 
 | Tool | Primary job | Relationship to Salvor |
 |---|---|---|
-| [GitHub Spec Kit](https://github.com/github/spec-kit) | Future-facing spec → plan → tasks → implement workflow | Complementary: Spec Kit governs what should be built; Salvor preserves the longitudinal engineering memory accumulated while the system evolves. |
-| [Serena](https://github.com/oraios/serena) | Semantic code intelligence, with an optional memory substrate | Salvor decides *what gets promoted* to durable memory and owns the canonical artifacts; Serena's memories serve as retrieval pointers. |
+| [GitHub Spec Kit](https://github.com/github/spec-kit) | Future-facing spec → plan → tasks → implement workflow | Complementary: Spec Kit governs what should be built; Salvor preserves the longitudinal engineering knowledge accumulated while the system evolves. |
+| [Serena](https://github.com/oraios/serena) | Semantic code intelligence, with an optional memory substrate | Salvor decides *what gets promoted* to durable engineering knowledge and owns the canonical artifacts; Serena's memories serve as retrieval pointers. |
 | [GitNexus](https://github.com/abhigyanpatwari/GitNexus) | Code knowledge graph + impact analysis | GitNexus remembers how the code is connected. Salvor preserves why the team made it that way. |
 | Vendor memory (Claude Code / Codex / Gemini project instructions & memories) | Personal, tool-specific continuity and preferences | Salvor is the repository's reviewed, shared record — it survives vendor switches and is diffable in PRs. Use both. |
-| [Cline Memory Bank](https://docs.cline.bot/prompting/cline-memory-bank) | Structured, repository-local documentation methodology usable across AI tools (commands and integrations vary) | Closest cousin — both use structured repository-local Markdown for continuity. Salvor additionally defines gated promotion into durable team knowledge, separate decision/learning/failure/deferred lifecycles, canonical ownership rules, and optional Serena/GitNexus orchestration. |
+| [Cline Memory Bank](https://docs.cline.bot/prompting/cline-memory-bank) | Structured, repository-local documentation methodology usable across AI tools (commands and integrations vary) | Adjacent approach — both use structured repository-local Markdown for continuity. Salvor additionally defines gated promotion into durable team knowledge, separate decision/learning/failure/deferred lifecycles, canonical ownership rules, and optional Serena/GitNexus orchestration. |
 | [Obsidian](https://obsidian.md) | General knowledge vault shaped around a person or team | Salvor is a repo-local protocol with capture gates and code-intelligence integration, not a general vault. |
 | [Google ADK](https://google.github.io/adk-docs/) | Runtime framework for *building* agents | Orthogonal: Salvor helps teams retain repo reasoning while building software — including ADK software. |
 
@@ -369,7 +491,8 @@ Deeper comparisons (RAG, plain `CLAUDE.md`, memory runtimes, and more) in
 
 Salvor pays off where knowledge compounds:
 
-- **Repeated agent use in the same repo** — the memory grows with every session.
+- **Repeated agent use in the same repo** — project knowledge grows with every
+  session.
 - **Long-lived, multi-component codebases** — where "why is it like this?" is a
   daily question.
 - **Distributed teams** — reviewed knowledge instead of tribal knowledge.
@@ -387,10 +510,22 @@ agent and model provider may still process repository content according to
 their configuration and data-handling policies.
 
 Never store secrets, credentials, or keys in `.salvor/` — it is committed,
-shared project memory. And because Salvor files are agent-readable
+shared project knowledge. And because Salvor files are agent-readable
 instructions, review PRs that touch them with the same rigor as code. See
 [`SECURITY.md`](./SECURITY.md) for the trust boundaries, prompt-injection
 guidance, and reporting details.
+
+## Community & feedback
+
+Salvor v1.0.0-beta is an intentionally early release. Bugs, rough edges,
+questions, suggestions, and real-world results are all useful.
+
+Join the shared conversation in
+[GitHub Discussions](https://github.com/dwasyluk/salvor/discussions). If GitHub
+isn't your thing, reply to or mention
+[`@blockchaindan`](https://x.com/blockchaindan) on X. Actionable bugs and scoped
+features move into [GitHub Issues](https://github.com/dwasyluk/salvor/issues);
+pull requests are welcome.
 
 ## Contributing & roadmap
 
@@ -409,7 +544,7 @@ it is to build the harder pieces together — issues tagged
   learnings up to the project's shared L1/L2, gated by the same capture classes
   and deduplicated through the same §10.4 semantic comparison.
 - **🩺 Salvor health checks** — a tooling wrapper for the [`RULES.md`](./RULES.md) §10.3
-  Brain Audit: lint the memory for semantic duplicates/contradictions, stale L1
+  Brain Audit: lint project knowledge for semantic duplicates/contradictions, stale L1
   lines, unresolved
   `LF:` entries, broken links, aging deferred findings, drift in the hand-authored
   GitNexus routing note, unsafe/unexpected `.gitnexusrc` changes, stale or missing
@@ -418,13 +553,13 @@ it is to build the harder pieces together — issues tagged
 - **🔌 More vendor adapters** — harden the Codex & Gemini entrypoints; add
   Cursor / OpenCode / others.
 - **🧩 Vendor plugins** — a Claude Code plugin (a convenience wrapper over the
-  same universal `SETUP_PROMPT.md`) is in active development and ships with
-  v1.1.0. Always a wrapper, never a
-  replacement for the paste-anywhere floor that keeps Salvor vendor-portable.
-  It will also evaluate packaging per the emerging cross-vendor
+  same universal `SETUP_PROMPT.md`) is targeted for v1.1.0. Always a wrapper,
+  never a replacement for the paste-anywhere floor that keeps Salvor
+  vendor-portable. The project will also evaluate packaging against the
+  emerging cross-vendor
   [Agent Plugins](https://agent-plugins.org/specification) standard (skills +
-  MCP servers in one portable folder), so a single package could serve Claude
-  Code alongside ChatGPT, Codex, Cursor, Copilot, Kiro, and VS Code.
+  MCP servers in one portable folder) to reduce duplication across clients
+  that support it, while retaining vendor-specific wrappers where required.
   Codex and Gemini equivalents are open for contributors.
 
 Contributions welcome beyond the roadmap too:
@@ -438,14 +573,13 @@ Contributions welcome beyond the roadmap too:
 
 ## Why "Salvor"?
 
-A *salvor* is one who salvages — someone who recovers what would otherwise be
-lost. For the [Foundation](https://en.wikipedia.org/wiki/Foundation_(TV_series))
-fans: Salvor Hardin kept the Foundation alive through its first crisis with
-knowledge rather than force, and the Prime Radiant — represented here by
-Salvor's canonical geometric mark — is the device that carries the accumulated plan
-across generations. A
-version-controlled record that preserves a codebase's reasoning across resets
-is the same idea, scaled down to your repo.
+A *salvor* is someone who recovers what would otherwise be lost. The name is
+also an unofficial nod to Salvor Hardin from Isaac Asimov's
+[*Foundation* series](https://en.wikipedia.org/wiki/Foundation_series) — a
+story deeply interested in how knowledge survives as people, systems, and
+circumstances change. At repository scale, the ambition is humbler than
+psychohistory: keep the project's hard-won engineering knowledge alive long
+enough for the next agent to use it. No association or endorsement is implied.
 
 ## Docs
 

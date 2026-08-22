@@ -11,6 +11,11 @@ Markdown documentation comprising root `README.md` and the complete `docs/` dire
 
 ## Architecture Notes
 - Keep public claims consistent with `../SETUP_PROMPT.md` and current implementation status.
+- The approved public category is **repo-native engineering knowledge layer**;
+  **persistent engineering cognition** names the durable, governed knowledge
+  carried across sessions, contributors, branches, and models. Keep the public
+  distinction explicit: Git preserves what changed; Salvor preserves what the
+  project learned.
 - Knowledge adoption is current beta behavior, not roadmap work: setup-time and
   later requests use one preservation-first, section-level mapping flow with
   explicit canonical ownership and untouched originals by default.

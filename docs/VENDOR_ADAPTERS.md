@@ -1,10 +1,12 @@
 # Vendor adapters
 
-**Goal:** use Salvor with whatever LLM CLI you like — don't get locked into one.
+**Goal:** use Salvor's repo-native engineering knowledge layer with a supported
+LLM CLI without locking the project brain to one vendor.
 
 **How realistic is that?** The honest split:
 
-- **Salvor Core is vendor-agnostic repository-local Markdown and governance.**
+- **Salvor Core is a vendor-agnostic engineering knowledge layer built from
+  repository-local Markdown and governance.**
   No LLM vendor owns the shared brain. The substance lives under `.salvor/` —
   L1/L2 (`active_state.md` /
   `active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
@@ -29,9 +31,9 @@ So Salvor ships a **vendor-agnostic core + all three thin entrypoint adapters by
 default**: `CLAUDE.md` is the canonical cross-vendor hub, while thin `AGENTS.md`
 and `GEMINI.md` adapters route other supported agents to the same shared brain.
 The vendor-named hub filename reflects the most deeply dogfooded adapter; it
-does not make the canonical repository memory Claude-only. Those adapters make
+does not make the canonical repository knowledge Claude-only. Those adapters make
 the shared brain vendor-portable, so supported agents can be switched without
-migrating the repository memory. Setup generates contract-tested entrypoints for
+migrating the project knowledge. Setup generates contract-tested entrypoints for
 Claude Code, Codex, and GEMINI.md-compatible clients. Claude Code is the most deeply
 dogfooded path; the Codex and Google adapters are wired and documented but less
 exercised. Other agents can integrate through compatible thin adapters.

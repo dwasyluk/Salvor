@@ -17,7 +17,7 @@ install, so nothing about how you installed constrains how you upgrade.
 | **Knowledge** | Your artifacts (`decisions/`, `domain-learnings/`, `postmortems/`, `archive/`), L1/L2 content, `DOMAIN_REF.md` facts, deferred entries | **Never touched** — you own it |
 
 An upgrade replaces Salvor's instructions, never your team's accumulated
-memory. Where you have customized generated RULES text (Strict defaults are
+project knowledge. Where you have customized generated RULES text (Strict defaults are
 explicitly editable), the upgrade is proposed as a three-way merge — your
 version vs the old template vs the new template — and any conflict is yours to
 decide, per the [`RULES.md`](../RULES.md) §10.2 governance rule. Nothing is written without

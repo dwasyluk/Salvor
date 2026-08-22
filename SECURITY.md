@@ -3,7 +3,7 @@
 ## What Salvor is (and isn't)
 
 Salvor is a set of files and prompts you copy into your own repository — a
-repo-native memory and governance protocol for coding agents. **Salvor Core
+repo-native engineering knowledge and governance protocol for coding agents. **Salvor Core
 itself introduces no hosted service, account, or telemetry.** Everything Salvor
 produces lives in your git repository, under your control. (Your coding agent
 and model provider, and any optional third-party MCP tools you enable, have

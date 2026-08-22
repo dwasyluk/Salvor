@@ -1,15 +1,22 @@
 # Salvor architecture
 
-Salvor is not a tool you run; it's a **disciplined structure** you add to a repo
-so a supported LLM coding agent, through a compatible entrypoint, works against
-the same accumulated, version-controlled knowledge instead of starting cold
-every time.
+Salvor is a **repo-native engineering knowledge layer and governance protocol**:
+a disciplined structure you add to a repository so a supported coding agent,
+through a compatible entrypoint, works against the same accumulated,
+version-controlled knowledge instead of starting cold every time.
 
 Out of the box, an LLM CLI carries little context from one session to the next.
 The rationale a teammate captured two months ago (in another session, maybe
 another vendor) is often re-derived, re-litigated, or lost. Salvor's job is to
 reduce that repeated context reconstruction by making the knowledge **persist,
 propagate, and compound**, all inside git.
+
+We use **persistent engineering cognition** to describe the broader capability:
+durable, governed project knowledge that carries forward decisions, rationale,
+failures, constraints, rules, and provenance across sessions, contributors,
+branches, and models. It is Salvor's term for an emerging construct, not an
+asserted industry-standard category. Salvor externalizes project cognition; it
+does not modify an agent's intrinsic reasoning or intelligence.
 
 ## The five pillars
 
@@ -43,7 +50,7 @@ cheap. Both are git-tracked.
 ### 3. RULES.md — the enforcement layer
 The documents above are inert without discipline. [`RULES.md`](../RULES.md) is what makes the
 knowledge compound rather than decay:
-- **§0 Task Termination Protocol** — keeps reviewed memory and component
+- **§0 Task Termination Protocol** — keeps reviewed project knowledge and component
   context synchronized: nothing is "done" until L1/L2 + spokes are synced. Optional
   Strict defaults can also enforce project-specific version counters and parity
   rules (e.g. bumping `VERSION.md`); per-component versioning and `APP_NAME`
@@ -140,6 +147,10 @@ Existing documentation remains project-owned and unchanged by default. It can:
 This is adoption rather than bulk copying: Salvor never makes an entire
 `docs/` tree canonical by duplication and never silently promotes existing
 Serena memories, agent notes, or project documents.
+
+Deliberate adoption can make a mature repository's project brain useful sooner,
+but it cannot recover rationale that no source or operator provides. Structure
+can often be derived; rationale needs evidence.
 
 ### One owner per durable fact
 
