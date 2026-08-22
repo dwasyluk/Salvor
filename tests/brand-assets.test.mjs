@@ -159,7 +159,7 @@ test("README lockup and social canvases use canonical generated compositions", (
   assert.match(social, /data-wordmark="outlined"/);
   assert.match(social, /data-typography="sf-mono-800-0\.22em"/);
   assert.match(social, /Your repo remembers\./);
-  assert.match(social, /Version-controlled engineering memory for coding agents\./);
+  assert.match(social, /Engineering knowledge layer for coding agents and software teams\./);
   assert.doesNotMatch(social, /<text\b/);
   const wordmark = read("assets/brand/generated/salvor-wordmark-black.svg");
   assert.match(wordmark, /data-typography="sf-mono-800-0\.22em"/);

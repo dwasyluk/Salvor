@@ -1,3 +1,22 @@
+## 2026-08-22 — Approved README positioning propagated downstream
+
+The operator-approved README is now the canonical narrative for the final beta:
+Salvor is a **repo-native engineering knowledge layer for coding agents and
+software teams**, and **persistent engineering cognition** names the durable,
+governed knowledge a project carries across sessions, contributors, branches,
+and models. The aligned public hierarchy is the engineering problem, Salvor's
+knowledge-layer answer, compounding across three adoption states, inspectable
+dogfooding, then current validation with the measured null and negative results
+kept binding.
+
+Current-facing docs, FAQ, architecture, vendor guidance, upgrading guidance,
+security language, GitHub Pages copy, metadata, contract expectations, and
+generated social cards now follow that narrative. Benchmark source data,
+methodology, report, and release history remain unchanged. The interactive hero
+burn is preservation-locked: its WebGL implementation, CSS geometry, hero
+artwork, interaction wiring, smoke behavior, and burn-field contracts were not
+edited. Feature-branch version history records `GHPAGE:pending DOCS:pending`;
+integration assigns counters under RULES §3/§10.2.
 
 ## 2026-08-19 (early hours) — Benchmark matrix executed: baselines complete, coordination penalty replicated
 

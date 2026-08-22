@@ -6,12 +6,12 @@ import path from "node:path";
 const root = process.cwd();
 const read = (file) => readFile(path.join(root, file), "utf8");
 
-test("the README exposes GitHub Discussions and X feedback before the product overview", async () => {
+test("the README exposes GitHub Discussions and X feedback in the public narrative", async () => {
   const readme = await read("README.md");
   const communityIndex = readme.indexOf("## Community & feedback");
-  const problemIndex = readme.indexOf("## The problem");
+  const contributingIndex = readme.indexOf("## Contributing & roadmap");
 
-  assert.ok(communityIndex > 0 && communityIndex < problemIndex);
+  assert.ok(communityIndex > 0 && communityIndex < contributingIndex);
   assert.match(readme, /\[GitHub Discussions\]\(https:\/\/github\.com\/dwasyluk\/salvor\/discussions\)/);
   assert.match(readme, /\[`@blockchaindan`\]\(https:\/\/x\.com\/blockchaindan\)/);
 });
@@ -76,7 +76,7 @@ test("the site mirrors the canonical framework taxonomy and governance", async (
     /Continued Learning/i,
     /Learned Failure/i,
     /Deferred Finding/i,
-    /RULES\.md\s+keeps reviewed memory and component context synchronized/i,
+    /RULES\.md\s+keeps reviewed project knowledge and component context synchronized/i,
     /Optional Strict defaults can also enforce project-specific version counters/i,
     /Serena \+ GitNexus/i,
   ]) {
@@ -349,23 +349,35 @@ test("the ghpage is independently versioned and its responsive sync SOP is share
   }
 });
 
-test("the hero keeps the tagline and leads with the brain + rationale framing", async () => {
+test("the hero keeps the tagline and leads with the canonical category framing", async () => {
   const html = await read("site/index.html");
   assert.match(html, /class="hero-tagline">Your repo remembers<span>\.<\/span>/);
   const flatHtml = html.replace(/\s+/g, " ");
-  assert.match(flatHtml, /A brain, not just memory — the why, not just the what\./);
-  assert.match(flatHtml, /reviewed in Git, merging like code/);
-  assert.match(flatHtml, /starts from what the team learned\. Prompt-first\. Vendor-portable\./);
-  assert.match(flatHtml, /<meta name="description" content="The version-controlled engineering brain for coding agents — the why, not just the what\." \/>/);
+  assert.match(flatHtml, /An engineering knowledge layer for coding agents and software teams\./);
+  assert.match(flatHtml, /Decisions, failures, and rationale — reviewed in Git\./);
+  assert.match(flatHtml, /Every session starts from what the project learned\. Vendor-portable\./);
+  assert.match(flatHtml, /<meta name="description" content="A repo-native engineering knowledge layer for coding agents and software teams\." \/>/);
 });
 
 test("the site presents the distributed brain honestly: slug IDs, reconcile, audit", async () => {
   const html = (await read("site/index.html")).replace(/\s+/g, " ");
-  assert.match(html, /Collision-free slug knowledge IDs/i);
-  assert.match(html, /reconcile at merge and pull points/i);
+  assert.match(html, /self-allocating slug ID/i);
+  assert.match(html, /Brain Reconcile runs at merge and pull points/i);
   assert.match(html, /recurring brain audit/i);
   assert.match(html, /LF:stale-note-reference/);
   assert.match(html, /duplicates and contradictions are surfaced for your decision, never shipped silently/i);
+});
+
+test("the site carries the canonical cognition, compounding, dogfood, and validation hierarchy", async () => {
+  const html = (await read("site/index.html")).replace(/\s+/g, " ");
+  for (const id of ["knowledge", "compounds", "dogfood", "measured"]) {
+    assert.match(html, new RegExp(`<section[^>]+id="${id}"`));
+  }
+  assert.match(html, /Persistent engineering cognition[\s\S]{0,180}durable, governed knowledge/i);
+  assert.match(html, /Structure can often be derived\. Rationale needs evidence\./i);
+  assert.match(html, /inspectable dogfooding examples, not an independent benchmark/i);
+  assert.match(html, /scored null and negative results remain binding/i);
+  assert.match(html, /advanced benchmarking RFC/i);
 });
 
 test("the site flags agentic capture as experimental and off by default", async () => {

@@ -10,6 +10,9 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 
 ## Architecture Notes
 - The repository sources above are authoritative; the site is their semantic presentation mirror.
+- Mirror the approved category as **repo-native engineering knowledge layer**
+  and treat **persistent engineering cognition** as Salvor's term for durable,
+  governed knowledge across sessions, contributors, branches, and models.
 - Existing mapped copy must update whenever its canonical sources change.
 - The Primary Path presents existing-knowledge adoption as current beta
   behavior: a read-only inventory during setup and the same section-level flow
