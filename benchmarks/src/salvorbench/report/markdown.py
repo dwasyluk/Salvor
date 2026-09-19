@@ -32,7 +32,16 @@ def render(summary: dict[str, Any]) -> str:
     conds = summary.get("conditions") or {}
     complete = summary.get("complete")
 
-    parts: list[str] = ["# Benchmark report", ""]
+    parts: list[str] = [
+        "# Benchmark report",
+        "",
+        "> **Scope:** This beta is an exploratory short-horizon task benchmark. It",
+        "> does not directly instantiate Salvor's mature-project longitudinal",
+        "> knowledge model and should not be interpreted as a direct test of",
+        "> long-term knowledge compounding. Its results remain binding for the",
+        "> treatment that ran.",
+        "",
+    ]
 
     if not complete:
         ran = ", ".join(sorted(conds)) or "none"

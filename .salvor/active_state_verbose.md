@@ -1,3 +1,51 @@
+## 2026-09-19 — Longitudinal-validation framing and official X destination
+
+The final feature-branch correction removes the public scorecard framing without
+erasing the exploratory record. README and GitHub Pages now state the narrower
+claim: Salvor's product hypothesis concerns reviewed engineering knowledge that
+compounds across real project history, while the archived beta is a
+short-horizon exploratory task benchmark and is not direct validation of that
+longitudinal value proposition. The archived methodology, report, raw results,
+and derived arm values remain intact and reproducible. The public site keeps its
+legacy `#measured` anchor for link compatibility but presents a compact
+RESEARCH STATUS composition, with pinned methodology/report evidence and the
+live advanced-benchmarking RFC instead of oversized scorecards.
+
+The claim audit used current primary sources for LongMemEval-V2, MemGym, and
+AgingBench. Those methods cover important adjacent long-horizon, multi-session,
+and coding-agent settings; the reviewed sources do not directly reproduce the
+full mature-repository, repository-governed construct described by Salvor. The
+public wording therefore reports an open validation question rather than
+claiming either established uplift or that all relevant benchmarks are useless.
+
+The official project account, `@SalvorKnows`, is added exactly once to the
+README Community area and once to the site's secondary footer navigation. It is
+described as a channel for project updates, release notes, community discussion,
+and ongoing development. Hero actions, primary navigation, canonical/OG/X-card
+metadata, social artwork, release identity, and the personal contributor handle
+remain unchanged.
+
+Regression-first contracts failed against the prior scorecard/community state,
+then passed after the bounded implementation. Required rendered checks preserve
+the approved hero fold at 140px (1440×1000), 244px (768×1024), 80px
+(360×780), and 50px (320×568), with zero horizontal overflow. The research
+composition is readable at each canonical viewport, footer links remain
+keyboard reachable with the existing visible focus treatment, and the external
+indicator stays with its label. Source verification passes 185/185
+unit/contract tests, 86/86 benchmark tests, 35/35 Playwright tests, 11/11
+release-audit gates, deterministic brand generation, zero npm vulnerabilities,
+report-regeneration parity, external X/RFC reachability, and `git diff --check`.
+The replacement archive is assembled strictly from the tracked release
+manifest; final archive identity and clean-extraction results remain external
+report data to avoid self-reference.
+
+L1, README, site, benchmark spoke, docs/site spokes, CHANGELOG, and VERSION
+history are synchronized for this correction. Existing Serena memories remain
+canonical routing pointers and contain no superseded benchmark or community
+state, so no independent memory copy was added. Component counters remain
+pending until the feature is integrated through the required dev-first
+ceremony.
+
 ## 2026-09-19 — Feature-branch finalization and merge-readiness gate
 
 The independently approved r3.3 candidate was re-audited without reopening its

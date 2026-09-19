@@ -34,7 +34,11 @@ Markdown documentation comprising root `README.md` and the complete `docs/` dire
   public distributable documentation. Shipped tests must enforce roadmap
   invariants against packaged public sources such as the README instead of
   reading that internal file.
-- Public feedback routing is owned by the root README and `CONTRIBUTING.md`: GitHub Discussions is the shared community hub, X `@blockchaindan` is the secondary no-GitHub path, and actionable work moves to Issues/PRs.
+- Public feedback routing is owned by the root README and `CONTRIBUTING.md`: GitHub Discussions is the shared community hub, the official `@SalvorKnows` X account is a secondary project-updates/community channel, and actionable work moves to Issues/PRs.
+- The README's primary validation narrative is longitudinal and explicitly
+  open. Keep the exploratory short-horizon beta public under `benchmarks/`, but
+  do not present its score table as validation of mature-repository knowledge
+  compounding.
 - README and social identity use the generated regular-logo/wordmark family; favicon and touch-icon consumers use the small-logo family. The adaptive favicon may add theme CSS to a generated derivative, but it must preserve the canonical `LOGO-SM.svg` geometry and source bytes. Never restore or independently redraw retired W10, badge, gem, or node-sigil assets.
 - The README may use the operator-supplied Foundation-inspired artwork only as
   a single personality flourish after `Why "Salvor"?`; keep it subordinate to

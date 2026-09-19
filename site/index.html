@@ -73,7 +73,7 @@
           </a>
           <nav class="desktop-nav" aria-label="Primary navigation">
             <a href="#why">WHY</a>
-            <a href="#measured">BENCH</a>
+            <a href="#measured">RESEARCH</a>
             <a href="#use">USE</a>
             <a href="#claude">ROADMAP</a>
             <a href="https://github.com/dwasyluk/salvor/discussions">COMMUNITY ↗</a>
@@ -84,7 +84,7 @@
           </button>
           <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" hidden>
             <a href="#why">WHY</a>
-            <a href="#measured">BENCH</a>
+            <a href="#measured">RESEARCH</a>
             <a href="#use">USE</a>
             <a href="#claude">ROADMAP</a>
             <a href="https://github.com/dwasyluk/salvor/discussions">COMMUNITY ↗</a>
@@ -379,35 +379,22 @@ $ # Salvor scaffolds the rest</code></pre>
             <p class="evidence-note"><a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/README.md#salvor-on-salvor">Inspect the source history <span aria-hidden="true">→</span></a></p>
           </div>
 
-          <div class="evidence-part measured-panel" id="measured" aria-labelledby="measured-title">
-            <div class="evidence-heading">
-              <p class="evidence-kicker">CURRENT VALIDATION</p>
-              <h2 id="measured-title">The measured results are null, negative, and published.</h2>
-              <p>One run per condition is evidence about this treatment, not a broad performance guarantee. The constrained beta establishes what happened and leaves the longitudinal question open.</p>
+          <div class="evidence-part research-status" id="measured" aria-labelledby="research-status-title">
+            <p class="evidence-kicker">RESEARCH STATUS</p>
+            <div class="research-status-layout">
+              <h2 id="research-status-title">Longitudinal validation is still open.</h2>
+              <div class="research-status-copy">
+                <p>Salvor is designed around engineering knowledge that compounds across real project history: decisions, domain learning, failed approaches, and deferred findings reused by later sessions and contributors.</p>
+                <p>Long-horizon agent-memory evaluation is advancing quickly. The methods reviewed cover important adjacent settings, including coding and multi-session reliability, but do not directly reproduce this full mature-repository, repository-governed construct.</p>
+                <p>As suitable coding-oriented longitudinal evaluation methods mature, we will publish reproducible results here.</p>
+              </div>
             </div>
-            <div class="metric-grid">
-              <article>
-                <p class="metric-status">NULL · SINGLE AGENT</p>
-                <p class="metric-value">19/19 <span>vs</span> 18/19</p>
-                <p>S1 resolved 19/19; S2 and S3 each resolved 18/19 and used more inference. With one run per condition and a saturated baseline, no positive uplift was established.</p>
-              </article>
-              <article>
-                <p class="metric-status">NEGATIVE · MULTI-AGENT</p>
-                <p class="metric-value">54% <span>→</span> 14%</p>
-                <p>C1 resolved 27/50. C2 and Salvor-treated C3 each resolved 7/50, with no recovery of the coordination gap and additional treatment cost and time.</p>
-              </article>
-              <article>
-                <p class="metric-status">OBSERVED · C3 TELEMETRY</p>
-                <p class="metric-value">1 / 0 / 0</p>
-                <p>Across 100 C3 invocations: one brain read, zero writes, and zero MCP calls. Availability did not become utilization and does not change the scored negative result.</p>
-              </article>
-              <article>
-                <p class="metric-status">OPEN · LONGITUDINAL</p>
-                <p class="metric-value">NOT YET TESTED</p>
-                <p>The minutes-old, task-blind benchmark brain did not naturally create mature project history. A longer-horizon design is still needed to test compounding knowledge directly.</p>
-              </article>
-            </div>
-            <p class="method-note">The clean room used frozen task populations, hash-chained cost and state ledgers, task-blind machine-built brains, leakage audits, and third-party evaluators. Read the <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/benchmarks/METHODOLOGY.md">methodology</a>, <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/benchmarks/results/beta/REPORT.md">full report</a>, and <a href="https://github.com/dwasyluk/salvor/issues/5">advanced benchmarking RFC</a>.</p>
+            <p class="research-note">Earlier exploratory short-horizon experiments remain archived for reproducibility, but they are not treated as longitudinal validation of Salvor.</p>
+            <nav class="research-links" aria-label="Research resources">
+              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/benchmarks/METHODOLOGY.md">Methodology <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/benchmarks/results/beta/REPORT.md">Exploratory beta report <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/dwasyluk/salvor/issues/5">Advanced benchmarking RFC <span aria-hidden="true">→</span></a>
+            </nav>
           </div>
         </section>
 
@@ -439,6 +426,7 @@ $ # Salvor scaffolds the rest</code></pre>
         <div class="footer-copy"><p>Open source. Community powered.<br />Make your project's knowledge compound.</p><p>v1.0.0-beta &nbsp;·&nbsp; MIT License</p></div>
         <nav aria-label="Footer navigation">
           <a href="https://github.com/dwasyluk/salvor/discussions">Community ↗</a>
+          <a href="https://x.com/SalvorKnows">X · @SalvorKnows ↗</a>
           <a href="https://github.com/dwasyluk/salvor">GitHub ↗</a>
           <a href="https://github.com/dwasyluk/salvor/tree/v1.0.0-beta/docs">Docs</a>
           <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/SETUP_PROMPT.md">SETUP_PROMPT.md</a>

@@ -12,6 +12,13 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Changed
+- Reframed the exploratory short-horizon beta as an archived research artifact
+  rather than primary longitudinal product validation: the README and Pages now
+  state that longitudinal validation remains open, while benchmark results stay
+  public with an explicit scope notice.
+- Added the official `@SalvorKnows` X account once in README Community and once
+  in the site footer as a secondary project channel, without changing primary
+  navigation, hero actions, card metadata, or release identity.
 - Corrected the GitHub Pages narrative and visual hierarchy: one numbered
   problem triptych now leads into distinct manifesto, adoption-rail,
   dogfood-ledger, and measured-evidence compositions.

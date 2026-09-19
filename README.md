@@ -275,7 +275,6 @@ shows the practical handoff Salvor is designed to preserve:
 | A feature was merged directly to the release branch and inverted the intended promotion flow. | [`RULES.md`](./RULES.md) now carries the dev-first branch/PR SOP; [`DEC:dev-first-branch-flow`](./.salvor/decisions/2026-08-18-dev-first-branch-flow.md) preserves why. | Branch from `dev`, reconcile before review, merge back to `dev`, and let the reviewer delete the branch — without rediscovering the policy. |
 | Installing into a mature repository risked overwriting the knowledge Salvor was meant to protect. | The [preservation-first adoption decision](./.salvor/decisions/2026-07-30-preservation-first-existing-repository-adoption.md) records the approved invariant. | Reuse existing hubs, rules, Serena/GitNexus state, and docs in place; show an adoption map before mutation. |
 | GitNexus versions differed in whether analysis injected context files or generated skills. | [`SETUP_PROMPT.md`](./SETUP_PROMPT.md) and the project hub retain the tested capability-detection and index-only rationale. | Detect `--index-only`; use pure indexing when supported; never let a derived code index silently rewrite the canonical brain. |
-| The beta benchmark exposed leakage, scoring, cost, and saturation traps while it was being built. | [`benchmarks/METHODOLOGY.md`](./benchmarks/METHODOLOGY.md) preserves the anti-contamination rules, rejected shortcuts, and interpretation limits. | Future runs inherit the safeguards instead of rebuilding — or repeating — the same methodological failures. |
 
 These examples matter not because Salvor knew them at installation, but because
 the repository accumulated them through actual engineering work and later
@@ -286,88 +285,25 @@ failure; the repository keeps its reviewed rationale; the next agent receives
 it when relevant. That reduces rediscovery and regression risk. It does not, by
 itself, prove a universal performance uplift.
 
-## Current validation: the beta benchmark
+## Longitudinal validation
 
-Salvor ships with an auditable [clean-room benchmark harness](benchmarks/). We
-built it to test the hypothesis rather than assume the product works, and to
-publish null or negative results without hiding them. It measures the
-**recommended Salvor stack** (Salvor + Serena + GitNexus), not Salvor Core in
-isolation, against matched treatments on two third-party benchmarks. The
-SWE-Bench-CL curriculum supplies sequencing and difficulty metadata only;
-patches are scored by the official SWE-bench harness against
-SWE-bench_Verified, and the upstream SWE-Bench-CL evaluator is never run.
-CooperBench uses its own deterministic, test-based evaluator. The
-[`methodology is designed for scrutiny`](benchmarks/METHODOLOGY.md); the
-canonical numbers come from
-[`summary.json`](benchmarks/results/beta/summary.json) and the
-[`full report`](benchmarks/results/beta/REPORT.md).
+Salvor's core hypothesis is longitudinal: reviewed engineering knowledge
+accumulated across sessions, contributors, decisions, failures, and project
+history should remain useful to later work.
 
-**Beta results — one run per condition, one vendor/model
-(`claude-sonnet-5`), no confidence intervals:**
+Long-horizon agent-memory evaluation is evolving rapidly. Existing methods
+cover important adjacent settings, including coding and multi-session
+reliability, but we have not yet established Salvor's effect with an evaluation
+that directly reproduces its mature-repository, repository-governed knowledge
+model. As suitable coding-oriented longitudinal methods mature, we will publish
+reproducible results here.
 
-| Arm | Setup | Resolved | Cost |
-|---|---|---:|---:|
-| S1 | Stateless single agent, 19-task pytest curriculum (official SWE-bench scoring) | **19/19 (100.0%)** | $5.91 |
-| S2 | Ported SWE-Bench-CL semantic-memory treatment | 18/19 (94.7%) | $7.33 |
-| S3 | Salvor stack, persistent brain chain | 18/19 (94.7%) | $17.32 |
-| C1 | Solo agent, CooperBench `flash` | **27/50 (54.0%)** | $16.50 |
-| C2 | Two-agent cooperative baseline | 7/50 (14.0%) | $31.42 |
-| C3 | Two agents + live shared Salvor brain | 7/50 (14.0%) | $33.73 |
-
-The [`canonical report`](benchmarks/results/beta/REPORT.md) and
-[`summary`](benchmarks/results/beta/summary.json) publish the complete arm-level
-totals and timing. The [`methodology`](benchmarks/METHODOLOGY.md) documents how
-the harness retains token categories, per-task records and trajectories, raw
-evaluator output, and bootstrap/lifecycle overhead.
-
-### What the single-agent result says
-
-The stateless S1 condition resolved 100% of the selected curriculum. S2 and S3
-each resolved 18/19, missed different tasks, and used more inference. With one
-run per condition, that observed one-task difference is not enough to estimate
-a reliable treatment effect. The stateless arm saturated the curriculum, so
-the task set has essentially no useful headroom for demonstrating positive
-resolution uplift at this model capability. It is not evidence that Salvor
-helps, and it is not evidence that Salvor never can.
-
-### What the multi-agent result says
-
-CooperBench retained headroom and produced a clear result. Solo performance was
-27/50 (54.0%); both the cooperative baseline and the Salvor treatment resolved
-7/50 (14.0%). The coordination gap was **-40.0 percentage points**, and Salvor
-recovered **0%** of it. For the 49 pairs with merge-conflict telemetry, 36 C2
-pairs and 34 C3 pairs conflicted. C3 also used more tokens, cost more, and took
-longer.
-
-The treatment was available — shared volumes were mounted and Serena/GitNexus
-reported connected — but telemetry shows the agents scarcely used it: one brain
-read, zero writes, and no MCP calls across 100 C3 invocations. **Availability is
-not utilization.** That is important context for what this run actually
-exercised, but it does not change the scored result: C3 matched C2 at 7/50.
-
-### What this benchmark cannot say
-
-Short coding benchmarks can demonstrate memory effects when earlier knowledge
-is deliberately made relevant to later tasks. This beta's clean-room brain was
-minutes old and task-blind, however, so it could not contain the part of the
-product that grows only through real project history: an old learned failure
-becoming relevant again, architectural rationale surviving many refactors,
-SOPs evolving across contributors, or vendor/runtime knowledge earned
-experimentally over weeks and months. Most standard coding benchmarks do not
-naturally create that mature, longitudinal project history. These cold-start
-conditions also do not model project aging, context rotation, changing
-requirements, external dependencies, distributed contributors, or
-multi-vendor teams.
-
-The scored null and negative results remain binding for the treatment that was
-run. They answer the experiment we ran; they do not answer the longitudinal
-question Salvor is designed to address. The open, post-beta
-[`advanced benchmarking RFC`](https://github.com/dwasyluk/salvor/issues/5)
-proposes a protocol-neutral longitudinal harness to test whether accumulated
-engineering knowledge improves fresh-agent performance as real projects evolve
-across releases, sessions, requirements, dependencies, and collaborating
-agents. It is research, not a shipped capability, and the beta does not wait
-for it.
+Earlier exploratory short-horizon experiments remain archived under
+[`benchmarks/`](./benchmarks/) for reproducibility and transparency. They are
+not presented as validation of Salvor's longitudinal value proposition. See the
+[`methodology`](./benchmarks/METHODOLOGY.md),
+[`exploratory beta report`](./benchmarks/results/beta/REPORT.md), and live
+[`advanced benchmarking RFC`](https://github.com/dwasyluk/salvor/issues/5).
 
 ## enhanced mode: Serena + GitNexus
 
@@ -527,11 +463,12 @@ Salvor v1.0.0-beta is an intentionally early release. Bugs, rough edges,
 questions, suggestions, and real-world results are all useful.
 
 Join the shared conversation in
-[GitHub Discussions](https://github.com/dwasyluk/salvor/discussions). If GitHub
-isn't your thing, reply to or mention
-[`@blockchaindan`](https://x.com/blockchaindan) on X. Actionable bugs and scoped
-features move into [GitHub Issues](https://github.com/dwasyluk/salvor/issues);
-pull requests are welcome.
+[GitHub Discussions](https://github.com/dwasyluk/salvor/discussions). Follow
+[`@SalvorKnows`](https://x.com/SalvorKnows) on X for project updates, release
+notes, community discussion, and ongoing Salvor development. Actionable bugs
+and scoped features move into
+[GitHub Issues](https://github.com/dwasyluk/salvor/issues); pull requests are
+welcome.
 
 ## Contributing & roadmap
 

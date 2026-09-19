@@ -203,7 +203,9 @@ for (const [name, viewport] of viewports) {
     await expect(page.locator(".hero-actions .button-primary").first()).toBeVisible();
 
     const communityHref = "https://github.com/dwasyluk/salvor/discussions";
+    const xHref = "https://x.com/SalvorKnows";
     await expect(page.locator(`a[href="${communityHref}"]`)).toHaveCount(3);
+    await expect(page.locator(`a[href="${xHref}"]`)).toHaveCount(1);
     if (viewport.width > 900) {
       await expect(page.locator(`.desktop-nav a[href="${communityHref}"]`)).toBeVisible();
       await expect(page.locator(`.mobile-menu a[href="${communityHref}"]`)).toBeHidden();
@@ -273,6 +275,11 @@ for (const [name, viewport] of viewports) {
 
     await page.locator(".site-footer").scrollIntoViewIfNeeded();
     await expect(page.locator(`.site-footer a[href="${communityHref}"]`)).toBeVisible();
+    const xLink = page.locator(`.site-footer a[href="${xHref}"]`);
+    await expect(xLink).toBeVisible();
+    await expect(xLink).toHaveText("X · @SalvorKnows ↗");
+    await xLink.focus();
+    await expect(xLink).toBeFocused();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     expect(overflow, JSON.stringify(await overflowReport(page), null, 2)).toBeLessThanOrEqual(1);
     expect(runtimeErrors).toEqual([]);
@@ -332,6 +339,31 @@ for (const [name, viewport, expectedIndent] of [
         expect(label.right).toBeLessThanOrEqual(entry.articleRight + 1);
       }
     }
+
+    const research = page.locator("#measured");
+    await research.scrollIntoViewIfNeeded();
+    await expect(research.locator("#research-status-title")).toHaveText("Longitudinal validation is still open.");
+    await expect(research.locator(".research-links a")).toHaveCount(3);
+    const researchGeometry = await research.evaluate((section) => {
+      const rect = section.getBoundingClientRect();
+      const layout = section.querySelector(".research-status-layout");
+      const copy = section.querySelector(".research-status-copy p");
+      const links = [...section.querySelectorAll(".research-links a")];
+      return {
+        left: rect.left,
+        right: rect.right,
+        height: rect.height,
+        columns: getComputedStyle(layout).gridTemplateColumns.split(" ").length,
+        copySize: Number.parseFloat(getComputedStyle(copy).fontSize),
+        linkWhiteSpace: links.map((link) => getComputedStyle(link).whiteSpace),
+      };
+    });
+    expect(researchGeometry.left).toBeGreaterThanOrEqual(0);
+    expect(researchGeometry.right).toBeLessThanOrEqual(viewport.width + 1);
+    expect(researchGeometry.height).toBeGreaterThan(200);
+    expect(researchGeometry.copySize).toBeGreaterThanOrEqual(13);
+    expect(researchGeometry.columns).toBe(viewport.width <= 640 ? 1 : 2);
+    expect(researchGeometry.linkWhiteSpace).toEqual(["nowrap", "nowrap", "nowrap"]);
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     expect(overflow, JSON.stringify(await overflowReport(page), null, 2)).toBeLessThanOrEqual(1);

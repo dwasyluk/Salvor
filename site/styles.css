@@ -604,8 +604,7 @@ h1,
 }
 
 .rail-label,
-.evidence-kicker,
-.metric-status {
+.evidence-kicker {
   color: var(--gold);
   font-size: 11px;
   font-weight: 800;
@@ -801,60 +800,59 @@ h1,
   text-decoration: none;
 }
 
-.measured-panel {
-  padding: clamp(32px, 5vw, 64px);
-  background: var(--terminal);
-  color: var(--terminal-text);
+.research-status {
+  padding: clamp(28px, 4vw, 48px) 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
 }
 
-.measured-panel .evidence-heading > p:last-child {
-  color: #c9c8c2;
-}
-
-.metric-grid {
+.research-status-layout {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  border-top: 1px solid #55595b;
-  border-left: 1px solid #55595b;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: start;
 }
 
-.metric-grid article {
-  min-width: 0;
-  padding: clamp(24px, 3vw, 38px);
-  border-right: 1px solid #55595b;
-  border-bottom: 1px solid #55595b;
-}
-
-.metric-grid p {
+.research-status h2 {
+  max-width: 13ch;
   margin: 0;
+  font-size: clamp(28px, 3.4vw, 48px);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
 }
 
-.metric-value {
-  margin: 16px 0 14px !important;
-  color: var(--terminal-text);
-  font-size: clamp(26px, 3.8vw, 54px);
+.research-status-copy {
+  display: grid;
+  gap: 12px;
+}
+
+.research-status-copy p,
+.research-note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: clamp(13px, 1.02vw, 15px);
+}
+
+.research-note {
+  max-width: 84ch;
+  margin-top: 24px;
+  padding-left: 14px;
+  border-left: 2px solid var(--gold);
+}
+
+.research-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin-top: 22px;
+}
+
+.research-links a {
+  color: var(--gold);
+  font-size: clamp(12px, 0.92vw, 14px);
   font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.055em;
-}
-
-.metric-value span {
-  color: var(--gold-hot);
-  font-size: 0.5em;
-}
-
-.metric-grid article > p:last-child,
-.method-note {
-  color: #c9c8c2;
-  font-size: clamp(12px, 0.95vw, 14px);
-}
-
-.method-note {
-  margin: 24px 0 0;
-}
-
-.method-note a {
-  color: #f0bd58;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .process-grid {
@@ -1292,6 +1290,7 @@ h1,
 
 .site-footer nav a {
   font-size: 12px;
+  white-space: nowrap;
 }
 
 /* WebGL owns the complete burn surface; WF and M stay canonical scene assets. */
@@ -1708,19 +1707,23 @@ h1,
   .case-fields dd,
   .dogfood-schema-note,
   .evidence-note,
-  .metric-grid article > p:last-child,
-  .method-note {
+  .research-status-copy p,
+  .research-note {
     font-size: 13px;
   }
 
-  .metric-grid {
+  .research-status-layout {
     grid-template-columns: 1fr;
+    gap: 18px;
   }
 
-  .measured-panel {
-    margin-right: calc(var(--gutter) * -1);
-    margin-left: calc(var(--gutter) * -1);
-    padding: 34px var(--gutter);
+  .research-status h2 {
+    max-width: 16ch;
+  }
+
+  .research-links {
+    display: grid;
+    gap: 10px;
   }
 
   .process-grid {

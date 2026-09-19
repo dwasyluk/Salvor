@@ -156,21 +156,32 @@ test("published numbers derive from the canonical summary", async (t) => {
   }
 });
 
-test("the landing page presents every completed beta result and C3 telemetry faithfully", async () => {
+test("the canonical benchmark archive preserves every completed beta result with explicit scope", async () => {
   const summary = JSON.parse(await read(SUMMARY));
   assert.equal(summary.complete, true, "public benchmark copy requires a completed canonical summary");
-  const site = (await read("site/index.html")).replace(/\s+/g, " ");
+  const [site, readme, benchmarkReadme, report, reportRenderer] = await Promise.all([
+    read("site/index.html"),
+    read("README.md"),
+    read("benchmarks/README.md"),
+    read("benchmarks/results/beta/REPORT.md"),
+    read("benchmarks/src/salvorbench/report/markdown.py"),
+  ]);
+  const scopePattern = /exploratory short-horizon task benchmark[\s\S]{0,260}does not directly (?:instantiate|test)[\s\S]{0,180}(?:mature-project longitudinal knowledge model|long-term knowledge compounding)/i;
+  const normalizeNotice = (text) => text.replace(/^>\s?/gm, "").replace(/\s+/g, " ");
 
-  assert.match(site, new RegExp(`${summary.conditions.S1.resolved}/${summary.conditions.S1.expected} <span>vs</span> ${summary.conditions.S2.resolved}/${summary.conditions.S2.expected}`));
-  assert.match(site, new RegExp(`${summary.conditions.C1.success_rate.toFixed(0)}% <span>→</span> ${summary.conditions.C3.success_rate.toFixed(0)}%`));
-  assert.match(site, /Across 100 C3 invocations: one brain read, zero writes, and zero MCP calls/i);
-  assert.match(site, /One run per condition/i);
-  assert.match(site, /saturated baseline/i);
-  assert.match(site, /hash-chained cost and state ledgers/i);
-  assert.match(site, /task-blind machine-built brains/i);
-  assert.match(site, /leakage audits/i);
-  assert.match(site, /third-party evaluators/i);
-  assert.match(site, /longitudinal question open/i);
+  for (const arm of ARMS) {
+    const condition = summary.conditions[arm];
+    assert.match(report, new RegExp(`\\*\\*${arm}\\*\\*[\\s\\S]{0,160}${condition.resolved}/${condition.evaluated}[\\s\\S]{0,80}${condition.success_rate.toFixed(1)}%`));
+  }
+  assert.match(normalizeNotice(benchmarkReadme), scopePattern);
+  assert.match(normalizeNotice(report), scopePattern);
+  assert.match(reportRenderer, /exploratory short-horizon task benchmark/i);
+
+  for (const surface of [site, readme]) {
+    assert.doesNotMatch(surface, /19\/19\s*(?:<[^>]+>)*\s*(?:vs|\|)/i);
+    assert.doesNotMatch(surface, /54%\s*(?:<[^>]+>)*\s*→\s*(?:<[^>]+>)*\s*14%/i);
+    assert.doesNotMatch(surface, /Across 100 C3 invocations/i);
+  }
 });
 
 test("isolation and integrity gates passed in the published run", async (t) => {

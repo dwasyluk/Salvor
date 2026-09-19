@@ -22,8 +22,8 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 - Keep the public sequence problem → answer → mechanics → loop → adoption →
   use → evidence → integrations. The engineering-problem section owns the
   page's only prominent numbered 1/2/3 triptych; answer, adoption, dogfood,
-  and measured evidence use distinct manifesto, rail, ledger, and metric
-  compositions rather than repeating that motif.
+  and research status use distinct manifesto, rail, ledger, and compact
+  editorial compositions rather than repeating that motif.
 - The Salvor-on-Salvor ledger presents canonical knowledge class as the parent,
   trigger metadata plus event title as one child heading, then `CAPTURED` and
   `COMPOUNDED KNOWLEDGE` as durable-result fields. Preserve its understated
@@ -43,7 +43,11 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 - Evidence used to substantiate this versioned release pins to the immutable
   `v1.0.0-beta` snapshot; live Issues, Discussions, and community destinations
   remain live rather than being release-pinned.
-- Community navigation links directly to GitHub Discussions in the desktop, mobile, and footer surfaces. The site does not link to the maintainer's X account; that secondary route is documented in the canonical README.
+- Research status keeps legacy `#measured` deep links working but presents the
+  longitudinal validation question as open. The exploratory short-horizon beta
+  remains discoverable through pinned methodology/report links and the live
+  RFC; do not restore its detailed scores as the product-validation dashboard.
+- Community navigation links directly to GitHub Discussions in the desktop, mobile, and footer surfaces. The official `@SalvorKnows` X account appears once as a secondary footer destination; it does not enter the hero or primary navigation, and the maintainer's personal X account remains outside the site.
 - Header, footer, burned-state, metadata, social, and loop marks use the generated regular-logo family. The browser favicon uses the generated adaptive small-logo SVG, whose internal `prefers-color-scheme` rule switches canonical ink from black to white; an unqualified black 32px PNG remains the compatibility fallback, and the Apple touch icon remains black. Run `npm run brand:check` and inspect `npm run brand:audit` evidence after brand-affecting changes. Hero background images are independent and must not change during a logo-only migration.
 
 ## Build and deploy

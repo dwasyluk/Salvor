@@ -13,7 +13,8 @@ test("the README exposes GitHub Discussions and X feedback in the public narrati
 
   assert.ok(communityIndex > 0 && communityIndex < contributingIndex);
   assert.match(readme, /\[GitHub Discussions\]\(https:\/\/github\.com\/dwasyluk\/salvor\/discussions\)/);
-  assert.match(readme, /\[`@blockchaindan`\]\(https:\/\/x\.com\/blockchaindan\)/);
+  assert.equal((readme.match(/https:\/\/x\.com\/SalvorKnows/g) ?? []).length, 1);
+  assert.match(readme, /\[`@SalvorKnows`\]\(https:\/\/x\.com\/SalvorKnows\)/);
 });
 
 test("canonical comparisons distinguish Claude Code Projects orchestration from Salvor governance", async () => {
@@ -35,7 +36,7 @@ test("canonical comparisons distinguish Claude Code Projects orchestration from 
   assert.match(faq, /repo-owned engineering knowledge and governance layer/i);
 });
 
-test("the site links directly to Discussions without presenting X as a site destination", async () => {
+test("the site keeps Discussions primary and exposes one official X footer destination", async () => {
   const html = await read("site/index.html");
   const discussionLinks = html.match(
     /href="https:\/\/github\.com\/dwasyluk\/salvor\/discussions"/g,
@@ -44,7 +45,11 @@ test("the site links directly to Discussions without presenting X as a site dest
   assert.equal(discussionLinks.length, 3);
   assert.equal((html.match(/>COMMUNITY ↗<\/a>/g) ?? []).length, 2);
   assert.match(html, />Community ↗<\/a>/);
+  assert.equal((html.match(/href="https:\/\/x\.com\/SalvorKnows"/g) ?? []).length, 1);
+  assert.match(html, />X · @SalvorKnows ↗<\/a>/);
   assert.doesNotMatch(html, /href="https:\/\/x\.com\/blockchaindan"/);
+  assert.match(html, /<span data-copy-label>COPY SETUP_PROMPT\.md<\/span>/);
+  assert.match(html, /> VIEW ON GITHUB ↗/);
 });
 
 test("versioned release evidence is pinned while live community destinations remain live", async () => {
@@ -413,7 +418,7 @@ test("the site presents the distributed brain honestly: slug IDs, reconcile, aud
   assert.match(html, /duplicates and contradictions are surfaced for your decision, never shipped silently/i);
 });
 
-test("the site carries the canonical cognition, compounding, dogfood, and validation hierarchy", async () => {
+test("the site carries the canonical cognition, compounding, dogfood, and research hierarchy", async () => {
   const html = (await read("site/index.html")).replace(/\s+/g, " ");
   for (const id of ["knowledge", "compounds"]) {
     assert.match(html, new RegExp(`<section[^>]+id="${id}"`));
@@ -424,8 +429,18 @@ test("the site carries the canonical cognition, compounding, dogfood, and valida
   assert.match(html, /Persistent engineering cognition[\s\S]{0,180}durable, governed knowledge/i);
   assert.match(html, /Structure can often be derived\. Rationale needs evidence\./i);
   assert.match(html, /inspectable examples[\s\S]{0,120}not an independent benchmark/i);
-  assert.match(html, /measured results are null, negative, and published/i);
+  assert.equal((html.match(/href="#measured">RESEARCH<\/a>/g) ?? []).length, 2);
+  assert.doesNotMatch(html, /href="#measured">BENCH<\/a>/);
+  assert.match(html, /RESEARCH STATUS/);
+  assert.match(html, /Longitudinal validation is still open\./i);
+  assert.match(html, /Earlier exploratory short-horizon experiments remain archived/i);
   assert.match(html, /advanced benchmarking RFC/i);
+  assert.doesNotMatch(html, /measured results are null, negative, and published/i);
+  assert.doesNotMatch(html, /19\/19\s*(?:<[^>]+>)*\s*vs\s*(?:<[^>]+>)*\s*18\/19/i);
+  assert.doesNotMatch(html, /54%\s*(?:<[^>]+>)*\s*→\s*(?:<[^>]+>)*\s*14%/i);
+  assert.doesNotMatch(html, /1\s*\/\s*0\s*\/\s*0/);
+  assert.doesNotMatch(html, /all (?:current )?(?:longitudinal[- ]memory|memory) benchmarks (?:are|remain) (?:ineffective|unsuitable|useless)/i);
+  assert.doesNotMatch(html, /(?:established|proven|demonstrated) longitudinal uplift/i);
 });
 
 test("the dogfood ledger exposes canonical capture classes and the compounding path", async () => {
@@ -490,7 +505,36 @@ test("the redesigned sections use distinct semantic compositions", async () => {
   assert.match(html, /class="[^"]*answer-manifesto[^"]*"/);
   assert.match(html, /class="[^"]*adoption-rail[^"]*"/);
   assert.match(html, /class="[^"]*case-ledger[^"]*"/);
-  assert.match(html, /class="[^"]*metric-grid[^"]*"/);
+  assert.match(html, /class="[^"]*research-status[^"]*"/);
+  assert.doesNotMatch(html, /class="[^"]*(?:metric-grid|measured-panel)[^"]*"/);
+});
+
+test("the README keeps three dogfood examples and a concise longitudinal validation section", async () => {
+  const readme = await read("README.md");
+  const dogfood = readme.slice(
+    readme.indexOf("## Salvor on Salvor"),
+    readme.indexOf("## Longitudinal validation"),
+  );
+  const validation = readme.slice(
+    readme.indexOf("## Longitudinal validation"),
+    readme.indexOf("## enhanced mode: Serena + GitNexus"),
+  );
+  const dogfoodRows = dogfood
+    .split("\n")
+    .filter((line) => /^\|.+\|$/.test(line) && !/^\|(?:---| Engineering event)/.test(line));
+
+  assert.equal(dogfoodRows.length, 3, "README dogfood table must contain exactly three examples");
+  assert.doesNotMatch(dogfood, /beta benchmark exposed/i);
+  assert.match(validation, /^## Longitudinal validation$/m);
+  assert.match(validation, /core hypothesis is longitudinal/i);
+  assert.match(validation, /not (?:yet )?(?:established|presented as validation)/i);
+  assert.match(validation, /\[`benchmarks\/`\]\(\.\/benchmarks\/\)/);
+  assert.match(validation, /\[`methodology`\]\(\.\/benchmarks\/METHODOLOGY\.md\)/);
+  assert.match(validation, /\[`exploratory beta report`\]\(\.\/benchmarks\/results\/beta\/REPORT\.md\)/);
+  assert.match(validation, /\[`advanced benchmarking RFC`\]\(https:\/\/github\.com\/dwasyluk\/salvor\/issues\/5\)/);
+  assert.doesNotMatch(validation, /^\|\s*Arm\s*\|/m);
+  assert.doesNotMatch(validation, /19\/19|18\/19|54\.0%|14\.0%|1\s*\/\s*0\s*\/\s*0/);
+  assert.doesNotMatch(validation, /(?:established|proven|demonstrated) longitudinal uplift/i);
 });
 
 test("public copy distinguishes protocol obligations from automation and avoids performance guarantees", async () => {
