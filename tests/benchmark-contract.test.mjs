@@ -156,6 +156,23 @@ test("published numbers derive from the canonical summary", async (t) => {
   }
 });
 
+test("the landing page presents every completed beta result and C3 telemetry faithfully", async () => {
+  const summary = JSON.parse(await read(SUMMARY));
+  assert.equal(summary.complete, true, "public benchmark copy requires a completed canonical summary");
+  const site = (await read("site/index.html")).replace(/\s+/g, " ");
+
+  assert.match(site, new RegExp(`${summary.conditions.S1.resolved}/${summary.conditions.S1.expected} <span>vs</span> ${summary.conditions.S2.resolved}/${summary.conditions.S2.expected}`));
+  assert.match(site, new RegExp(`${summary.conditions.C1.success_rate.toFixed(0)}% <span>→</span> ${summary.conditions.C3.success_rate.toFixed(0)}%`));
+  assert.match(site, /Across 100 C3 invocations: one brain read, zero writes, and zero MCP calls/i);
+  assert.match(site, /One run per condition/i);
+  assert.match(site, /saturated baseline/i);
+  assert.match(site, /hash-chained cost and state ledgers/i);
+  assert.match(site, /task-blind machine-built brains/i);
+  assert.match(site, /leakage audits/i);
+  assert.match(site, /third-party evaluators/i);
+  assert.match(site, /longitudinal question open/i);
+});
+
 test("isolation and integrity gates passed in the published run", async (t) => {
   if (!(await exists(SUMMARY))) { t.skip("no completed run yet"); return; }
   const summary = JSON.parse(await read(SUMMARY));

@@ -45,9 +45,11 @@ test("Step 0 upgrade flow is version-aware and delta-scoped", () => {
   assert.match(f, /ALWAYS operator-decided/i);
 });
 
-test("the two-layer guarantee: protocol upgrades, knowledge is never touched", () => {
+test("the two-layer guarantee preserves knowledge and gates explicit migrations", () => {
   const f = flat("SETUP_PROMPT.md");
-  assert.match(f, /\*\*knowledge layer\*\*[^.]*NEVER touched by an upgrade/i);
+  assert.match(f, /\*\*knowledge layer\*\*[^.]*preserved by default/i);
+  assert.match(f, /never silently rewrite knowledge claims/i);
+  assert.match(f, /migration[^.]*separately approved/i);
   // the never-overwrite list includes the archive now
   assert.match(f, /`decisions\/`, `domain-learnings\/`, `postmortems\/`, `archive\/`/);
 });
@@ -56,7 +58,8 @@ test("UPGRADING doc exists, is linked, and documents the stamp + layers + migrat
   assert.ok(existsSync(join(root, "docs/UPGRADING.md")));
   const up = flat("docs/UPGRADING.md");
   assert.match(up, /Salvor-Protocol: v/);
-  assert.match(up, /Never touched/i);
+  assert.match(up, /Preserved by default/i);
+  assert.match(up, /never silently rewrites knowledge claims/i);
   assert.match(up, /three-way merge/i);
   assert.match(up, /Migration notes by version/i);
   assert.match(up, /Slug knowledge IDs/i);

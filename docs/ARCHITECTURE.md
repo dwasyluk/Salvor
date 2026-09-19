@@ -164,8 +164,10 @@ canonical owner**; other shared files link to or summarize it rather than forkin
   `postmortems/` = incident/failure evidence; `DEFERRED_TODOS.md` = deferred findings.
 - Canonical engineering knowledge lives in its assigned `.salvor/` artifact.
   **GitNexus** owns machine-derived code structure; **Serena** memories and **vendor
-  adapters** are concise retrieval and routing aids; **Spec Kit** owns its
-  specs/plans.
+  adapters** are concise retrieval and routing aids; vendor-native workspace
+  memory, including Claude Code Project memory, remains owned by that workspace
+  unless a separately approved capture promotes selected knowledge into Salvor;
+  **Spec Kit** owns its specs/plans.
 - **Vendor entrypoints** (`CLAUDE.md` hub, `AGENTS.md`, `GEMINI.md`) point to and
   summarize the canonical records — they are **never** a knowledge fork.
 
@@ -209,7 +211,8 @@ while dev B captures `DL:clob-429-throttling` ("order endpoint throttles
 ~10 req/s; retry with jitter") — different slugs, both merge cleanly, and the
 brain now carries the same vendor behavior twice. Worse, contradictions: A
 records "the sandbox mirrors production latency," B later measures that it
-doesn't. Reconcile runs at merge and pull points: incoming artifacts are
+doesn't. The protocol calls for Brain Reconcile at merge and pull points:
+incoming artifacts are
 **paired by subject-tag overlap** (not name similarity), their claims compared,
 and each pair classified — *distinct*, *duplicate* (merge into one),
 *overlapping* (augment), *contradictory* (operator decision; exactly one
@@ -220,10 +223,10 @@ re-synthesized from both sides after resolution — and, under Strict defaults,
 `VERSION.md` counters advance only at integration (feature branches record
 `pending`), so parallel branches never race a counter.
 
-**Brain Audit (§10.3).** Reconcile only sees what a merge brings in. A
-recurring semantic self-audit — due every 3 days by default, operator-tunable,
-tracked by the `Last Brain Audit` line in L1 — runs the same subject/claim
-comparison across the *whole* brain, catching duplicates that accreted on one
+**Brain Audit (§10.3).** Reconcile only sees what a merge brings in. The
+protocol calls for a recurring semantic self-audit — due every 3 days by
+default, operator-tunable, tracked by the `Last Brain Audit` line in L1 — using
+the same subject/claim comparison across the *whole* brain to catch duplicates that accreted on one
 branch, contradictions against `DOMAIN_REF.md` current truth, stale L1 lines,
 and dangling links. (The audit interval and its configurability are an area
 where beta feedback is explicitly invited.)

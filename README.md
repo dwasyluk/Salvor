@@ -60,19 +60,21 @@ reasoning or intelligence.
 
 Broadly, RAG retrieves external information, agent memory retains prior
 experience, and context engineering curates what enters the active context.
-Salvor focuses additionally on what durable project knowledge should exist, who
-may promote it, how it is reviewed and reconciled, and which version remains
-authoritative. That lifecycle includes provenance, rationale, branch and team
-propagation, contradiction handling, supersession, and retrieval by later
-sessions. This is an emerging field; “persistent engineering cognition” is
-Salvor's term for the capability, not an asserted industry standard.
+Salvor focuses additionally on what durable project knowledge should exist,
+when it may be promoted, how that promotion is approved and reviewed, how
+contradictions are reconciled, and which version remains authoritative. That
+lifecycle includes provenance, rationale, branch and team propagation,
+contradiction handling, supersession, and retrieval by later sessions. This is
+an emerging field; “persistent engineering cognition” is Salvor's term for the
+capability, not an asserted industry standard.
 
 It is **prompt-first**: paste one setup prompt, answer four setup questions, and
 your project gains a hub-and-spoke context layer, a two-tier persisted memory,
 a rules protocol, and user-approved capture gates that record knowledge *and
 the reasoning behind it* as you work. Upgrades honor the same boundary:
-a newer setup prompt refreshes only Salvor's protocol layer — your accumulated
-knowledge is never touched. The shared brain is vendor-agnostic:
+a newer setup prompt refreshes Salvor's protocol layer and is designed to
+preserve accumulated project knowledge; any approved schema, metadata, link,
+or identifier migration remains explicit and reviewable. The shared brain is vendor-agnostic:
 everything lives as plain Markdown in your repo, owned by no LLM vendor and
 reviewable in PRs, diffable, and branchable. Thin adapters make that same brain
 vendor-portable, so teams can switch supported agents without migrating their
@@ -82,9 +84,11 @@ dogfooded path; Codex and Google entrypoints are covered by the shared adapter
 contracts and documented for the beta, with less real-project dogfooding to
 date. No hosted service, no additional account.
 
-The ecosystem is increasingly recognizing the durable-project-context
-problem. Salvor does not claim to be the first or only answer. It is one
-opinionated attempt to make the repository-knowledge layer coherent:
+The important question is no longer whether an agent can remember. The question
+is which engineering knowledge becomes durable, who owns it, how it is reviewed,
+and whether it survives a change of agent or vendor. Salvor does not claim to be
+the first or only answer. It is one opinionated attempt to make the
+repository-knowledge layer coherent:
 repository-local canonical truth, Git-native review, structured knowledge
 classes, governed capture, explicit merge/reconcile semantics, thin vendor
 adapters, and a clean boundary between canonical knowledge, retrieval aids,
@@ -184,8 +188,9 @@ file: **[`SETUP_PROMPT.md`](./SETUP_PROMPT.md)**.
 
 **Upgrading is the same move:** paste a newer `SETUP_PROMPT.md` and Step 0
 reads the `Salvor-Protocol:` stamp in your `.salvor/README.md`, then proposes
-only the protocol deltas — your accumulated knowledge is never touched, and
-customized rules are merged with your approval. Works from any supported
+only the protocol deltas. The process is designed to preserve accumulated
+project knowledge; any identifier, header, link, or metadata migration is
+proposed separately, and customized rules are merged with your approval. Works from any supported
 vendor's CLI; future plugins wrap the same path. Details:
 **[`docs/UPGRADING.md`](./docs/UPGRADING.md)**.
 
@@ -231,8 +236,7 @@ Every claim about Salvor's engineering knowledge and governance in this README
 holds in **Core** mode.
 Claims about symbol-level navigation, "what breaks if I change this?" impact
 analysis, and code-graph awareness require **enhanced** mode. Serena and
-GitNexus are optional, but both are highly recommended for the best
-code-grounded results.
+GitNexus are optional and recommended when those capabilities fit the work.
 
 ## Lifecycle: the Salvor Loop
 
@@ -248,7 +252,8 @@ surfaces something durable, a capture gate asks you before anything is saved.
 Finishing a task means updating L1/L2, the affected component spoke, and the
 configured project-history or version artifact when applicable — so the
 project knowledge stays tied to the code it describes. Salvor is designed so
-the next session starts from reviewed knowledge instead of reconstruction.
+the next session can start from reviewed knowledge instead of reconstructing
+it from scratch.
 
 <p align="center">
   <img src="assets/salvor-loop.svg" width="900" alt="The Salvor Loop: nine phases build context, act, and feed durable knowledge back into the repository brain, contrasted with an agent that starts cold without Salvor."/>
@@ -479,7 +484,8 @@ person or a runtime; Salvor serves a repository. By job-to-be-done:
 | [GitHub Spec Kit](https://github.com/github/spec-kit) | Future-facing spec → plan → tasks → implement workflow | Complementary: Spec Kit governs what should be built; Salvor preserves the longitudinal engineering knowledge accumulated while the system evolves. |
 | [Serena](https://github.com/oraios/serena) | Semantic code intelligence, with an optional memory substrate | Salvor decides *what gets promoted* to durable engineering knowledge and owns the canonical artifacts; Serena's memories serve as retrieval pointers. |
 | [GitNexus](https://github.com/abhigyanpatwari/GitNexus) | Code knowledge graph + impact analysis | GitNexus remembers how the code is connected. Salvor preserves why the team made it that way. |
-| Vendor memory (Claude Code / Codex / Gemini project instructions & memories) | Personal, tool-specific continuity and preferences | Salvor is the repository's reviewed, shared record — it survives vendor switches and is diffable in PRs. Use both. |
+| [Claude Code Projects (beta)](https://code.claude.com/docs/en/claude-projects) | Claude-native long-running development orchestration and coordination: one conversation coordinates parallel Claude Code cloud threads, each on its own branch | Shared Project memory across threads plus Project instructions and files; strong orchestration that Salvor does not replace. It is a Claude-native control plane rather than a cross-vendor repo-owned memory protocol. The relationship is complementary with overlap: Projects coordinates ongoing Claude work and maintains shared Project memory; Salvor provides repo-owned engineering knowledge that is Git-reviewed, provenance-aware, and portable across supported tools. Project memory remains separate from repository `CLAUDE.md`. |
+| Other vendor memory (Codex / Gemini / Copilot and similar project instructions & memories) | Tool- or workspace-specific continuity, facts, and preferences | Useful alongside Salvor. Salvor's concern is selected engineering knowledge that should be repository-owned, Git-reviewed, provenance-aware, and portable across supported tools. |
 | [Cline Memory Bank](https://docs.cline.bot/prompting/cline-memory-bank) | Structured, repository-local documentation methodology usable across AI tools (commands and integrations vary) | Adjacent approach — both use structured repository-local Markdown for continuity. Salvor additionally defines gated promotion into durable team knowledge, separate decision/learning/failure/deferred lifecycles, canonical ownership rules, and optional Serena/GitNexus orchestration. |
 | [Obsidian](https://obsidian.md) | General knowledge vault shaped around a person or team | Salvor is a repo-local protocol with capture gates and code-intelligence integration, not a general vault. |
 | [Google ADK](https://google.github.io/adk-docs/) | Runtime framework for *building* agents | Orthogonal: Salvor helps teams retain repo reasoning while building software — including ADK software. |
@@ -560,7 +566,10 @@ it is to build the harder pieces together — issues tagged
   [Agent Plugins](https://agent-plugins.org/specification) standard (skills +
   MCP servers in one portable folder) to reduce duplication across clients
   that support it, while retaining vendor-specific wrappers where required.
-  Codex and Gemini equivalents are open for contributors.
+  Codex and Gemini equivalents are open for contributors. **P1 validation:**
+  exercise the Claude Code plugin inside Claude Code Projects cloud threads,
+  including repository `.salvor/` and `CLAUDE.md` loading, plugin behavior, and
+  the availability boundaries for optional Serena/GitNexus capabilities.
 
 Contributions welcome beyond the roadmap too:
 
@@ -580,6 +589,17 @@ story deeply interested in how knowledge survives as people, systems, and
 circumstances change. At repository scale, the ambition is humbler than
 psychohistory: keep the project's hard-won engineering knowledge alive long
 enough for the next agent to use it. No association or endorsement is implied.
+
+<p align="center">
+  <img
+    src="assets/brand/reference/foundation_ref_assets/salvor_artifact_expansion.png"
+    alt="Salvor Hardin accessing a psychohistory artifact — a Foundation-inspired visual reference for durable project knowledge carried forward across time."
+    width="960">
+</p>
+
+<p align="center">
+  <em>Foundation-inspired visual reference: Salvor Hardin accessing the artifact — an echo of project knowledge carried forward in a durable, inspectable form.</em>
+</p>
 
 ## Docs
 

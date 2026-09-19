@@ -1,3 +1,184 @@
+## 2026-09-19 — Feature-branch finalization and merge-readiness gate
+
+The independently approved r3.3 candidate was re-audited without reopening its
+positioning or visual decisions. The working branch is
+`feat/final-beta-positioning`, starting from `de2b6d6`; local `dev` at
+`3dbffb1` is its exact merge base, with the feature two commits ahead and zero
+commits behind before the final commit. The required read-only
+`git fetch origin dev` could not update the comparison because the remote has
+no `dev` ref. No remote branch was created and no merge, push, tag, workflow
+dispatch, deployment, or publication occurred.
+
+Approved-content checks confirm one three-numeral engineering-problem triptych,
+the manifesto/process/adoption/terminal/evidence/integration compositions, the
+three nested dogfood records and amber rail, and unchanged hero-burn code and
+benchmark sources. The 1086×362 Foundation artwork remains directly after
+`Why "Salvor"?` and before Docs; its SHA-256
+`9b25f1f4085160d07b284ecc5a84db5452f484d88e371575720458e1dda59834`
+matches the independently reviewed r3.3 archive byte for byte. Product identity
+remains `v1.0.0-beta`; benchmark `beta` remains a separate run identity. The
+three evidence documents stay pinned to the release tag while issue #5 and
+community destinations remain live. Pages remains operator-dispatched from
+`./site`; its canonical URL is not deployed in this feature task.
+
+Fresh source verification passes `npm ci`, 184/184 unit/contract tests, 35/35
+Playwright tests (including exact fold, overflow, CTA, dogfood, and burn gates),
+11/11 release-audit gates, deterministic brand generation, zero npm
+vulnerabilities, and `git diff --check`. The first sandboxed unit invocation
+passed 183 tests but could not launch the nested Chromium brand renderer because
+macOS denied its Mach rendezvous port; the unchanged isolated brand command and
+complete unit suite both passed with the required browser permission, proving
+an environment restriction rather than a source defect. The feature-final ZIP
+is built only from the tracked release manifest, excludes local working assets
+and stale review archives, and passes the repository's clean-extraction verifier
+with browser coverage. Its path, counts, and SHA-256 remain external report data
+so the archive does not encode a self-referential identity.
+
+L1 and this L2 are synchronized for the feature boundary. Existing Serena
+memories remain concise retrieval pointers to RULES, the canonical state, and
+the dev-first SOP, so no independent knowledge copy was added. VERSION retains
+`CORE:pending GHPAGE:pending DOCS:pending`; the feature → `dev` merge ceremony
+must assign real counters and re-synthesize branch-relative state later.
+
+## 2026-09-19 — r3.3 dogfood information hierarchy
+
+The approved final polish changes only the `SALVOR ON SALVOR` ledger inside
+Evidence & Validation. Canonical source review confirms `Branch flow inverted`
+as `DEC:dev-first-branch-flow`, `Mature-repo adoption` as the approved
+preservation-first adoption decision, and GitNexus version/runtime variance as
+tested Domain Learning rather than a governing design decision. README evidence
+already supports those classifications and required no correction.
+
+The flat INCIDENT / RISK / VERSION DRIFT columns became three nested knowledge
+records. Each record leads with its canonical class, groups `TRIGGER · type`
+and the event title into one semantic `h3`, and uses a definition list for
+`CAPTURED` and `COMPOUNDED KNOWLEDGE`. A compact
+`TRIGGER → CAPTURE → COMPOUNDED KNOWLEDGE` guide and one sentence explain the
+loop without adding a numbered sequence or a new page section. The amber child
+rail begins at 28px on desktop/tablet and 16px on phones; body copy is at least
+13px at 320px.
+
+Regression-first evidence: the new semantic contract and four rendered
+hierarchy checks both failed against the prior flat ledger, then passed after
+the bounded implementation. Required screenshots are outside the repository at
+`/private/tmp/salvor-dogfood-r3.3-review/`; visual inspection confirms clear
+parent/child reading, clean schema wrapping at 320px, unclipped labels, and no
+horizontal overflow. Source verification passes 184/184 unit/contract checks,
+35/35 Playwright checks, 11/11 release-audit gates, deterministic brand output,
+zero npm vulnerabilities, and clean staged/unstaged whitespace checks. Hero,
+burn, README, benchmark sources/results, metadata, social art, and release
+identity are unchanged. The full r3.3 archive also passes the same unit,
+browser, audit, brand, dependency, and diff gates from a clean disposable Git
+extraction. Its final byte identity is reported with the external review
+artifact rather than embedded self-referentially in the ZIP.
+
+## 2026-09-19 — r3.2 artifact reproducibility and evidence pinning
+
+The final release correction leaves all approved r3/r3.1 design, protocol,
+benchmark, hero/burn, and README-artwork behavior unchanged. The three links
+that substantiate versioned evidence now target the immutable `v1.0.0-beta`
+README, methodology, and beta report; the advanced-benchmarking issue remains
+live because it is an ongoing discussion destination. A focused site contract
+requires that distinction and rejects only the three superseded mutable links.
+
+`docs/roadmap-issues.md` is not distributable content: Git does not track it,
+`.gitignore` classifies it with local-only handoff documents, and its own title
+calls it a local issue-stub handoff. The setup-safety suite therefore no longer
+reads it at module load. The same shipped-behavior invariant now checks the
+packaged README's public roadmap, preserving the assertion without leaking or
+placeholdering internal planning material.
+
+The existing release auditor gained a bounded `--archive` mode, exposed as
+`npm run release:verify-archive -- <archive.zip> [--browser] [--keep]`. It tests
+ZIP integrity, extracts to a fresh temporary root, initializes a disposable
+Git repository and baseline-commits the exact archive entries for the required
+post-validation `git diff --check`, installs from the lockfile, then runs unit, release-audit, brand,
+dependency-audit, and optional browser gates from the extracted tree. The
+r3.1 failure was reproduced first as an `ENOENT` for the ignored roadmap file.
+Source validation for the correction is 183/183 unit/contract, 31/31
+Playwright, 11/11 release-audit, deterministic brand output, zero npm
+vulnerabilities, and clean staged/unstaged whitespace checks. Final r3.2 ZIP
+identity and clean-extraction results are reported with the review artifact,
+not embedded self-referentially in the archive.
+
+## 2026-09-18 — r3 release ratification and review packaging
+
+The product identity forensic audit retained `v1.0.0-beta`. Commit
+`50949f729c04de3d8b717c52e20ed73e8e80a133` established the earlier stable
+release line, but the later coordinated commit
+`3c47812d8071700acb7c4871f8de5c167394f04d` deliberately converted product
+surfaces to `v1.0.0-beta`. Its approved design record,
+`docs/plans/2026-07-26-beta-protocol-and-site-consistency-design.md` in that
+commit, explicitly defines the change as a product-wide soft-launch decision.
+VERSION history, package metadata, changelog, README, release links, and the
+operator launch sequence all agree on the intended `v1.0.0-beta` tag. The
+benchmark's `benchmarks/results/beta/` name is a separate run identity.
+
+The hero was compacted through layout rhythm and narrower copy only. The
+redundant mobile `top: 72px` offset was removed, width/height-specific minimums
+were retuned, narrow CTAs remain complete, and phone evidence copy now floors
+at 13px. Actual normal-script renders expose 140px of `#why` at 1440×1000,
+244px at 768×1024, 80px at 360×780, and 50px at 320×568. All four have zero
+horizontal overflow and actions remain within the hero. The WebGL shader,
+state machine, timing/radius, pointer/touch behavior, reveal threshold,
+textures, and hero artwork were not changed.
+
+Public claims were checked against RULES §10, SETUP_PROMPT, current docs, and
+the benchmark result/methodology artifacts. Slug IDs, structured headers,
+Brain Reconcile, Brain Audit, experimental off-by-default provisional capture,
+mature-repo mapping, and stamp-aware upgrades are current protocol behavior.
+Semantic duplicate/contradiction wording was qualified to describe the
+protocol's operator-gated comparison rather than autonomous merging. The beta
+benchmark values and disclosure boundaries derive from
+`benchmarks/results/beta/summary.json`, REPORT.md, and METHODOLOGY.md.
+
+Claude Code Projects beta was reverified against Anthropic's 2026-09-17
+official announcement, current Claude Code Projects documentation, and Help
+Center entry. The README comparison treats Projects as strong Claude-native
+orchestration with shared Project memory and Salvor as a complementary
+repo-owned knowledge protocol; real cloud-thread compatibility remains a P1.
+
+Final README personality polish adds the operator-supplied 1086×362
+`assets/brand/reference/foundation_ref_assets/salvor_artifact_expansion.png`
+immediately after `Why "Salvor"?` and before Docs. One centered image, a short
+Foundation-inspired caption, and existing non-affiliation wording keep the
+reference subordinate to the engineering story. Native GitHub HTML uses a
+960px width attribute without CSS, fixed height, script, wrapper asset, or site
+change. A brand-assets contract checks exact PNG dimensions, local path,
+placement, markup, alt text, and caption; the full review archive advances to
+r3.1 while the site-only r3 archive remains valid.
+
+Validation after final README polish: `npm ci`; 181/181 unit+contract; 31/31 Playwright,
+including four exact fold gates and all burn interactions; 11/11 release-audit
+gates; deterministic brand check; `npm audit --audit-level=high` found zero
+vulnerabilities; `git diff --check` clean. Review screenshots live outside the
+repository release tree. Full and optional site review ZIPs are local draft
+artifacts only; no push, tag, deploy, workflow dispatch, settings change, or
+release publication occurred.
+
+## 2026-09-18 — Canonical comparison and GitHub Pages design correction
+
+The approved README was re-digested before downstream work. Claude Code
+Projects beta is now described from Anthropic's redesigned Projects model: one
+coordinating conversation can launch parallel Claude Code cloud threads, each
+thread is a separate cloud session/branch, and Project memory is vendor-owned
+workspace state distinct from repository `CLAUDE.md`. Salvor remains the
+repo-owned, Git-reviewed governance and portability layer that those sessions
+can consume. A P1 validation item covers real Projects cloud-thread behavior,
+`.salvor/`, adapters, and optional Serena/GitNexus boundaries.
+
+The GitHub Pages regression was corrected without redesigning the brand or
+touching the hero burn. Exactly one prominent numbered triptych remains in the
+engineering-problem section. The public sequence is now problem → answer →
+mechanics → loop → adoption → use → evidence → integrations, with an inverse
+manifesto, adoption rail, dogfood ledger, and measured-result grid providing
+distinct visual rhythms. Protocol ceremonies are described as obligations,
+not autonomous hooks; upgrade language preserves knowledge by design while
+allowing separately approved metadata/schema/link/id migrations; optional
+integrations are described by capability rather than performance guarantees.
+Feature-branch counters remain `CORE:pending GHPAGE:pending DOCS:pending` until
+integration.
+
 ## 2026-08-22 — Approved README positioning propagated downstream
 
 The operator-approved README is now the canonical narrative for the final beta:

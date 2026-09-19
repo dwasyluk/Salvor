@@ -20,8 +20,9 @@ LLM CLI without locking the project brain to one vendor.
 - **enhanced mode optionally adds Serena + GitNexus.** They are OPTIONAL enhanced
   integrations, not constituent requirements of Salvor Core. Serena memories
   (`.serena/memories/`) are an OPTIONAL retrieval aid; GitNexus's index is
-  machine-derived and **gitignored** — not canonical git-tracked memory. Both are
-  highly recommended for the best code-grounded results. They are standard
+  machine-derived and **gitignored** — not canonical git-tracked memory. They
+  are recommended when semantic navigation and graph-based impact analysis fit
+  the work. They are standard
   **MCP** servers (a cross-vendor standard) and already work in Claude Code,
   Codex, Gemini CLI, Cursor, and others.
 - **The glue is vendor-specific.** *How* project instructions auto-load, where
@@ -49,6 +50,29 @@ which points the agent at the shared in-repo core.
 | **Codex + other AGENTS.md-compatible agents** | `AGENTS.md` | — | instruction-driven | ✅ via MCP config |
 | **Gemini CLI / Antigravity CLI** | `GEMINI.md` | — | instruction-driven | ✅ via MCP config |
 | **Cursor / others** | tool-specific rules file | varies | varies | ✅ if MCP-capable |
+
+### Claude Code Projects (beta)
+
+Claude Code Projects is a Claude-specific orchestration workspace rather than a
+new repository entrypoint. Anthropic documents one coordinating conversation
+that routes work to parallel Claude Code cloud threads, each on its own branch.
+New threads begin with the Project's repositories, instructions, Library files,
+and shared Project memory; repository `CLAUDE.md`, skills, and plugins are also
+loaded from Project repositories.
+
+Project memory and repository knowledge remain separate ownership domains.
+Project auto-memory uses a `MEMORY.md` index and files managed in Project
+settings; it is explicitly separate from repository `CLAUDE.md`. When a Project
+repository contains Salvor, threads can consume the same `CLAUDE.md` hub and
+`.salvor/` knowledge as other supported agents. Project memory remains
+vendor-workspace state unless the operator separately approves promoting a
+specific claim into its canonical Salvor artifact.
+
+Cloud threads do not automatically inherit local-only files, tools, MCP servers,
+or settings. Validate the planned Claude Code plugin inside Projects before
+claiming parity with local Claude Code: repository files and committed skills may
+load, while optional Serena/GitNexus availability depends on the Project's cloud
+environment and connectors.
 
 The pointer file says, in effect:
 

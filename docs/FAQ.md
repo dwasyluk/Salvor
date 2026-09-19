@@ -26,10 +26,10 @@ established industry-standard category.
 
 Agent memory generally retains and recalls prior information. Salvor focuses
 additionally on which project knowledge remains authoritative, why it matters,
-who may promote it, how contradictions are reconciled, and how later knowledge
-supersedes earlier truth without erasing provenance. Salvor does not change an
-agent's intrinsic intelligence; it externalizes, governs, and preserves project
-cognition.
+when knowledge may be promoted and how that promotion is approved, how
+contradictions are reconciled, and how later knowledge supersedes earlier truth
+without erasing provenance. Salvor does not change an agent's intrinsic
+intelligence; it externalizes, governs, and preserves project cognition.
 
 ## Isn't this already in Git?
 
@@ -63,8 +63,9 @@ hiring for:
   notes, research, and personal or shared knowledge graphs.
 - **GBrain** — for running a full knowledge runtime: ingestion, retrieval,
   synthesis, and background jobs over a large knowledge base.
-- **Vendor memory (Claude/Cursor/etc.)** — for personal or tool-specific
-  continuity and preferences that follow you across sessions.
+- **Vendor-native project memory and orchestration** — including Claude Code
+  Projects, for coordinating ongoing vendor-specific work and carrying shared
+  workspace context across its sessions or threads.
 - **RAG / vector DBs** — for retrieval infrastructure over documents you already
   have.
 - **Cline/Roo Memory Bank** — a structured, repository-local documentation
@@ -73,6 +74,10 @@ hiring for:
 Salvor is built for the specific intersection of code-grounded, team-shared,
 git-versioned, and governed engineering knowledge — that's the job it's
 designed around.
+
+The important question is no longer whether an agent can remember. It is which
+knowledge becomes durable, who owns it, how it is reviewed, and whether it
+survives a change of agent or vendor.
 
 ## How is Salvor different from GBrain?
 
@@ -105,8 +110,8 @@ knowledge graphs.
 
 Salvor gives a software repo a governed knowledge layer: component spokes,
 versioned rationale, learned failures, deferred findings, and task termination
-rules. Optional enhanced mode adds code intelligence through Serena and GitNexus;
-both are highly recommended for the best code-grounded results.
+rules. Optional enhanced mode adds semantic code navigation through Serena and
+graph-based impact analysis through GitNexus.
 
 Obsidian is a general knowledge vault — flexible enough to hold anything,
 including code notes, for individuals or teams. Salvor's job is narrower: an
@@ -239,6 +244,33 @@ knowledge that should become part of the repository's reviewed, shared team
 record: it lives in your repo, compatible agents can load it through thin
 entrypoints, you can diff it in a PR, and it travels across branches and vendors.
 Different jobs — use both.
+
+## How does Salvor differ from Claude Code Projects?
+
+[Claude Code Projects (beta)](https://code.claude.com/docs/en/claude-projects)
+is a vendor-native orchestration layer for ongoing work. One coordinating Claude
+conversation creates or routes work to parallel Claude Code cloud threads; each
+thread has its own branch and starts with the Project's repositories,
+instructions, Library files, and shared Project memory. That orchestration is a
+substantial capability Salvor does not attempt to replace.
+
+The overlap is persistent project knowledge, but the ownership model and job are
+different. Claude can write Project auto-memory as work proceeds, and users can
+read, edit, or delete those memory files in Project settings. Anthropic documents
+Project memory as separate from repository `CLAUDE.md`; deleting the Project
+deletes its memory and files while Git branches and pull requests remain.
+
+Salvor is a repo-owned engineering knowledge and governance layer. It defines how
+selected decisions, domain learnings, failures, deferred findings, and current
+state become Git-reviewed, provenance-aware repository knowledge. A Claude Code
+Project can load and use Salvor through the repository's `CLAUDE.md` and
+`.salvor/` files, while that same knowledge remains available to other supported
+agents and humans outside the Anthropic Project workspace.
+
+Projects currently run Claude-specific cloud sessions and do not automatically
+inherit tools or files that exist only on a local machine. Anthropic is rolling
+the redesigned experience out in stages; the older general-purpose Projects
+experience continues during the rollout.
 
 ## What does it cost, and is it only for teams?
 
@@ -439,11 +471,14 @@ Paste the newer `SETUP_PROMPT.md` into your agent from the repo root — same
 operation as installing, in any supported vendor's CLI. Step 0 detects the
 existing install via the `Salvor-Protocol:` stamp in `.salvor/README.md` and
 proposes a delta-scoped upgrade plan covering only the **protocol layer**
-(rules text, templates, adapters); your **knowledge layer** — artifacts,
-L1/L2, domain facts, deferred findings — is never touched by an upgrade. If
-you've customized generated rules, the plan is a three-way merge and conflicts
-are yours to decide. Vendor plugins (coming) wrap the identical prompt and
-path, so a prompt install and a plugin install upgrade the same way. See
+(rules text, templates, adapters). The process is designed to preserve your
+**knowledge layer** — artifacts, L1/L2, domain facts, and deferred findings —
+and never silently rewrites its claims. A release may propose an explicit,
+reviewable migration of identifiers, headers, links, or other knowledge
+metadata; nothing is applied without your approval. If you've customized
+generated rules, the plan is a three-way merge and conflicts are yours to
+decide. Vendor plugins (coming) wrap the identical prompt and path, so a prompt
+install and a plugin install upgrade the same way. See
 [`docs/UPGRADING.md`](./UPGRADING.md).
 
 ## Can agents add to the memory without asking me?

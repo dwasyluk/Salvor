@@ -11,6 +11,35 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+- Corrected the GitHub Pages narrative and visual hierarchy: one numbered
+  problem triptych now leads into distinct manifesto, adoption-rail,
+  dogfood-ledger, and measured-evidence compositions.
+- Updated the canonical comparison for Claude Code Projects beta, separating
+  its cloud-thread orchestration and Project memory from Salvor's repo-owned,
+  Git-reviewed knowledge governance; added P1 compatibility validation.
+- Calibrated protocol-ceremony, upgrade-preservation, and optional-integration
+  claims without changing the release version, hero burn, or social metadata.
+- Compacted hero rhythm at the four canonical review viewports so the
+  engineering-problem section is visibly discoverable above the fold while
+  preserving complete CTA usability, mobile readability, and the burn system.
+- Ratified `v1.0.0-beta` as the intentional product release identity from the
+  approved July 26 soft-launch decision and coordinated canonical history,
+  independently of the benchmark run's own `results/beta/` label.
+- Audited landing-page protocol and benchmark claims against canonical sources
+  and packaged the complete distributable repository for independent review.
+- Added one Foundation-inspired visual reference after the README naming note,
+  using responsive GitHub-native markup and a local-asset regression check.
+- Pinned the Salvor-on-Salvor, benchmark-methodology, and benchmark-report
+  evidence links to the immutable `v1.0.0-beta` snapshot while keeping the
+  longitudinal RFC and community destinations live.
+- Made the distributable self-testing: shipped tests no longer depend on the
+  intentionally internal `docs/roadmap-issues.md`, and the release auditor can
+  extract and validate the actual ZIP in a disposable Git fixture.
+- Reworked only the Salvor-on-Salvor ledger around canonical capture classes
+  and a trigger → capture → compounded-knowledge hierarchy, with a restrained
+  responsive child rail and explicit Design Decision / Domain Learning labels.
+
 ## [1.0.0-beta] — 2026-08-06
 
 Initial public beta.

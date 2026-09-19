@@ -16,6 +16,25 @@ test("the README exposes GitHub Discussions and X feedback in the public narrati
   assert.match(readme, /\[`@blockchaindan`\]\(https:\/\/x\.com\/blockchaindan\)/);
 });
 
+test("canonical comparisons distinguish Claude Code Projects orchestration from Salvor governance", async () => {
+  const [readme, faq] = await Promise.all([
+    read("README.md"),
+    read("docs/FAQ.md"),
+  ]);
+
+  assert.match(readme, /Claude Code Projects \(beta\)/);
+  assert.match(readme, /parallel Claude Code cloud threads/i);
+  assert.match(readme, /repo-owned engineering knowledge/i);
+  assert.match(readme, /Project memory[^\n]*separate from[^\n]*CLAUDE\.md/i);
+  assert.match(readme, /Claude-native long-running development orchestration and coordination/i);
+  assert.match(readme, /shared Project memory across threads plus Project instructions and files/i);
+  assert.match(readme, /Claude-native control plane/i);
+  assert.match(readme, /complementary with overlap/i);
+  assert.match(faq, /How does Salvor differ from Claude Code Projects\?/i);
+  assert.match(faq, /vendor-native orchestration/i);
+  assert.match(faq, /repo-owned engineering knowledge and governance layer/i);
+});
+
 test("the site links directly to Discussions without presenting X as a site destination", async () => {
   const html = await read("site/index.html");
   const discussionLinks = html.match(
@@ -26,6 +45,23 @@ test("the site links directly to Discussions without presenting X as a site dest
   assert.equal((html.match(/>COMMUNITY ↗<\/a>/g) ?? []).length, 2);
   assert.match(html, />Community ↗<\/a>/);
   assert.doesNotMatch(html, /href="https:\/\/x\.com\/blockchaindan"/);
+});
+
+test("versioned release evidence is pinned while live community destinations remain live", async () => {
+  const html = await read("site/index.html");
+
+  for (const url of [
+    "https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/README.md#salvor-on-salvor",
+    "https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/benchmarks/METHODOLOGY.md",
+    "https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/benchmarks/results/beta/REPORT.md",
+  ]) {
+    assert.ok(html.includes(`href="${url}"`), `release evidence must pin ${url}`);
+  }
+
+  assert.doesNotMatch(html, /href="https:\/\/github\.com\/dwasyluk\/salvor#salvor-on-salvor"/);
+  assert.doesNotMatch(html, /href="https:\/\/github\.com\/dwasyluk\/salvor\/blob\/main\/benchmarks\/METHODOLOGY\.md"/);
+  assert.doesNotMatch(html, /href="https:\/\/github\.com\/dwasyluk\/salvor\/blob\/main\/benchmarks\/results\/beta\/REPORT\.md"/);
+  assert.match(html, /href="https:\/\/github\.com\/dwasyluk\/salvor\/issues\/5"/);
 });
 
 test("contributor routing keeps community ideas separate from actionable GitHub work", async () => {
@@ -76,7 +112,7 @@ test("the site mirrors the canonical framework taxonomy and governance", async (
     /Continued Learning/i,
     /Learned Failure/i,
     /Deferred Finding/i,
-    /RULES\.md\s+keeps reviewed project knowledge and component context synchronized/i,
+    /RULES\.md\s+defines how reviewed project knowledge and component context stay synchronized/i,
     /Optional Strict defaults can also enforce project-specific version counters/i,
     /Serena \+ GitNexus/i,
   ]) {
@@ -112,7 +148,7 @@ test("the site presents six portable process steps and linked enhanced integrati
   assert.ok(process.indexOf("Vendor-Agnostic") < process.indexOf("Governed, Versioned Why"));
   assert.match(html, /<h2><a href="https:\/\/github\.com\/oraios\/serena">Serena<\/a>/);
   assert.match(html, /<h2><a href="https:\/\/github\.com\/abhigyanpatwari\/GitNexus">GitNexus<\/a>/);
-  assert.match(html, /optional[^.]*highly recommended|highly recommended[^.]*optional/i);
+  assert.match(html, /optional[^.]*recommended when you want semantic symbol navigation and graph-based impact analysis/i);
 });
 
 test("the capture-class card uses the approved three-document foundation icon", async () => {
@@ -176,9 +212,8 @@ test("section hierarchy keeps the Loop copy full width and integration guidance 
   assert.match(css, /\.loop-heading h2\s*\{[^}]*max-width:\s*760px;/s);
   assert.match(css, /\.loop-heading > p:last-child\s*\{[^}]*max-width:\s*none;/s);
 
-  assert.match(html, /Salvor can use Serena MCP and GitNexus MCP/);
-  assert.match(html, /<em>Neither is required<\/em>/);
-  assert.match(html, /<strong>both are highly recommended for the best results and improved token efficiency\.<\/strong>/);
+  assert.match(html, /Serena MCP and GitNexus MCP are optional integrations/);
+  assert.match(html, /semantic code navigation and graph-based impact analysis/);
 });
 
 test("the production site embeds two standalone Salvor Loop panels", async () => {
@@ -228,9 +263,8 @@ test("the public site describes the hub without exposing a vendor-named canonica
   assert.doesNotMatch(visibleText, /CLAUDE\.md/i);
   assert.match(visibleText, /vendor-agnostic canonical hub/i);
   assert.match(visibleText, /thin (?:multi-vendor )?(?:entrypoint )?adapters/i);
-  assert.match(visibleText, /Serena MCP and GitNexus MCP/i);
-  assert.match(visibleText, /Neither is required/i);
-  assert.match(visibleText, /both are highly recommended for the best results and improved token efficiency/i);
+  assert.match(visibleText, /Serena MCP and GitNexus MCP are optional integrations/i);
+  assert.match(visibleText, /semantic code navigation and graph-based impact analysis/i);
 });
 
 test("unpublished burn-hero experiment pages are absent", async () => {
@@ -253,6 +287,17 @@ test("all local HTML resources exist", async () => {
     .map((match) => path.join("site", match[1]));
   assert.ok(refs.length > 5);
   await Promise.all(refs.map((ref) => access(path.join(root, ref))));
+});
+
+test("all in-page navigation targets resolve after the narrative reorder", async () => {
+  const html = await read("site/index.html");
+  const ids = new Set([...html.matchAll(/\bid=["']([^"']+)["']/g)].map((match) => match[1]));
+  const anchors = [...html.matchAll(/\bhref=["']#([^"']+)["']/g)].map((match) => match[1]);
+
+  assert.ok(anchors.length > 0);
+  for (const anchor of anchors) {
+    assert.ok(ids.has(anchor), `missing in-page target #${anchor}`);
+  }
 });
 
 test("authored regular and small logos are the only production families and reduced motion is explicit", async () => {
@@ -353,31 +398,109 @@ test("the hero keeps the tagline and leads with the canonical category framing",
   const html = await read("site/index.html");
   assert.match(html, /class="hero-tagline">Your repo remembers<span>\.<\/span>/);
   const flatHtml = html.replace(/\s+/g, " ");
-  assert.match(flatHtml, /An engineering knowledge layer for coding agents and software teams\./);
+  assert.match(flatHtml, /Repo-owned engineering knowledge for coding agents and teams\./);
   assert.match(flatHtml, /Decisions, failures, and rationale — reviewed in Git\./);
-  assert.match(flatHtml, /Every session starts from what the project learned\. Vendor-portable\./);
+  assert.match(flatHtml, /Portable across sessions, teammates, and supported agents\./);
   assert.match(flatHtml, /<meta name="description" content="A repo-native engineering knowledge layer for coding agents and software teams\." \/>/);
 });
 
 test("the site presents the distributed brain honestly: slug IDs, reconcile, audit", async () => {
   const html = (await read("site/index.html")).replace(/\s+/g, " ");
   assert.match(html, /self-allocating slug ID/i);
-  assert.match(html, /Brain Reconcile runs at merge and pull points/i);
-  assert.match(html, /recurring brain audit/i);
+  assert.match(html, /protocol calls for Brain Reconcile at merge and pull points/i);
+  assert.match(html, /recurring Brain Audit/i);
   assert.match(html, /LF:stale-note-reference/);
   assert.match(html, /duplicates and contradictions are surfaced for your decision, never shipped silently/i);
 });
 
 test("the site carries the canonical cognition, compounding, dogfood, and validation hierarchy", async () => {
   const html = (await read("site/index.html")).replace(/\s+/g, " ");
-  for (const id of ["knowledge", "compounds", "dogfood", "measured"]) {
+  for (const id of ["knowledge", "compounds"]) {
     assert.match(html, new RegExp(`<section[^>]+id="${id}"`));
+  }
+  for (const id of ["dogfood", "measured"]) {
+    assert.match(html, new RegExp(`<div[^>]+id="${id}"`));
   }
   assert.match(html, /Persistent engineering cognition[\s\S]{0,180}durable, governed knowledge/i);
   assert.match(html, /Structure can often be derived\. Rationale needs evidence\./i);
-  assert.match(html, /inspectable dogfooding examples, not an independent benchmark/i);
-  assert.match(html, /scored null and negative results remain binding/i);
+  assert.match(html, /inspectable examples[\s\S]{0,120}not an independent benchmark/i);
+  assert.match(html, /measured results are null, negative, and published/i);
   assert.match(html, /advanced benchmarking RFC/i);
+});
+
+test("the dogfood ledger exposes canonical capture classes and the compounding path", async () => {
+  const html = await read("site/index.html");
+  const dogfood = html.slice(
+    html.indexOf('id="dogfood"'),
+    html.indexOf('id="measured"'),
+  );
+  const cases = dogfood.match(/<article>[\s\S]*?<\/article>/g) ?? [];
+  const dogfoodText = dogfood.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ");
+
+  assert.equal(cases.length, 3, "dogfood must contain exactly three case examples");
+  assert.match(dogfoodText, /TRIGGER\s*→\s*CAPTURE\s*→\s*COMPOUNDED KNOWLEDGE/);
+  assert.match(dogfoodText, /Each example follows the same path:.*later sessions inherit the reviewed result\./i);
+
+  for (const [index, caseHtml] of cases.entries()) {
+    assert.match(
+      caseHtml,
+      index < 2 ? /DESIGN DECISION/ : /DOMAIN LEARNING/,
+      `case ${index + 1} must expose its canonical capture class`,
+    );
+    assert.match(caseHtml, /TRIGGER\s*·\s*(?:INCIDENT|RISK|VERSION DRIFT)/);
+    assert.match(caseHtml, /<dt>\s*CAPTURED\s*<\/dt>/);
+    assert.match(caseHtml, /<dt>\s*COMPOUNDED KNOWLEDGE\s*<\/dt>/);
+    assert.doesNotMatch(caseHtml, /class="reason-number"|<ol\b/i);
+  }
+
+  assert.doesNotMatch(dogfood, /<dt>\s*INHERITED\s*<\/dt>/);
+});
+
+test("the page reserves the prominent numbered triptych for the engineering problem", async () => {
+  const html = await read("site/index.html");
+  const numberedGrids = html.match(/class="[^"]*\breason-grid\b[^"]*"/g) || [];
+  const largeNumbers = html.match(/class="reason-number"/g) || [];
+  const why = html.match(/<section[^>]+id="why"[\s\S]*?<\/section>/i)?.[0] || "";
+
+  assert.equal(numberedGrids.length, 1, "only the problem may use the numbered triptych");
+  assert.equal(largeNumbers.length, 3, "the page must contain exactly three large numbers");
+  assert.equal((why.match(/class="reason-number"/g) || []).length, 3);
+  for (const id of ["knowledge", "compounds", "dogfood", "measured"]) {
+    const section = html.match(new RegExp(`<(?:section|div)[^>]+id="${id}"[\\s\\S]*?<\\/(?:section|div)>`, "i"))?.[0] || "";
+    assert.doesNotMatch(section, /reason-number/);
+  }
+});
+
+test("the public narrative reaches mechanics before adoption and evidence", async () => {
+  const html = await read("site/index.html");
+  const orderedIds = ["why", "knowledge", "how", "loop", "compounds", "use", "evidence", "foundations"];
+  let previous = -1;
+  for (const id of orderedIds) {
+    const current = html.indexOf(`id="${id}"`);
+    assert.ok(current > previous, `${id} must follow the preceding narrative section`);
+    previous = current;
+  }
+  for (const id of ["dogfood", "measured"]) {
+    assert.ok(html.indexOf(`id="${id}"`) > html.indexOf('id="evidence"'));
+  }
+});
+
+test("the redesigned sections use distinct semantic compositions", async () => {
+  const html = await read("site/index.html");
+  assert.match(html, /class="[^"]*answer-manifesto[^"]*"/);
+  assert.match(html, /class="[^"]*adoption-rail[^"]*"/);
+  assert.match(html, /class="[^"]*case-ledger[^"]*"/);
+  assert.match(html, /class="[^"]*metric-grid[^"]*"/);
+});
+
+test("public copy distinguishes protocol obligations from automation and avoids performance guarantees", async () => {
+  const html = (await read("site/index.html")).replace(/\s+/g, " ");
+  assert.match(html, /protocol calls for Brain Reconcile at merge and pull points/i);
+  assert.doesNotMatch(html, /Brain Reconcile runs at merge and pull points/i);
+  assert.match(html, /RULES\.md<\/code> defines how reviewed project knowledge and component context stay synchronized/i);
+  assert.match(html, /can start from reviewed knowledge instead of reconstructing it from scratch/i);
+  assert.doesNotMatch(html, /improved token efficiency|see what breaks before you ship/i);
+  assert.match(html, /designed to preserve accumulated project knowledge/i);
 });
 
 test("the site flags agentic capture as experimental and off by default", async () => {
@@ -394,5 +517,6 @@ test("the site tree includes the archive and the primary path mentions upgrades"
   const flatHtml = html.replace(/\s+/g, " ");
   assert.match(flatHtml, /Upgrading later is the same move/i);
   assert.match(flatHtml, /protocol stamp/i);
-  assert.match(flatHtml, /knowledge is never touched/i);
+  assert.match(flatHtml, /designed to preserve accumulated project knowledge/i);
+  assert.match(flatHtml, /migration is proposed separately for approval/i);
 });

@@ -23,6 +23,22 @@ function meta(prop) {
 const CANON = "https://dwasyluk.github.io/salvor/";
 const CARD = "https://dwasyluk.github.io/salvor/assets/social/salvor-social-card.png";
 
+test("the shipped release archive verifier exercises a fresh extracted artifact", () => {
+  const pkg = JSON.parse(read("package.json"));
+  const audit = read("scripts/audit-release.mjs");
+
+  assert.equal(pkg.scripts["release:verify-archive"], "node scripts/audit-release.mjs --archive");
+  assert.match(audit, /mkdtempSync\([^\n]*salvor-release-artifact-/);
+  assert.match(audit, /execFileSync\("unzip", \["-t"/);
+  assert.match(audit, /\["ci"\]/);
+  assert.match(audit, /\["run", "test:unit"\]/);
+  assert.match(audit, /\["run", "release:audit"\]/);
+  assert.match(audit, /\["run", "brand:check"\]/);
+  assert.match(audit, /\["audit", "--audit-level=high"\]/);
+  assert.match(audit, /\["commit", "-q", "--no-gpg-sign", "-m", "release fixture baseline"\]/);
+  assert.match(audit, /\["diff", "--check"\]/);
+});
+
 // --- Licensing + brand ----------------------------------------------------
 test("LICENSE is standard MIT © 2026 Dan Wasyluk", () => {
   const l = read("LICENSE");
