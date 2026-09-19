@@ -14,10 +14,13 @@ install, so nothing about how you installed constrains how you upgrade.
 | Layer | Contents | On upgrade |
 |---|---|---|
 | **Protocol** | [`RULES.md`](../RULES.md) text, artifact-folder READMEs/templates, hub directives, vendor adapters, Salvor-managed sections | Refreshed — Salvor owns it |
-| **Knowledge** | Your artifacts (`decisions/`, `domain-learnings/`, `postmortems/`, `archive/`), L1/L2 content, `DOMAIN_REF.md` facts, deferred entries | **Never touched** — you own it |
+| **Knowledge** | Your artifacts (`decisions/`, `domain-learnings/`, `postmortems/`, `archive/`), L1/L2 content, `DOMAIN_REF.md` facts, deferred entries | Preserved by default — any identifier, header, link, or metadata migration is separately proposed and operator-approved |
 
-An upgrade replaces Salvor's instructions, never your team's accumulated
-memory. Where you have customized generated RULES text (Strict defaults are
+An upgrade refreshes Salvor's instructions and is designed to preserve your
+team's accumulated project knowledge. It never silently rewrites knowledge
+claims; when a release requires a schema, identifier, header, link, or metadata
+migration, the exact edits are part of the operator-approved plan. Where you
+have customized generated RULES text (Strict defaults are
 explicitly editable), the upgrade is proposed as a three-way merge — your
 version vs the old template vs the new template — and any conflict is yours to
 decide, per the [`RULES.md`](../RULES.md) §10.2 governance rule. Nothing is written without

@@ -1,0 +1,14 @@
+# Agent configuration — BYTE-IDENTICAL across all six conditions (S1/S2/S3/C1/C2/C3).
+#
+# This file's sha256 is recorded in the run manifest and re-asserted by
+# `salvorbench verify`. Any per-condition divergence invalidates the comparison:
+# the arms must differ ONLY by memory/coordination mechanism, never by the
+# agent scaffold, its budgets, or its tool surface.
+#
+# Deliberately NOT set (stock Claude Code behaviour in every arm):
+#   max_output_tokens, file_read_max_tokens, mcp_max_output_tokens, disallowed_tools
+# Turn limits are an experimental constant, never a cost lever — a unit that
+# exhausts them is scored as a real negative (`limits_exceeded`), not retried.
+
+backend: docker
+max_turns: 120

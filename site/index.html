@@ -4,25 +4,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffffff" />
-    <meta name="description" content="The version-controlled engineering brain for coding agents — the why, not just the what." />
+    <meta name="description" content="A repo-native engineering knowledge layer for coding agents and software teams." />
     <link rel="canonical" href="https://dwasyluk.github.io/salvor/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Salvor" />
     <meta property="og:title" content="Salvor — Your repo remembers." />
-    <meta property="og:description" content="The version-controlled engineering brain for coding agents — the why, not just the what." />
+    <meta property="og:description" content="A repo-native engineering knowledge layer for coding agents and software teams." />
     <meta property="og:url" content="https://dwasyluk.github.io/salvor/" />
     <meta property="og:image" content="https://dwasyluk.github.io/salvor/assets/social/salvor-social-card.png" />
     <meta property="og:image:secure_url" content="https://dwasyluk.github.io/salvor/assets/social/salvor-social-card.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Canonical Salvor logo and wordmark over the full-bleed geometric hero with the tagline Your repo remembers." />
+    <meta property="og:image:alt" content="Salvor engineering knowledge layer social card with the tagline Your repo remembers." />
     <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Salvor — Your repo remembers." />
-    <meta name="twitter:description" content="The version-controlled engineering brain for coding agents — the why, not just the what." />
+    <meta name="twitter:description" content="A repo-native engineering knowledge layer for coding agents and software teams." />
     <meta name="twitter:image" content="https://dwasyluk.github.io/salvor/assets/social/salvor-social-card.png" />
-    <meta name="twitter:image:alt" content="Canonical Salvor logo and wordmark over the full-bleed geometric hero with the tagline Your repo remembers." />
+    <meta name="twitter:image:alt" content="Salvor engineering knowledge layer social card with the tagline Your repo remembers." />
     <meta name="twitter:creator" content="@blockchaindan" />
     <title>Salvor — Your repo remembers.</title>
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/brand/salvor-logo-sm-black-32.png" />
@@ -36,6 +36,7 @@
         "@type": "SoftwareSourceCode",
         "name": "Salvor",
         "version": "1.0.0-beta",
+        "description": "A repo-native engineering knowledge layer for coding agents and software teams.",
         "url": "https://dwasyluk.github.io/salvor/",
         "codeRepository": "https://github.com/dwasyluk/salvor",
         "license": "https://opensource.org/licenses/MIT",
@@ -72,6 +73,7 @@
           </a>
           <nav class="desktop-nav" aria-label="Primary navigation">
             <a href="#why">WHY</a>
+            <a href="#measured">RESEARCH</a>
             <a href="#use">USE</a>
             <a href="#claude">ROADMAP</a>
             <a href="https://github.com/dwasyluk/salvor/discussions">COMMUNITY ↗</a>
@@ -82,6 +84,7 @@
           </button>
           <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile navigation" hidden>
             <a href="#why">WHY</a>
+            <a href="#measured">RESEARCH</a>
             <a href="#use">USE</a>
             <a href="#claude">ROADMAP</a>
             <a href="https://github.com/dwasyluk/salvor/discussions">COMMUNITY ↗</a>
@@ -95,9 +98,9 @@
             <h1 id="hero-title">SALVOR</h1>
             <p class="hero-tagline">Your repo remembers<span>.</span></p>
             <ul class="hero-points">
-              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">A brain, not just memory — the why, not just the what.</span></li>
-              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Decisions, failures, learnings — reviewed in Git, merging like code.</span></li>
-              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Every session starts from what the team learned. Prompt-first. Vendor-portable.</span></li>
+              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Repo-owned engineering knowledge for coding agents and teams.</span></li>
+              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Decisions, failures, and rationale — reviewed in Git.</span></li>
+              <li><span class="hero-point-marker" aria-hidden="true">&gt;</span><span class="hero-point-copy">Portable across sessions, teammates, and supported agents.</span></li>
             </ul>
           </div>
           <div class="hero-actions">
@@ -117,7 +120,7 @@
 
       <div class="content-shell">
         <section class="section reasons" id="why" aria-labelledby="why-title">
-          <p class="section-label" id="why-title">// THREE REASONS</p>
+          <p class="section-label" id="why-title">// THE ENGINEERING PROBLEM</p>
           <div class="reason-grid">
             <article class="reason-card">
               <div class="reason-heading">
@@ -127,8 +130,8 @@
                   <path d="M29 15 15 45m20-30 14 30M18 50h28"/>
                 </svg>
               </div>
-              <h2>The repo remembers why.</h2>
-              <p>Preserves decisions, learned failures, domain knowledge, and deferred findings — with the reasoning behind them.</p>
+              <h2>Source is only one kind of project state.</h2>
+              <p>Code, commits, and tests show what exists and what changed. They rarely preserve why one approach won, which failure should not be retried, or what an incident taught the team.</p>
             </article>
             <article class="reason-card">
               <div class="reason-heading">
@@ -138,8 +141,8 @@
                   <path d="M7 55c0-12 7-18 16-18s16 6 16 18M29 55c0-10 6-16 14-16s14 6 14 16"/>
                 </svg>
               </div>
-              <h2>Every supported agent starts from the same reviewed truth.</h2>
-              <p>A shared, version-controlled brain across sessions, teammates, and even different vendors. Collision-free slug knowledge IDs plus a semantic reconcile at merge and pull points — and a recurring brain audit — keep parallel branches single-truth instead of silently duplicating or contradicting each other.</p>
+              <h2>Fresh sessions often reconstruct the same context.</h2>
+              <p>Context rotation, subagents, handoffs, parallel branches, new contributors, and vendor changes each create another chance to rediscover, re-litigate, or quietly lose hard-won engineering knowledge.</p>
             </article>
             <article class="reason-card">
               <div class="reason-heading">
@@ -148,10 +151,37 @@
                   <path d="M32 7 52 15v15c0 13-7 22-20 28C19 52 12 43 12 30V15Z"/>
                 </svg>
               </div>
-              <h2>Vendor-agnostic. Vendor-portable.</h2>
-              <p>No hosted service, no account, and no vendor-owned shared brain. Repository Markdown stays canonical while compatible thin adapters let you switch supported agents without migrating your memory.</p>
+              <h2>Salvor preserves what the project learned.</h2>
+              <p>Salvor gives decisions, rationale, domain learnings, rejected approaches, operational lessons, SOPs, and deferred findings a durable, reviewable home alongside the source they explain.</p>
             </article>
           </div>
+        </section>
+
+        <section class="section answer-manifesto" id="knowledge" aria-labelledby="knowledge-title">
+          <p class="section-label" id="knowledge-title">// SALVOR'S ANSWER</p>
+          <div class="answer-layout">
+            <div class="answer-statement">
+              <p class="answer-kicker">Agents can remember. Salvor makes the important knowledge belong to the repo.</p>
+              <h2>The repo-owned engineering knowledge layer.</h2>
+              <p>Selected decisions, rationale, failures, constraints, and deferred findings become durable Markdown in Git: reviewable with the code, available to teammates, and independent of one vendor workspace.</p>
+              <p class="answer-definition"><strong>Persistent engineering cognition</strong> is Salvor's term for that durable, governed knowledge carrying forward across sessions, contributors, branches, and models.</p>
+            </div>
+            <div class="principle-list" aria-label="Salvor principles">
+              <article>
+                <h3>Repo-owned</h3>
+                <p>Knowledge travels with the code instead of depending on one agent's memory or one vendor's Project.</p>
+              </article>
+              <article>
+                <h3>Governed</h3>
+                <p>Promotion requires explicit approval; canonical ownership, provenance, contradiction handling, and supersession are defined.</p>
+              </article>
+              <article>
+                <h3>Portable</h3>
+                <p>Supported agents and vendor-native project workspaces can consume the same reviewed repository knowledge.</p>
+              </article>
+            </div>
+          </div>
+          <p class="answer-footnote"><strong>Git preserves what changed. Salvor preserves what the project learned.</strong> Salvor externalizes project cognition; it does not modify an agent's intrinsic intelligence.</p>
         </section>
 
         <section class="section process" id="how" aria-labelledby="how-title">
@@ -171,11 +201,11 @@
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><circle cx="12" cy="28" r="5"/><circle cx="44" cy="12" r="5"/><circle cx="44" cy="44" r="5"/><path d="M17 28h9m4-4 9-9m-9 17 9 9M26 20v16"/><path d="m22 16 8 4-8 4m0 8 8 4-8 4"/></svg>
-              <h2>Vendor-Agnostic &amp; Portable</h2><p>The shared brain is repo-owned Markdown. Compatible thin adapters let you switch supported vendors without migrating memory.</p>
+              <h2>Vendor-Agnostic &amp; Portable</h2><p>The shared brain is repo-owned Markdown. Compatible thin adapters let you switch supported vendors without migrating project knowledge.</p>
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="M7 30 29 8h20v20L27 50Z"/><circle cx="39" cy="18" r="3"/></svg>
-              <h2>Governed, Versioned Why</h2><p><code>RULES.md</code> keeps reviewed memory and component context synchronized. Optional Strict defaults can also enforce project-specific version counters and parity rules.</p>
+              <h2>Governed, Versioned Why</h2><p><code>RULES.md</code> defines how reviewed project knowledge and component context stay synchronized. Optional Strict defaults can also enforce project-specific version counters and parity rules.</p>
             </article>
             <article>
               <svg class="process-icon" viewBox="0 0 56 56" aria-hidden="true"><path d="m28 5 18 10v26L28 51 10 41V15Zm0 20 18-10M28 25 10 15m18 10v26"/></svg>
@@ -183,7 +213,8 @@
             </article>
           </div>
           <div class="brain-summary">
-            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred findings (<code>DEFERRED_TODOS.md</code>), postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale. Every durable artifact carries a self-allocating slug ID (like <code>LF:stale-note-reference</code>) with a structured Subject/Claim header, so knowledge captured on parallel branches merges semantically — duplicates and contradictions are surfaced for your decision, never shipped silently.</p>
+            <p><code>.salvor/</code> is the namespaced brain: L1/L2 state, <code>DOMAIN_REF.md</code>, infrastructure, deferred findings (<code>DEFERRED_TODOS.md</code>), postmortems, <code>.salvor/domain-learnings/</code>, and <code>.salvor/decisions/</code> for durable design rationale. Every durable capture receives a self-allocating slug ID (like <code>LF:stale-note-reference</code>) and structured Subject/Claim metadata. At branch boundaries, the protocol requires knowledge to be compared by subject; duplicates and contradictions are surfaced for your decision, never shipped silently.</p>
+            <p>The protocol calls for Brain Reconcile at merge and pull points, and for a recurring Brain Audit of the reviewed knowledge layer for stale, duplicate, overlapping, or contradictory claims.</p>
             <p>Every capture class is user-gated — durable saves need your explicit approval. For a finding, the agent asks: <q>Save this as a domain learning? (yes/no)</q> An experimental, off-by-default mode additionally lets agents capture provisionally for overnight and multi-agent runs — explicitly flagged, held in a lower trust tier, and ratified item-by-item by you.</p>
           </div>
         </section>
@@ -192,7 +223,7 @@
           <div class="loop-heading">
             <p class="section-label">// THE SALVOR LOOP</p>
             <h2 id="loop-title">Every approved capture gives the next session more context.</h2>
-            <p>The shared brain supplies context before the work, then receives user-approved knowledge and rationale after it — so a fresh session starts from reviewed knowledge instead of reconstruction.</p>
+            <p>The shared brain supplies context before the work, then receives user-approved knowledge and rationale after it — so a fresh session can start from reviewed knowledge instead of reconstructing it from scratch.</p>
           </div>
           <div class="loop-panels">
             <img
@@ -229,6 +260,34 @@
           </div>
         </section>
 
+        <section class="section compounds" id="compounds" aria-labelledby="compounds-title">
+          <p class="section-label" id="compounds-title">// SALVOR COMPOUNDS</p>
+          <div class="adoption-rail">
+            <article>
+              <span class="rail-node" aria-hidden="true"></span>
+              <p class="rail-label">GREENFIELD</p>
+              <h2>Grow the brain with the code.</h2>
+              <p>Architecture decisions, implementation choices, failures, operating procedures, and domain discoveries accumulate as the project develops.</p>
+            </article>
+            <article>
+              <span class="rail-node" aria-hidden="true"></span>
+              <p class="rail-label">MATURE + DELIBERATE</p>
+              <h2>Map what the team already knows.</h2>
+              <p>Committed docs, ADRs, changelogs, postmortems, runbooks, and project instructions can seed reviewed knowledge through section-level mappings.</p>
+            </article>
+            <article>
+              <span class="rail-node" aria-hidden="true"></span>
+              <p class="rail-label">MATURE + MINIMAL</p>
+              <h2>Start thin and learn forward.</h2>
+              <p>Salvor begins with what setup can legitimately derive from available project state. Undocumented historical rationale remains undocumented until evidence surfaces.</p>
+            </article>
+          </div>
+          <div class="adoption-caveat">
+            <p><strong>Structure can often be derived. Rationale needs evidence.</strong></p>
+            <p>Existing sources are inspected read-only. Salvor proposes mappings, preserves canonical ownership, and asks before promotion or mutation; it cannot preserve knowledge it has never been given or had a chance to learn.</p>
+          </div>
+        </section>
+
         <section class="section use" id="use" aria-labelledby="use-title">
           <p class="section-label" id="use-title">// USE SALVOR</p>
           <div class="terminal-grid">
@@ -243,11 +302,11 @@
                 <li>Paste <code>SETUP_PROMPT.md</code> and answer the four setup questions.</li>
                 <li>For an existing project, review a read-only inventory and optionally adopt selected docs or knowledge during setup—or later on demand—through the same section-level mapping flow. Originals remain untouched unless you separately approve changing them.</li>
                 <li>Review the proposed files and the completed diff.</li>
-                <li>Enable Serena and GitNexus enhanced tooling if desired — both are optional, but highly recommended for the best code-grounded results — after reviewing each project's installation and license terms.</li>
+                <li>Enable Serena and GitNexus if desired. They are optional and recommended when you want semantic symbol navigation and graph-based impact analysis; review each project's installation and license terms first.</li>
                 <li>When GitNexus is selected, let setup detect the installed CLI's capabilities and offer the safest supported indexing mode.</li>
                 <li>Review and optionally commit only the Salvor-related changes.</li>
               </ol>
-              <p>Core works with repository files alone; setup doesn't fail without the optional enhanced integrations. Upgrading later is the same move: paste a newer <code>SETUP_PROMPT.md</code> and setup reads the install's protocol stamp, proposing only the protocol deltas — your accumulated knowledge is never touched.</p>
+              <p>Core works with repository files alone; setup doesn't fail without the optional enhanced integrations. Upgrading later is the same move: paste a newer <code>SETUP_PROMPT.md</code> and setup reads the install's protocol stamp, proposing only the protocol deltas. The process is designed to preserve accumulated project knowledge; any explicit identifier, header, link, or metadata migration is proposed separately for approval.</p>
               <pre><code>$ cat SETUP_PROMPT.md
 $ # copy the output; paste into your CLI
 $ # answer the setup questions
@@ -268,17 +327,88 @@ $ # Salvor scaffolds the rest</code></pre>
           </div>
         </section>
 
+        <section class="section evidence" id="evidence" aria-labelledby="evidence-title">
+          <p class="section-label" id="evidence-title">// EVIDENCE &amp; VALIDATION</p>
+
+          <div class="evidence-part dogfood-ledger" id="dogfood" aria-labelledby="dogfood-title">
+            <div class="evidence-heading">
+              <p class="evidence-kicker">SALVOR ON SALVOR</p>
+              <h2 id="dogfood-title">The repository carries its own receipts.</h2>
+              <p>Three inspectable examples show project knowledge surviving into later work. They are operational evidence, not an independent benchmark or a universal performance claim.</p>
+            </div>
+            <div class="dogfood-schema" aria-label="Trigger to capture to compounded knowledge">
+              <span>TRIGGER</span>
+              <span class="schema-arrow" aria-hidden="true">→</span>
+              <span>CAPTURE</span>
+              <span class="schema-arrow" aria-hidden="true">→</span>
+              <span>COMPOUNDED KNOWLEDGE</span>
+            </div>
+            <p class="dogfood-schema-note">Each example follows the same path: engineering work triggers a durable capture; later sessions inherit the reviewed result.</p>
+            <div class="case-ledger">
+              <article>
+                <p class="case-class">DESIGN DECISION</p>
+                <div class="case-body">
+                  <h3><span class="case-event-context"><span class="case-trigger">TRIGGER · INCIDENT</span><span aria-hidden="true"> —</span></span><span class="case-event-title">Branch flow inverted</span></h3>
+                  <dl class="case-fields">
+                    <div><dt>CAPTURED</dt><dd>The dev-first release SOP and the rationale behind it.</dd></div>
+                    <div><dt>COMPOUNDED KNOWLEDGE</dt><dd>Later sessions begin from the corrected policy instead of reconstructing the incident.</dd></div>
+                  </dl>
+                </div>
+              </article>
+              <article>
+                <p class="case-class">DESIGN DECISION</p>
+                <div class="case-body">
+                  <h3><span class="case-event-context"><span class="case-trigger">TRIGGER · RISK</span><span aria-hidden="true"> —</span></span><span class="case-event-title">Mature-repo adoption</span></h3>
+                  <dl class="case-fields">
+                    <div><dt>CAPTURED</dt><dd>A preservation-first invariant: reuse existing hubs, rules, tool state, and docs.</dd></div>
+                    <div><dt>COMPOUNDED KNOWLEDGE</dt><dd>Setup presents an adoption map before any approved promotion or mutation.</dd></div>
+                  </dl>
+                </div>
+              </article>
+              <article>
+                <p class="case-class">DOMAIN LEARNING</p>
+                <div class="case-body">
+                  <h3><span class="case-event-context"><span class="case-trigger">TRIGGER · VERSION DRIFT</span><span aria-hidden="true"> —</span></span><span class="case-event-title">GitNexus capabilities varied</span></h3>
+                  <dl class="case-fields">
+                    <div><dt>CAPTURED</dt><dd>A tested index-only default and a boundary for machine-derived structure.</dd></div>
+                    <div><dt>COMPOUNDED KNOWLEDGE</dt><dd>Derived code intelligence does not silently rewrite canonical project knowledge.</dd></div>
+                  </dl>
+                </div>
+              </article>
+            </div>
+            <p class="evidence-note"><a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/README.md#salvor-on-salvor">Inspect the source history <span aria-hidden="true">→</span></a></p>
+          </div>
+
+          <div class="evidence-part research-status" id="measured" aria-labelledby="research-status-title">
+            <p class="evidence-kicker">RESEARCH STATUS</p>
+            <div class="research-status-layout">
+              <h2 id="research-status-title">Longitudinal validation is still open.</h2>
+              <div class="research-status-copy">
+                <p>Salvor is designed around engineering knowledge that compounds across real project history: decisions, domain learning, failed approaches, and deferred findings reused by later sessions and contributors.</p>
+                <p>Long-horizon agent-memory evaluation is advancing quickly. The methods reviewed cover important adjacent settings, including coding and multi-session reliability, but do not directly reproduce this full mature-repository, repository-governed construct.</p>
+                <p>As suitable coding-oriented longitudinal evaluation methods mature, we will publish reproducible results here.</p>
+              </div>
+            </div>
+            <p class="research-note">Earlier exploratory short-horizon experiments remain archived for reproducibility, but they are not treated as longitudinal validation of Salvor.</p>
+            <nav class="research-links" aria-label="Research resources">
+              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/benchmarks/METHODOLOGY.md">Methodology <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/benchmarks/results/beta/REPORT.md">Exploratory beta report <span aria-hidden="true">→</span></a>
+              <a href="https://github.com/dwasyluk/salvor/issues/5">Advanced benchmarking RFC <span aria-hidden="true">→</span></a>
+            </nav>
+          </div>
+        </section>
+
         <section class="section foundations" id="foundations" aria-labelledby="foundations-title">
           <p class="section-label" id="foundations-title">// CODE INTELLIGENCE INTEGRATIONS</p>
-          <p class="foundation-intro">Salvor's core runs on repository files alone. For faster code traversal and deeper code-grounded intelligence, Salvor can use Serena MCP and GitNexus MCP — each under its own license and terms. <em>Neither is required</em>, but <strong>both are highly recommended for the best results and improved token efficiency.</strong></p>
+          <p class="foundation-intro">Salvor's core runs on repository files alone. Serena MCP and GitNexus MCP are optional integrations for semantic code navigation and graph-based impact analysis, each under its own license and terms.</p>
           <div class="foundation-grid">
             <article>
               <svg class="foundation-mark" viewBox="0 0 72 72" aria-hidden="true"><path d="m36 4 28 16v32L36 68 8 52V20Zm0 0v64M8 20l28 16 28-16"/><circle cx="36" cy="36" r="5"/></svg>
-              <div><h2><a href="https://github.com/oraios/serena">Serena</a> <span>CODE INTELLIGENCE</span></h2><p>Optional open-source integration for semantic code navigation and targeted edits by symbol. Highly recommended for the best results: understand before you change.</p><a href="https://github.com/oraios/serena">github.com/oraios/serena →</a></div>
+              <div><h2><a href="https://github.com/oraios/serena">Serena</a> <span>CODE INTELLIGENCE</span></h2><p>Optional open-source integration for semantic code navigation and targeted edits by symbol: understand the relevant structure before you change it.</p><a href="https://github.com/oraios/serena">github.com/oraios/serena →</a></div>
             </article>
             <article>
               <svg class="foundation-mark" viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="28"/><circle cx="36" cy="36" r="5"/><path d="M36 8v23m0 10v23M8 36h23m10 0h23M16 16l16 16m8 8 16 16M56 16 40 32m-8 8L16 56"/></svg>
-              <div><h2><a href="https://github.com/abhigyanpatwari/GitNexus">GitNexus</a> <span>IMPACT ANALYSIS</span></h2><p>Optional integration providing a code knowledge graph — see what breaks before you ship. A third-party project under the PolyForm Noncommercial license; review its terms for your use.</p><a href="https://github.com/abhigyanpatwari/GitNexus">github.com/abhigyanpatwari/GitNexus →</a></div>
+              <div><h2><a href="https://github.com/abhigyanpatwari/GitNexus">GitNexus</a> <span>IMPACT ANALYSIS</span></h2><p>Optional integration providing a code knowledge graph to inspect the likely blast radius before editing or shipping. A third-party project under the PolyForm Noncommercial license; review its terms for your use.</p><a href="https://github.com/abhigyanpatwari/GitNexus">github.com/abhigyanpatwari/GitNexus →</a></div>
             </article>
           </div>
         </section>
@@ -296,6 +426,7 @@ $ # Salvor scaffolds the rest</code></pre>
         <div class="footer-copy"><p>Open source. Community powered.<br />Make your project's knowledge compound.</p><p>v1.0.0-beta &nbsp;·&nbsp; MIT License</p></div>
         <nav aria-label="Footer navigation">
           <a href="https://github.com/dwasyluk/salvor/discussions">Community ↗</a>
+          <a href="https://x.com/SalvorKnows">X · @SalvorKnows ↗</a>
           <a href="https://github.com/dwasyluk/salvor">GitHub ↗</a>
           <a href="https://github.com/dwasyluk/salvor/tree/v1.0.0-beta/docs">Docs</a>
           <a href="https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/SETUP_PROMPT.md">SETUP_PROMPT.md</a>

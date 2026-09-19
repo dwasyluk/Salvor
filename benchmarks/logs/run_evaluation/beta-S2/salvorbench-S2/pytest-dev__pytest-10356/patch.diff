@@ -1,0 +1,64 @@
+diff --git a/changelog/9330.bugfix.rst b/changelog/9330.bugfix.rst
+new file mode 100644
+index 000000000..6553431e1
+--- /dev/null
++++ b/changelog/9330.bugfix.rst
+@@ -0,0 +1 @@
++Fixed marks not getting inherited properly for classes with multiple base classes (diamond/multiple inheritance). Marks are now collected considering the class's MRO (Method Resolution Order), so marks from all base classes are properly applied to derived test classes.
+diff --git a/src/_pytest/mark/structures.py b/src/_pytest/mark/structures.py
+index 800a25c92..43ecf7446 100644
+--- a/src/_pytest/mark/structures.py
++++ b/src/_pytest/mark/structures.py
+@@ -1,5 +1,6 @@
+ import collections.abc
+ import inspect
++import itertools
+ import warnings
+ from typing import Any
+ from typing import Callable
+@@ -355,11 +356,30 @@ class MarkDecorator:
+         return self.with_args(*args, **kwargs)
+ 
+ 
+-def get_unpacked_marks(obj: object) -> Iterable[Mark]:
+-    """Obtain the unpacked marks that are stored on an object."""
+-    mark_list = getattr(obj, "pytestmark", [])
++def _get_own_mark_list(cls: type) -> List[Union[Mark, "MarkDecorator"]]:
++    mark_list = cls.__dict__.get("pytestmark", [])
+     if not isinstance(mark_list, list):
+         mark_list = [mark_list]
++    return mark_list
++
++
++def get_unpacked_marks(obj: object, *, consider_mro: bool = True) -> Iterable[Mark]:
++    """Obtain the unpacked marks that are stored on an object.
++
++    If obj is a class and consider_mro is true, return marks applied to
++    this class and all of its super-classes in MRO order. If consider_mro
++    is false, only marks applied to this class will be considered.
++    """
++    if isinstance(obj, type):
++        if consider_mro:
++            mark_lists = (_get_own_mark_list(x) for x in obj.__mro__)
++            mark_list = list(itertools.chain.from_iterable(mark_lists))
++        else:
++            mark_list = _get_own_mark_list(obj)
++    else:
++        mark_list = getattr(obj, "pytestmark", [])
++        if not isinstance(mark_list, list):
++            mark_list = [mark_list]
+     return normalize_mark_list(mark_list)
+ 
+ 
+@@ -388,7 +408,10 @@ def store_mark(obj, mark: Mark) -> None:
+     assert isinstance(mark, Mark), mark
+     # Always reassign name to avoid updating pytestmark in a reference that
+     # was only borrowed.
+-    obj.pytestmark = [*get_unpacked_marks(obj), mark]
++    obj.pytestmark = [
++        *get_unpacked_marks(obj, consider_mro=False),
++        mark,
++    ]
+ 
+ 
+ # Typing for builtin pytest marks. This is cheating; it gives builtin marks

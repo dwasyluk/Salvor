@@ -1,0 +1,66 @@
+# The six experimental conditions, declaratively. `expected` counts come from
+# here via the manifest and are NEVER derived from what actually ran.
+version: 1
+
+model:
+  id: claude-sonnet-5
+  # Identical across all six arms. Effort is left at the API default (high on
+  # Claude Code) and is never varied by condition.
+  effort: null
+
+swecl:
+  benchmark: swe-bench-cl
+  sequence: pytest-dev/pytest
+  expected_tasks: 19
+  order_policy: upstream_sequence_position
+  order_note: >-
+    Upstream `sequence_position` verbatim. This is difficulty-tiered and then
+    chronological WITHIN tier - it is NOT globally chronological. Never re-sorted.
+  scoring: official-swebench-harness
+  scoring_note: >-
+    SWE-Bench-CL's own harness is abandoned and contains simulated results; it is
+    never used for scoring. The curriculum file supplies ordering, difficulty and
+    dependency metadata only.
+
+cooper:
+  benchmark: cooperbench
+  ref: v0.0.29
+  subset: flash
+  full_pairs: 50
+  # Resolved by `salvorbench probe` and frozen into the manifest BEFORE any C run.
+  chosen_n: null
+
+conditions:
+  - id: S1
+    bench: swe-bench-cl
+    salvor: false
+    memory: none
+  - id: S2
+    bench: swe-bench-cl
+    salvor: false
+    memory: ported-swebench-cl-semantic
+    memory_note: >-
+      Lifecycle is reproduced from the pinned upstream source, not assumed.
+      The external evaluator result NEVER enters memory or gates a write.
+  - id: S3
+    bench: swe-bench-cl
+    salvor: true
+    memory: salvor-brain-chained
+    mcp: [serena, gitnexus]
+  - id: C1
+    bench: cooperbench
+    setting: solo
+    agents: 1
+    salvor: false
+  - id: C2
+    bench: cooperbench
+    setting: coop
+    agents: 2
+    salvor: false
+  - id: C3
+    bench: cooperbench
+    setting: coop
+    agents: 2
+    salvor: true
+    mcp: [serena, gitnexus]
+    shared_brain: true

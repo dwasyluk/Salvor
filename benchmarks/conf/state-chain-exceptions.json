@@ -1,0 +1,14 @@
+{
+  "_doc": "Documented tamper-evidence exceptions. Each entry names ONE state-log line whose chain digest is known-broken, with cause and prevention. verify() downgrades exactly these entries to prominently-reported warnings; any other break still blocks publication. The log itself is never rewritten - a tamper-evident record edited to verify would be worthless.",
+  "exceptions": [
+    {
+      "run": "beta",
+      "seq": 16,
+      "line_sha256": "2af6a9d687933fa74589dafd755db43fe73ef013a31f34c47e773287d953a764",
+      "event": "subset_frozen",
+      "cause": "Caller passed a payload field named 'sha256' (the frozen subset digest) which collided with the chain-digest key at append time, so the recomputed digest cannot match.",
+      "prevention": "RESERVED field names are refused at append since the fix (state/log.py); regression-tested.",
+      "recorded": "2026-08-19"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+diff --git a/changelog/7517.bugfix.rst b/changelog/7517.bugfix.rst
+new file mode 100644
+index 000000000..4f5e6aa29
+--- /dev/null
++++ b/changelog/7517.bugfix.rst
+@@ -0,0 +1,5 @@
++Fixed regression where ``capfd``/``capfdbinary`` (FD-level capturing) would convert
++``\r`` (carriage return) characters into ``\n`` (newline) when reading captured output,
++because the internal capture file was opened in universal-newlines mode. The capture
++file is now opened with ``newline=""`` so carriage returns and other line endings are
++preserved exactly as written.
+diff --git a/src/_pytest/capture.py b/src/_pytest/capture.py
+index 3f9c60fb9..f538b67ec 100644
+--- a/src/_pytest/capture.py
++++ b/src/_pytest/capture.py
+@@ -388,6 +388,7 @@ class FDCaptureBinary:
+                 TemporaryFile(buffering=0),  # type: ignore[arg-type]
+                 encoding="utf-8",
+                 errors="replace",
++                newline="",
+                 write_through=True,
+             )
+             if targetfd in patchsysdict:

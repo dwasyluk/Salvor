@@ -9,6 +9,13 @@ const viewports = [
   ["narrow", { width: 320, height: 568 }],
 ];
 
+const foldTargets = [
+  ["desktop", { width: 1440, height: 1000 }, 120],
+  ["tablet", { width: 768, height: 1024 }, 160],
+  ["phone360", { width: 360, height: 780 }, 80],
+  ["phone320", { width: 320, height: 568 }, 50],
+];
+
 async function overflowReport(page) {
   return page.evaluate(() => [...document.querySelectorAll("body *")]
     .map((element) => {
@@ -117,6 +124,36 @@ async function renderedInkBounds(page, locator, regions) {
   });
 }
 
+for (const [name, viewport, minimumWhyVisible] of foldTargets) {
+  test(`${name} exposes the engineering problem above the fold without clipping hero actions`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    await expect(page.locator("[data-burn-hero]")).toBeVisible();
+
+    const geometry = await page.evaluate(() => {
+      const hero = document.querySelector("[data-burn-hero]").getBoundingClientRect();
+      const why = document.querySelector("#why").getBoundingClientRect();
+      const actions = document.querySelector(".hero-actions").getBoundingClientRect();
+      return {
+        heroHeight: hero.height,
+        heroBottom: hero.bottom,
+        whyTop: why.top,
+        whyVisible: Math.max(0, innerHeight - why.top),
+        actionsTop: actions.top,
+        actionsBottom: actions.bottom,
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      };
+    });
+
+    expect(geometry.whyVisible).toBeGreaterThanOrEqual(minimumWhyVisible);
+    expect(geometry.actionsTop).toBeGreaterThanOrEqual(0);
+    expect(geometry.actionsBottom).toBeLessThanOrEqual(geometry.heroBottom + 1);
+    expect(geometry.actionsBottom).toBeLessThanOrEqual(viewport.height - minimumWhyVisible + 1);
+    expect(geometry.scrollWidth - geometry.clientWidth).toBeLessThanOrEqual(1);
+  });
+}
+
 test("adaptive SM favicon renders dark on light chrome and white on dark chrome", async ({ browser }) => {
   for (const [colorScheme, expectedRange] of [
     ["light", [0, 80]],
@@ -166,7 +203,9 @@ for (const [name, viewport] of viewports) {
     await expect(page.locator(".hero-actions .button-primary").first()).toBeVisible();
 
     const communityHref = "https://github.com/dwasyluk/salvor/discussions";
+    const xHref = "https://x.com/SalvorKnows";
     await expect(page.locator(`a[href="${communityHref}"]`)).toHaveCount(3);
+    await expect(page.locator(`a[href="${xHref}"]`)).toHaveCount(1);
     if (viewport.width > 900) {
       await expect(page.locator(`.desktop-nav a[href="${communityHref}"]`)).toBeVisible();
       await expect(page.locator(`.mobile-menu a[href="${communityHref}"]`)).toBeHidden();
@@ -236,9 +275,98 @@ for (const [name, viewport] of viewports) {
 
     await page.locator(".site-footer").scrollIntoViewIfNeeded();
     await expect(page.locator(`.site-footer a[href="${communityHref}"]`)).toBeVisible();
+    const xLink = page.locator(`.site-footer a[href="${xHref}"]`);
+    await expect(xLink).toBeVisible();
+    await expect(xLink).toHaveText("X · @SalvorKnows ↗");
+    await xLink.focus();
+    await expect(xLink).toBeFocused();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     expect(overflow, JSON.stringify(await overflowReport(page), null, 2)).toBeLessThanOrEqual(1);
     expect(runtimeErrors).toEqual([]);
+  });
+}
+
+for (const [name, viewport, expectedIndent] of [
+  ["desktop", { width: 1440, height: 1000 }, 28],
+  ["tablet", { width: 768, height: 1024 }, 28],
+  ["phone360", { width: 360, height: 780 }, 16],
+  ["phone320", { width: 320, height: 568 }, 16],
+]) {
+  test(`${name} renders the dogfood cases as nested canonical knowledge`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+
+    const dogfood = page.locator("#dogfood");
+    const cases = dogfood.locator(".case-ledger article");
+    await expect(cases).toHaveCount(3);
+    await dogfood.scrollIntoViewIfNeeded();
+
+    const hierarchy = await cases.evaluateAll((articles) => articles.map((article) => {
+      const knowledgeClass = article.querySelector(".case-class");
+      const body = article.querySelector(".case-body");
+      const trigger = article.querySelector(".case-trigger");
+      const event = article.querySelector(".case-event-title");
+      const prose = article.querySelector("dd");
+      const articleRect = article.getBoundingClientRect();
+      const bodyRect = body.getBoundingClientRect();
+      const labels = [...article.querySelectorAll("dt")].map((label) => {
+        const rect = label.getBoundingClientRect();
+        return { left: rect.left, right: rect.right };
+      });
+
+      return {
+        knowledgeClassColor: getComputedStyle(knowledgeClass).color,
+        gold: getComputedStyle(document.querySelector(".evidence-kicker")).color,
+        knowledgeClassWeight: Number.parseInt(getComputedStyle(knowledgeClass).fontWeight, 10),
+        bodyIndent: bodyRect.left - articleRect.left,
+        triggerSize: Number.parseFloat(getComputedStyle(trigger).fontSize),
+        eventSize: Number.parseFloat(getComputedStyle(event).fontSize),
+        proseSize: Number.parseFloat(getComputedStyle(prose).fontSize),
+        articleLeft: articleRect.left,
+        articleRight: articleRect.right,
+        labels,
+      };
+    }));
+
+    for (const entry of hierarchy) {
+      expect(entry.knowledgeClassColor).toBe(entry.gold);
+      expect(entry.knowledgeClassWeight).toBeGreaterThanOrEqual(700);
+      expect(Math.abs(entry.bodyIndent - expectedIndent)).toBeLessThanOrEqual(0.5);
+      expect(entry.eventSize).toBeGreaterThan(entry.triggerSize);
+      expect(entry.proseSize).toBeGreaterThanOrEqual(13);
+      for (const label of entry.labels) {
+        expect(label.left).toBeGreaterThanOrEqual(entry.articleLeft - 1);
+        expect(label.right).toBeLessThanOrEqual(entry.articleRight + 1);
+      }
+    }
+
+    const research = page.locator("#measured");
+    await research.scrollIntoViewIfNeeded();
+    await expect(research.locator("#research-status-title")).toHaveText("Longitudinal validation is still open.");
+    await expect(research.locator(".research-links a")).toHaveCount(3);
+    const researchGeometry = await research.evaluate((section) => {
+      const rect = section.getBoundingClientRect();
+      const layout = section.querySelector(".research-status-layout");
+      const copy = section.querySelector(".research-status-copy p");
+      const links = [...section.querySelectorAll(".research-links a")];
+      return {
+        left: rect.left,
+        right: rect.right,
+        height: rect.height,
+        columns: getComputedStyle(layout).gridTemplateColumns.split(" ").length,
+        copySize: Number.parseFloat(getComputedStyle(copy).fontSize),
+        linkWhiteSpace: links.map((link) => getComputedStyle(link).whiteSpace),
+      };
+    });
+    expect(researchGeometry.left).toBeGreaterThanOrEqual(0);
+    expect(researchGeometry.right).toBeLessThanOrEqual(viewport.width + 1);
+    expect(researchGeometry.height).toBeGreaterThan(200);
+    expect(researchGeometry.copySize).toBeGreaterThanOrEqual(13);
+    expect(researchGeometry.columns).toBe(viewport.width <= 640 ? 1 : 2);
+    expect(researchGeometry.linkWhiteSpace).toEqual(["nowrap", "nowrap", "nowrap"]);
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    expect(overflow, JSON.stringify(await overflowReport(page), null, 2)).toBeLessThanOrEqual(1);
   });
 }
 

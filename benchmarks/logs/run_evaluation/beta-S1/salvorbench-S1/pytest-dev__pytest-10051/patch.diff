@@ -1,0 +1,16 @@
+diff --git a/src/_pytest/logging.py b/src/_pytest/logging.py
+index a4f4214b1..f3a0439ff 100644
+--- a/src/_pytest/logging.py
++++ b/src/_pytest/logging.py
+@@ -440,7 +440,10 @@ class LogCaptureFixture:
+ 
+     def clear(self) -> None:
+         """Reset the list of log records and the captured log text."""
+-        self.handler.reset()
++        # Mutate the existing list, rather than replacing it, so the caller
++        # can still access the same object via get_records(current_when).
++        self.handler.records.clear()
++        self.handler.stream = StringIO()
+ 
+     def set_level(self, level: Union[int, str], logger: Optional[str] = None) -> None:
+         """Set the level of a logger for the duration of a test.

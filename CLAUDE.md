@@ -13,6 +13,7 @@ Salvor is a prompt-and-documentation framework that gives repositories a version
 | core | Markdown prompt protocol | @core/CLAUDE.md |
 | ghpage | Static GitHub Pages v1.0.0-beta presentation mirror | @site/CLAUDE.md |
 | docs | Markdown | @docs/CLAUDE.md |
+| bench | Python (uv) clean-room benchmark harness | @benchmarks/CLAUDE.md |
 
 ## Documentation Map
 | Document | Purpose | When to Read |
@@ -33,6 +34,10 @@ Maintain `.salvor/active_state.md` (L1, ≤50 lines, confirmed current logic/del
 
 ### SYSTEM DIRECTIVE: THREE CAPTURE CLASSES
 Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record. The three capture classes: (1) **Decision / Domain Learning** — ask exactly `Record this as a design decision? (yes/no)` (→ `.salvor/decisions/`) or `Save this as a domain learning? (yes/no)` (→ `.salvor/domain-learnings/`); (2) **Learned Failure (`LF:<slug>`)** — registered through the same flow when the discovery is a failure; (3) **Deferred Finding** — ask exactly `Log this to .salvor/DEFERRED_TODOS.md? (yes/no)`. Never infer, silently save, or batch unrelated discoveries; follow `RULES.md` §2 and §7 on approval. Knowledge IDs are self-allocating slugs with structured Subject/Claim headers, and incoming-brain reconcile + the recurring brain audit run per `RULES.md` §10.
+
+### SYSTEM DIRECTIVE: BRANCH FLOW (dev-first)
+
+Work branches from `dev`, never from `main`: `dev` → `feat/<slug>` or `bug/<slug>` (carry the GitHub issue ID once one exists, e.g. `feat/3_evaluate-agent-plugins-1.0`) → implement → **sync `dev` into the branch and resolve conflicts first** (this is the `RULES.md` [§0.6](RULES.md#0-critical-task-termination-protocol)/[§10.2](RULES.md#102-brain-reconcile-mergepull-ceremony) pre-merge Brain Reconcile trigger) → PR back to `dev` → adjacent developer reviews and approves → **the reviewer merges and deletes the branch**. `dev` promotes to `main` in controlled feature groups; `dev` is the integration branch that advances build counters ([§3](RULES.md#3-version-increment-rules)), `main` is the release branch. If asked to merge a feature branch directly into `main`, do not proceed — ask verbatim: `"SOP is feature → dev → main. Merge into dev instead? (yes / no — override)"`. Full rule: [`RULES.md` §6.12](RULES.md#6-coding-required-practices).
 
 ## GitNexus — Code Intelligence
 

@@ -159,12 +159,26 @@ test("README lockup and social canvases use canonical generated compositions", (
   assert.match(social, /data-wordmark="outlined"/);
   assert.match(social, /data-typography="sf-mono-800-0\.22em"/);
   assert.match(social, /Your repo remembers\./);
-  assert.match(social, /Version-controlled engineering memory for coding agents\./);
+  assert.match(social, /Engineering knowledge layer for coding agents and software teams\./);
   assert.doesNotMatch(social, /<text\b/);
   const wordmark = read("assets/brand/generated/salvor-wordmark-black.svg");
   assert.match(wordmark, /data-typography="sf-mono-800-0\.22em"/);
   assert.match(wordmark, /<path[^>]+fill="#050608"/);
   assert.doesNotMatch(wordmark, /stroke="#050608"/);
+});
+
+test("README places the Foundation reference artwork after Why Salvor with a release-safe local asset", () => {
+  const path = "assets/brand/reference/foundation_ref_assets/salvor_artifact_expansion.png";
+  const readme = read("README.md");
+  const why = readme.indexOf('## Why "Salvor"?');
+  const image = readme.indexOf(`<img\n    src="${path}"`);
+  const docs = readme.indexOf("## Docs");
+
+  assert.deepEqual(png(path), { width: 1086, height: 362 });
+  assert.ok(why >= 0 && image > why && docs > image, "artwork must conclude Why Salvor before Docs");
+  assert.match(readme, /<p align="center">\s*<img[^>]+width="960"[^>]*>\s*<\/p>/s);
+  assert.match(readme, /alt="Salvor Hardin accessing a psychohistory artifact[^\"]+"/);
+  assert.match(readme, /<em>Foundation-inspired visual reference:[^<]+<\/em>/);
 });
 
 test("public surfaces use the small logo only for favicons and the regular logo everywhere else", () => {

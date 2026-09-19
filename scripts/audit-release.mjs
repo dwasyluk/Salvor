@@ -3,12 +3,80 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, statSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, extname, join, normalize, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const git = (...args) => execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
+
+function verifyReleaseArchive() {
+  const archiveFlag = process.argv.indexOf("--archive");
+  const archiveArgument = process.argv
+    .slice(archiveFlag + 1)
+    .find((argument) => !argument.startsWith("--"));
+  assert.ok(archiveArgument, "usage: npm run release:verify-archive -- <archive.zip> [--browser] [--keep]");
+
+  const archivePath = resolve(root, archiveArgument);
+  assert.ok(existsSync(archivePath), `release archive does not exist: ${archivePath}`);
+  assert.equal(extname(archivePath), ".zip", "release archive must be a .zip file");
+
+  const keep = process.argv.includes("--keep");
+  const browser = process.argv.includes("--browser");
+  const extractionRoot = mkdtempSync(join(tmpdir(), "salvor-release-artifact-"));
+
+  try {
+    execFileSync("unzip", ["-t", archivePath], { stdio: "inherit" });
+    execFileSync("unzip", ["-q", archivePath, "-d", extractionRoot], { stdio: "inherit" });
+    assert.ok(existsSync(join(extractionRoot, "package.json")), "archive must extract its release root directly");
+
+    const archiveFiles = execFileSync("unzip", ["-Z1", archivePath], { encoding: "utf8" })
+      .split("\n")
+      .filter((entry) => entry && !entry.endsWith("/"));
+    execFileSync("git", ["init", "-q"], { cwd: extractionRoot, stdio: "inherit" });
+    for (let offset = 0; offset < archiveFiles.length; offset += 100) {
+      execFileSync("git", ["add", "-f", "--", ...archiveFiles.slice(offset, offset + 100)], {
+        cwd: extractionRoot,
+        stdio: "inherit",
+      });
+    }
+    execFileSync("git", ["commit", "-q", "--no-gpg-sign", "-m", "release fixture baseline"], {
+      cwd: extractionRoot,
+      env: {
+        ...process.env,
+        GIT_AUTHOR_NAME: "Salvor Release Verifier",
+        GIT_AUTHOR_EMAIL: "release-verifier@localhost",
+        GIT_COMMITTER_NAME: "Salvor Release Verifier",
+        GIT_COMMITTER_EMAIL: "release-verifier@localhost",
+      },
+      stdio: "inherit",
+    });
+
+    const validationCommands = [
+      ["npm", ["ci"]],
+      ["npm", ["run", "test:unit"]],
+      ["npm", ["run", "release:audit"]],
+      ["npm", ["run", "brand:check"]],
+      ["npm", ["audit", "--audit-level=high"]],
+    ];
+    if (browser) validationCommands.push(["npm", ["run", "test:browser"]]);
+    validationCommands.push(["git", ["diff", "--check"]]);
+
+    for (const [command, args] of validationCommands) {
+      console.log(`\n$ ${command} ${args.join(" ")}`);
+      execFileSync(command, args, { cwd: extractionRoot, stdio: "inherit" });
+    }
+
+    console.log(`\nRelease archive validation passed: ${archivePath}`);
+    console.log(`EXTRACTED_RELEASE_PATH=${extractionRoot}`);
+  } finally {
+    if (!keep) rmSync(extractionRoot, { recursive: true, force: true });
+    else console.log(`Preserved extracted release at ${extractionRoot}`);
+  }
+}
+
+function runReleaseAudit() {
 const files = git("ls-files", "--cached", "--others", "--exclude-standard", "-z").split("\0").filter(Boolean).filter((file) => existsSync(join(root, file)));
 const fileSet = new Set(files);
 const textExtensions = new Set(["", ".css", ".html", ".js", ".json", ".md", ".mjs", ".svg", ".txt", ".yml", ".yaml"]);
@@ -168,3 +236,7 @@ if (failures.length) {
 } else {
   console.log(`\nRelease integrity audit passed (${checks.length} gates).`);
 }
+}
+
+if (process.argv.includes("--archive")) verifyReleaseArchive();
+else runReleaseAudit();

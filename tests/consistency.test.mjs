@@ -25,10 +25,10 @@ const changelog = read("CHANGELOG.md");
 test("site does not tell every user to install Serena and GitNexus", () => {
   assert.doesNotMatch(site, /Install Serena and GitNexus/i);
 });
-test("public quickstart presents both enhanced integrations as optional and highly recommended", () => {
+test("public quickstart presents enhanced integrations as optional capabilities", () => {
   assert.match(
     flat("site/index.html"),
-    /<li>[^<]*Serena[^<]*GitNexus[^<]*both[^<]*optional[^<]*highly recommended[^<]*best code-grounded results[^<]*<\/li>/i,
+    /<li>[^<]*Serena[^<]*GitNexus[^<]*optional[^<]*semantic symbol navigation[^<]*graph-based impact analysis[^<]*<\/li>/i,
   );
 });
 
@@ -142,7 +142,7 @@ test("public docs explain the vendor-named hub as a cross-vendor implementation 
   }
 });
 
-test("enhanced integrations are optional and highly recommended", () => {
+test("enhanced integrations are optional and described by capability", () => {
   for (const file of [
     "README.md",
     "SETUP_PROMPT.md",
@@ -151,6 +151,7 @@ test("enhanced integrations are optional and highly recommended", () => {
   ]) {
     const source = flat(file);
     assert.match(source, /optional/i, file);
-    assert.match(source, /highly recommended|best results/i, file);
+    assert.match(source, /semantic[^.]*navigation|graph-based impact analysis/i, file);
+    assert.doesNotMatch(source, /improved token efficiency|best results/i, file);
   }
 });
