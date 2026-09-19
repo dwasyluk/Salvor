@@ -7,6 +7,7 @@ Operational reference for local work, deployment, environment variables, externa
 - The canonical repository is primarily Markdown; this branch also has a root Node test harness for the site.
 - Run `npm test` for site contracts/interactions and `npm run test:browser` for direct Playwright rendering.
 - Run `npm run brand:build` to regenerate the canonical regular/small authored-SVG asset families, `npm run brand:check` for byte-level drift detection, and `npm run brand:audit` for a visual contact sheet under `/tmp/salvor-v1.0.0-beta-brand-audit/`.
+- After creating a release ZIP, run `npm run release:verify-archive -- <archive.zip> --browser --keep` to test the clean extracted artifact. The gate verifies ZIP integrity, initializes and baseline-commits a disposable Git repository for `git diff --check`, installs from the lockfile, and runs unit, release-audit, brand, dependency-audit, and optional browser checks against the extracted files rather than the source worktree.
 - `example-project/api` and `example-project/web` are separate TypeScript regression fixtures; inspect their package manifests before running fixture commands.
 - Use the narrowest structural, link/path, diff, and Markdown checks appropriate to the change.
 

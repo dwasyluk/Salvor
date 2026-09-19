@@ -20,6 +20,9 @@ thin CLI-specific entrypoints.
   one read-only, section-level mapping flow. Mixed documents may map to
   multiple independently approved artifacts; originals remain unchanged by
   default and every durable fact retains one canonical owner.
+- Upgrade plans preserve accumulated knowledge by default and never silently
+  rewrite claims. Any required schema, identifier, header, link, or metadata
+  migration is itemized and separately approved.
 - A prompt behavior change must be reflected in `example-project/` and user-facing documentation.
 
 ## Validation
@@ -27,6 +30,6 @@ thin CLI-specific entrypoints.
 - Scan for unresolved template tokens and verify all vendor adapters point to the same canonical core.
 
 ## Build
-- No compilation. `VERSION.md` key: `CORE`; current build `CORE:18`; derived constant: `CORE_BUILD`.
+- No compilation. `VERSION.md` key: `CORE`; current build `CORE:19`; derived constant: `CORE_BUILD`.
 
 Use Serena for repository structure, `.salvor/DOMAIN_REF.md` for product truth, and `.salvor/INFRA.md` for operational details.

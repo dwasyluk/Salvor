@@ -156,6 +156,34 @@ test("published numbers derive from the canonical summary", async (t) => {
   }
 });
 
+test("the canonical benchmark archive preserves every completed beta result with explicit scope", async () => {
+  const summary = JSON.parse(await read(SUMMARY));
+  assert.equal(summary.complete, true, "public benchmark copy requires a completed canonical summary");
+  const [site, readme, benchmarkReadme, report, reportRenderer] = await Promise.all([
+    read("site/index.html"),
+    read("README.md"),
+    read("benchmarks/README.md"),
+    read("benchmarks/results/beta/REPORT.md"),
+    read("benchmarks/src/salvorbench/report/markdown.py"),
+  ]);
+  const scopePattern = /exploratory short-horizon task benchmark[\s\S]{0,260}does not directly (?:instantiate|test)[\s\S]{0,180}(?:mature-project longitudinal knowledge model|long-term knowledge compounding)/i;
+  const normalizeNotice = (text) => text.replace(/^>\s?/gm, "").replace(/\s+/g, " ");
+
+  for (const arm of ARMS) {
+    const condition = summary.conditions[arm];
+    assert.match(report, new RegExp(`\\*\\*${arm}\\*\\*[\\s\\S]{0,160}${condition.resolved}/${condition.evaluated}[\\s\\S]{0,80}${condition.success_rate.toFixed(1)}%`));
+  }
+  assert.match(normalizeNotice(benchmarkReadme), scopePattern);
+  assert.match(normalizeNotice(report), scopePattern);
+  assert.match(reportRenderer, /exploratory short-horizon task benchmark/i);
+
+  for (const surface of [site, readme]) {
+    assert.doesNotMatch(surface, /19\/19\s*(?:<[^>]+>)*\s*(?:vs|\|)/i);
+    assert.doesNotMatch(surface, /54%\s*(?:<[^>]+>)*\s*→\s*(?:<[^>]+>)*\s*14%/i);
+    assert.doesNotMatch(surface, /Across 100 C3 invocations/i);
+  }
+});
+
 test("isolation and integrity gates passed in the published run", async (t) => {
   if (!(await exists(SUMMARY))) { t.skip("no completed run yet"); return; }
   const summary = JSON.parse(await read(SUMMARY));

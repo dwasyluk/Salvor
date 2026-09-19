@@ -1,15 +1,22 @@
 # Salvor architecture
 
-Salvor is not a tool you run; it's a **disciplined structure** you add to a repo
-so a supported LLM coding agent, through a compatible entrypoint, works against
-the same accumulated, version-controlled knowledge instead of starting cold
-every time.
+Salvor is a **repo-native engineering knowledge layer and governance protocol**:
+a disciplined structure you add to a repository so a supported coding agent,
+through a compatible entrypoint, works against the same accumulated,
+version-controlled knowledge instead of starting cold every time.
 
 Out of the box, an LLM CLI carries little context from one session to the next.
 The rationale a teammate captured two months ago (in another session, maybe
 another vendor) is often re-derived, re-litigated, or lost. Salvor's job is to
 reduce that repeated context reconstruction by making the knowledge **persist,
 propagate, and compound**, all inside git.
+
+We use **persistent engineering cognition** to describe the broader capability:
+durable, governed project knowledge that carries forward decisions, rationale,
+failures, constraints, rules, and provenance across sessions, contributors,
+branches, and models. It is Salvor's term for an emerging construct, not an
+asserted industry-standard category. Salvor externalizes project cognition; it
+does not modify an agent's intrinsic reasoning or intelligence.
 
 ## The five pillars
 
@@ -43,7 +50,7 @@ cheap. Both are git-tracked.
 ### 3. RULES.md — the enforcement layer
 The documents above are inert without discipline. [`RULES.md`](../RULES.md) is what makes the
 knowledge compound rather than decay:
-- **§0 Task Termination Protocol** — keeps reviewed memory and component
+- **§0 Task Termination Protocol** — keeps reviewed project knowledge and component
   context synchronized: nothing is "done" until L1/L2 + spokes are synced. Optional
   Strict defaults can also enforce project-specific version counters and parity
   rules (e.g. bumping `VERSION.md`); per-component versioning and `APP_NAME`
@@ -141,6 +148,10 @@ This is adoption rather than bulk copying: Salvor never makes an entire
 `docs/` tree canonical by duplication and never silently promotes existing
 Serena memories, agent notes, or project documents.
 
+Deliberate adoption can make a mature repository's project brain useful sooner,
+but it cannot recover rationale that no source or operator provides. Structure
+can often be derived; rationale needs evidence.
+
 ### One owner per durable fact
 
 Salvor is not "everything in-repo is co-canonical." Each durable fact has **one
@@ -153,8 +164,10 @@ canonical owner**; other shared files link to or summarize it rather than forkin
   `postmortems/` = incident/failure evidence; `DEFERRED_TODOS.md` = deferred findings.
 - Canonical engineering knowledge lives in its assigned `.salvor/` artifact.
   **GitNexus** owns machine-derived code structure; **Serena** memories and **vendor
-  adapters** are concise retrieval and routing aids; **Spec Kit** owns its
-  specs/plans.
+  adapters** are concise retrieval and routing aids; vendor-native workspace
+  memory, including Claude Code Project memory, remains owned by that workspace
+  unless a separately approved capture promotes selected knowledge into Salvor;
+  **Spec Kit** owns its specs/plans.
 - **Vendor entrypoints** (`CLAUDE.md` hub, `AGENTS.md`, `GEMINI.md`) point to and
   summarize the canonical records — they are **never** a knowledge fork.
 
@@ -198,7 +211,8 @@ while dev B captures `DL:clob-429-throttling` ("order endpoint throttles
 ~10 req/s; retry with jitter") — different slugs, both merge cleanly, and the
 brain now carries the same vendor behavior twice. Worse, contradictions: A
 records "the sandbox mirrors production latency," B later measures that it
-doesn't. Reconcile runs at merge and pull points: incoming artifacts are
+doesn't. The protocol calls for Brain Reconcile at merge and pull points:
+incoming artifacts are
 **paired by subject-tag overlap** (not name similarity), their claims compared,
 and each pair classified — *distinct*, *duplicate* (merge into one),
 *overlapping* (augment), *contradictory* (operator decision; exactly one
@@ -209,10 +223,10 @@ re-synthesized from both sides after resolution — and, under Strict defaults,
 `VERSION.md` counters advance only at integration (feature branches record
 `pending`), so parallel branches never race a counter.
 
-**Brain Audit (§10.3).** Reconcile only sees what a merge brings in. A
-recurring semantic self-audit — due every 3 days by default, operator-tunable,
-tracked by the `Last Brain Audit` line in L1 — runs the same subject/claim
-comparison across the *whole* brain, catching duplicates that accreted on one
+**Brain Audit (§10.3).** Reconcile only sees what a merge brings in. The
+protocol calls for a recurring semantic self-audit — due every 3 days by
+default, operator-tunable, tracked by the `Last Brain Audit` line in L1 — using
+the same subject/claim comparison across the *whole* brain to catch duplicates that accreted on one
 branch, contradictions against `DOMAIN_REF.md` current truth, stale L1 lines,
 and dangling links. (The audit interval and its configurability are an area
 where beta feedback is explicitly invited.)

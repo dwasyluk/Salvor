@@ -122,7 +122,10 @@ version** (header above):
   Salvor's two layers make this safe: the **protocol layer** (RULES text,
   templates, adapters — Salvor's, replaceable) upgrades; the **knowledge
   layer** (artifacts, L1/L2 content, DOMAIN_REF facts, deferred entries —
-  yours, accumulated) is NEVER touched by an upgrade. Where the operator has
+  yours, accumulated) is preserved by default. An upgrade must never silently
+  rewrite knowledge claims; any required identifier, header, link, metadata,
+  or schema migration must be itemized in the upgrade plan and separately
+  approved. Where the operator has
   customized generated RULES text, treat the change as a three-way merge
   (their version / old template / new template) and route conflicts through
   the §10.2 governance rule — RULES conflicts are ALWAYS operator-decided.
@@ -237,8 +240,8 @@ current client.** "enhanced" must never imply unverified MCP functionality.
 Never run `gitnexus setup`, install global tooling, or modify global/client MCP
 config without explicit approval after enumerating the exact mutations.
 
-Serena and GitNexus remain optional, but both are highly recommended for the
-best code-grounded results.
+Serena and GitNexus remain optional. Recommend them when semantic symbol
+navigation and graph-based impact analysis fit the work.
 
 If Serena or GitNexus is missing (or present but not MCP-active), offer me
 exactly these options and wait for my choice:

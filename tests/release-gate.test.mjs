@@ -23,6 +23,22 @@ function meta(prop) {
 const CANON = "https://dwasyluk.github.io/salvor/";
 const CARD = "https://dwasyluk.github.io/salvor/assets/social/salvor-social-card.png";
 
+test("the shipped release archive verifier exercises a fresh extracted artifact", () => {
+  const pkg = JSON.parse(read("package.json"));
+  const audit = read("scripts/audit-release.mjs");
+
+  assert.equal(pkg.scripts["release:verify-archive"], "node scripts/audit-release.mjs --archive");
+  assert.match(audit, /mkdtempSync\([^\n]*salvor-release-artifact-/);
+  assert.match(audit, /execFileSync\("unzip", \["-t"/);
+  assert.match(audit, /\["ci"\]/);
+  assert.match(audit, /\["run", "test:unit"\]/);
+  assert.match(audit, /\["run", "release:audit"\]/);
+  assert.match(audit, /\["run", "brand:check"\]/);
+  assert.match(audit, /\["audit", "--audit-level=high"\]/);
+  assert.match(audit, /\["commit", "-q", "--no-gpg-sign", "-m", "release fixture baseline"\]/);
+  assert.match(audit, /\["diff", "--check"\]/);
+});
+
 // --- Licensing + brand ----------------------------------------------------
 test("LICENSE is standard MIT © 2026 Dan Wasyluk", () => {
   const l = read("LICENSE");
@@ -66,7 +82,7 @@ test("Open Graph + Twitter metadata is correct and absolute HTTPS", () => {
   assert.equal(meta("og:type"), "website");
   assert.equal(meta("og:site_name"), "Salvor");
   assert.equal(meta("og:title"), "Salvor — Your repo remembers.");
-  assert.equal(meta("og:description"), "The version-controlled engineering brain for coding agents — the why, not just the what.");
+  assert.equal(meta("og:description"), "A repo-native engineering knowledge layer for coding agents and software teams.");
   assert.equal(meta("og:url"), CANON);
   assert.equal(meta("og:image"), CARD);
   assert.equal(meta("og:image:secure_url"), CARD);
@@ -75,6 +91,7 @@ test("Open Graph + Twitter metadata is correct and absolute HTTPS", () => {
   assert.ok((meta("og:image:alt") || "").length > 10, "og:image:alt nonempty");
   assert.equal(meta("twitter:card"), "summary_large_image");
   assert.equal(meta("twitter:title"), "Salvor — Your repo remembers.");
+  assert.equal(meta("twitter:description"), "A repo-native engineering knowledge layer for coding agents and software teams.");
   assert.equal(meta("twitter:image"), CARD);
   assert.ok((meta("twitter:image:alt") || "").length > 10, "twitter:image:alt nonempty");
   assert.equal(meta("twitter:creator"), "@blockchaindan");

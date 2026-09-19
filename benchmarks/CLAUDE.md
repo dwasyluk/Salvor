@@ -39,6 +39,11 @@ the root `package.json`, and nothing installed by normal Salvor setup.
   matrix is incomplete, `summary.json` is stamped `"complete": false` and the
   public surfaces stay unpopulated — partial numbers look finished and are worse
   than none.
+- **Scope, not erasure.** The beta is an exploratory short-horizon task
+  benchmark, not a direct test of Salvor's mature-project longitudinal
+  knowledge model. Preserve that neutral notice in the benchmark README and
+  generated report; the completed run remains binding for the treatment that
+  actually ran.
 
 ## Validation
 - `uv run pytest` — harness units (cost extraction, ledger tamper-evidence,
@@ -51,6 +56,6 @@ the root `package.json`, and nothing installed by normal Salvor setup.
   `summary.isolation`.
 
 ## Build
-- No compilation. `VERSION.md` key: `BENCH`; current build `BENCH:01`; derived constant: `BENCH_BUILD`.
+- No compilation. `VERSION.md` key: `BENCH`; current build `BENCH:02`; derived constant: `BENCH_BUILD`.
 
 Use `METHODOLOGY.md` for protocol truth, `.salvor/DOMAIN_REF.md` for product truth, and `.salvor/INFRA.md` for operational details.

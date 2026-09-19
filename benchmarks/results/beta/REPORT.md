@@ -1,5 +1,11 @@
 # Benchmark report
 
+> **Scope:** This beta is an exploratory short-horizon task benchmark. It
+> does not directly instantiate Salvor's mature-project longitudinal
+> knowledge model and should not be interpreted as a direct test of
+> long-term knowledge compounding. Its results remain binding for the
+> treatment that ran.
+
 Model: `claude-sonnet-5` · generated 2026-08-20T23:15:53.246Z
 
 Salvor arms measure the **recommended stack — Salvor + Serena + GitNexus —

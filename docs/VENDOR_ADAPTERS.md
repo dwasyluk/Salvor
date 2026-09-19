@@ -1,10 +1,12 @@
 # Vendor adapters
 
-**Goal:** use Salvor with whatever LLM CLI you like — don't get locked into one.
+**Goal:** use Salvor's repo-native engineering knowledge layer with a supported
+LLM CLI without locking the project brain to one vendor.
 
 **How realistic is that?** The honest split:
 
-- **Salvor Core is vendor-agnostic repository-local Markdown and governance.**
+- **Salvor Core is a vendor-agnostic engineering knowledge layer built from
+  repository-local Markdown and governance.**
   No LLM vendor owns the shared brain. The substance lives under `.salvor/` —
   L1/L2 (`active_state.md` /
   `active_state_verbose.md`), `DOMAIN_REF.md`, `INFRA.md`, `DEFERRED_TODOS.md`,
@@ -18,8 +20,9 @@
 - **enhanced mode optionally adds Serena + GitNexus.** They are OPTIONAL enhanced
   integrations, not constituent requirements of Salvor Core. Serena memories
   (`.serena/memories/`) are an OPTIONAL retrieval aid; GitNexus's index is
-  machine-derived and **gitignored** — not canonical git-tracked memory. Both are
-  highly recommended for the best code-grounded results. They are standard
+  machine-derived and **gitignored** — not canonical git-tracked memory. They
+  are recommended when semantic navigation and graph-based impact analysis fit
+  the work. They are standard
   **MCP** servers (a cross-vendor standard) and already work in Claude Code,
   Codex, Gemini CLI, Cursor, and others.
 - **The glue is vendor-specific.** *How* project instructions auto-load, where
@@ -29,9 +32,9 @@ So Salvor ships a **vendor-agnostic core + all three thin entrypoint adapters by
 default**: `CLAUDE.md` is the canonical cross-vendor hub, while thin `AGENTS.md`
 and `GEMINI.md` adapters route other supported agents to the same shared brain.
 The vendor-named hub filename reflects the most deeply dogfooded adapter; it
-does not make the canonical repository memory Claude-only. Those adapters make
+does not make the canonical repository knowledge Claude-only. Those adapters make
 the shared brain vendor-portable, so supported agents can be switched without
-migrating the repository memory. Setup generates contract-tested entrypoints for
+migrating the project knowledge. Setup generates contract-tested entrypoints for
 Claude Code, Codex, and GEMINI.md-compatible clients. Claude Code is the most deeply
 dogfooded path; the Codex and Google adapters are wired and documented but less
 exercised. Other agents can integrate through compatible thin adapters.
@@ -47,6 +50,29 @@ which points the agent at the shared in-repo core.
 | **Codex + other AGENTS.md-compatible agents** | `AGENTS.md` | — | instruction-driven | ✅ via MCP config |
 | **Gemini CLI / Antigravity CLI** | `GEMINI.md` | — | instruction-driven | ✅ via MCP config |
 | **Cursor / others** | tool-specific rules file | varies | varies | ✅ if MCP-capable |
+
+### Claude Code Projects (beta)
+
+Claude Code Projects is a Claude-specific orchestration workspace rather than a
+new repository entrypoint. Anthropic documents one coordinating conversation
+that routes work to parallel Claude Code cloud threads, each on its own branch.
+New threads begin with the Project's repositories, instructions, Library files,
+and shared Project memory; repository `CLAUDE.md`, skills, and plugins are also
+loaded from Project repositories.
+
+Project memory and repository knowledge remain separate ownership domains.
+Project auto-memory uses a `MEMORY.md` index and files managed in Project
+settings; it is explicitly separate from repository `CLAUDE.md`. When a Project
+repository contains Salvor, threads can consume the same `CLAUDE.md` hub and
+`.salvor/` knowledge as other supported agents. Project memory remains
+vendor-workspace state unless the operator separately approves promoting a
+specific claim into its canonical Salvor artifact.
+
+Cloud threads do not automatically inherit local-only files, tools, MCP servers,
+or settings. Validate the planned Claude Code plugin inside Projects before
+claiming parity with local Claude Code: repository files and committed skills may
+load, while optional Serena/GitNexus availability depends on the Project's cloud
+environment and connectors.
 
 The pointer file says, in effect:
 

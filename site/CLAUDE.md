@@ -10,7 +10,25 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 
 ## Architecture Notes
 - The repository sources above are authoritative; the site is their semantic presentation mirror.
+- Mirror the approved category as **repo-native engineering knowledge layer**
+  and treat **persistent engineering cognition** as Salvor's term for durable,
+  governed knowledge across sessions, contributors, branches, and models.
 - Existing mapped copy must update whenever its canonical sources change.
+- Hero fold acceptance is measured from the rendered page with normal assets
+  and scripts: `#why` must expose at least 120px at 1440×1000, 160px at
+  768×1024, 80px at 360×780, and 40–50px at 320×568, with both CTAs usable and
+  no content clipping, overlap, or horizontal overflow. Do not satisfy these
+  targets by hiding content or changing the protected burn implementation.
+- Keep the public sequence problem → answer → mechanics → loop → adoption →
+  use → evidence → integrations. The engineering-problem section owns the
+  page's only prominent numbered 1/2/3 triptych; answer, adoption, dogfood,
+  and research status use distinct manifesto, rail, ledger, and compact
+  editorial compositions rather than repeating that motif.
+- The Salvor-on-Salvor ledger presents canonical knowledge class as the parent,
+  trigger metadata plus event title as one child heading, then `CAPTURED` and
+  `COMPOUNDED KNOWLEDGE` as durable-result fields. Preserve its understated
+  schema and amber child rail with 28px desktop/tablet nesting and 16px phone
+  nesting; do not flatten it back into equal-weight columns.
 - The Primary Path presents existing-knowledge adoption as current beta
   behavior: a read-only inventory during setup and the same section-level flow
   later on demand, with originals untouched unless separately approved.
@@ -22,12 +40,19 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 - WF/early-progress hero display copy, including the slogan, is pointer-transparent and nonselectable so the burn surface receives mouse and touch drag gestures through the text. At 80% reveal progress the semantic hero copy becomes selectable while WebGL finishes the padded smoke tail. Keep CTA controls and canonical header/navigation interactive, and do not attach burn handlers to text nodes.
 - At 900px and below, the hero reading panel is part of both browser-rendered WebGL UI snapshots: translucent white in WF and translucent black in Mystic. It must burn locally with the text, retain its internal breathing room, and never alter the laptop/desktop presentation.
 - Silent public-content drift is forbidden.
-- Community navigation links directly to GitHub Discussions in the desktop, mobile, and footer surfaces. The site does not link to the maintainer's X account; that secondary route is documented in the canonical README.
+- Evidence used to substantiate this versioned release pins to the immutable
+  `v1.0.0-beta` snapshot; live Issues, Discussions, and community destinations
+  remain live rather than being release-pinned.
+- Research status keeps legacy `#measured` deep links working but presents the
+  longitudinal validation question as open. The exploratory short-horizon beta
+  remains discoverable through pinned methodology/report links and the live
+  RFC; do not restore its detailed scores as the product-validation dashboard.
+- Community navigation links directly to GitHub Discussions in the desktop, mobile, and footer surfaces. The official `@SalvorKnows` X account appears once as a secondary footer destination; it does not enter the hero or primary navigation, and the maintainer's personal X account remains outside the site.
 - Header, footer, burned-state, metadata, social, and loop marks use the generated regular-logo family. The browser favicon uses the generated adaptive small-logo SVG, whose internal `prefers-color-scheme` rule switches canonical ink from black to white; an unqualified black 32px PNG remains the compatibility fallback, and the Apple touch icon remains black. Run `npm run brand:check` and inspect `npm run brand:audit` evidence after brand-affecting changes. Hero background images are independent and must not change during a logo-only migration.
 
 ## Build and deploy
 - Static files live in `site/`; `.github/workflows/pages.yml` deploys that directory from `main`. `main` is the single source of truth.
 - Run the Node contract/interaction tests and Playwright browser suite before commit. Deploys are operator-dispatched only (`workflow_dispatch` on `pages.yml`) — a push never auto-deploys; dispatching from `dev` pre-verifies the workflow before promotion to `main`.
-- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:20`; derived constant: `GHPAGE_BUILD`.
+- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:21`; derived constant: `GHPAGE_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for deployment details.

@@ -14,7 +14,6 @@ const readme = readFileSync(join(root, "README.md"), "utf8");
 const exampleReadme = readFileSync(join(root, "example-project/README.md"), "utf8");
 const architecture = readFileSync(join(root, "docs/ARCHITECTURE.md"), "utf8");
 const faq = readFileSync(join(root, "docs/FAQ.md"), "utf8");
-const roadmap = readFileSync(join(root, "docs/roadmap-issues.md"), "utf8");
 
 // --- Git safety -----------------------------------------------------------
 test("setup prompt never blanket-stages files", () => {
@@ -243,9 +242,9 @@ test("knowledge adoption is current beta behavior across the example and public 
     "shipped knowledge adoption must not remain in the README roadmap"
   );
   assert.doesNotMatch(
-    roadmap,
-    /^## \d+\. Existing-repo import\b/m,
-    "shipped knowledge adoption must not remain an unimplemented issue stub"
+    readme.match(/^## Contributing & roadmap[\s\S]*?(?=^## Why "Salvor"\?)/m)?.[0] ?? "",
+    /Existing-repo (?:adoption|import)/i,
+    "shipped knowledge adoption must not remain an item in the public roadmap"
   );
 });
 
