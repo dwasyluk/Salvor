@@ -31,13 +31,18 @@ jobs:
         if: steps.harness.outputs.present == 'true'
         run: npm ci
 
-      - name: Unit and contract tests
-        if: steps.harness.outputs.present == 'true'
-        run: npm run test:unit
-
+      # Browsers must install BEFORE the unit suite: the brand-determinism
+      # test renders the generated assets through Playwright Chromium
+      # (scripts/generate-brand-assets.mjs --check), so a fresh runner needs
+      # the browser earlier than the browser-test step that originally
+      # motivated this install.
       - name: Install Playwright browsers
         if: steps.harness.outputs.present == 'true'
         run: npx playwright install --with-deps chromium
+
+      - name: Unit and contract tests
+        if: steps.harness.outputs.present == 'true'
+        run: npm run test:unit
 
       - name: Browser tests
         if: steps.harness.outputs.present == 'true'
