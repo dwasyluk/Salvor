@@ -55,3 +55,7 @@ benchmarks/vendor/CooperBench/dataset/
 benchmarks/**/__pycache__/
 benchmarks/.pytest_cache/
 benchmarks/dataset/
+/assets/brand/reference/foundation_ref_assets/salvor_harkin_artifact_portrait.png
+/assets/brand/reference/foundation_ref_assets/salvor_harkin_artifact_lanscape.png
+/assets/brand/reference/foundation_ref_assets/salvor_harkin.png
+/assets/brand/reference/foundation_ref_assets/salvor_artifact_expansion_lg.png

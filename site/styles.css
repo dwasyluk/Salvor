@@ -719,10 +719,10 @@ h1,
 
 .case-class {
   margin: 0;
-  color: var(--gold);
-  font-size: 11px;
+  color: darkgray;
   font-weight: 800;
   letter-spacing: 0.08em;
+  font-size: clamp(14px, 1.7vw, 24px);
 }
 
 .case-body {
@@ -754,14 +754,14 @@ h1,
 
 .case-event-title {
   color: var(--ink);
-  font-size: clamp(19px, 1.7vw, 24px);
+  font-size: clamp(14px, 1.7vw, 24px);
   letter-spacing: -0.02em;
 }
 
 .case-fields {
   display: grid;
   gap: 0;
-  margin: 18px 0 0;
+  margin: 10px 0 0;
 }
 
 .case-fields > div {
