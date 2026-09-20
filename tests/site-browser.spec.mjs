@@ -617,9 +617,14 @@ test("slow mouse drags use spaced burn points and later clicks keep earlier burn
   expect(dragCount).toBeLessThan(30);
 
   await page.mouse.click(1180, 500);
-  await expect.poll(async () => Number(await hero.getAttribute("data-burn-count")))
-    .toBeGreaterThan(dragCount);
-  await expect(hero).toHaveAttribute("data-burn-state", "burning");
+  // Same SwiftShader budget as the drag above: the click registers through
+  // the burn sim's frame loop, which software GL services far slower than a
+  // local GPU — the default 5s expectation window is a throughput bound.
+  await expect.poll(
+    async () => Number(await hero.getAttribute("data-burn-count")),
+    { timeout: 60_000 },
+  ).toBeGreaterThan(dragCount);
+  await expect(hero).toHaveAttribute("data-burn-state", "burning", { timeout: 60_000 });
 });
 
 test("WebGL owns exact browser-rendered UI transition without changing the established ready or M end states", async ({ page }) => {
