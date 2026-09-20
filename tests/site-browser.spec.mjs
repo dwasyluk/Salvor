@@ -316,7 +316,6 @@ for (const [name, viewport, expectedIndent] of [
 
       return {
         knowledgeClassColor: getComputedStyle(knowledgeClass).color,
-        gold: getComputedStyle(document.querySelector(".evidence-kicker")).color,
         knowledgeClassWeight: Number.parseInt(getComputedStyle(knowledgeClass).fontWeight, 10),
         bodyIndent: bodyRect.left - articleRect.left,
         triggerSize: Number.parseFloat(getComputedStyle(trigger).fontSize),
@@ -329,7 +328,11 @@ for (const [name, viewport, expectedIndent] of [
     }));
 
     for (const entry of hierarchy) {
-      expect(entry.knowledgeClassColor).toBe(entry.gold);
+      // Approved ledger restyle (2026-09-19 "Fix layout of dogfood ledger"):
+      // the parent knowledge-class label is understated darkgray; the amber
+      // treatment stays on the child rail. Prominence is still enforced via
+      // weight and the size hierarchy below.
+      expect(entry.knowledgeClassColor).toBe("rgb(169, 169, 169)");
       expect(entry.knowledgeClassWeight).toBeGreaterThanOrEqual(700);
       expect(Math.abs(entry.bodyIndent - expectedIndent)).toBeLessThanOrEqual(0.5);
       expect(entry.eventSize).toBeGreaterThan(entry.triggerSize);

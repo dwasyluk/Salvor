@@ -14,6 +14,34 @@ const heroPath = join(root, "site/assets/hero/salvor-mystic.png");
 const checkMode = process.argv.includes("--check");
 const auditMode = process.argv.includes("--audit");
 const iconSizes = [16, 32, 48, 64, 128, 256, 512];
+
+// Canonical rasterized-art output specification — the single source of truth
+// consumed by BOTH build() (render dimensions) and the --check dimension gate.
+// Icon-family dimensions are not listed here; they derive from canonicalLogos
+// x iconSizes below, exactly as the generation loop constructs them.
+const fixedRasterArt = [
+  ["assets/brand/generated/salvor-readme-lockup.png", 720, 180, false],
+  ["site/assets/social/salvor-social-card.png", 1200, 630, false],
+  ["assets/social/github-social-preview.png", 1280, 640, false],
+  ["assets/salvor-loop.png", 1600, 1000, false],
+];
+
+function expectedRasterDimensions() {
+  const dims = new Map(fixedRasterArt.map(([path, width, height]) => [path, { width, height }]));
+  for (const logo of Object.values(canonicalLogos)) {
+    for (const color of ["black", "white"]) {
+      for (const size of iconSizes) {
+        for (const path of [
+          `assets/brand/generated/icons/${logo.stem}-${color}-${size}.png`,
+          `site/assets/brand/${logo.stem}-${color}-${size}.png`,
+        ]) {
+          dims.set(path, { width: size, height: size });
+        }
+      }
+    }
+  }
+  return dims;
+}
 const canonicalLogos = {
   regular: {
     path: "assets/brand/reference/LOGO.svg",
@@ -227,12 +255,14 @@ async function build(outputRoot) {
         }
       }
     }
-    for (const [path, source, width, height, transparent] of [
-      ["assets/brand/generated/salvor-readme-lockup.png", lockup, 720, 180, false],
-      ["site/assets/social/salvor-social-card.png", social, 1200, 630, false],
-      ["assets/social/github-social-preview.png", github, 1280, 640, false],
-      ["assets/salvor-loop.png", await readFile(join(outputRoot, "assets/salvor-loop.svg"), "utf8"), 1600, 1000, false],
-    ]) {
+    const rasterSources = {
+      "assets/brand/generated/salvor-readme-lockup.png": lockup,
+      "site/assets/social/salvor-social-card.png": social,
+      "assets/social/github-social-preview.png": github,
+      "assets/salvor-loop.png": await readFile(join(outputRoot, "assets/salvor-loop.svg"), "utf8"),
+    };
+    for (const [path, width, height, transparent] of fixedRasterArt) {
+      const source = rasterSources[path];
       const destination = join(outputRoot, path);
       await mkdir(dirname(destination), { recursive: true });
       await renderSvg(page, source, destination, width, height, transparent);
@@ -264,8 +294,19 @@ async function build(outputRoot) {
   await ensureWrite(outputRoot, "assets/brand/generated/manifest.json", `${JSON.stringify(manifest, null, 2)}\n`);
 }
 
+// PNG rasterization is Chromium/platform-bound (antialiasing, subpixel
+// handling, encoder settings), so byte-equality for rasterized outputs only
+// holds on the generation platform (darwin). SVG/JSON outputs derive from the
+// canonical text outlines and are platform-independent, so they must
+// byte-match everywhere. The manifest records the PNG hashes, so it follows
+// the rasterized rule for regeneration equality — but its coherence with the
+// CHECKED-IN bytes is platform-independent and is asserted on every platform.
+const isRasterized = (path) => path.endsWith(".png") || path.endsWith("manifest.json");
+const fullByteCheck = (process.platform === "darwin" && process.env.BRAND_CHECK_SIMULATE_CI !== "1") || process.env.BRAND_CHECK_FULL === "1";
+
 async function compare(checkRoot) {
   const drift = [];
+  const skipped = [];
   for (const path of outputFiles) {
     const expected = join(root, path);
     const actual = join(checkRoot, path);
@@ -273,8 +314,72 @@ async function compare(checkRoot) {
       drift.push(path);
       continue;
     }
+    if (!fullByteCheck && isRasterized(path)) {
+      skipped.push(path);
+      continue;
+    }
     const [left, right] = await Promise.all([readFile(expected), readFile(actual)]);
     if (!left.equals(right)) drift.push(path);
+  }
+  if (!fullByteCheck) {
+    // Platform-independent PNG verification against the CHECKED-IN manifest.
+    // Deliberately: hashes are recomputed from the checked-in files and
+    // compared to the committed manifest — the manifest is never regenerated
+    // here, so an image and its manifest entry cannot drift together
+    // unnoticed. Declaration completeness is asserted in BOTH directions so
+    // drift-by-omission also fails.
+    const manifest = JSON.parse(await readFile(join(root, "assets/brand/generated/manifest.json"), "utf8"));
+    const recorded = manifest.generated ?? {};
+    const declaredRasters = outputFiles.filter((path) => path.endsWith(".png"));
+    const rasterDims = expectedRasterDimensions();
+
+    for (const path of declaredRasters) {
+      if (!(path in recorded)) drift.push(`${path} (declared output missing from checked-in manifest)`);
+    }
+    for (const path of Object.keys(recorded)) {
+      if (path.endsWith(".png") && !declaredRasters.includes(path)) {
+        drift.push(`${path} (manifest records an undeclared rasterized output)`);
+      }
+    }
+
+    for (const path of declaredRasters) {
+      const file = join(root, path);
+      if (!existsSync(file)) {
+        drift.push(`${path} (declared PNG missing from the tree)`);
+        continue;
+      }
+      const bytes = await readFile(file);
+      if (path in recorded) {
+        const digest = createHash("sha256").update(bytes).digest("hex");
+        if (digest !== recorded[path]) drift.push(`${path} (checked-in bytes do not match checked-in manifest hash)`);
+      }
+      // Format: PNG signature + IHDR. Dimensions: validated against the
+      // generator's own canonical output specification (fixedRasterArt +
+      // canonicalLogos x iconSizes) — the same data build() renders from, so
+      // no second source of truth exists. Every declared PNG must have a spec.
+      const isPng = bytes.length > 24 &&
+        bytes.readUInt32BE(0) === 0x89504e47 && bytes.readUInt32BE(4) === 0x0d0a1a0a &&
+        bytes.toString("ascii", 12, 16) === "IHDR";
+      if (!isPng) {
+        drift.push(`${path} (not a valid PNG)`);
+        continue;
+      }
+      const spec = rasterDims.get(path);
+      if (!spec) {
+        drift.push(`${path} (no canonical dimension specification for this rasterized output)`);
+        continue;
+      }
+      const width = bytes.readUInt32BE(16);
+      const height = bytes.readUInt32BE(20);
+      if (width !== spec.width || height !== spec.height) {
+        drift.push(`${path} (IHDR ${width}x${height} does not match the canonical ${spec.width}x${spec.height})`);
+      }
+    }
+    console.log(
+      `brand check: ${skipped.length} rasterized output(s) byte-verified only on the generation platform ` +
+      `(${process.platform} rasterizer differs); checked-in hashes verified against the checked-in manifest, ` +
+      `declaration completeness both directions, PNG format for all, and IHDR dimensions against the canonical output spec for all of them.`,
+    );
   }
   if (drift.length) throw new Error(`Brand asset drift detected:\n${drift.map((path) => `- ${path}`).join("\n")}`);
 }

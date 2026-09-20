@@ -25,7 +25,7 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
   and research status use distinct manifesto, rail, ledger, and compact
   editorial compositions rather than repeating that motif.
 - The Salvor-on-Salvor ledger presents canonical knowledge class as the parent,
-  trigger metadata plus event title as one child heading, then `CAPTURED` and
+  trigger metadata (`TRIGGER: <EVENT>`) with the event title as a sibling child heading, then `CAPTURED` and
   `COMPOUNDED KNOWLEDGE` as durable-result fields. Preserve its understated
   schema and amber child rail with 28px desktop/tablet nesting and 16px phone
   nesting; do not flatten it back into equal-weight columns.
@@ -53,6 +53,6 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
 ## Build and deploy
 - Static files live in `site/`; `.github/workflows/pages.yml` deploys that directory from `main`. `main` is the single source of truth.
 - Run the Node contract/interaction tests and Playwright browser suite before commit. Deploys are operator-dispatched only (`workflow_dispatch` on `pages.yml`) — a push never auto-deploys; dispatching from `dev` pre-verifies the workflow before promotion to `main`.
-- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:21`; derived constant: `GHPAGE_BUILD`.
+- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:22`; derived constant: `GHPAGE_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for deployment details.

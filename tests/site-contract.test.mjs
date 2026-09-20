@@ -462,7 +462,10 @@ test("the dogfood ledger exposes canonical capture classes and the compounding p
       index < 2 ? /DESIGN DECISION/ : /DOMAIN LEARNING/,
       `case ${index + 1} must expose its canonical capture class`,
     );
-    assert.match(caseHtml, /TRIGGER\s*·\s*(?:INCIDENT|RISK|VERSION DRIFT)/);
+    // Approved ledger layout (2026-09-19 "Fix layout of dogfood ledger"):
+    // the trigger label reads "TRIGGER: <EVENT>" with the event title as a
+    // sibling heading, replacing the earlier "TRIGGER · <EVENT> —" heading.
+    assert.match(caseHtml, /TRIGGER:\s*(?:INCIDENT|RISK|VERSION DRIFT)/);
     assert.match(caseHtml, /<dt>\s*CAPTURED\s*<\/dt>/);
     assert.match(caseHtml, /<dt>\s*COMPOUNDED KNOWLEDGE\s*<\/dt>/);
     assert.doesNotMatch(caseHtml, /class="reason-number"|<ol\b/i);
