@@ -20,8 +20,8 @@ function meta(prop) {
   const m = html.match(re);
   return m ? (m[0].match(/content=["']([^"']*)["']/i) || [])[1] ?? null : null;
 }
-const CANON = "https://dwasyluk.github.io/salvor/";
-const CARD = "https://dwasyluk.github.io/salvor/assets/social/salvor-social-card.png";
+const CANON = "https://salvorknows.dev/";
+const CARD = "https://salvorknows.dev/assets/social/salvor-social-card.png";
 
 test("the shipped release archive verifier exercises a fresh extracted artifact", () => {
   const pkg = JSON.parse(read("package.json"));
@@ -103,6 +103,9 @@ test("Open Graph + Twitter metadata is correct and absolute HTTPS", () => {
   // no twitter:site, no dev hosts in the head
   assert.doesNotMatch(head, /twitter:site/);
   assert.doesNotMatch(head, /localhost|127\.0\.0\.1|file:\/\//);
+  assert.match(html, /"url": "https:\/\/salvorknows\.dev\/"/);
+  assert.match(html, /"image": "https:\/\/salvorknows\.dev\/assets\/brand\/salvor-logo-black-128\.png"/);
+  assert.doesNotMatch(head, /dwasyluk\.github\.io\/salvor/);
 });
 test("social images exist at exact dimensions; dims metadata matches; source present", () => {
   const og = png("site/assets/social/salvor-social-card.png");

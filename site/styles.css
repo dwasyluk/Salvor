@@ -1282,6 +1282,17 @@ h1,
   font-size: 12px;
 }
 
+.token-authenticity {
+  grid-column: 1 / -1;
+  margin: -12px 0 0;
+  text-align: center;
+  font-size: 11px;
+}
+
+.token-authenticity a:first-of-type {
+  overflow-wrap: anywhere;
+}
+
 .site-footer nav {
   position: relative;
   z-index: 1;
@@ -1291,6 +1302,18 @@ h1,
 .site-footer nav a {
   font-size: 12px;
   white-space: nowrap;
+}
+
+@media (min-width: 901px) {
+  .footer-inner {
+    grid-template-columns: auto auto;
+    justify-content: center;
+  }
+
+  .site-footer nav {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
 }
 
 /* WebGL owns the complete burn surface; WF and M stay canonical scene assets. */

@@ -204,6 +204,9 @@ for (const [name, viewport] of viewports) {
 
     const communityHref = "https://github.com/dwasyluk/salvor/discussions";
     const xHref = "https://x.com/SalvorKnows";
+    const mint = "4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS";
+    const bagsHref = `https://bags.fm/${mint}`;
+    const solscanHref = `https://solscan.io/token/${mint}`;
     await expect(page.locator(`a[href="${communityHref}"]`)).toHaveCount(3);
     await expect(page.locator(`a[href="${xHref}"]`)).toHaveCount(1);
     if (viewport.width > 900) {
@@ -280,6 +283,40 @@ for (const [name, viewport] of viewports) {
     await expect(xLink).toHaveText("X · @SalvorKnows ↗");
     await xLink.focus();
     await expect(xLink).toBeFocused();
+    await expect(page.locator(".site-footer .token-authenticity")).toContainText(`CA: ${mint}`);
+    await expect(page.locator(`.site-footer a[href="${bagsHref}"]`)).toBeVisible();
+    await expect(page.locator(`.site-footer a[href="${solscanHref}"]`)).toHaveCount(2);
+    if (viewport.width >= 1200) {
+      const footerLinkBounds = await page.locator(".site-footer nav a").evaluateAll((links) =>
+        links.map((link) => {
+          const { left, right } = link.getBoundingClientRect();
+          return { text: link.textContent.trim(), left, right };
+        }));
+      for (const bounds of footerLinkBounds) {
+        expect(bounds.left, `${bounds.text} starts outside the viewport`).toBeGreaterThanOrEqual(0);
+        expect(bounds.right, `${bounds.text} ends outside the viewport`).toBeLessThanOrEqual(viewport.width + 1);
+      }
+      const licenseLineCount = await page.locator(".footer-copy p").last().evaluate((line) => {
+        const range = document.createRange();
+        range.selectNodeContents(line);
+        return range.getClientRects().length;
+      });
+      expect(licenseLineCount).toBe(1);
+      const footerRows = await page.locator(".footer-inner").evaluate((footer) => {
+        const brand = footer.querySelector(".footer-brand").getBoundingClientRect();
+        const copy = footer.querySelector(".footer-copy").getBoundingClientRect();
+        const nav = footer.querySelector("nav").getBoundingClientRect();
+        const authenticity = footer.querySelector(".token-authenticity").getBoundingClientRect();
+        return {
+          firstRowBottom: Math.max(brand.bottom, copy.bottom),
+          navTop: nav.top,
+          navBottom: nav.bottom,
+          authenticityTop: authenticity.top,
+        };
+      });
+      expect(footerRows.navTop).toBeGreaterThanOrEqual(footerRows.firstRowBottom);
+      expect(footerRows.authenticityTop).toBeGreaterThanOrEqual(footerRows.navBottom);
+    }
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     expect(overflow, JSON.stringify(await overflowReport(page), null, 2)).toBeLessThanOrEqual(1);
     expect(runtimeErrors).toEqual([]);

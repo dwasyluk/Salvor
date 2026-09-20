@@ -46,6 +46,20 @@ The approved existing-repository adoption invariant is recorded in
 
 The deployable GitHub Pages site in `site/` is a semantic presentation mirror of these sources, not an independent authority.
 
+## Canonical Project and Token Identity
+
+- Project and token name: `Salvor`; token ticker: `$SALVOR`; network: Solana.
+- Official project site: `https://salvorknows.dev/`; project X:
+  `@SalvorKnows` (`https://x.com/SalvorKnows`); repository:
+  `https://github.com/dwasyluk/salvor`.
+- The only official `$SALVOR` mint is
+  `4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS`. Canonical destinations are
+  `https://bags.fm/4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS` and
+  `https://solscan.io/token/4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS`.
+  Any other token claiming affiliation with Salvor is unofficial. Public token
+  references remain subordinate authenticity/security annotations; Salvor is
+  the product/project.
+
 ## Brand Authority
 
 The operator-supplied `assets/brand/reference/LOGO.svg` and

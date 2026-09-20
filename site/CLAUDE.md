@@ -48,11 +48,17 @@ The site is `site/` on `main`, deployed from `main` by `.github/workflows/pages.
   remains discoverable through pinned methodology/report links and the live
   RFC; do not restore its detailed scores as the product-validation dashboard.
 - Community navigation links directly to GitHub Discussions in the desktop, mobile, and footer surfaces. The official `@SalvorKnows` X account appears once as a secondary footer destination; it does not enter the hero or primary navigation, and the maintainer's personal X account remains outside the site.
+- The footer carries the site's only `$SALVOR` token reference: an understated
+  authenticity annotation with the full Solana mint
+  `4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS`, exact Bags/Solscan links,
+  and the unofficial-token warning. The canonical public site and social/JSON-LD
+  metadata origin is `https://salvorknows.dev/`. Keep both subordinate to the
+  Salvor product and out of the hero and primary navigation.
 - Header, footer, burned-state, metadata, social, and loop marks use the generated regular-logo family. The browser favicon uses the generated adaptive small-logo SVG, whose internal `prefers-color-scheme` rule switches canonical ink from black to white; an unqualified black 32px PNG remains the compatibility fallback, and the Apple touch icon remains black. Run `npm run brand:check` and inspect `npm run brand:audit` evidence after brand-affecting changes. Hero background images are independent and must not change during a logo-only migration.
 
 ## Build and deploy
 - Static files live in `site/`; `.github/workflows/pages.yml` deploys that directory from `main`. `main` is the single source of truth.
 - Run the Node contract/interaction tests and Playwright browser suite before commit. Deploys are operator-dispatched only (`workflow_dispatch` on `pages.yml`) — a push never auto-deploys; dispatching from `dev` pre-verifies the workflow before promotion to `main`.
-- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:22`; derived constant: `GHPAGE_BUILD`.
+- `VERSION.md` key: `GHPAGE`; current build `GHPAGE:23`; derived constant: `GHPAGE_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for deployment details.

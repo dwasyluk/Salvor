@@ -470,6 +470,10 @@ and scoped features move into
 [GitHub Issues](https://github.com/dwasyluk/salvor/issues); pull requests are
 welcome.
 
+**SALVOR** — Official Salvor token on Solana · [`4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS`](https://solscan.io/token/4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS) · [Bags](https://bags.fm/4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS)
+
+Any other token claiming affiliation with Salvor is unofficial.
+
 ## Contributing & roadmap
 
 Salvor v1 is the foundation, not the finish line. The point of open-sourcing

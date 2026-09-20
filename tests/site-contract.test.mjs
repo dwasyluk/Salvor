@@ -17,6 +17,34 @@ test("the README exposes GitHub Discussions and X feedback in the public narrati
   assert.match(readme, /\[`@SalvorKnows`\]\(https:\/\/x\.com\/SalvorKnows\)/);
 });
 
+test("README and site publish the one canonical SALVOR authenticity identity", async () => {
+  const [readme, html] = await Promise.all([
+    read("README.md"),
+    read("site/index.html"),
+  ]);
+  const mint = "4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS";
+  const bags = `https://bags.fm/${mint}`;
+  const solscan = `https://solscan.io/token/${mint}`;
+
+  assert.ok(
+    readme.includes(`**SALVOR** — Official Salvor token on Solana · [\`${mint}\`](${solscan}) · [Bags](${bags})`),
+  );
+  assert.match(readme, /Any other token claiming affiliation with Salvor is unofficial\./);
+
+  const footer = html.match(/<footer class="site-footer">([\s\S]*?)<\/footer>/)?.[1] ?? "";
+  assert.match(footer, /Official \$SALVOR · Solana · CA:/);
+  assert.match(footer, new RegExp(`<a href="${solscan}">${mint}<\\/a>`));
+  assert.match(footer, new RegExp(`<a href="${bags}">Bags ↗<\\/a>`));
+  assert.match(footer, new RegExp(`<a href="${solscan}">Solscan ↗<\\/a>`));
+  assert.match(footer, /Other tokens claiming affiliation with Salvor are unofficial\./);
+
+  for (const [surface, source, mintCount] of [["README", readme, 3], ["site", footer, 4]]) {
+    assert.equal(source.split(mint).length - 1, mintCount, `${surface} CA occurrences`);
+    assert.equal(source.split(bags).length - 1, 1, `${surface} Bags URL`);
+    assert.equal(source.split(solscan).length - 1, surface === "README" ? 1 : 2, `${surface} Solscan URL`);
+  }
+});
+
 test("canonical comparisons distinguish Claude Code Projects orchestration from Salvor governance", async () => {
   const [readme, faq] = await Promise.all([
     read("README.md"),

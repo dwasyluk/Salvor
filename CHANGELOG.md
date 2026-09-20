@@ -12,6 +12,10 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Changed
+- Published the canonical `$SALVOR` Solana mint, Bags page, and Solscan page as
+  understated authenticity notices in README Community and the site footer;
+  aligned canonical/social/JSON-LD metadata to `https://salvorknows.dev/`
+  without adding tokenomics, promotional language, or primary calls to action.
 - Reframed the exploratory short-horizon beta as an archived research artifact
   rather than primary longitudinal product validation: the README and Pages now
   state that longitudinal validation remains open, while benchmark results stay

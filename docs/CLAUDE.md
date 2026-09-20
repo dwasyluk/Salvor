@@ -35,6 +35,11 @@ Markdown documentation comprising root `README.md` and the complete `docs/` dire
   invariants against packaged public sources such as the README instead of
   reading that internal file.
 - Public feedback routing is owned by the root README and `CONTRIBUTING.md`: GitHub Discussions is the shared community hub, the official `@SalvorKnows` X account is a secondary project-updates/community channel, and actionable work moves to Issues/PRs.
+- The README Community area carries the one canonical low-signal `$SALVOR`
+  authenticity notice: Solana mint
+  `4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS`, linked to the exact
+  Solscan and Bags destinations. It is identity/security information, not
+  tokenomics or a primary product CTA.
 - The README's primary validation narrative is longitudinal and explicitly
   open. Keep the exploratory short-horizon beta public under `benchmarks/`, but
   do not present its score table as validation of mature-repository knowledge
@@ -49,6 +54,6 @@ Markdown documentation comprising root `README.md` and the complete `docs/` dire
 - Check links and paths, scan for stale vendor/version claims, and inspect rendered Markdown when layout matters.
 
 ## Build
-- No compilation. `VERSION.md` key: `DOCS`; current build `DOCS:25`; derived constant: `DOCS_BUILD`.
+- No compilation. `VERSION.md` key: `DOCS`; current build `DOCS:26`; derived constant: `DOCS_BUILD`.
 
 Use `.salvor/DOMAIN_REF.md` for product truth and `.salvor/INFRA.md` for operational details.

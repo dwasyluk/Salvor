@@ -1,3 +1,35 @@
+## 2026-09-20 — Canonical `$SALVOR` authenticity identity
+
+The operator supplied the exact post-launch identity for Salvor's supporting
+Solana token and approved a bounded authenticity-only update. README Community
+and the existing site footer now expose the full mint
+`4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS`, exact Bags and Solscan links,
+and the explicit warning that other tokens claiming Salvor affiliation are
+unofficial. Salvor remains the product/project; there is no tokenomics,
+promotional language, trading UI, buy action, wallet integration, or new visual
+component. Hero, burn/artifact effects, backgrounds, logos, navigation,
+responsive behavior, scripts, and assets are unchanged.
+
+The same identity pass corrected the site's former GitHub Pages origin in
+canonical, Open Graph, Twitter-card, and JSON-LD metadata to the operator-supplied
+`https://salvorknows.dev/`. Regression-first contracts pin the exact mint and
+URLs on both surfaces and the metadata origin. The existing six-viewport footer
+gate confirms the new links are visible, focusable, and non-overflowing at
+1440, 1024, 768, 390, 360, and 320px. A direct screenshot review caught the
+authenticity copy widening the original desktop footer grid enough to clip its
+last navigation link behind the footer's overflow boundary. A failing rendered
+bounds regression reproduced the 1475.59px right edge at 1440px; moving the
+footer to the operator-approved three-row desktop hierarchy (brand + project
+description/version/license, navigation, then centered authenticity annotation)
+restored the navigation spacing, kept the license on one line, and kept the
+token identity visually subordinate at desktop and 320px. Fresh source
+verification passes 186/186 unit/contract and 35/35 Playwright tests, local
+Markdown rendering preserves the full linked address, and `git diff --check`
+is clean. Bags, the canonical site, X, and GitHub returned HTTP 200; Solscan's
+canonical route responded with its reachable Cloudflare HTTP 403 challenge.
+The completed change is committed locally to `dev`; nothing was pushed,
+deployed, workflow-dispatched, or posted to X.
+
 ## 2026-09-19 — Longitudinal-validation framing and official X destination
 
 The final feature-branch correction removes the public scorecard framing without
