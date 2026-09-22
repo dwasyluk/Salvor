@@ -1,0 +1,597 @@
+import assert from "node:assert/strict";
+import { access, readFile, readdir } from "node:fs/promises";
+import test from "node:test";
+import path from "node:path";
+
+const root = process.cwd();
+const read = (file) => readFile(path.join(root, file), "utf8");
+
+test("the README exposes GitHub Discussions and X feedback in the public narrative", async () => {
+  const readme = await read("README.md");
+  const communityIndex = readme.indexOf("## Community & feedback");
+  const contributingIndex = readme.indexOf("## Contributing & roadmap");
+
+  assert.ok(communityIndex > 0 && communityIndex < contributingIndex);
+  assert.match(readme, /\[GitHub Discussions\]\(https:\/\/github\.com\/dwasyluk\/salvor\/discussions\)/);
+  assert.equal((readme.match(/https:\/\/x\.com\/SalvorKnows/g) ?? []).length, 1);
+  assert.match(readme, /\[`@SalvorKnows`\]\(https:\/\/x\.com\/SalvorKnows\)/);
+});
+
+test("README and site publish the one canonical SALVOR authenticity identity", async () => {
+  const [readme, html] = await Promise.all([
+    read("README.md"),
+    read("site/index.html"),
+  ]);
+  const mint = "4KxtNWc5XTL3cuyc8PJMchqB6RYggvEFeMub727GBAGS";
+  const bags = `https://bags.fm/${mint}`;
+  const solscan = `https://solscan.io/token/${mint}`;
+
+  assert.ok(
+    readme.includes(`**SALVOR** — Official Salvor token on Solana · [\`${mint}\`](${solscan}) · [Bags](${bags})`),
+  );
+  assert.match(readme, /Any other token claiming affiliation with Salvor is unofficial\./);
+
+  const footer = html.match(/<footer class="site-footer">([\s\S]*?)<\/footer>/)?.[1] ?? "";
+  assert.match(footer, /Official \$SALVOR · Solana · CA:/);
+  assert.match(footer, new RegExp(`<a href="${solscan}">${mint}<\\/a>`));
+  assert.match(footer, new RegExp(`<a href="${bags}">Bags ↗<\\/a>`));
+  assert.match(footer, new RegExp(`<a href="${solscan}">Solscan ↗<\\/a>`));
+  assert.match(footer, /Other tokens claiming affiliation with Salvor are unofficial\./);
+
+  for (const [surface, source, mintCount] of [["README", readme, 3], ["site", footer, 4]]) {
+    assert.equal(source.split(mint).length - 1, mintCount, `${surface} CA occurrences`);
+    assert.equal(source.split(bags).length - 1, 1, `${surface} Bags URL`);
+    assert.equal(source.split(solscan).length - 1, surface === "README" ? 1 : 2, `${surface} Solscan URL`);
+  }
+});
+
+test("canonical comparisons distinguish Claude Code Projects orchestration from Salvor governance", async () => {
+  const [readme, faq] = await Promise.all([
+    read("README.md"),
+    read("docs/FAQ.md"),
+  ]);
+
+  assert.match(readme, /Claude Code Projects \(beta\)/);
+  assert.match(readme, /parallel Claude Code cloud threads/i);
+  assert.match(readme, /repo-owned engineering knowledge/i);
+  assert.match(readme, /Project memory[^\n]*separate from[^\n]*CLAUDE\.md/i);
+  assert.match(readme, /Claude-native long-running development orchestration and coordination/i);
+  assert.match(readme, /shared Project memory across threads plus Project instructions and files/i);
+  assert.match(readme, /Claude-native control plane/i);
+  assert.match(readme, /complementary with overlap/i);
+  assert.match(faq, /How does Salvor differ from Claude Code Projects\?/i);
+  assert.match(faq, /vendor-native orchestration/i);
+  assert.match(faq, /repo-owned engineering knowledge and governance layer/i);
+});
+
+test("the site keeps Discussions primary and exposes one official X footer destination", async () => {
+  const html = await read("site/index.html");
+  const discussionLinks = html.match(
+    /href="https:\/\/github\.com\/dwasyluk\/salvor\/discussions"/g,
+  ) ?? [];
+
+  assert.equal(discussionLinks.length, 3);
+  assert.equal((html.match(/>COMMUNITY ↗<\/a>/g) ?? []).length, 2);
+  assert.match(html, />Community ↗<\/a>/);
+  assert.equal((html.match(/href="https:\/\/x\.com\/SalvorKnows"/g) ?? []).length, 1);
+  assert.match(html, />X · @SalvorKnows ↗<\/a>/);
+  assert.doesNotMatch(html, /href="https:\/\/x\.com\/blockchaindan"/);
+  assert.match(html, /<span data-copy-label>COPY SETUP_PROMPT\.md<\/span>/);
+  assert.match(html, /> VIEW ON GITHUB ↗/);
+});
+
+test("versioned release evidence is pinned while live community destinations remain live", async () => {
+  const html = await read("site/index.html");
+
+  for (const url of [
+    "https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/README.md#salvor-on-salvor",
+    "https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/benchmarks/METHODOLOGY.md",
+    "https://github.com/dwasyluk/salvor/blob/v1.0.0-beta/benchmarks/results/beta/REPORT.md",
+  ]) {
+    assert.ok(html.includes(`href="${url}"`), `release evidence must pin ${url}`);
+  }
+
+  assert.doesNotMatch(html, /href="https:\/\/github\.com\/dwasyluk\/salvor#salvor-on-salvor"/);
+  assert.doesNotMatch(html, /href="https:\/\/github\.com\/dwasyluk\/salvor\/blob\/main\/benchmarks\/METHODOLOGY\.md"/);
+  assert.doesNotMatch(html, /href="https:\/\/github\.com\/dwasyluk\/salvor\/blob\/main\/benchmarks\/results\/beta\/REPORT\.md"/);
+  assert.match(html, /href="https:\/\/github\.com\/dwasyluk\/salvor\/issues\/5"/);
+});
+
+test("contributor routing keeps community ideas separate from actionable GitHub work", async () => {
+  const [contributing, issueConfig, bugTemplate, featureTemplate, adapterTemplate] = await Promise.all([
+    read("CONTRIBUTING.md"),
+    read(".github/ISSUE_TEMPLATE/config.yml"),
+    read(".github/ISSUE_TEMPLATE/bug_report.md"),
+    read(".github/ISSUE_TEMPLATE/feature_request.md"),
+    read(".github/ISSUE_TEMPLATE/adapter_request.md"),
+  ]);
+
+  for (const category of ["HELP", "BUG", "IDEA", "ADAPTER", "SHOWCASE"]) {
+    assert.match(contributing, new RegExp(`\\b${category}\\b`));
+  }
+  assert.match(contributing, /IDEA[\s\S]*\[FEAT\]/);
+  assert.match(contributing, /BUG[\s\S]*\[BUG\]/);
+  assert.match(contributing, /ADAPTER[\s\S]*\[ADAPTER\]/);
+  assert.match(issueConfig, /https:\/\/github\.com\/dwasyluk\/salvor\/discussions/);
+  assert.match(bugTemplate, /^title: "\[BUG\] "/m);
+  assert.match(featureTemplate, /^title: "\[FEAT\] "/m);
+  assert.match(adapterTemplate, /^title: "\[ADAPTER\] "/m);
+});
+
+test("the site is scoped to v1.0.0-beta and describes plugins only as future work", async () => {
+  const html = await read("site/index.html");
+  assert.match(html, /SALVOR v1\.0\.0-beta/);
+  assert.match(html, /coming soon/i);
+  assert.match(html, /SHIPS WITH v1\.1\.0/);
+  assert.match(html, /in active development and is not part of the v1\.0\.0-beta release/i);
+  assert.match(html, /Codex and Gemini plugin equivalents are open for contributors/i);
+  assert.doesNotMatch(html, /domain[- ]tuning/i);
+  assert.doesNotMatch(html, /\/salvor:(?:init|status|capture|health)/i);
+  assert.doesNotMatch(html, /\/plugin install|marketplace add|install the (?:official )?Salvor plugin/i);
+});
+
+test("the site mirrors the canonical framework taxonomy and governance", async () => {
+  const html = await read("site/index.html");
+  const visibleText = html.replace(/<[^>]+>/g, " ");
+  for (const claim of [
+    /vendor-agnostic canonical hub/i,
+    /thin multi-vendor adapters/i,
+    /GEMINI\.md/i,
+    /vendor-agnostic and vendor-portable/i,
+    /through compatible thin adapters/i,
+    /\.salvor\/domain-learnings\//i,
+    /\.salvor\/decisions\//i,
+    /Save this as a domain learning\? \(yes\/no\)/i,
+    /Continued Learning/i,
+    /Learned Failure/i,
+    /Deferred Finding/i,
+    /RULES\.md\s+defines how reviewed project knowledge and component context stay synchronized/i,
+    /Optional Strict defaults can also enforce project-specific version counters/i,
+    /Serena \+ GitNexus/i,
+  ]) {
+    assert.match(visibleText, claim);
+  }
+});
+
+test("the site presents preservation-first knowledge adoption as current beta behavior", async () => {
+  const html = await read("site/index.html");
+  const visibleText = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+
+  assert.match(
+    visibleText,
+    /existing project[\s\S]{0,240}(?:docs|documentation|knowledge)[\s\S]{0,180}(?:section|snippet)[- ]level/i,
+  );
+  assert.match(
+    visibleText,
+    /(?:during|at) setup[^.]{0,180}(?:later|on demand)|(?:later|on demand)[^.]{0,180}(?:during|at) setup/i,
+  );
+  assert.match(visibleText, /originals? (?:stay|remain)[^.]{0,80}(?:untouched|unchanged)/i);
+  assert.doesNotMatch(visibleText, /existing-repo adoption\/import[^.]{0,120}(?:roadmap|coming soon)/i);
+});
+
+test("the site presents six portable process steps and linked enhanced integrations", async () => {
+  const html = await read("site/index.html");
+  const process = html.match(
+    /<div class="process-grid">([\s\S]*?)<\/div>\s*<div class="brain-summary">/,
+  )?.[1] ?? "";
+  assert.equal((process.match(/<article>/g) ?? []).length, 6);
+  assert.match(process, /Hub, Spokes &amp; Adapters/);
+  assert.match(process, /Vendor-Agnostic &amp; Portable/);
+  assert.ok(process.indexOf("Vendor-Agnostic") > process.indexOf("3 Capture Classes"));
+  assert.ok(process.indexOf("Vendor-Agnostic") < process.indexOf("Governed, Versioned Why"));
+  assert.match(html, /<h2><a href="https:\/\/github\.com\/oraios\/serena">Serena<\/a>/);
+  assert.match(html, /<h2><a href="https:\/\/github\.com\/abhigyanpatwari\/GitNexus">GitNexus<\/a>/);
+  assert.match(html, /optional[^.]*recommended when you want semantic symbol navigation and graph-based impact analysis/i);
+});
+
+test("the capture-class card uses the approved three-document foundation icon", async () => {
+  const html = await read("site/index.html");
+  const captureIcon = html.match(
+    /<svg class="process-icon"[^>]*>([\s\S]*?)<\/svg>\s*<h2>3 Capture Classes<\/h2>/,
+  )?.[1] ?? "";
+
+  assert.equal((captureIcon.match(/<rect\b/g) ?? []).length, 3);
+  assert.doesNotMatch(captureIcon, /<path\b[^>]*d="M17 42h22M20 36V23/);
+});
+
+test("hero bullets use a separate marker column for wrapped copy", async () => {
+  const [html, css] = await Promise.all([
+    read("site/index.html"),
+    read("site/styles.css"),
+  ]);
+  assert.equal((html.match(/class="hero-point-marker"/g) ?? []).length, 3);
+  assert.equal((html.match(/class="hero-point-copy"/g) ?? []).length, 3);
+  assert.match(css, /\.hero-points li\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:/s);
+});
+
+test("tablet and mobile hero copy uses a burn-integrated reading panel without changing desktop", async () => {
+  const [html, css] = await Promise.all([
+    read("site/index.html"),
+    read("site/styles.css"),
+  ]);
+
+  assert.equal((html.match(/class="hero-reading-panel"/g) ?? []).length, 1);
+  assert.match(
+    html,
+    /class="hero-reading-panel"[\s\S]*class="eyebrow"[\s\S]*id="hero-title"[\s\S]*class="hero-tagline"[\s\S]*class="hero-points"[\s\S]*<\/div>\s*<div class="hero-actions">/,
+  );
+  assert.match(css, /@media\s*\(max-width:\s*900px\)/);
+  assert.match(css, /\.hero-reading-panel::before\s*\{[^}]*--panel-fill:\s*rgba\(255,\s*255,\s*255,/s);
+  assert.match(css, /\.hero\.is-enhanced\[data-burn-state="revealed"\][^{]*\.hero-reading-panel::before\s*\{[^}]*--panel-fill:\s*rgba\((?:0|[1-9]\d?),/s);
+  assert.match(css, /\.hero\.is-enhanced:not\(\[data-burn-state="revealed"\]\)[^{]*\.hero-reading-panel::before\s*\{[^}]*opacity:\s*0/s);
+  assert.match(css, /\.hero-reading-panel::before\s*\{[^}]*--panel-stroke:\s*rgba\(/s);
+  assert.match(
+    css,
+    /\.hero-reading-panel::before\s*\{[^}]*linear-gradient\([^;]*var\(--panel-stroke\)[^;]*\)\s*top right\s*\/\s*18px 18px no-repeat/s,
+  );
+  assert.match(
+    css,
+    /\.hero-reading-panel::before\s*\{[^}]*linear-gradient\([^;]*var\(--panel-stroke\)[^;]*\)\s*bottom left\s*\/\s*18px 18px no-repeat/s,
+  );
+  assert.doesNotMatch(css, /filter:\s*blur\(/i);
+
+  const panelRuleIndex = css.indexOf(".hero-reading-panel::before");
+  const tabletMediaIndex = css.lastIndexOf("@media (max-width: 900px)", panelRuleIndex);
+  assert.ok(panelRuleIndex > tabletMediaIndex && tabletMediaIndex >= 0);
+});
+
+test("section hierarchy keeps the Loop copy full width and integration guidance explicit", async () => {
+  const [html, css] = await Promise.all([
+    read("site/index.html"),
+    read("site/styles.css"),
+  ]);
+
+  assert.match(css, /\.loop-heading\s*\{[^}]*max-width:\s*none;/s);
+  assert.match(css, /\.loop-heading h2\s*\{[^}]*max-width:\s*760px;/s);
+  assert.match(css, /\.loop-heading > p:last-child\s*\{[^}]*max-width:\s*none;/s);
+
+  assert.match(html, /Serena MCP and GitNexus MCP are optional integrations/);
+  assert.match(html, /semantic code navigation and graph-based impact analysis/);
+});
+
+test("the production site embeds two standalone Salvor Loop panels", async () => {
+  const [html, css, rootLoop, withSalvor, siteLoop, withoutSalvor] = await Promise.all([
+    read("site/index.html"),
+    read("site/styles.css"),
+    read("assets/salvor-loop.svg"),
+    read("site/assets/salvor-loop-with.svg"),
+    read("site/assets/salvor-loop.svg"),
+    read("site/assets/salvor-loop-without.svg"),
+  ]);
+  assert.match(html, /<section[^>]+id=["']loop["']/i);
+  assert.match(html, /class=["']loop-panels["']/i);
+  assert.match(html, /src=["']\.\/assets\/salvor-loop-with\.svg["']/i);
+  assert.match(html, /src=["']\.\/assets\/salvor-loop-without\.svg["']/i);
+  assert.doesNotMatch(html, /src=["']\.\/assets\/salvor-loop\.svg["']/i);
+
+  assert.match(css, /\.loop-panels\s*\{[^}]*display:\s*flex;/s);
+  assert.match(css, /\.loop-panels\s*\{[^}]*flex-wrap:\s*wrap;/s);
+  assert.match(css, /\.loop-panels\s*\{[^}]*align-items:\s*flex-start;/s);
+  assert.match(css, /\.loop-panels\s*>\s*img\s*\{[^}]*flex:\s*1 1 420px;/s);
+  assert.match(css, /\.loop-panels\s*>\s*img\s*\{[^}]*max-width:\s*100%;/s);
+  assert.match(css, /\.loop-panels\s*>\s*img\s*\{[^}]*width:\s*100%;/s);
+  assert.match(css, /\.loop-panels\s*>\s*img\s*\{[^}]*height:\s*auto;/s);
+
+  assert.match(withSalvor, /viewBox=["']0 0 800 960["']/);
+  assert.match(withSalvor, /FULL CONTEXT, COMPOUNDING/);
+  assert.match(withSalvor, /Every approved capture gives the next session more context\./);
+  assert.doesNotMatch(withSalvor, /EMPTY VESSEL|WITHOUT SALVOR/);
+  for (const loop of [rootLoop, withSalvor, siteLoop]) {
+    assert.match(loop, /VENDOR-AGNOSTIC HUB \+ SPOKES/);
+    assert.match(loop, /navigate by symbol/);
+    assert.doesNotMatch(loop, /CLAUDE\.md|SERENA|GITNEXUS/i);
+  }
+
+  assert.match(withoutSalvor, /viewBox=["']0 0 800 960["']/);
+  assert.match(withoutSalvor, /EMPTY VESSEL — COLD START EVERY SESSION/);
+  assert.match(withoutSalvor, /The same ground is covered again\./);
+  assert.doesNotMatch(withoutSalvor, /FULL CONTEXT|THE SALVOR LOOP/);
+  assert.doesNotMatch(`${withSalvor}${withoutSalvor}`, /x1=["']800["'][^>]*x2=["']800["']/);
+});
+
+test("the public site describes the hub without exposing a vendor-named canonical filename", async () => {
+  const html = await read("site/index.html");
+  const visibleText = html.replace(/<[^>]+>/g, " ");
+
+  assert.doesNotMatch(visibleText, /CLAUDE\.md/i);
+  assert.match(visibleText, /vendor-agnostic canonical hub/i);
+  assert.match(visibleText, /thin (?:multi-vendor )?(?:entrypoint )?adapters/i);
+  assert.match(visibleText, /Serena MCP and GitNexus MCP are optional integrations/i);
+  assert.match(visibleText, /semantic code navigation and graph-based impact analysis/i);
+});
+
+test("unpublished burn-hero experiment pages are absent", async () => {
+  const files = await readdir(path.join(root, "site"));
+  assert.deepEqual(files.filter((file) => /^burn-hero-.*\.html$/.test(file)), []);
+});
+
+test("the production page exposes the approved sections and canonical actions", async () => {
+  const html = await read("site/index.html");
+  for (const id of ["top", "why", "how", "use", "claude", "foundations"]) {
+    assert.match(html, new RegExp(`id=["']${id}["']`));
+  }
+  assert.match(html, /COPY SETUP_PROMPT\.md/);
+  assert.match(html, /github\.com\/dwasyluk\/salvor/);
+});
+
+test("all local HTML resources exist", async () => {
+  const html = await read("site/index.html");
+  const refs = [...html.matchAll(/(?:src|href)=["'](\.\/[^"'#?]+)["']/g)]
+    .map((match) => path.join("site", match[1]));
+  assert.ok(refs.length > 5);
+  await Promise.all(refs.map((ref) => access(path.join(root, ref))));
+});
+
+test("all in-page navigation targets resolve after the narrative reorder", async () => {
+  const html = await read("site/index.html");
+  const ids = new Set([...html.matchAll(/\bid=["']([^"']+)["']/g)].map((match) => match[1]));
+  const anchors = [...html.matchAll(/\bhref=["']#([^"']+)["']/g)].map((match) => match[1]);
+
+  assert.ok(anchors.length > 0);
+  for (const anchor of anchors) {
+    assert.ok(ids.has(anchor), `missing in-page target #${anchor}`);
+  }
+});
+
+test("authored regular and small logos are the only production families and reduced motion is explicit", async () => {
+  const [html, css] = await Promise.all([read("site/index.html"), read("site/styles.css")]);
+  assert.match(html, /salvor-logo-(?:black|white)/);
+  assert.match(html, /salvor-logo-sm-black-(?:16|32|48|64|128)\.png/);
+  assert.match(html, /salvor-wordmark-(?:black|white)/);
+  assert.doesNotMatch(html, /salvor-mark-full|salvor-mark-core|salvor-v10-node-sigil|salvor-08|broad-artifact|logo-badge/);
+  assert.match(css, /prefers-reduced-motion:\s*reduce/);
+});
+
+test("production JavaScript has focused module boundaries", async () => {
+  const html = await read("site/index.html");
+  assert.match(html, /scripts\/site\.js/);
+  assert.match(html, /scripts\/burn-reveal\.js/);
+  await Promise.all([
+    access(path.join(root, "site/scripts/site.js")),
+    access(path.join(root, "site/scripts/burn-reveal.js")),
+  ]);
+});
+
+test("the hero burn is one WebGL runtime with no legacy effect machinery", async () => {
+  const [html, css, burnSource] = await Promise.all([
+    read("site/index.html"),
+    read("site/styles.css"),
+    read("site/scripts/burn-reveal.js"),
+  ]);
+
+  assert.match(burnSource, /getContext\(["']webgl["']/);
+  assert.match(burnSource, /BURN_FRAGMENT_SHADER/);
+  assert.match(burnSource, /u_wireUi/);
+  assert.match(burnSource, /u_mysticUi/);
+  assert.match(burnSource, /foreignObject/);
+  assert.match(css, /\.burn-webgl\s*\{/);
+  assert.doesNotMatch(css, /mix-blend-mode:\s*difference/);
+  for (const legacy of [
+    "createBurnField",
+    "createImageData",
+    "toDataURL",
+    "burn-edge",
+    "burn-fx",
+    "burn-copy",
+    "burn-truth",
+    "burn-wire",
+  ]) {
+    assert.doesNotMatch(`${burnSource}\n${css}`, new RegExp(legacy));
+  }
+
+  const stylesheetVersion = html.match(/href=["']\.\/styles\.css\?v=([^"']+)["']/)?.[1];
+  const burnVersion = html.match(/src=["']\.\/scripts\/burn-reveal\.js\?v=([^"']+)["']/)?.[1];
+  assert.ok(stylesheetVersion);
+  assert.equal(burnVersion, stylesheetVersion);
+});
+
+test("repository surfaces include the canonical loop and deploy only this versioned site", async () => {
+  const [readme, workflow, ignore] = await Promise.all([
+    read("README.md"),
+    read(".github/workflows/pages.yml"),
+    read(".gitignore"),
+  ]);
+  assert.match(readme, /assets\/salvor-loop\.svg/);
+  assert.match(workflow, /workflow_dispatch/);
+  assert.doesNotMatch(workflow, /\n\s*push:/);
+  assert.match(workflow, /path:\s*\.\/site/);
+  assert.match(ignore, /playwright-report\//);
+  assert.match(ignore, /test-results\//);
+});
+
+test("the ghpage is independently versioned and its responsive sync SOP is shared memory", async () => {
+  const [version, spoke, l1, l2, infra, completion] = await Promise.all([
+    read("VERSION.md"),
+    read("site/CLAUDE.md"),
+    read(".salvor/active_state.md"),
+    read(".salvor/active_state_verbose.md"),
+    read(".salvor/INFRA.md"),
+    read(".serena/memories/task_completion.md"),
+  ]);
+  // Derive the ghpage build ID from VERSION.md's JSON header instead of a
+  // pinned literal (RULES §10 / integration-bump: pinned counters conflict on
+  // every parallel bump).
+  const ghpage = String(JSON.parse(version.match(/<!--\s*({[^\n]+})\s*-->/)[1]).ghpage).padStart(2, "0");
+  assert.match(version, new RegExp(`GHPAGE:${ghpage}`));
+  assert.match(spoke, /VERSION\.md[^\n]*GHPAGE/);
+  assert.match(l1, new RegExp(`GHPAGE:${ghpage}`));
+  // The responsive-check SOP lives in its canonical homes (L1, INFRA, L2), not
+  // duplicated across every Serena memory — post-refresh, Serena memories are
+  // concise pointers under the one-owner model.
+  void spoke; void completion;
+  for (const memory of [l1, infra, l2]) {
+    assert.match(memory, /Playwright/i);
+    assert.match(memory, /desktop/i);
+    assert.match(memory, /tablet/i);
+    assert.match(memory, /small[- ]phone/i);
+  }
+});
+
+test("the hero keeps the tagline and leads with the canonical category framing", async () => {
+  const html = await read("site/index.html");
+  assert.match(html, /class="hero-tagline">Your repo remembers<span>\.<\/span>/);
+  const flatHtml = html.replace(/\s+/g, " ");
+  assert.match(flatHtml, /Repo-owned engineering knowledge for coding agents and teams\./);
+  assert.match(flatHtml, /Decisions, failures, and rationale — reviewed in Git\./);
+  assert.match(flatHtml, /Portable across sessions, teammates, and supported agents\./);
+  assert.match(flatHtml, /<meta name="description" content="A repo-native engineering knowledge layer for coding agents and software teams\." \/>/);
+});
+
+test("the site presents the distributed brain honestly: slug IDs, reconcile, audit", async () => {
+  const html = (await read("site/index.html")).replace(/\s+/g, " ");
+  assert.match(html, /self-allocating slug ID/i);
+  assert.match(html, /protocol calls for Brain Reconcile at merge and pull points/i);
+  assert.match(html, /recurring Brain Audit/i);
+  assert.match(html, /LF:stale-note-reference/);
+  assert.match(html, /duplicates and contradictions are surfaced for your decision, never shipped silently/i);
+});
+
+test("the site carries the canonical cognition, compounding, dogfood, and research hierarchy", async () => {
+  const html = (await read("site/index.html")).replace(/\s+/g, " ");
+  for (const id of ["knowledge", "compounds"]) {
+    assert.match(html, new RegExp(`<section[^>]+id="${id}"`));
+  }
+  for (const id of ["dogfood", "measured"]) {
+    assert.match(html, new RegExp(`<div[^>]+id="${id}"`));
+  }
+  assert.match(html, /Persistent engineering cognition[\s\S]{0,180}durable, governed knowledge/i);
+  assert.match(html, /Structure can often be derived\. Rationale needs evidence\./i);
+  assert.match(html, /inspectable examples[\s\S]{0,120}not an independent benchmark/i);
+  assert.equal((html.match(/href="#measured">RESEARCH<\/a>/g) ?? []).length, 2);
+  assert.doesNotMatch(html, /href="#measured">BENCH<\/a>/);
+  assert.match(html, /RESEARCH STATUS/);
+  assert.match(html, /Longitudinal validation is still open\./i);
+  assert.match(html, /Earlier exploratory short-horizon experiments remain archived/i);
+  assert.match(html, /advanced benchmarking RFC/i);
+  assert.doesNotMatch(html, /measured results are null, negative, and published/i);
+  assert.doesNotMatch(html, /19\/19\s*(?:<[^>]+>)*\s*vs\s*(?:<[^>]+>)*\s*18\/19/i);
+  assert.doesNotMatch(html, /54%\s*(?:<[^>]+>)*\s*→\s*(?:<[^>]+>)*\s*14%/i);
+  assert.doesNotMatch(html, /1\s*\/\s*0\s*\/\s*0/);
+  assert.doesNotMatch(html, /all (?:current )?(?:longitudinal[- ]memory|memory) benchmarks (?:are|remain) (?:ineffective|unsuitable|useless)/i);
+  assert.doesNotMatch(html, /(?:established|proven|demonstrated) longitudinal uplift/i);
+});
+
+test("the dogfood ledger exposes canonical capture classes and the compounding path", async () => {
+  const html = await read("site/index.html");
+  const dogfood = html.slice(
+    html.indexOf('id="dogfood"'),
+    html.indexOf('id="measured"'),
+  );
+  const cases = dogfood.match(/<article>[\s\S]*?<\/article>/g) ?? [];
+  const dogfoodText = dogfood.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ");
+
+  assert.equal(cases.length, 3, "dogfood must contain exactly three case examples");
+  assert.match(dogfoodText, /TRIGGER\s*→\s*CAPTURE\s*→\s*COMPOUNDED KNOWLEDGE/);
+  assert.match(dogfoodText, /Each example follows the same path:.*later sessions inherit the reviewed result\./i);
+
+  for (const [index, caseHtml] of cases.entries()) {
+    assert.match(
+      caseHtml,
+      index < 2 ? /DESIGN DECISION/ : /DOMAIN LEARNING/,
+      `case ${index + 1} must expose its canonical capture class`,
+    );
+    // Approved ledger layout (2026-09-19 "Fix layout of dogfood ledger"):
+    // the trigger label reads "TRIGGER: <EVENT>" with the event title as a
+    // sibling heading, replacing the earlier "TRIGGER · <EVENT> —" heading.
+    assert.match(caseHtml, /TRIGGER:\s*(?:INCIDENT|RISK|VERSION DRIFT)/);
+    assert.match(caseHtml, /<dt>\s*CAPTURED\s*<\/dt>/);
+    assert.match(caseHtml, /<dt>\s*COMPOUNDED KNOWLEDGE\s*<\/dt>/);
+    assert.doesNotMatch(caseHtml, /class="reason-number"|<ol\b/i);
+  }
+
+  assert.doesNotMatch(dogfood, /<dt>\s*INHERITED\s*<\/dt>/);
+});
+
+test("the page reserves the prominent numbered triptych for the engineering problem", async () => {
+  const html = await read("site/index.html");
+  const numberedGrids = html.match(/class="[^"]*\breason-grid\b[^"]*"/g) || [];
+  const largeNumbers = html.match(/class="reason-number"/g) || [];
+  const why = html.match(/<section[^>]+id="why"[\s\S]*?<\/section>/i)?.[0] || "";
+
+  assert.equal(numberedGrids.length, 1, "only the problem may use the numbered triptych");
+  assert.equal(largeNumbers.length, 3, "the page must contain exactly three large numbers");
+  assert.equal((why.match(/class="reason-number"/g) || []).length, 3);
+  for (const id of ["knowledge", "compounds", "dogfood", "measured"]) {
+    const section = html.match(new RegExp(`<(?:section|div)[^>]+id="${id}"[\\s\\S]*?<\\/(?:section|div)>`, "i"))?.[0] || "";
+    assert.doesNotMatch(section, /reason-number/);
+  }
+});
+
+test("the public narrative reaches mechanics before adoption and evidence", async () => {
+  const html = await read("site/index.html");
+  const orderedIds = ["why", "knowledge", "how", "loop", "compounds", "use", "evidence", "foundations"];
+  let previous = -1;
+  for (const id of orderedIds) {
+    const current = html.indexOf(`id="${id}"`);
+    assert.ok(current > previous, `${id} must follow the preceding narrative section`);
+    previous = current;
+  }
+  for (const id of ["dogfood", "measured"]) {
+    assert.ok(html.indexOf(`id="${id}"`) > html.indexOf('id="evidence"'));
+  }
+});
+
+test("the redesigned sections use distinct semantic compositions", async () => {
+  const html = await read("site/index.html");
+  assert.match(html, /class="[^"]*answer-manifesto[^"]*"/);
+  assert.match(html, /class="[^"]*adoption-rail[^"]*"/);
+  assert.match(html, /class="[^"]*case-ledger[^"]*"/);
+  assert.match(html, /class="[^"]*research-status[^"]*"/);
+  assert.doesNotMatch(html, /class="[^"]*(?:metric-grid|measured-panel)[^"]*"/);
+});
+
+test("the README keeps three dogfood examples and a concise longitudinal validation section", async () => {
+  const readme = await read("README.md");
+  const dogfood = readme.slice(
+    readme.indexOf("## Salvor on Salvor"),
+    readme.indexOf("## Longitudinal validation"),
+  );
+  const validation = readme.slice(
+    readme.indexOf("## Longitudinal validation"),
+    readme.indexOf("## enhanced mode: Serena + GitNexus"),
+  );
+  const dogfoodRows = dogfood
+    .split("\n")
+    .filter((line) => /^\|.+\|$/.test(line) && !/^\|(?:---| Engineering event)/.test(line));
+
+  assert.equal(dogfoodRows.length, 3, "README dogfood table must contain exactly three examples");
+  assert.doesNotMatch(dogfood, /beta benchmark exposed/i);
+  assert.match(validation, /^## Longitudinal validation$/m);
+  assert.match(validation, /core hypothesis is longitudinal/i);
+  assert.match(validation, /not (?:yet )?(?:established|presented as validation)/i);
+  assert.match(validation, /\[`benchmarks\/`\]\(\.\/benchmarks\/\)/);
+  assert.match(validation, /\[`methodology`\]\(\.\/benchmarks\/METHODOLOGY\.md\)/);
+  assert.match(validation, /\[`exploratory beta report`\]\(\.\/benchmarks\/results\/beta\/REPORT\.md\)/);
+  assert.match(validation, /\[`advanced benchmarking RFC`\]\(https:\/\/github\.com\/dwasyluk\/salvor\/issues\/5\)/);
+  assert.doesNotMatch(validation, /^\|\s*Arm\s*\|/m);
+  assert.doesNotMatch(validation, /19\/19|18\/19|54\.0%|14\.0%|1\s*\/\s*0\s*\/\s*0/);
+  assert.doesNotMatch(validation, /(?:established|proven|demonstrated) longitudinal uplift/i);
+});
+
+test("public copy distinguishes protocol obligations from automation and avoids performance guarantees", async () => {
+  const html = (await read("site/index.html")).replace(/\s+/g, " ");
+  assert.match(html, /protocol calls for Brain Reconcile at merge and pull points/i);
+  assert.doesNotMatch(html, /Brain Reconcile runs at merge and pull points/i);
+  assert.match(html, /RULES\.md<\/code> defines how reviewed project knowledge and component context stay synchronized/i);
+  assert.match(html, /can start from reviewed knowledge instead of reconstructing it from scratch/i);
+  assert.doesNotMatch(html, /improved token efficiency|see what breaks before you ship/i);
+  assert.match(html, /designed to preserve accumulated project knowledge/i);
+});
+
+test("the site flags agentic capture as experimental and off by default", async () => {
+  const html = (await read("site/index.html")).replace(/\s+/g, " ");
+  assert.match(html, /experimental, off-by-default mode/i);
+  assert.match(html, /ratified item-by-item by you/i);
+  // the user gate remains the headline claim
+  assert.match(html, /Every capture class is user-gated/);
+});
+
+test("the site tree includes the archive and the primary path mentions upgrades", async () => {
+  const html = await read("site/index.html");
+  assert.match(html, /├── postmortems\/\n└── archive\/<\/code>/);
+  const flatHtml = html.replace(/\s+/g, " ");
+  assert.match(flatHtml, /Upgrading later is the same move/i);
+  assert.match(flatHtml, /protocol stamp/i);
+  assert.match(flatHtml, /designed to preserve accumulated project knowledge/i);
+  assert.match(flatHtml, /migration is proposed separately for approval/i);
+});

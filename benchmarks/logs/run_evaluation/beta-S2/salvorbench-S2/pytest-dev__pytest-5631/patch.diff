@@ -1,0 +1,25 @@
+diff --git a/src/_pytest/compat.py b/src/_pytest/compat.py
+index d238061b4..1440cdebc 100644
+--- a/src/_pytest/compat.py
++++ b/src/_pytest/compat.py
+@@ -68,7 +68,11 @@ def num_mock_patch_args(function):
+     if any(mock_modules):
+         sentinels = [m.DEFAULT for m in mock_modules if m is not None]
+         return len(
+-            [p for p in patchings if not p.attribute_name and p.new in sentinels]
++            [
++                p
++                for p in patchings
++                if not p.attribute_name and any(p.new is s for s in sentinels)
++            ]
+         )
+     return len(patchings)
+ 
+diff --git a/changelog/5662.bugfix.rst b/changelog/5662.bugfix.rst
+new file mode 100644
+index 000000000..ed5211602
+--- /dev/null
++++ b/changelog/5662.bugfix.rst
+@@ -0,0 +1,2 @@
++Fix ``ValueError`` raised during collection of tests using ``unittest.mock.patch`` with a ``new`` value
++that does not support usual comparison operations, such as ``numpy`` arrays.

@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">The Salvor Loop</title>
+  <desc id="desc">A side-by-side comparison. With Salvor, nine connected phases read from and write to a shared repository brain. Without Salvor, an isolated agent starts empty every session.</desc>
+  <defs>
+    <linearGradient id="read" x1="190" y1="170" x2="650" y2="650" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7dd3fc"/><stop offset=".52" stop-color="#6366f1"/><stop offset="1" stop-color="#4338ca"/>
+    </linearGradient>
+    <linearGradient id="write" x1="570" y1="650" x2="150" y2="190" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f3c66f"/><stop offset=".55" stop-color="#c9841d"/><stop offset="1" stop-color="#8d5711"/>
+    </linearGradient>
+    <linearGradient id="handoff" x1="309" y1="639" x2="329" y2="639" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366f1"/><stop offset=".5" stop-color="#7a66d8"/><stop offset="1" stop-color="#c9841d"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="48%" r="52%">
+      <stop stop-color="#818cf8" stop-opacity=".23"/><stop offset=".62" stop-color="#818cf8" stop-opacity=".05"/><stop offset="1" stop-color="#818cf8" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#d9d8d2"/></pattern>
+    <filter id="shadow" x="-20%" y="-25%" width="140%" height="150%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#111827" flood-opacity=".09"/></filter>
+    <path id="ring-chevron" d="M-8-8 4 0-8 8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </defs>
+
+  <rect width="800" height="1000" fill="#fcfbf7"/>
+  <rect width="800" height="1000" fill="url(#dots)" opacity=".22"/>
+  <rect x="800" width="800" height="1000" fill="#f6f6f4"/>
+  <line x1="800" y1="38" x2="800" y2="962" stroke="#dcdad4" stroke-width="2"/>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="64" y="62" fill="#111316" font-size="22" font-weight="800" letter-spacing="3">THE SALVOR LOOP</text>
+    <text x="64" y="96" fill="#55585d" font-size="16" font-weight="600" letter-spacing="1">WITH SALVOR · FULL CONTEXT, COMPOUNDING</text>
+    <text x="864" y="62" fill="#686b70" font-size="22" font-weight="800" letter-spacing="3">WITHOUT SALVOR</text>
+    <text x="864" y="96" fill="#a0a2a5" font-size="16" font-weight="600" letter-spacing="1">SESSION N · NOTHING CARRIES FORWARD</text>
+  </g>
+
+  <!-- Compounding loop -->
+  <circle cx="400" cy="415" r="315" fill="url(#glow)"/>
+  <circle cx="400" cy="415" r="203" fill="none" stroke="#dfddd7" stroke-width="1.5" stroke-dasharray="3 9"/>
+  <!-- Exact phase-aligned ring segments, all sharing center 400,415 and radius 238. -->
+  <path d="M400 177A238 238 0 0 1 553 233" fill="none" stroke="#111316" stroke-width="14" stroke-linecap="butt"/>
+  <path d="M553 233A238 238 0 0 1 319 639" fill="none" stroke="url(#read)" stroke-width="14" stroke-linecap="butt"/>
+  <path d="M319 639A238 238 0 0 1 247 233" fill="none" stroke="url(#write)" stroke-width="14" stroke-linecap="butt"/>
+  <path d="M247 233A238 238 0 0 1 400 177" fill="none" stroke="url(#write)" stroke-width="14" stroke-linecap="butt"/>
+  <use href="#ring-chevron" transform="translate(511 205) rotate(31)"/>
+  <use href="#ring-chevron" transform="translate(616 314) rotate(65)"/>
+  <use href="#ring-chevron" transform="translate(624 496) rotate(110)"/>
+  <use href="#ring-chevron" transform="translate(537 610) rotate(145)"/>
+  <use href="#ring-chevron" transform="translate(400 653) rotate(180)"/>
+  <use href="#ring-chevron" transform="translate(264 610) rotate(215)"/>
+  <use href="#ring-chevron" transform="translate(176 496) rotate(250)"/>
+  <use href="#ring-chevron" transform="translate(176 334) rotate(290)"/>
+  <use href="#ring-chevron" transform="translate(285 209) rotate(-28)"/>
+
+  <!-- Read-to-write pivot at PLAN → ACT. -->
+  <circle cx="319" cy="639" r="10" fill="url(#handoff)" stroke="#fff" stroke-width="3"/>
+
+  <!-- Every phase both reads from and writes to the shared brain -->
+  <g id="internal-spokes" fill="none" stroke="#777b81" stroke-width="1.4" stroke-linecap="round" opacity=".18">
+    <path d="M400 296 400 209"/>
+    <path d="M474 337 536 277"/>
+    <path d="M500 405 591 405"/>
+    <path d="M462 456 565 547"/>
+    <path d="M410 486 453 626"/>
+    <path d="M390 486 347 626"/>
+    <path d="M338 456 243 547"/>
+    <path d="M300 405 208 405"/>
+    <path d="M326 337 256 281"/>
+  </g>
+
+  <!-- CANONICAL_LOGO_REGULAR_START --><image data-brand-source="canonical-logo-regular" href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MjkuNzYgNTUxLjQ0Ij4KICA8ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xLCAuY2xzLTIsIC5jbHMtMywgLmNscy00IHsKICAgICAgICBmaWxsOiBub25lOwogICAgICAgIHN0cm9rZTogIzIzMWYyMDsKICAgICAgICBzdHJva2UtbWl0ZXJsaW1pdDogMTA7CiAgICAgIH0KCiAgICAgIC5jbHMtMSwgLmNscy0yLCAuY2xzLTMsIC5jbHMtNSB7CiAgICAgICAgZmlsbC1ydWxlOiBldmVub2RkOwogICAgICB9CgogICAgICAuY2xzLTEsIC5jbHMtNCB7CiAgICAgICAgc3Ryb2tlLXdpZHRoOiAycHg7CiAgICAgIH0KCiAgICAgIC5jbHMtMiB7CiAgICAgICAgc3Ryb2tlLXdpZHRoOiAxMnB4OwogICAgICB9CgogICAgICAuY2xzLTMgewogICAgICAgIHN0cm9rZS13aWR0aDogMTBweDsKICAgICAgfQoKICAgICAgLmNscy01IHsKICAgICAgICBmaWxsOiAjMjMxZjIwOwogICAgICB9CiAgICA8L3N0eWxlPgogIDwvZGVmcz4KICA8ZyBpZD0ib3V0c2lkZV9lZGdlIiBkYXRhLW5hbWU9Im91dHNpZGUgZWRnZSI+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0yNjUuNjEsNi44OWwxOTUuNywxMTEuMDksNjEuOCwyMjEuNDUtMTEzLjMsMTMxLjY5LTE0NC4yLDczLjU3LTE0NC4yLTczLjU3TDYuNjQsMzM5LjQ0bDYxLjA2LTIyMS40NUwyNjUuNjEsNi44OVoiLz4KICA8L2c+CiAgPGcgaWQ9ImlubmV0Ij4KICAgIDxwYXRoIGNsYXNzPSJjbHMtNCIgZD0iTTYuNjQsMzM5LjQ0bDEwMi4yNyw1NC40NC0yNS4wMS0xNjkuOTVMNi42NCwzMzkuNDRaTTEyMS40MSw0NzEuMTNoNjcuNzZsLTgwLjI3LTc3LjI1LDEyLjUxLDc3LjI1Wk02Ny43MSwxMTcuOThsMTYuMTksMTA1Ljk0LDc4LjcyLTEwMC43OS05NC45MS01LjE1Wk00MDkuODIsNDcxLjEzbDEwLjMtNzcuMjUtNzkuMTMsNzcuMjVoNjguODNaTTQ2MS4zMiwxMTcuOThsLTk1LjY0LDUuMTUsNzguNzIsMTAwLjc5LDE2LjkyLTEwNS45NFpNNDQ0LjM5LDIyMy45M2wtMjQuMjgsMTY5Ljk1LDEwMy01NC40NC03OC43Mi0xMTUuNTFaTTM2NS42NywxMjMuMTNMMjY1LjYxLDYuODlsLTEwMywxMTYuMjRoMjAzLjA2Wk0yNjUuNjEsNTQ0LjdsNzUuMzctNzMuNTdoLTE1MS44MWw3Ni40NCw3My41N1oiLz4KICA8L2c+CiAgPGcgaWQ9InRyaUwiPgogICAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNMjY1Ljk4LDEyOC43MkwxMTUuMTYsMzkwLjY0aDI5OS40NGwtMTQ4LjYyLTI2MS45MloiLz4KICA8L2c+CiAgPGcgaWQ9InRyaVNNIj4KICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE4NC42OSwzNDcuNjJoMTU4LjkybC03Ny45OS0xNTEuNTYtODAuOTMsMTUxLjU2WiIvPgogIDwvZz4KICA8ZyBpZD0idHJpY2F5Ij4KICAgIDxnPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zMzUuMTQsMjUyLjMybC02OS44OSw0NC44OHYtMTY4LjQ4Ii8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE5My44OCwyNTIuMzJsNzAuNjMsNDQuODgtMTUwLjA5LDkzLjQ0Ii8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQxMy44NiwzOTAuNjRsLTE0OC42Mi05My40NCIvPgogICAgPC9nPgogIDwvZz4KICA8ZyBpZD0ic3BhcmsiPgogICAgPGc+CiAgICAgIDxwb2x5Z29uIGNsYXNzPSJjbHMtNSIgcG9pbnRzPSIzMzcuMzUgMjk3LjUgMjc2LjI4IDI5Mi4zNSAzMTYuMDEgMjM5LjM4IDI3MC40IDI4Ny4yIDI2NS45OCAxMjkuNzYgMjYwLjgzIDI4Ny4yIDIxNS4yMiAyMzkuMzggMjU0Ljk1IDI5Mi4zNSAxOTMuODggMjk3LjUgMjU0Ljk1IDMwMS4xOCAyMTUuMjIgMzcxLjgxIDI2MC44MyAzMDcuOCAyNjUuOTggNDU5LjM2IDI3MC40IDMwNy44IDMxNi4wMSAzNzEuODEgMjc2LjI4IDMwMS4xOCAzMzcuMzUgMjk3LjUiLz4KICAgICAgPHBvbHlnb24gY2xhc3M9ImNscy00IiBwb2ludHM9IjMzNy4zNSAyOTcuNSAyNzYuMjggMjkyLjM1IDMxNi4wMSAyMzkuMzggMjcwLjQgMjg3LjIgMjY1Ljk4IDEyOS43NiAyNjAuODMgMjg3LjIgMjE1LjIyIDIzOS4zOCAyNTQuOTUgMjkyLjM1IDE5My44OCAyOTcuNSAyNTQuOTUgMzAxLjE4IDIxNS4yMiAzNzEuODEgMjYwLjgzIDMwNy44IDI2NS45OCA0NTkuMzYgMjcwLjQgMzA3LjggMzE2LjAxIDM3MS44MSAyNzYuMjggMzAxLjE4IDMzNy4zNSAyOTcuNSIvPgogICAgPC9nPgogIDwvZz4KICA8ZyBpZD0idG9wbGluZSI+CiAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yNjUuNjEsNy41N3YxMTYuMjQiLz4KICA8L2c+Cjwvc3ZnPg==" x="300" y="278" width="200" height="200" preserveAspectRatio="xMidYMid meet"/><!-- CANONICAL_LOGO_REGULAR_END -->
+
+  <g text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="400" y="512" fill="#111316" font-size="22" font-weight="800">.salvor/</text>
+    <text x="400" y="540" fill="#4e5156" font-size="13">L1/L2 · DOMAIN LEARNINGS · DECISIONS</text>
+    <text x="400" y="562" fill="#4e5156" font-size="13">LEARNED FAILURES · DEFERRED TODOs</text>
+    <text x="400" y="584" fill="#4e5156" font-size="13">VENDOR-AGNOSTIC HUB + SPOKES</text>
+  </g>
+
+  <!-- Nine phases -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" filter="url(#shadow)">
+    <g transform="translate(320 151)"><rect width="160" height="58" rx="12" fill="#fff" stroke="#111316" stroke-width="1.5"/><circle cx="25" cy="20" r="12" fill="#111316"/><text x="25" y="25" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">0</text><text x="47" y="24" fill="#111316" font-size="14" font-weight="800">REQUEST</text><text x="17" y="45" fill="#6b6d72" font-size="11">task enters</text></g>
+    <g transform="translate(536 213)"><rect width="182" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">1</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">ORIENT</text><text x="17" y="47" fill="#55585d" font-size="11">hub → L1 → spoke</text></g>
+    <g transform="translate(591 362)"><rect width="191" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">2</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">UNDERSTAND</text><text x="17" y="47" fill="#55585d" font-size="11">navigate by symbol</text></g>
+    <g transform="translate(565 515)"><rect width="217" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">3</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">ENRICH</text><text x="17" y="47" fill="#55585d" font-size="10">impact + flows · before edit</text></g>
+    <g transform="translate(421 626)"><rect width="218" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">4</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">RECALL THE WHY</text><text x="17" y="47" fill="#55585d" font-size="11">decisions · L1/L2 · VERSION</text></g>
+    <g transform="translate(161 626)"><rect width="218" height="64" rx="12" fill="#fff" stroke="#6366f1" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#6366f1"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">5</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">PLAN</text><text x="17" y="47" fill="#55585d" font-size="11">accumulated context</text></g>
+    <g transform="translate(33 515)"><rect width="210" height="64" rx="12" fill="#fff" stroke="#c9841d" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#c9841d"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">6</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">ACT</text><text x="17" y="47" fill="#55585d" font-size="10">honor surfaced couplings</text></g>
+    <g transform="translate(3 362)"><rect width="205" height="64" rx="12" fill="#fff" stroke="#c9841d" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#c9841d"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">7</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">CAPTURE</text><text x="17" y="47" fill="#55585d" font-size="10">ask verbatim, then persist</text></g>
+    <g transform="translate(36 205)"><rect width="220" height="76" rx="12" fill="#fff" stroke="#c9841d" stroke-width="2"/><circle cx="25" cy="21" r="12" fill="#c9841d"/><text x="25" y="26" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">8</text><text x="47" y="25" fill="#111316" font-size="14" font-weight="800">TERMINATE</text><text x="17" y="48" fill="#55585d" font-size="10">RULES §0 · VERSION</text><text x="17" y="64" fill="#55585d" font-size="10">sync L1/L2 · spokes · parity</text></g>
+  </g>
+
+  <!-- Arc labels are a quiet horizontal key, not another UI component -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" font-weight="800">
+    <line x1="170" y1="744" x2="210" y2="744" stroke="#6366f1" stroke-width="5" stroke-linecap="round"/>
+    <text x="224" y="749" fill="#4338ca">ASSEMBLE CONTEXT · READ</text>
+    <line x1="448" y1="744" x2="488" y2="744" stroke="#c9841d" stroke-width="5" stroke-linecap="round"/>
+    <text x="502" y="749" fill="#8d5711">COMPOUND · WRITE</text>
+  </g>
+
+  <!-- Matched value-proposition rows -->
+  <g text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <line x1="64" y1="810" x2="736" y2="810" stroke="#d3d1ca" stroke-width="2"/>
+    <text x="400" y="854" fill="#111316" font-size="20" font-weight="800">FULL CONTEXT, COMPOUNDING</text>
+    <text x="400" y="891" fill="#55585d" font-size="16">Every phase reads from and writes back to the brain.</text>
+    <text x="400" y="925" fill="#111316" font-size="16" font-weight="800">Every approved capture gives the next session more context.</text>
+  </g>
+
+  <!-- Quiet cold-start field: deliberately no grid and no competing detail -->
+  <rect x="854" y="142" width="692" height="636" rx="32" fill="#fff" stroke="#e5e5e1" stroke-width="2"/>
+  <circle cx="1200" cy="420" r="168" fill="#fafafa" stroke="#efefec"/>
+  <circle cx="1200" cy="420" r="118" fill="none" stroke="#e6e6e2" stroke-width="2" stroke-dasharray="5 12"/>
+
+  <!-- Prior-session fragments evaporate instead of compounding. -->
+  <g fill="#8d9095" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15">
+    <text x="918" y="220" opacity=".37" transform="rotate(-2 918 220)">why did we…?</text>
+    <text x="1492" y="248" text-anchor="end" opacity=".24" transform="rotate(2 1492 248)">that decision</text>
+    <text x="918" y="332" opacity=".50" transform="rotate(1.5 918 332)">didn't we try this?</text>
+    <text x="1490" y="370" text-anchor="end" opacity=".30" transform="rotate(-1.5 1490 370)">was that on purpose?</text>
+    <text x="916" y="470" opacity=".42" transform="rotate(-1 916 470)">re-deriving it all</text>
+    <text x="1492" y="476" text-anchor="end" opacity=".27" transform="rotate(1 1492 476)">which approach won?</text>
+    <text x="916" y="642" opacity=".48" transform="rotate(-1.5 916 642)">safe to change?</text>
+    <text x="1492" y="654" text-anchor="end" opacity=".33" transform="rotate(1.5 1492 654)">that TODO we parked</text>
+    <text x="920" y="718" opacity=".45" transform="rotate(1 920 718)">this bug again</text>
+    <text x="1488" y="734" text-anchor="end" opacity=".39" transform="rotate(-1 1488 734)">starting from zero</text>
+  </g>
+
+  <g transform="translate(1200 416)" fill="none" stroke="#a6a8ab" stroke-width="4">
+    <circle cx="0" cy="-66" r="68" fill="#fff"/>
+    <path d="M-92 104q8-104 92-104t92 104" fill="#fff"/>
+    <rect x="-42" y="-91" width="84" height="52" rx="9"/>
+    <path d="m-26-75 15 11-15 11M-1-53h27" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="1200" y="586" fill="#a0a2a5" font-size="15" font-weight="800" letter-spacing="1.3">NO MEMORY · NO PROCESS · NO WHY</text>
+    <line x1="864" y1="810" x2="1536" y2="810" stroke="#deded9" stroke-width="2"/>
+    <text x="1200" y="854" fill="#66696e" font-size="20" font-weight="800">EMPTY VESSEL — COLD START EVERY SESSION</text>
+    <text x="1200" y="891" fill="#97999d" font-size="16">Discoveries evaporate between sessions.</text>
+    <text x="1200" y="925" fill="#797c81" font-size="20" font-weight="800">The same ground is covered again.</text>
+  </g>
+</svg>

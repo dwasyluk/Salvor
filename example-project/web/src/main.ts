@@ -1,4 +1,4 @@
-// Notebook web client — plain DOM, no framework.
+// Notes web client — plain DOM, no framework.
 // Fetches notes from the API, renders them, and posts new ones.
 
 /** Mirrors the API's Note shape (api/src/types.ts). */
@@ -10,11 +10,16 @@ interface Note {
 }
 
 const API_BASE = "http://localhost:8787";
+const APP_NAME = document.documentElement.dataset.appName ?? "Notebook";
 
+const appNameEl = document.getElementById("app-name") as HTMLHeadingElement;
 const listEl = document.getElementById("note-list") as HTMLUListElement;
 const formEl = document.getElementById("note-form") as HTMLFormElement;
 const titleEl = document.getElementById("title") as HTMLInputElement;
 const bodyEl = document.getElementById("body") as HTMLTextAreaElement;
+
+document.title = APP_NAME;
+appNameEl.textContent = APP_NAME;
 
 async function fetchNotes(): Promise<Note[]> {
   const res = await fetch(`${API_BASE}/notes`);

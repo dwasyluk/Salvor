@@ -2,17 +2,18 @@
 ### CURRENT STATE (L1 Cache)
 @.salvor/active_state.md
 
-> Deep history and dementia recovery: `.salvor/active_state_verbose.md`
+> Deep history and context recovery: `.salvor/active_state_verbose.md`
 
 ## Project Overview
-Salvor is a prompt-and-documentation framework that gives repositories a version-controlled institutional brain shared across sessions, contributors, and LLM vendors. Its universal installer is `SETUP_PROMPT.md`; public guidance lives in `README.md` and `docs/`; the planned GitHub Pages site is a generated presentation mirror. The non-obvious invariant is that repository knowledge and rationale are canonical, while vendor entrypoints and public surfaces stay thin and synchronized.
+Salvor is a prompt-and-documentation framework that gives repositories a version-controlled institutional brain shared across sessions, contributors, and LLM vendors. Its universal installer is `SETUP_PROMPT.md`; public guidance lives in `README.md` and `docs/`; the GitHub Pages site source lives in `site/` on `main` and deploys from `main` via `.github/workflows/pages.yml`. The non-obvious invariant is that repository knowledge and rationale are a vendor-agnostic canonical record, while compatible thin adapters make it vendor-portable and public surfaces stay synchronized. Existing-repository setup is preservation-first: reuse mature tool state and agent infrastructure in place, and require an approved adoption map before any mutation.
 
 ## Architecture
 | Component | Stack | Spoke |
 |-----------|-------|-------|
 | core | Markdown prompt protocol | @core/CLAUDE.md |
-| web | Static GitHub Pages (planned; metadata-only) | @site/CLAUDE.md |
+| ghpage | Static GitHub Pages v1.0.0-beta presentation mirror | @site/CLAUDE.md |
 | docs | Markdown | @docs/CLAUDE.md |
+| bench | Python (uv) clean-room benchmark harness | @benchmarks/CLAUDE.md |
 
 ## Documentation Map
 | Document | Purpose | When to Read |
@@ -21,7 +22,7 @@ Salvor is a prompt-and-documentation framework that gives repositories a version
 | `.salvor/INFRA.md` | Local, release, GitHub Pages, external tooling | Changing infra/deployment/APIs |
 | `.salvor/DEFERRED_TODOS.md` | User-approved out-of-scope findings | Before related work |
 | `core/CLAUDE.md` | Universal setup protocol | Changing `SETUP_PROMPT.md` |
-| `site/CLAUDE.md` | Planned public site and sync contract | Changing future `site/` |
+| `site/CLAUDE.md` | Public ghpage and source-of-truth sync contract | Changing `site/` or Pages delivery |
 | `docs/CLAUDE.md` | README and documentation architecture | Changing `README.md` or `docs/` |
 | `.serena/memories/` | Shared structure, conventions, commands | Query through Serena MCP |
 
@@ -29,52 +30,15 @@ Salvor is a prompt-and-documentation framework that gives repositories a version
 Use `APP_NAME`; default `salvor`. Never introduce a separate hardcoded application-name constant.
 
 ### SYSTEM DIRECTIVE: TWO-TIER MEMORY MANAGEMENT
-Maintain `.salvor/active_state.md` (L1, ≤50 lines, confirmed current logic/deltas/infra/LFs) and `.salvor/active_state_verbose.md` (L2, unlimited reasoning/history/raw evidence). Update L1 silently after every confirmed resolution, milestone, or architectural shift, then immediately preserve pruned nuance in L2. Read L2 only when explicitly requested or during dementia recovery.
+Maintain `.salvor/active_state.md` (L1, ≤50 lines, confirmed current logic/deltas/infra/LFs) and `.salvor/active_state_verbose.md` (L2, detailed but curated reasoning/history/evidence — when it exceeds ~1,500 lines or at release milestones, condense the oldest resolved sections, keeping durable conclusions, evidence references, and commit/test/issue IDs while dropping raw noise; never persist material on the `RULES.md` §9.1 never-persist list). Update L1 silently after every confirmed resolution, milestone, or architectural shift, then immediately preserve pruned nuance in L2. Read L2 only when explicitly requested or during context recovery.
 
-### SYSTEM DIRECTIVE: THREE KNOWLEDGE-CAPTURE TRIGGERS
-For each continued-learning discovery or Learned Failure, pause and ask exactly: `Save this as a domain learning? (yes/no)`. For out-of-scope findings, ask exactly: `Log this to .salvor/DEFERRED_TODOS.md? (yes/no)`. Never infer, silently save, or batch unrelated discoveries; follow `RULES.md` §2 and §7 on approval.
+### SYSTEM DIRECTIVE: THREE CAPTURE CLASSES
+Salvor may update concise operational state as work progresses. It must ask before promoting a decision, domain learning, learned failure, or deferred finding into the repository's durable shared engineering record. The three capture classes: (1) **Decision / Domain Learning** — ask exactly `Record this as a design decision? (yes/no)` (→ `.salvor/decisions/`) or `Save this as a domain learning? (yes/no)` (→ `.salvor/domain-learnings/`); (2) **Learned Failure (`LF:<slug>`)** — registered through the same flow when the discovery is a failure; (3) **Deferred Finding** — ask exactly `Log this to .salvor/DEFERRED_TODOS.md? (yes/no)`. Never infer, silently save, or batch unrelated discoveries; follow `RULES.md` §2 and §7 on approval. Knowledge IDs are self-allocating slugs with structured Subject/Claim headers, and incoming-brain reconcile + the recurring brain audit run per `RULES.md` §10.
 
-<!-- GitNexus code-intelligence block — auto-generated by `gitnexus analyze`; do not edit by hand. -->
-<!-- gitnexus:start -->
-# GitNexus — Code Intelligence
+### SYSTEM DIRECTIVE: BRANCH FLOW (dev-first)
 
-This project is indexed by GitNexus as **salvor** (364 symbols, 373 relationships, 0 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+Work branches from `dev`, never from `main`: `dev` → `feat/<slug>` or `bug/<slug>` (carry the GitHub issue ID once one exists, e.g. `feat/3_evaluate-agent-plugins-1.0`) → implement → **sync `dev` into the branch and resolve conflicts first** (this is the `RULES.md` [§0.6](RULES.md#0-critical-task-termination-protocol)/[§10.2](RULES.md#102-brain-reconcile-mergepull-ceremony) pre-merge Brain Reconcile trigger) → PR back to `dev` → adjacent developer reviews and approves → **the reviewer merges and deletes the branch**. `dev` promotes to `main` in controlled feature groups; `dev` is the integration branch that advances build counters ([§3](RULES.md#3-version-increment-rules)), `main` is the release branch. If asked to merge a feature branch directly into `main`, do not proceed — ask verbatim: `"SOP is feature → dev → main. Merge into dev instead? (yes / no — override)"`. Full rule: [`RULES.md` §6.12](RULES.md#6-coding-required-practices).
 
-> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
+## GitNexus — Code Intelligence
 
-## Always Do
-
-- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `gitnexus_impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
-- **MUST run `gitnexus_detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows.
-- **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
-- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
-- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
-
-## Never Do
-
-- NEVER edit a function, class, or method without first running `gitnexus_impact` on it.
-- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
-- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
-- NEVER commit changes without running `gitnexus_detect_changes()` to check affected scope.
-
-## Resources
-
-| Resource | Use for |
-|----------|---------|
-| `gitnexus://repo/salvor/context` | Codebase overview, check index freshness |
-| `gitnexus://repo/salvor/clusters` | All functional areas |
-| `gitnexus://repo/salvor/processes` | All execution flows |
-| `gitnexus://repo/salvor/process/{name}` | Step-by-step execution trace |
-
-## CLI
-
-| Task | Read this skill file |
-|------|---------------------|
-| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
-| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
-| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
-| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
-| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
-| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
-
-<!-- gitnexus:end -->
+GitNexus is Salvor's code-intelligence layer: run impact analysis before editing a symbol and use it for structural navigation of the call graph. The local index is machine-derived and regenerated by `gitnexus analyze` (the index is gitignored, not committed). This hub keeps a concise, hand-authored GitNexus routing note; enhanced setup runs `gitnexus analyze --index-only` (v1.6.9+; pure index — no context-file writes, no generated skills, no hooks; detect via `gitnexus analyze --help`, older versions fall back to `--skip-agents-md`) so GitNexus does not overwrite this Salvor-owned hub. Any generated skills under `.claude/skills/gitnexus*/` are gitignored. When the GitNexus MCP tools actually respond in the current client, use them (`gitnexus_impact`, `gitnexus_context`, `gitnexus_query`, `gitnexus_detect_changes`, `gitnexus_rename`) for blast-radius checks, symbol context, and safe renames. If the CLI/index exists but the MCP tools do not respond (ENHANCED-READY / PARTIAL), say so and fall back to normal search/navigation — never imply impact analysis ran when it did not. If you explicitly enabled generated skills and the `.claude/skills/gitnexus-*/` files exist, they provide task-specific guidance (pure index mode generates none).

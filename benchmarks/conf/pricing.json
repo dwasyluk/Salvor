@@ -1,0 +1,22 @@
+{
+  "_comment": "Verified against https://platform.claude.com/docs/en/about-claude/pricing on 2026-08-18. Mirrored in salvorbench/cost/pricing.py; tests/pricing_test.py asserts the two agree, and the Node contract test reads this file.",
+  "retrieved_at": "2026-08-18",
+  "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "currency": "USD",
+  "unit": "per_million_tokens",
+  "models": {
+    "claude-sonnet-5": {
+      "input": 2.00,
+      "output": 10.00,
+      "cache_write_5m": 2.50,
+      "cache_write_1h": 4.00,
+      "cache_read": 0.20
+    }
+  },
+  "notes": [
+    "The $2/$10 introductory rate is now the STANDARD price. Anthropic's pricing page states the previously scheduled 2026-09-01 increase to $3/$15 will not occur, so no rate-change boundary is modelled.",
+    "Cache multipliers relative to base input: 5m write 1.25x, 1h write 2x, read 0.1x.",
+    "Batch API (50% off) is NOT used — every arm runs synchronous requests.",
+    "inference_geo is left unset (global default, 1.0x). Pinning 'us' would apply a 1.1x multiplier."
+  ]
+}

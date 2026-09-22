@@ -1,7 +1,31 @@
 # Project Overview
 
-Salvor is a prompt/docs product that adds a disciplined, git-tracked shared memory structure to any repo so AI coding agents across vendors/sessions/teammates share accumulated project knowledge. The README frames it as a version-controlled brain with hub-and-spoke context, L1/L2 persisted memory, RULES.md enforcement, user-gated capture triggers, versioned rationale, and Serena + GitNexus MCP substrate.
+> Serena memories are retrieval aids / pointers, not canonical truth. Canonical knowledge lives in `.salvor/` artifacts + the hub (`CLAUDE.md`) and spokes. Keep this short; verify against canon before trusting.
 
-Primary files: README.md, SETUP_PROMPT.md (canonical installer), docs/ARCHITECTURE.md, docs/VENDOR_ADAPTERS.md, docs/PLAN.md, CONTRIBUTING.md, CHANGELOG.md, LICENSE. example-project/ is the rendered runnable demonstration and regression fixture for prompt changes.
+Salvor (v1.0.0-beta soft launch, MIT) is a repo-native engineering brain — memory, rationale, and governance ("the why, not just the what"): a prompt/docs product that installs a disciplined, vendor-agnostic git-tracked shared knowledge structure into any repo so AI coding agents across vendors, sessions, and teammates share accumulated project knowledge under explicit rules. Compatible thin adapters make that brain vendor-portable without a memory migration. Core pieces: hub/spokes/adapters, L1/L2 persisted state (`.salvor/active_state.md` + verbose), RULES.md enforcement, user-gated capture, and versioned rationale. Framing: "Every approved capture gives the next session more context."
 
-Current branding: 'Salvor', named for Salvor Hardin from Foundation, with tagline 'Give your codebase a memory - a version-controlled brain your whole team's AI shares.'
+## Modes
+- **Core mode** — files only (hub/spokes + `.salvor/` + RULES.md). No MCP dependency.
+- **enhanced mode** — optionally adds Serena + GitNexus MCP substrate; both are highly recommended for the best code-grounded results. GitNexus safe default = `gitnexus analyze --index-only` (v1.6.9+; pure index, no context files/skills/hooks); merge `.gitnexusrc {"indexOnly": true}` for persistence. Older CLIs fall back to `--skip-agents-md`. Detect via `gitnexus analyze --help`.
+
+## Capture taxonomy (three CAPTURE CLASSES)
+1. Decision / Domain Learning
+2. Learned Failure (`LF:<slug>`)
+3. Deferred Finding
+
+IDs are self-allocating slugs (`LF:`/`DL:`/`DEC:`/`PM:`/`deferred:`) with structured Subject/Claim headers; merge/pull reconcile + recurring Brain Audit per `RULES.md` §10 (canon). EXPERIMENTAL default-OFF agentic provisional capture + `.salvor/archive/` = §10.5–§10.6 (graduation: GH issue #1). Upgrades: `Salvor-Protocol:` stamp in `.salvor/README.md` + version-aware Step 0 (canon: `docs/UPGRADING.md`).
+
+## One-owner canonical model
+`.salvor/` artifacts + hub/spokes own their knowledge. Serena memories are retrieval aids/pointers, never the canonical source.
+
+## Existing-repository adoption
+Setup is preservation-first: reuse existing `.serena/`, GitNexus state, hubs, spokes, rules, adapters, and vendor infrastructure in place. Do not rerun Serena initialization or automatically migrate Serena memories into `.salvor/`. Existing project knowledge can be adopted during setup or later on demand through the same read-only, section-level mapping flow. One document may yield multiple independently approved artifacts or remain canonical in place; each mapping names one owner and exact content, and originals remain unchanged unless separately approved. Canonical decision: `.salvor/decisions/2026-07-30-preservation-first-existing-repository-adoption.md`.
+
+## Primary files
+README.md, SETUP_PROMPT.md (canonical installer), docs/ARCHITECTURE.md, docs/VENDOR_ADAPTERS.md, docs/FAQ.md, CONTRIBUTING.md, LICENSE. `example-project/` is the rendered runnable demonstration + regression fixture for prompt changes. Brand routing: immutable `assets/brand/reference/LOGO.svg` owns regular uses; `LOGO-SM.svg` owns favicon/touch icons; see `assets/brand/BRAND_ASSETS.md` and `.salvor/decisions/2026-07-27-canonical-logo-svg-masters.md`.
+
+Pointers:
+- Canonical architecture: ../../docs/ARCHITECTURE.md
+- Canonical current state: ../../.salvor/active_state.md
+- Canonical rules: ../../RULES.md
+- Canonical integration policy: ../../docs/VENDOR_ADAPTERS.md

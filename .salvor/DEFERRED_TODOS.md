@@ -2,9 +2,10 @@
 
 Out-of-scope findings intentionally not addressed when they surfaced: real, but not worth derailing their originating task. Severity reflects impact if left for roughly six months, not whether something is broken today. See `RULES.md` §7.
 
-<!-- Template for new entries:
+<!-- Template for new entries (self-allocating slug ID — never a sequential number; RULES §10.1):
 
-### N. <short title>
+### deferred:<kebab-slug> — <short title>
+- **Subject**: <tags: system / vendor / component the finding is about>
 - **Where**: <file / location>
 - **What**: <the issue>
 - **Severity**: <Low | Medium | High>
@@ -14,6 +15,6 @@ Out-of-scope findings intentionally not addressed when they surfaced: real, but 
 
 ## How This File Is Maintained
 
-1. When an entry is fixed, delete it and reference it in the fixing commit (`closes deferred #N` if numbered).
+1. When an entry is fixed, delete it and reference the stable slug ID in the fixing commit (`closes deferred:<slug>`).
 2. When a new out-of-scope risk appears, prompt per `RULES.md` §7 and add it only after approval.
 3. When impact becomes urgent, promote it to a real ticket and link back.

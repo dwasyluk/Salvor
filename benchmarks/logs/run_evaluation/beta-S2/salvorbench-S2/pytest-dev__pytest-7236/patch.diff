@@ -1,0 +1,32 @@
+diff --git a/changelog/7215.bugfix.rst b/changelog/7215.bugfix.rst
+new file mode 100644
+index 000000000..6d6555ff1
+--- /dev/null
++++ b/changelog/7215.bugfix.rst
+@@ -0,0 +1 @@
++Fixed ``--pdb`` running ``unittest`` ``tearDown()`` for tests that are skipped via ``@unittest.skip``.
+diff --git a/src/_pytest/unittest.py b/src/_pytest/unittest.py
+index 773f545af..3b5350e27 100644
+--- a/src/_pytest/unittest.py
++++ b/src/_pytest/unittest.py
+@@ -18,6 +18,11 @@ from _pytest.skipping import skipped_by_mark_key
+ from _pytest.skipping import unexpectedsuccess_key
+ 
+ 
++def _is_skipped(obj) -> bool:
++    """Return True if the given object has been marked with @unittest.skip"""
++    return bool(getattr(obj, "__unittest_skip__", False))
++
++
+ def pytest_pycollect_makeitem(collector, name, obj):
+     # has unittest been imported and is obj a subclass of its TestCase?
+     try:
+@@ -220,7 +225,7 @@ class TestCaseFunction(Function):
+             # arguably we could always postpone tearDown(), but this changes the moment where the
+             # TestCase instance interacts with the results object, so better to only do it
+             # when absolutely needed
+-            if self.config.getoption("usepdb"):
++            if self.config.getoption("usepdb") and not _is_skipped(self.obj):
+                 self._explicit_tearDown = self._testcase.tearDown
+                 setattr(self._testcase, "tearDown", lambda *args: None)
+ 

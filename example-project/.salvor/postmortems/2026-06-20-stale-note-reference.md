@@ -1,5 +1,11 @@
 # 2026-06-20 — Stale note reference (store handed out live objects)
 
+- **ID:** PM:stale-note-reference
+- **Subject:** api, store, mutation-safety
+- **Claim:** The store handed out live Note references and a caller mutated stored state in place — accessors must return copies.
+- **Evidence date:** 2026-06-20
+- **Status:** live
+
 ## Summary
 While wiring an "edit note" affordance into the `web` client, fetched notes started showing corrupted titles in the list
 even though no save had been triggered. Blast radius: all reads from the `api` store returned silently-mutated data;
@@ -21,13 +27,14 @@ JavaScript objects are passed by reference. `getNote()` and `listNotes()` return
 therefore no audit trail. The store believed its state was unchanged.
 
 ## Findings → follow-ups
-- **`LF-1`** — Store must return copies, never live references. Registered in `.salvor/DOMAIN_REF.md` (LF-1) with fix sites.
+- **`LF:stale-note-reference`** — Store must return copies, never live references. Registered in `.salvor/DOMAIN_REF.md`
+  (LF:stale-note-reference) with fix sites.
 - **`FIXED`** — `api/src/store.ts`: private `copy(note)` helper (shallow `{ ...note }`); applied to `getNote`,
   `listNotes`, and `createNote`'s return value. (Landed with this postmortem.)
-- **`DEFERRED`** — Lack of persistence (the reason a restart masked the bug) is tracked separately as DEFERRED #1; not
-  caused by this incident, but it made the symptom intermittent.
+- **`deferred:no-persistence`** — Lack of persistence (the reason a restart masked the bug) is tracked separately as
+  deferred:no-persistence; not caused by this incident, but it made the symptom intermittent.
 
 ## What would have caught it earlier
 A store unit test asserting that mutating a value returned by `getNote(id)` does NOT change the result of a subsequent
 `getNote(id)` (i.e. the copy invariant). No such test existed because the demo had no `tests/` yet — adding one is the
-cheapest guard against an LF-1 regression.
+cheapest guard against an LF:stale-note-reference regression.

@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "dev"]
+  pull_request:
+    branches: ["main", "dev"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # The Node test harness (site contract/unit/browser tests) lives on
+      # branches that carry the site (package.json present). On branches
+      # without it, CI passes as a no-op rather than failing.
+      - name: Detect test harness
+        id: harness
+        run: echo "present=$([ -f package.json ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Node
+        if: steps.harness.outputs.present == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.harness.outputs.present == 'true'
+        run: npm ci
+
+      # Browsers must install BEFORE the unit suite: the brand-determinism
+      # test renders the generated assets through Playwright Chromium
+      # (scripts/generate-brand-assets.mjs --check), so a fresh runner needs
+      # the browser earlier than the browser-test step that originally
+      # motivated this install.
+      - name: Install Playwright browsers
+        if: steps.harness.outputs.present == 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Unit and contract tests
+        if: steps.harness.outputs.present == 'true'
+        run: npm run test:unit
+
+      - name: Browser tests
+        if: steps.harness.outputs.present == 'true'
+        run: npm run test:browser

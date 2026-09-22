@@ -1,0 +1,66 @@
+diff --git a/changelog/7486.bugfix.rst b/changelog/7486.bugfix.rst
+new file mode 100644
+index 000000000..7f94975df
+--- /dev/null
++++ b/changelog/7486.bugfix.rst
+@@ -0,0 +1 @@
++Fix ``pytest.mark.xfail`` marks being ignored when they are dynamically added via ``request.node.add_marker()`` from within the test body.
+diff --git a/src/_pytest/skipping.py b/src/_pytest/skipping.py
+index 335e10996..14c2ac079 100755
+--- a/src/_pytest/skipping.py
++++ b/src/_pytest/skipping.py
+@@ -276,21 +276,16 @@ def pytest_runtest_makereport(item: Item, call: CallInfo[None]):
+         assert call.excinfo.value.msg is not None
+         rep.wasxfail = "reason: " + call.excinfo.value.msg
+         rep.outcome = "skipped"
++    elif not rep.skipped and xfailed is None:
++        if call.when == "call":
++            try:
++                item._store[xfailed_key] = xfailed = evaluate_xfail_marks(item)
++            except Exception:
++                pass
++        if xfailed:
++            _process_xfailed_report(xfailed, rep, call)
+     elif not rep.skipped and xfailed:
+-        if call.excinfo:
+-            raises = xfailed.raises
+-            if raises is not None and not isinstance(call.excinfo.value, raises):
+-                rep.outcome = "failed"
+-            else:
+-                rep.outcome = "skipped"
+-                rep.wasxfail = xfailed.reason
+-        elif call.when == "call":
+-            if xfailed.strict:
+-                rep.outcome = "failed"
+-                rep.longrepr = "[XPASS(strict)] " + xfailed.reason
+-            else:
+-                rep.outcome = "passed"
+-                rep.wasxfail = xfailed.reason
++        _process_xfailed_report(xfailed, rep, call)
+ 
+     if (
+         item._store.get(skipped_by_mark_key, True)
+@@ -306,6 +301,23 @@ def pytest_runtest_makereport(item: Item, call: CallInfo[None]):
+         rep.longrepr = str(filename), line + 1, reason
+ 
+ 
++def _process_xfailed_report(xfailed: Xfail, rep: BaseReport, call: CallInfo[None]) -> None:
++    if call.excinfo:
++        raises = xfailed.raises
++        if raises is not None and not isinstance(call.excinfo.value, raises):
++            rep.outcome = "failed"
++        else:
++            rep.outcome = "skipped"
++            rep.wasxfail = xfailed.reason
++    elif call.when == "call":
++        if xfailed.strict:
++            rep.outcome = "failed"
++            rep.longrepr = "[XPASS(strict)] " + xfailed.reason
++        else:
++            rep.outcome = "passed"
++            rep.wasxfail = xfailed.reason
++
++
+ def pytest_report_teststatus(report: BaseReport) -> Optional[Tuple[str, str, str]]:
+     if hasattr(report, "wasxfail"):
+         if report.skipped:

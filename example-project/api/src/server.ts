@@ -12,6 +12,7 @@ import { createServer, IncomingMessage, ServerResponse } from "node:http";
 import { createNote, deleteNote, getNote, listNotes } from "./store.js";
 
 const PORT = Number(process.env.PORT ?? 8787);
+const APP_NAME = process.env.APP_NAME ?? "Notebook";
 
 function sendJson(res: ServerResponse, status: number, payload: unknown): void {
   const body = JSON.stringify(payload);
@@ -104,5 +105,5 @@ const server = createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Notebook API listening on http://localhost:${PORT}`);
+  console.log(`${APP_NAME} API listening on http://localhost:${PORT}`);
 });

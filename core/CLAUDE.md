@@ -1,6 +1,8 @@
 # core — universal Salvor setup protocol
 
-Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds vendor-neutral governance and memory, then adds thin CLI-specific entrypoints.
+Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds a
+vendor-agnostic, repository-owned brain and makes it vendor-portable through
+thin CLI-specific entrypoints.
 
 ## Key Files
 - `../SETUP_PROMPT.md` — canonical one-shot installer and scaffold templates
@@ -8,8 +10,19 @@ Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds ven
 - `../CHANGELOG.md` — user-visible protocol history
 
 ## Architecture Notes
-- Keep the installer vendor-neutral; adapter glue must not fork the shared brain.
+- Keep the installer vendor-agnostic and vendor-portable; thin adapter glue must
+  never fork or take ownership of the shared brain.
 - Scope questions are user-gated. Never invent components, stacks, or parity paths.
+- Existing repositories use preservation-first adoption: reuse existing
+  Serena/GitNexus state, hubs, spokes, rules, adapters, and vendor
+  infrastructure; every exact mutation or conflict is planned and approved.
+- Existing knowledge can be adopted during setup or later on demand through
+  one read-only, section-level mapping flow. Mixed documents may map to
+  multiple independently approved artifacts; originals remain unchanged by
+  default and every durable fact retains one canonical owner.
+- Upgrade plans preserve accumulated knowledge by default and never silently
+  rewrite claims. Any required schema, identifier, header, link, or metadata
+  migration is itemized and separately approved.
 - A prompt behavior change must be reflected in `example-project/` and user-facing documentation.
 
 ## Validation
@@ -17,6 +30,6 @@ Markdown prompt protocol implemented by root `SETUP_PROMPT.md`. It scaffolds ven
 - Scan for unresolved template tokens and verify all vendor adapters point to the same canonical core.
 
 ## Build
-- No compilation. `VERSION.md` key: `CORE`; derived constant: `CORE_BUILD`.
+- No compilation. `VERSION.md` key: `CORE`; current build `CORE:19`; derived constant: `CORE_BUILD`.
 
 Use Serena for repository structure, `.salvor/DOMAIN_REF.md` for product truth, and `.salvor/INFRA.md` for operational details.
