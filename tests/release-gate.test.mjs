@@ -3,6 +3,7 @@
 // and version-state. Locks the launch corrections against regression.
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { readFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -78,6 +79,17 @@ test(".gitnexusrc ships indexOnly only; docs don't claim it carries skipAgentsMd
 });
 
 // --- Social metadata (static, absolute HTTPS, consistent) -----------------
+test("release audit accepts the current canonical social metadata", () => {
+  const result = spawnSync(process.execPath, ["scripts/audit-release.mjs"], {
+    cwd: root,
+    encoding: "utf8",
+    timeout: 30_000,
+  });
+  assert.ifError(result.error);
+  // Other gates may require local tools (e.g. xmllint); assert this gate independently.
+  assert.match(result.stdout, /^PASS social metadata uses canonical absolute URLs and exact assets:/m);
+});
+
 test("Open Graph + Twitter metadata is correct and absolute HTTPS", () => {
   assert.equal(meta("og:type"), "website");
   assert.equal(meta("og:site_name"), "Salvor");
