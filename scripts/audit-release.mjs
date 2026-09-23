@@ -201,9 +201,11 @@ check("release metadata and public licensing agree", () => {
 
 check("social metadata uses canonical absolute URLs and exact assets", () => {
   const html = read("site/index.html");
-  assert.match(html, /<link rel="canonical" href="https:\/\/dwasyluk\.github\.io\/salvor\/"/);
-  assert.match(html, /property="og:image" content="https:\/\/dwasyluk\.github\.io\/salvor\/assets\/social\/salvor-social-card\.png"/);
-  assert.match(html, /name="twitter:image" content="https:\/\/dwasyluk\.github\.io\/salvor\/assets\/social\/salvor-social-card\.png"/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/salvorknows\.dev\/"/);
+  assert.match(html, /property="og:url" content="https:\/\/salvorknows\.dev\/"/);
+  assert.match(html, /property="og:image" content="https:\/\/salvorknows\.dev\/assets\/social\/salvor-social-card\.png"/);
+  assert.match(html, /property="og:image:secure_url" content="https:\/\/salvorknows\.dev\/assets\/social\/salvor-social-card\.png"/);
+  assert.match(html, /name="twitter:image" content="https:\/\/salvorknows\.dev\/assets\/social\/salvor-social-card\.png"/);
   return "canonical, Open Graph, and Twitter URLs agree";
 });
 

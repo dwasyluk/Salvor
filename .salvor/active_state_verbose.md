@@ -1,3 +1,21 @@
+## 2026-09-23 — Issue #10 release-audit canonical URL correction
+
+On `bug/10_release-audit-canonical-url`, based on upstream `dev` at `9140ea9`,
+updated only the release auditor's stale canonical/social URL expectations to
+match the existing site contract. The gate now checks canonical, `og:url`,
+`og:image`, `og:image:secure_url`, and `twitter:image`. The existing release-gate
+suite gains an auditor regression that failed before the correction and passes
+after it, independently of unrelated audit prerequisites.
+
+Historical URL records, site metadata, protocol, plugins, and release/build
+versions are unchanged. This is validation tooling outside the component-owned
+scopes in RULES §3; no component counter or pending version row is allocated.
+Validation: `npm ci` passed with zero vulnerabilities; 15 release-gate tests and
+187 unit tests passed. The release audit passes 10 gates, including metadata;
+its sole remaining failure is unavailable `xmllint` (environment prerequisite).
+Browser validation: 29 passed, 6 existing macOS-only skips. `git diff --check`
+passed. No commit, push, or PR was made.
+
 ## 2026-09-20 — Canonical `$SALVOR` authenticity identity
 
 The operator supplied the exact post-launch identity for Salvor's supporting
