@@ -126,6 +126,43 @@ compatible thin adapter.
   [vendor adapter issue](https://github.com/dwasyluk/salvor/issues) or PR — exactly the
   kind of contribution Salvor wants.
 
+## OpenCode V2 — validated Core path
+
+**PASS WITH DOCUMENTED LIMITATION** — validated 2026-09-24 for
+[issue #15](https://github.com/dwasyluk/Salvor/issues/15), using OpenCode
+**v2.0.16** with its default **`opencode/space-bunny-free`** model on Linux/WSL2.
+The tests used minimal disposable Git fixtures, the existing generic `AGENTS.md`
+adapter, and a subset of Salvor's rules. The observed Core behavior requires no
+OpenCode-specific Salvor adapter or duplicated knowledge file: `AGENTS.md`
+remains a routing adapter, never a canonical knowledge store.
+
+Unique fixture markers and tool-read traces distinguished automatic root
+`AGENTS.md` loading from explicit reads of `CLAUDE.md`, the relevant component
+spoke, `RULES.md`, and `.salvor/active_state.md`. Observed behaviors included:
+
+- dev-first branch guidance and the direct-to-main approval guard;
+- human-gated durable-capture questions without unauthorized persistence;
+- task completion with L1/L2 and spoke updates, version-applicability checks,
+  and diff verification;
+- nested `AGENTS.md` discovery, and root instruction-marker refresh when
+  continuing the same session;
+- permission enforcement for inspection, edits, push, and external-directory reads.
+
+Two independent runs with only `CLAUDE.md` and no `AGENTS.md` received no
+automatic project guidance, consistent with the
+[OpenCode V2 instruction documentation](https://opencode.ai/v2/docs/instructions).
+Keep the root `AGENTS.md` entrypoint; do not rely on legacy fallback behavior.
+
+**Limits:** unattended `opencode run` dismissed the capture approval questions
+and exited with status 1 without persistence; interactive approval behavior was
+not validated. Internal nested-instruction deduplication remains unverified.
+Root-marker refresh was observed across session continuation with a restarted
+standalone server, not proven within one continuously running process.
+Serena/GitNexus and enhanced-mode MCP integration remain **unverified**.
+These results are scoped to this version, model, and minimal fixture; they do
+not establish full production-policy compliance, compatibility with every
+OpenCode model/version, or Claude Code plugin behavior in OpenCode.
+
 ## The MCP substrate: Serena + GitNexus setup and ownership
 
 **Serena.** Current install:
