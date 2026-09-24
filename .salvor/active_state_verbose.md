@@ -1,3 +1,41 @@
+## 2026-09-24 — Issue #15 OpenCode Core validation documentation
+
+On `docs/15_opencode-validation`, based on upstream `dev` at `9140ea9`, recorded
+operator-approved validation findings in `docs/VENDOR_ADAPTERS.md`:
+**PASS WITH DOCUMENTED LIMITATION**, OpenCode v2.0.16 with default model
+`opencode/space-bunny-free` on Linux/WSL2. Disposable fixtures used the existing
+AGENTS.md adapter, unique markers, observable tool reads, and a minimal rules
+subset. Root loading, hub/rules/L1 and component routing, dev-first guidance,
+direct-main guard, gated capture, completion bookkeeping, nested discovery,
+continued-session marker refresh, no CLAUDE-only fallback (two runs), and
+permission boundaries were observed. No new adapter or knowledge copy is needed
+by those observations.
+
+Unattended approval questions were dismissed and exited 1 without persistence;
+interactive approvals, internal nested deduplication, same-process live refresh,
+and Serena/GitNexus enhanced MCP remain unverified. This is one version/model
+and a minimal fixture, not a production-policy or universal compatibility claim.
+The initial harness cwd/PWD mismatch runs were excluded; accepted runs used
+matching fixture paths. All fixtures and test sessions were cleaned up. Raw
+local evidence remains outside the contribution; no personal paths are published.
+
+The docs spoke and L1 point to the bounded public note; CONTRIBUTING requires
+an Unreleased changelog entry. VERSION records DOCS:pending; real build counters
+and release identity remain unchanged. README remains accurate. Existing adapter
+ownership/claim contracts suffice; no prose-only tests or durable learning/design
+artifacts were added. No protocol, site, plugin, or benchmark changes.
+
+Validation: npm ci passed with zero vulnerabilities; 186 unit/contract tests
+passed; browser suite passed 29 tests with 6 existing macOS-only skips;
+git diff --check passed. The release audit passes 9 gates and retains the two
+existing dev failures: unavailable xmllint and the stale canonical URL addressed
+separately by PR #11. Neither failure was changed here.
+
+Pre-review reconcile: fetched dev again and synchronized with --ff-only;
+upstream remains 9140ea9, identical to this branch's base. The incoming side of
+the three-way brain diff is empty; no competing OpenCode artifacts, conflicts,
+or semantic merge/dedupe resolutions were required. DOCS:pending is retained.
+
 ## 2026-09-20 — Canonical `$SALVOR` authenticity identity
 
 The operator supplied the exact post-launch identity for Salvor's supporting

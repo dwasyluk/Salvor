@@ -12,6 +12,8 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Changed
+- Documented OpenCode v2.0.16 Core validation through the existing `AGENTS.md`
+  adapter, with approval limitations and unverified enhanced-mode MCP support.
 - Published the canonical `$SALVOR` Solana mint, Bags page, and Solscan page as
   understated authenticity notices in README Community and the site footer;
   aligned canonical/social/JSON-LD metadata to `https://salvorknows.dev/`

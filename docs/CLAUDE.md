@@ -49,6 +49,10 @@ Markdown documentation comprising root `README.md` and the complete `docs/` dire
   a single personality flourish after `Why "Salvor"?`; keep it subordinate to
   the engineering narrative, locally referenced, responsive through native
   GitHub rendering, and free of affiliation or endorsement claims.
+- OpenCode's validated Core path and its version/model/fixture limits are recorded
+  in `VENDOR_ADAPTERS.md` under "OpenCode V2 — validated Core path". Preserve the
+  noninteractive approval caveat and unverified Serena/GitNexus MCP status;
+  the generic `AGENTS.md` remains routing-only.
 
 ## Validation
 - Check links and paths, scan for stale vendor/version claims, and inspect rendered Markdown when layout matters.
