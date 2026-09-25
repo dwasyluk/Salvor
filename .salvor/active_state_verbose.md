@@ -1,3 +1,20 @@
+## 2026-09-25 — Contributor docs: `dev` target and test order
+
+On `docs/contributing-dev-target-and-test-order`, based on upstream `dev` at `9140ea9`.
+Three small contributor-facing fixes, with no protocol, site, plugin, or benchmark change:
+
+- `CONTRIBUTING.md` "Making a PR" didn't mention `dev`. GitHub's default branch is `main`, but RULES §6.12 and the
+  hub require branching from `dev` and opening PRs against it; existing contributor PRs already target `dev`. Step 1
+  now says so, and the PR template has a matching checklist line.
+- `CONTRIBUTING.md` "Running the tests" ran `npm run test:unit` before `npx playwright install`. The unit suite calls
+  `scripts/generate-brand-assets.mjs --check`, which launches Chromium, so on a fresh machine the documented order
+  fails. `.github/workflows/ci.yml` already installs browsers first, with a comment explaining why. The docs now use
+  the same order.
+- `VERSION.md` had a blank line between the 2026-08-18 and 2026-08-07 rows. Markdown ended the table there, so the
+  older rows rendered as raw text on GitHub. The blank line is removed.
+
+VERSION records `DOCS:pending`; real counters and release identity are unchanged.
+
 ## 2026-09-20 — Canonical `$SALVOR` authenticity identity
 
 The operator supplied the exact post-launch identity for Salvor's supporting
