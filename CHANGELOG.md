@@ -12,6 +12,9 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Changed
+- Contributor docs now say to branch from and target `dev`, list the Chromium
+  install before the unit suite (as CI does), and the VERSION history table
+  renders as one table again.
 - Published the canonical `$SALVOR` Solana mint, Bags page, and Solscan page as
   understated authenticity notices in README Community and the site footer;
   aligned canonical/social/JSON-LD metadata to `https://salvorknows.dev/`

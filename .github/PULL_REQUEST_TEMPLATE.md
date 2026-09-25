@@ -4,6 +4,7 @@
 Briefly: what does this change, and what problem does it solve?
 
 ## Checklist
+- [ ] **Targets `dev`** — branched from `dev` and opened against `dev`, not `main`.
 - [ ] **Anonymized** — no project-, company-, or domain-specific names leaked in (templates stay generic).
 - [ ] **Example synced** — if I edited `SETUP_PROMPT.md`, I re-rendered `example-project/` so the worked example still matches.
 - [ ] **Docs updated** — README / ARCHITECTURE / VENDOR_ADAPTERS updated if behavior or structure changed.

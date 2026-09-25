@@ -96,8 +96,8 @@ The site + contract tests live at the repo root:
 
 ```sh
 npm ci
+npx playwright install --with-deps chromium    # first time only; the unit suite also needs Chromium
 npm run test:unit                              # node --test (contract + interactions)
-npx playwright install --with-deps chromium    # first time only
 npm run test:browser                           # Playwright (Chromium)
 ```
 
@@ -105,7 +105,8 @@ Both suites should pass before a PR is ready for review.
 
 ## Making a PR
 
-1. Fork, branch, and make your change.
+1. Fork, branch from `dev`, and make your change. Open the PR against `dev`:
+   `main` is the release branch and only receives promoted work.
 2. Keep it focused — one logical change per PR.
 3. Fill in the PR checklist. The four things we care about:
    - **Anonymized.** Templates stay generic — no project-, company-, or
