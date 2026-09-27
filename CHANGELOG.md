@@ -12,6 +12,10 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Changed
+- RULES §10.5 [EXPERIMENTAL]: before each "Ratify this agent contribution?" gate,
+  the agent now gives the operator one plain-language line per option (yes / no /
+  archive). The gate line itself is unchanged. Prompted by a field trial where an
+  operator answered `archive` without knowing what it did, then reversed it.
 - Published the canonical `$SALVOR` Solana mint, Bags page, and Solscan page as
   understated authenticity notices in README Community and the site footer;
   aligned canonical/social/JSON-LD metadata to `https://salvorknows.dev/`

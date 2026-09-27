@@ -873,3 +873,20 @@ public version remains v1.0.0-beta. L1 RELEASE GATE re-synthesized to the
 promoted state; `dev` retained as the persistent integration branch. Full main
 source-tree validation and clean-extracted release-ZIP verification recorded in
 the promotion merge commit.
+
+## 2026-09-27 — §10.5 ratification: one plain-language line per option
+
+On `docs/ratify-gate-option-lines`, based on upstream `dev` at `9140ea9`.
+
+- Field-trial evidence (Discussion #12, report #4): at a real Brain Audit, a non-specialist operator was shown the
+  verbatim gate "Ratify this agent contribution? (yes / no / archive)" for two provisional deferred findings and
+  answered `archive` for both, then reversed both to `yes` once each option was explained in plain language. The gate
+  was followed exactly and still produced an uninformed answer.
+- Change: in §10.5 "Ratification", after the per-option consequences, the agent gives one plain-language line per
+  option before each gate, in the operator's language: yes = keep as team knowledge; no = reject (agents stop using it,
+  a one-line pointer stays); archive = park unreviewed (agents stop loading it; a later `yes` brings it back). The gate line itself is unchanged, so
+  existing adopter files and gate-matching tooling keep working.
+- Surfaces kept in sync: SETUP_PROMPT.md, RULES.md, example-project/RULES.md; `tests/agentic-contract.test.mjs` now
+  asserts the new sentence on all three. `npm run test:unit`: 186/186.
+
+VERSION records `CORE:pending`; real counters and release identity are unchanged.

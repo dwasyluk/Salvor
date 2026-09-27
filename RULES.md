@@ -195,7 +195,7 @@ When the operator sets `provisional`:
 - **Commit trailer.** Commits introducing agent contributions carry the trailer `Salvor-Contribution: agent`. Header and trailer must agree — a mismatch is an audit red flag.
 - **Ratification.** The Brain Audit (§10.3) enumerates every `Review: unreviewed` / `Review: proposed` artifact by scanning headers (no separate ledger — derived, conflict-free) and presents each through the §10.4 classification with the verbatim gate:
   > "Ratify this agent contribution? (yes / no / archive)"
-  `yes` → `Review: ratified`, drop the L1 `(prov)` tags; `no` → one-line redirect stub stays in place, full content moves to the archive (§10.6); `archive` → moved untouched for later review. Review each item individually — bulk ratification defeats the tier.
+  `yes` → `Review: ratified`, drop the L1 `(prov)` tags; `no` → one-line redirect stub stays in place, full content moves to the archive (§10.6); `archive` → moved untouched for later review. Review each item individually — bulk ratification defeats the tier. Before each gate, give the operator one plain-language line per option, in the operator's language, saying what changes for them rather than where files move, so the answer is an informed choice rather than a guess — e.g. *yes* = keep it as team knowledge; *no* = reject it (agents stop using it; only a one-line pointer stays); *archive* = park it unreviewed (agents stop loading it; a later `yes` brings it back). The gate line itself stays verbatim.
 
 ### 10.6 [EXPERIMENTAL] Archive — `.salvor/archive/`
 

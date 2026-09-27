@@ -70,6 +70,9 @@ test("ratification and archive ceremonies carry the verbatim gates", () => {
     assert.match(doc, /"Archive N stale unreviewed contributions\? \(yes\/no\)"/, file);
     const f = doc.replace(/\s+/g, " ");
     assert.match(f, /bulk ratification defeats the tier/i, file);
+    assert.match(f, /one plain-language line per option/i, file);
+    assert.match(f, /what changes for them rather than where files move/i, file);
+    assert.match(f, /The gate line itself stays verbatim/i, file);
     assert.match(f, /Ratified knowledge never ages out/i, file);
     assert.match(f, /no separate ledger/i, file);
   }
