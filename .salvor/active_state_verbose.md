@@ -873,3 +873,29 @@ public version remains v1.0.0-beta. L1 RELEASE GATE re-synthesized to the
 promoted state; `dev` retained as the persistent integration branch. Full main
 source-tree validation and clean-extracted release-ZIP verification recorded in
 the promotion merge commit.
+
+## 2026-09-27 — docs/UPGRADING.md: Removing Salvor
+
+On `feat/docs-removing-salvor`, based on upstream `dev` at `9140ea9`.
+
+- Gap: no doc said how to remove Salvor. UPGRADING already frames Salvor as a replaceable protocol layer over a
+  knowledge layer the team owns, so removal is written as that split in reverse.
+- New section, 6 steps: (1) the setup commit (`git log --diff-filter=A -- .salvor/README.md`) is the checklist, plus
+  later upgrade/agent-trailer commits; adoption may edit lines outside the managed block; (2) keep the knowledge you
+  want, and find code comments/tests citing knowledge IDs; (3) remove only files setup created, restore files it
+  modified from the setup diff, or `git revert` Salvor-only commits newest first; (4) side files (`.gitignore`
+  entries, `.gitnexusrc` indexOnly; Serena/GitNexus are separate tools); (5) `/plugin uninstall salvor` (+ marketplace
+  remove); (6) verify with `git grep` and a fresh agent session. README docs list links it.
+- Dry-run on a real adopter repository (a field-trial fork): setup created 6 root/spoke files + `.salvor/` and modified
+  4 existing files (`AGENTS.md` outside the managed block, `.gitignore`, two pre-existing memory files turned into
+  pointers). Revert path (3 Salvor-only commits): tree identical to pre-install. Per-file path on a branch with later
+  code changes: protocol files identical to pre-install, later code kept, `git grep -i salvor` empty. 5 code/test
+  comments cite `LF:` IDs: 4 predate setup and point to the adopter's own restored memory file; 1 was added after
+  setup and now dangles. Step 2 therefore says to compare the ID search with the pre-setup commit.
+- Review round: softened the opening claim (setup may add an approved `.claude/settings.json` hook), added
+  `.serena/memories/`, `.tmp/` and untracked GitNexus output to step 4, marked the plugin as pre-release with scoped
+  uninstall, and widened the ID regex to legacy `LF1`/`LF-1` with word boundaries.
+- `tests/upgrade-contract.test.mjs` asserts the section, the setup-commit command, the knowledge step and the plugin
+  uninstall.
+
+VERSION records `DOCS:pending`; real counters and release identity are unchanged.

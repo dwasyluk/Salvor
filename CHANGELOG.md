@@ -11,6 +11,12 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- `docs/UPGRADING.md` "Removing Salvor": find what setup changed from the
+  setup commit, keep the knowledge you want (including code comments that cite
+  `LF:`/`DEC:` IDs), remove only what setup created or restore what it modified,
+  check side files and the plugin, and verify. Linked from the README docs list.
+
 ### Changed
 - Published the canonical `$SALVOR` Solana mint, Bags page, and Solscan page as
   understated authenticity notices in README Community and the site footer;

@@ -546,7 +546,7 @@ enough for the next agent to use it. No association or endorsement is implied.
 
 - [`SETUP_PROMPT.md`](./SETUP_PROMPT.md) — the one-shot installer
 - [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — the five pillars
-- [`docs/UPGRADING.md`](./docs/UPGRADING.md) — the protocol stamp and version-aware upgrades
+- [`docs/UPGRADING.md`](./docs/UPGRADING.md) — the protocol stamp and version-aware upgrades, and how to remove Salvor
 - [`docs/VENDOR_ADAPTERS.md`](./docs/VENDOR_ADAPTERS.md) — Codex, Gemini, and beyond
 - [`docs/FAQ.md`](./docs/FAQ.md) — full comparisons and common questions
 

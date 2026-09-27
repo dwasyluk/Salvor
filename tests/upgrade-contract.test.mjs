@@ -54,6 +54,14 @@ test("the two-layer guarantee preserves knowledge and gates explicit migrations"
   assert.match(f, /`decisions\/`, `domain-learnings\/`, `postmortems\/`, `archive\/`/);
 });
 
+test("UPGRADING doc explains how to remove Salvor without losing knowledge", () => {
+  const up = flat("docs/UPGRADING.md");
+  assert.match(up, /## Removing Salvor/);
+  assert.match(up, /git log --diff-filter=A --format='%h %ad %s' --date=short -- \.salvor\/README\.md/);
+  assert.match(up, /Keep the knowledge you want/);
+  assert.match(up, /\/plugin uninstall salvor/);
+});
+
 test("UPGRADING doc exists, is linked, and documents the stamp + layers + migrations", () => {
   assert.ok(existsSync(join(root, "docs/UPGRADING.md")));
   const up = flat("docs/UPGRADING.md");
