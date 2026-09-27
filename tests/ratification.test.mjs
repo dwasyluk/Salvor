@@ -111,3 +111,13 @@ test("security wording is scoped to Salvor Core, not the whole toolchain", () =>
   assert.match(secFlat, /Salvor Core itself introduces no hosted service, account, or telemetry/);
   assert.doesNotMatch(secFlat, /Nothing in Salvor phones home/);
 });
+
+test("security guidance covers repositories served by a web server", () => {
+  const secFlat = security.replace(/\s+/g, " ");
+  assert.match(secFlat, /## Repositories whose files are served by a web server/);
+  assert.match(secFlat, /Deploy from an explicit list or a build output directory/);
+  assert.match(secFlat, /RedirectMatch 404 "\(\?i\)\/\\\.\(salvor\|serena\|gitnexus\|claude\|codex\|gemini\|git\)\(\/\|\$\)"/);
+  assert.match(secFlat, /<FilesMatch "\(\?i\)\\\.md\$">/);
+  assert.match(secFlat, /mcp\\\.json/);
+  assert.match(secFlat, /subfolder with its own `\.htaccess` and `RewriteEngine On` silently skips/);
+});

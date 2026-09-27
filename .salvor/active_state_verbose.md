@@ -873,3 +873,30 @@ public version remains v1.0.0-beta. L1 RELEASE GATE re-synthesized to the
 promoted state; `dev` retained as the persistent integration branch. Full main
 source-tree validation and clean-extracted release-ZIP verification recorded in
 the promotion merge commit.
+
+## 2026-09-27 — SECURITY.md: repositories served by a web server
+
+On `feat/security-web-served-root`, based on upstream `dev` at `9140ea9`.
+
+- Field-trial evidence (Discussion #12, reports #2/#3): a static-site repository deployed by file copy already served
+  its `README.md` publicly before Salvor was installed. `.salvor/` (including INFRA.md with hosts and deploy steps),
+  the hub, spokes, RULES and adapters would have been published by the next careless deploy. Nothing in SECURITY.md,
+  SETUP_PROMPT.md or docs/ mentioned this.
+- Change: a new SECURITY.md section before "Reporting a vulnerability": deploy from an explicit list or build output;
+  block `.md` files, `.mcp.json`, `.gitnexusrc` and the `.salvor`, `.serena`, `.gitnexus`, `.claude`, `.codex`,
+  `.gemini`, `.git` folders with
+  Apache `FilesMatch` + `RedirectMatch`; check with `curl -I`, including under subfolders with their own server config.
+- Review found that the first draft's mod_rewrite rules do not reach subfolders that have their own `.htaccess` with
+  `RewriteEngine On` (on the trial host, `/<godot-folder>/x.md` returned 404 from the file system, not 403), and that
+  an `<IfModule>` wrapper fails silently. The directives were replaced and probe-tested on the live Apache 2.4 host:
+  real probe files (`x.md`, `x.MD`, `.salvor/x`, `.SALVOR/x`, `%2esalvor/x`, `.git/x`, `.serena/x`) in the web root
+  and in three subfolders with their own `.htaccess` all returned 403/404; the probes were then deleted.
+- A final review added `.codex/`, `.gemini/` and `.mcp.json` (SETUP_PROMPT §0.2 names them; `.mcp.json` can hold MCP
+  env values), the `RewriteOptions Inherit` and `AllowOverride None` caveats, and "check with a file that exists".
+  Re-probed live with real files in the root and a subfolder: all 403/404, probes deleted.
+- `tests/ratification.test.mjs` asserts the section heading, the deploy advice, the RedirectMatch rule and the
+  subfolder warning.
+- Docs only; no protocol or schema change. A matching SETUP_PROMPT question ("is any part of this repo web-served?")
+  would be a Core change and is left for a proposal issue.
+
+VERSION records `DOCS:pending`; real counters and release identity are unchanged.

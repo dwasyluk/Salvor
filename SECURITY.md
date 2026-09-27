@@ -59,6 +59,46 @@ actions. **Review PRs that modify these files with the same rigor as code
 changes** — arguably more, since their effects are indirect and easy to skim
 past.
 
+## Repositories whose files are served by a web server
+
+Some projects deploy by copying the repository, or part of it, to a web
+server: static sites, PHP apps, documentation hosts. Salvor's files are
+ordinary files in that tree. If the served directory includes them, they
+become public on the next deploy: `.salvor/**` (including `INFRA.md`, which
+describes hosts, deploy steps and tooling), `CLAUDE.md` and its spokes,
+`RULES.md`, `AGENTS.md`, `GEMINI.md`, `.mcp.json` (which can hold MCP
+environment values), and tool folders such as `.serena/`, `.gitnexus/`,
+`.claude/`, `.codex/`, `.gemini/` and `.git/`.
+
+If any part of your repository is served directly:
+
+- **Deploy from an explicit list or a build output directory**, not from the
+  repository root, so that new files are not published by default.
+- **Block these paths at the web server as a second line of defence.** For
+  Apache 2.4 (`.htaccess` or vhost config):
+
+  ```apache
+  <FilesMatch "(?i)\.md$">
+    Require all denied
+  </FilesMatch>
+  RedirectMatch 404 "(?i)/\.(salvor|serena|gitnexus|claude|codex|gemini|git)(/|$)"
+  RedirectMatch 404 "(?i)/\.(gitnexusrc|mcp\.json)$"
+  ```
+
+  These directives are inherited by subdirectories. `mod_rewrite` rules are
+  not: a subfolder with its own `.htaccess` and `RewriteEngine On` silently
+  skips the parent's `RewriteRule`s (unless it sets `RewriteOptions Inherit`).
+  Don't wrap the block in `<IfModule>`, so that a missing module or a
+  forbidden override fails loudly (HTTP 500) instead of blocking nothing.
+  With `AllowOverride None`, though, Apache ignores the whole `.htaccess`
+  silently, which is one more reason to run the check below. Adapt the rules
+  to your server; `\.md$` also blocks any Markdown the site means to serve.
+- **Check after setup and after each deploy-path change** with a file that
+  really exists on the server: e.g. `curl -I https://<your-site>/RULES.md`
+  should return `403`, not `200`. A `404` for a file that isn't there proves
+  nothing. Repeat the check under any subfolder that has its own server
+  config.
+
 ## Reporting a vulnerability
 
 If you find a security issue in Salvor (the setup prompt, templates, docs, or

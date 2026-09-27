@@ -11,6 +11,12 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- `SECURITY.md`: guidance for repositories whose files are served by a web
+  server: deploy from an explicit list, block `.salvor/`, agent Markdown, `.mcp.json`
+  and tool dot-folders with Apache directives that subfolders inherit, and
+  verify with `curl -I` against a file that exists.
+
 ### Changed
 - Published the canonical `$SALVOR` Solana mint, Bags page, and Solscan page as
   understated authenticity notices in README Community and the site footer;
