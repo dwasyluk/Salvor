@@ -13,12 +13,9 @@ then report findings + concrete fixes. Do NOT modify files — offer to fix, or
 suggest `/salvor:capture` for anything worth persisting. If the Salvor files don't
 exist, tell the user to run `/salvor:init` first.
 
-Apply the rubric in the bundled checklist (inlined below):
-
-!`cat "${CLAUDE_SKILL_DIR}/HEALTH_CHECKLIST.md"`
-
-> If the inline above is empty, read `HEALTH_CHECKLIST.md` in this skill's own
-> directory and apply it instead.
+First, use the Read tool to read `HEALTH_CHECKLIST.md` from this skill's own
+directory (`${CLAUDE_SKILL_DIR}/HEALTH_CHECKLIST.md`). It is the canonical rubric
+— apply every check in it.
 
 For each check, report **PASS / WARN / FAIL** with a one-line reason and a concrete
 fix. End with a short summary (counts) and the single highest-priority fix.

@@ -873,3 +873,26 @@ public version remains v1.0.0-beta. L1 RELEASE GATE re-synthesized to the
 promoted state; `dev` retained as the persistent integration branch. Full main
 source-tree validation and clean-extracted release-ZIP verification recorded in
 the promotion merge commit.
+
+## 2026-09-28 — Plugin: headless-safe `/salvor:health` (issue #29)
+
+Branch `bug/29_health-skill-headless` from `feat/claude-code-plugin-v1`
+(`9604a16`), PR back to that branch. Field report (Windows 10, Claude Code
+2.1.229, plugin 0.1.0; previously also seen on Linux): `/salvor:health` ended
+with 0 turns and an empty result under headless `claude -p` while `/salvor:status`
+worked. The only structural difference is health's inline command
+preprocessing (``!`cat "${CLAUDE_SKILL_DIR}/HEALTH_CHECKLIST.md"` ``); its
+"read the file if the inline is empty" fallback cannot help when execution
+terminates before the model's first turn. Fix: remove the preprocessing and make
+reading `HEALTH_CHECKLIST.md` from the skill directory an explicit Read-tool
+step (Read was already in `allowed-tools`). `HEALTH_CHECKLIST.md` is unchanged;
+read-only, PASS/WARN/FAIL + reason + fix, counts, highest-priority fix, and the
+`/salvor:init` fallback are preserved. Regression: new
+`tests/claude-plugin-health.test.mjs` (5 tests; fails 2/5 on the pre-fix
+skill), named apart from PR #8's `claude-plugin-contract.test.mjs` to avoid an
+add/add conflict; wired into `test:unit` and `test:contract`. Local runtime
+check (Linux, Claude Code 2.1.283, disposable plugin copy without MCP servers,
+empty git fixture): both pre- and post-fix skills completed headlessly in 2
+turns, so the field failure did NOT reproduce here; evidence for the fix is the
+deterministic contract. The plugin has no `VERSION.md` component, so no counter
+changed. The same report's Serena first-start ownership findings are out of scope.
