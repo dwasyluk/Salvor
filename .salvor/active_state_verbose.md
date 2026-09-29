@@ -873,3 +873,56 @@ public version remains v1.0.0-beta. L1 RELEASE GATE re-synthesized to the
 promoted state; `dev` retained as the persistent integration branch. Full main
 source-tree validation and clean-extracted release-ZIP verification recorded in
 the promotion merge commit.
+
+## 2026-09-29 — Plugin: Serena launch config (pin, context, project detection)
+
+Branch `fix/plugin-serena-launch` from `feat/claude-code-plugin-v1` (`9604a16`),
+PR back to that branch. Field report (Discussion #12 report 5, plus Linux): the
+bundled Serena ran from unpinned `git+https://github.com/oraios/serena`, used the
+deprecated context `ide-assistant` (Serena logs a rename warning to
+`claude-code` on every start), and passed `--project ${CLAUDE_PROJECT_DIR}`, so a
+Claude Code session started in the home folder bound Serena to the home folder
+and wrote `~/.serena/project.yml` next to Serena's global config.
+
+Fix: `uvx --from serena-agent==1.7.0 serena start-mcp-server --context claude-code
+--project-from-cwd`. `--project-from-cwd` picks the nearest ancestor with `.git`
+or `.serena/project.yml`, and activates nothing when there is none.
+
+Checks:
+- serena-agent 1.7.0 (PyPI, 2026-08-09) on Linux: from a non-repo folder, no
+  project was activated. From a repo subfolder, the repo root was activated.
+  There was no deprecation warning.
+- The old arguments, run against a non-repo folder, activated it, created
+  `.serena/` there and logged the `ide-assistant` warning.
+- Claude Code with `--strict-mcp-config` and only this server: from a repo
+  subfolder, Serena listed the repo's symbols. From a non-repo folder, it
+  reported no active project.
+- Windows 10 (Claude Code 2.1.229, uvx): from `Blog\evidence`, Serena
+  auto-detected `Blog`. From a non-repo folder under the home folder it first
+  bound the home folder, because an earlier plugin build had left
+  `C:\Users\<user>\.serena\project.yml`. With that file moved aside, it logged
+  "No project root found" and activated nothing. The README therefore tells
+  upgrading users to remove that one leftover file.
+
+Version: `plugin.json` and the marketplace `metadata.version` move from 0.1.0 to
+0.1.1. Claude Code caches installed plugins in a folder named after the version
+(`~/.claude/plugins/cache/salvor/salvor/0.1.0/`), so the bump is the safe way to
+make existing installs pick up the new launch. (Not verified: whether an update
+without a bump would already do so. A directory marketplace served skills from
+its source folder in our Windows test.) The Serena process of a live 0.1.0
+install on this machine ran the old arguments with `--project /home/<user>`.
+
+Regression: `tests/claude-plugin-mcp.test.mjs` has 4 tests:
+- the exact PyPI pin
+- the `claude-code` context
+- the exact argument tail ending in `--project-from-cwd`, which rejects
+  `--project`, `--project=…`, a positional project and `CLAUDE_PROJECT_DIR`
+- a plugin version above 0.1.0 that matches the marketplace
+
+All 4 fail on the old files. The tests are wired into `test:unit` and
+`test:contract`. An independent pre-PR review found the version gap and the
+looser first draft of the argument test; both are fixed here. The target branch
+tip is unchanged since the branch point, so there was no Brain Reconcile
+(§0.6) to run. The plugin has no `VERSION.md` component, so
+no counter changed. GitNexus stays unpinned (`npx -y gitnexus`); that is a
+separate follow-up.

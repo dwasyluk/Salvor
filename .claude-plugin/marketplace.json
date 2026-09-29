@@ -3,7 +3,7 @@
   "owner": { "name": "dwasyluk", "url": "https://github.com/dwasyluk" },
   "metadata": {
     "description": "Salvor's own plugin marketplace — the optional Claude Code layer over the universal, vendor-agnostic prompt.",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "plugins": [
     {

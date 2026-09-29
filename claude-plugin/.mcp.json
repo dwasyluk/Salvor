@@ -3,10 +3,10 @@
     "serena": {
       "command": "uvx",
       "args": [
-        "--from", "git+https://github.com/oraios/serena",
+        "--from", "serena-agent==1.7.0",
         "serena", "start-mcp-server",
-        "--context", "ide-assistant",
-        "--project", "${CLAUDE_PROJECT_DIR}"
+        "--context", "claude-code",
+        "--project-from-cwd"
       ]
     },
     "gitnexus": {

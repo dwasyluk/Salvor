@@ -19,6 +19,28 @@ wraps it in slash commands and bundles the two MCP servers.
 - `uv` on PATH (for Serena via `uvx`) and Node / `npx` (for GitNexus).
 - Already running Serena/GitNexus? You can decline the plugin's copies at the approval prompt.
 
+## Bundled Serena
+- **Pinned release.** `.mcp.json` runs the PyPI release `serena-agent==1.7.0`, not
+  the moving `main` branch. To upgrade, bump the pin after checking the new release.
+- **Project detection.** `--project-from-cwd` binds Serena to the launch directory
+  or its nearest ancestor that contains `.git` or `.serena/project.yml`. If Claude
+  Code starts outside any repository (for example in your home folder), Serena
+  activates no project rather than indexing that folder.
+- **Upgrading from an earlier plugin build.** Earlier builds passed
+  `--project ${CLAUDE_PROJECT_DIR}`, which bound Serena to whatever folder Claude
+  Code was started in. If that was your home folder, Serena may have left
+  `~/.serena/project.yml` behind. While that file exists, `--project-from-cwd`
+  treats your home folder as a project, so any launch from a folder under your
+  home folder that isn't inside a repository still binds to your home folder.
+  Remove only that one file, because `~/.serena/` also
+  holds Serena's global `serena_config.yml`. Optionally, also delete the
+  home-folder entry under `projects:` in that config. This fix ships as plugin
+  version 0.1.1; update the plugin so the new launch settings are used.
+- **Files it creates.** On first start in a repository, Serena writes `.serena/`
+  (`project.yml`, `memories/`, and its own `.gitignore` for `cache/` and
+  `project.local.yml`). Salvor's setup treats `.serena/memories/` as committed, so
+  review these files before your first commit.
+
 ## Install
 ```bash
 /plugin marketplace add dwasyluk/salvor
