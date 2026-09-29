@@ -11,10 +11,11 @@ Out-of-scope findings intentionally not addressed when they surfaced: real, but 
 - **Severity**: <Low | Medium | High>
 - **Suggested fix**: <actionable suggestion>
 - **Why deferred**: <why it was safe to skip now>
+- **Status**: live
 -->
 
 ## How This File Is Maintained
 
-1. When an entry is fixed, delete it and reference the stable slug ID in the fixing commit (`closes deferred:<slug>`).
+1. When an entry is fixed, never delete it (`RULES.md` §10.1): set `- **Status**: closed <date>` under its heading and reference the stable slug ID in the fixing commit (`closes deferred:<slug>`). An archived entry (§10.5/§10.6) moves in full to `archive/DEFERRED_TODOS.md` and keeps a `Status: archived` pointer here.
 2. When a new out-of-scope risk appears, prompt per `RULES.md` §7 and add it only after approval.
 3. When impact becomes urgent, promote it to a real ticket and link back.

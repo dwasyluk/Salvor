@@ -153,13 +153,15 @@ never silently log one (I own prioritization).
 
 Bundle multiple findings that emerge together into one prompt. **On `yes`:**
 1. Read `.salvor/DEFERRED_TODOS.md` first and **deduplicate by subject** — if the finding (or a close relative) already
-   exists, surface it and ask whether to augment rather than add a duplicate.
+   exists, surface it and ask whether to augment rather than add a duplicate. A match with a `closed` entry is reopened
+   (`Status: live`) rather than re-added.
 2. If new, record it under a self-allocating slug ID (`### deferred:<kebab-slug> — <short title>`; never a sequential
    number, §10.1) with subject tags, location (**Where**), issue (**What**), **Severity** (Low / Medium / High — judged
-   as "impact if left ~6 months," not "broken today"), **Suggested fix**, and reason deferred.
+   as "impact if left ~6 months," not "broken today"), **Suggested fix**, reason deferred, and `Status: live`.
 3. Do not derail the current task to fix it — capture and continue.
 
-When one is later fixed: delete its entry, and reference the stable ID in the fixing commit (`closes deferred:<slug>`).
+When one is later fixed, never delete its entry (§10.1): set its `Status` to `closed <date>` and reference the stable ID
+in the fixing commit (`closes deferred:<slug>`).
 
 ## 8. Memory layers & canonical ownership [CORE]
 - **Shared and Git-tracked does not mean co-canonical.** Every durable fact has one canonical owner; other shared files
@@ -198,7 +200,7 @@ The brain travels through Git. Parallel branches, agents, and worktrees can capt
 ### 10.1 Knowledge IDs [CORE]
 
 - Every durable knowledge artifact has a **self-allocating slug ID** — `<CLASS>:<kebab-slug>` — assigned at capture time: `LF:` (Learned Failure), `DL:` (Domain Learning), `DEC:` (Design Decision), `PM:` (Postmortem), `deferred:` (Deferred Finding). **Never a sequential number** — no ID allocation may read shared state.
-- Every artifact opens with the **structured header** (the semantic-dedupe key): **ID** · **Subject** (tags: the system/vendor/component the claim is about) · **Claim** (one-line invariant) · **Evidence date** · **Status** (`live` | `superseded-by: <id>`).
+- Every artifact opens with the **structured header** (the semantic-dedupe key): **ID** · **Subject** (tags: the system/vendor/component the claim is about) · **Claim** (one-line invariant) · **Evidence date** · **Status** (`live` | `superseded-by: <id>` | `archived` (§10.6) | `closed <date>` (deferred findings only, when fixed — §7)).
 - IDs are immutable once merged to the integration branch; renaming before merge (on the owning branch) is fine.
 - Registries/indexes enforce slug uniqueness per class. A slug collision found at reconcile time is a probable duplicate (§10.4), not an error. Superseded artifacts keep their ID with `Status: superseded-by: <id>` — never delete an ID from a registry; references must not dangle.
 
@@ -218,7 +220,7 @@ The brain travels through Git. Parallel branches, agents, and worktrees can capt
 | `.salvor/DOMAIN_REF.md` | Single current truth — contradictions resolve to ONE `Status: live` entry; loser marked superseded with date + why. |
 | L1 (`.salvor/active_state.md`) | NEVER textually merged — re-synthesize from both sides' L2 + artifacts after resolution (≤50 lines). |
 | L2 (`.salvor/active_state_verbose.md`) | Union both sides, normalize to chronological order, collapse duplicate sections. |
-| Index READMEs + `DEFERRED_TODOS.md` | Union rows, re-sort, dedupe. (Optional `.gitattributes` `merge=union` convenience — reconcile normalizes regardless.) |
+| Index READMEs + `DEFERRED_TODOS.md` | Union rows, re-sort, dedupe. For `DEFERRED_TODOS.md` and `archive/DEFERRED_TODOS.md`, dedupe by ID; when both sides hold the same ID, `closed` or `archived` wins over `live`. (Optional `.gitattributes` `merge=union` convenience — reconcile normalizes regardless.) |
 | `RULES.md` | Governance — conflicting edits to Salvor-managed sections are ALWAYS operator-decided; never auto-merged. |
 | `.serena/memories/` | Derived views — re-derive from the reconciled canonical artifacts; never merge textually. |
 | Spoke `CLAUDE.md` | Update knowledge references to the reconciled IDs; [STRICT] build lines per §3 integration bump. |
@@ -234,7 +236,7 @@ Reconcile only sees what a merge brings in; duplicates also accrete on a single 
 
 > "Brain audit is due (last run N days ago) — run it now? (yes/no)"
 
-- **Sweep:** the §10.4 comparison run all-pairs across the whole brain, plus: contradiction check against DOMAIN_REF current truth; missing/empty Subject/Claim headers; stale L1 lines; dangling or superseded cross-links; aging deferred findings; L1 ≤50-line and L2 rotation checks.
+- **Sweep:** the §10.4 comparison run all-pairs across the whole brain, plus: contradiction check against DOMAIN_REF current truth; missing/empty Subject/Claim headers; stale L1 lines, including L1 references to `deferred:` IDs that are `closed`, `archived`, or missing from the ledger; dangling or superseded cross-links; aging `live` deferred findings; L1 ≤50-line and L2 rotation checks.
 - Findings route through the same classification + operator gates as §10.2. Update the L1 audit line and land the run as an ordinary commit.
 
 ### 10.4 Semantic comparison (never filename-only)
@@ -264,7 +266,7 @@ When the operator sets `provisional`:
 
 Unreviewed knowledge is parked, never silently discarded — the same principle as deferred findings, one tier down.
 
-- **Layout:** mirrors the live folder structure (`archive/domain-learnings/`, `archive/decisions/`, `archive/postmortems/`). An archived artifact keeps its ID and full content; the live registry keeps a one-line `Status: archived` pointer (never delete an ID — §10.1).
+- **Layout:** mirrors the live folder structure (`archive/domain-learnings/`, `archive/decisions/`, `archive/postmortems/`). An archived artifact keeps its ID and full content; the live registry keeps a one-line `Status: archived` pointer (never delete an ID — §10.1). Deferred findings are entries, not files: an archived one moves in full to `archive/DEFERRED_TODOS.md`, and the live ledger keeps its heading with the `Status: archived` pointer.
 - **Aging:** `ARCHIVE_AFTER_DAYS = 90` (operator-tunable). The Brain Audit surfaces unreviewed contributions older than the window with the verbatim gate:
 
 > "Archive N stale unreviewed contributions? (yes/no)"

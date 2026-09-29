@@ -51,6 +51,15 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   and a trigger → capture → compounded-knowledge hierarchy, with a restrained
   responsive child rail and explicit Design Decision / Domain Learning labels.
 
+### Fixed
+- Deferred-finding lifecycle (#32): deleting a fixed entry contradicted
+  §10.1's "never delete an ID". A fixed entry now keeps its heading with
+  `Status: closed <date>`, and a new matching finding reopens it. `archived` and
+  `closed <date>` join the §10.1 Status values, archived deferred findings move
+  to `archive/DEFERRED_TODOS.md` (§10.6), reconcile prefers the closed side of a
+  same-ID pair, and the Brain Audit flags L1 references to closed, archived, or
+  missing `deferred:` IDs.
+
 ## [1.0.0-beta] — 2026-08-06
 
 Initial public beta.

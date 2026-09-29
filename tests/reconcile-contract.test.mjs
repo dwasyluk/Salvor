@@ -158,3 +158,35 @@ test("no LF#/numeric-allocation or positional-deferred stragglers in living prot
     }
   }
 });
+
+// --- Deferred-finding lifecycle (issue #32) ---------------------------------
+// §7 used to say "delete the entry when fixed", which contradicted §10.1's
+// "never delete an ID", and §10.6 had no archive home for deferred entries.
+test("deferred findings are closed or archived, never deleted", () => {
+  for (const [file, doc] of protocolSurfaces) {
+    const f = doc.replace(/\s+/g, " ");
+    assert.doesNotMatch(f, /delete (its|the) entry,? and reference/i, file);
+    assert.match(f, /never delete (its|the) entry \(§10\.1\): set its `Status` to `closed <date>`/, file);
+    assert.match(f, /`archived` \(§10\.6\) \| `closed <date>` \(deferred findings only, when fixed — §7\)/, file);
+    assert.match(f, /closed` entry (reopens it|is reopened) \(`Status: live`\)/, file);
+    assert.match(f, /when both sides hold the same ID, `closed` or `archived` wins over `live`/, file);
+    assert.match(f, /aging `live` deferred findings/, file);
+    assert.doesNotMatch(f, /body may shrink/, file);
+    assert.match(f, /`archive\/DEFERRED_TODOS\.md`/, file);
+    assert.match(f, /L1 references to `deferred:` IDs that are `closed`, `archived`, or missing from the ledger/, file);
+  }
+  for (const p of [".salvor/DEFERRED_TODOS.md", "example-project/.salvor/DEFERRED_TODOS.md"]) {
+    const doc = flat(p);
+    assert.match(doc, /- \*\*Status\*\*: live -->/, `${p} template lacks Status`);
+    assert.match(doc, /never delete it \(`?RULES(\.md)?`? §10\.1\)/, p);
+    assert.doesNotMatch(doc, /When an entry is fixed, delete it/, p);
+  }
+  for (const p of [".salvor/archive/README.md", "example-project/.salvor/archive/README.md"]) {
+    assert.match(flat(p), /plus `DEFERRED_TODOS\.md` for archived deferred findings/, p);
+  }
+  assert.match(setup, /### `\.salvor\/DEFERRED_TODOS\.md`[\s\S]*?- \*\*Status\*\*: live\n-->/);
+  // the installed ledger and archive README templates inside SETUP_PROMPT
+  assert.match(flat("SETUP_PROMPT.md"), /When you fix one: never delete it \(RULES §10\.1\)/);
+  assert.match(flat("SETUP_PROMPT.md"), /plus `DEFERRED_TODOS\.md` for archived deferred findings/);
+  assert.doesNotMatch(setup, /not yet fixed/);
+});

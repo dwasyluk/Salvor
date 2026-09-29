@@ -20,7 +20,7 @@ Notebook is a tiny notes service: a TypeScript `api` (Node built-in `http`, no f
 |----------|---------|-------------|
 | `.salvor/DOMAIN_REF.md` | Domain logic, business rules, learned failures | Changing core logic |
 | `.salvor/INFRA.md` | Running, env vars, deployment, external APIs | Changing infra/deployment/APIs |
-| `.salvor/DEFERRED_TODOS.md` | Known out-of-scope issues deferred (not yet fixed) | Before starting related work |
+| `.salvor/DEFERRED_TODOS.md` | Known out-of-scope issues deferred (`live` until fixed, then `closed`) | Before starting related work |
 | `.salvor/decisions/` | Design decisions + load-bearing invariants (why it's this way, what must stay) | Before changing/refactoring anything non-trivial |
 | `api/CLAUDE.md` | api architecture and key files | Working in api/ |
 | `web/CLAUDE.md` | web architecture and key files | Working in web/ |

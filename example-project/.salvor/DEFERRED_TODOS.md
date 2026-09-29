@@ -13,6 +13,7 @@ were found in. Captured here so they don't slip into "I'll remember." Severity r
 - **Severity**: <Low | Medium | High>
 - **Suggested fix**: <actionable suggestion>
 - **Why deferred**: <why it was safe to skip now>
+- **Status**: live
 -->
 
 ### deferred:no-persistence — Notes are lost on API restart
@@ -25,9 +26,12 @@ were found in. Captured here so they don't slip into "I'll remember." Severity r
   SQLite table or a JSON file flushed on write. No caller changes required.
 - **Why deferred**: Fine for a demo / local use, which is the entire point of this example. Promoting Notebook to anything
   real makes this urgent.
+- **Status**: live
 
 ## How this file is maintained
-1. When an entry is fixed, delete it and reference the stable slug ID in the fixing commit (`closes deferred:<slug>`).
+1. When an entry is fixed, never delete it (RULES §10.1): set `- **Status**: closed <date>` under its heading and
+   reference the stable slug ID in the fixing commit (`closes deferred:<slug>`). An archived entry (§10.5/§10.6) moves
+   in full to `archive/DEFERRED_TODOS.md` and keeps a `Status: archived` pointer here.
 2. When you discover a NEW out-of-scope risk during related work: prompt me (RULES §7), and if I agree, add it here —
    don't let it slip into chat.
 3. When something here becomes urgent (impact observed): promote it to a real ticket and link back.

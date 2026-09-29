@@ -389,7 +389,7 @@ non-obvious constraint contributors must remember.]
 |----------|---------|-------------|
 | `.salvor/DOMAIN_REF.md` | Domain logic, business rules, learned failures | Changing core logic |
 | `.salvor/INFRA.md` | Running, env vars, deployment, external APIs | Changing infra/deployment/APIs |
-| `.salvor/DEFERRED_TODOS.md` | Deferred findings (out-of-scope, not yet fixed) | Before starting related work |
+| `.salvor/DEFERRED_TODOS.md` | Deferred findings (out-of-scope; `live` until fixed, then `closed`) | Before starting related work |
 | `.salvor/decisions/` | Design decisions + load-bearing invariants (why it's this way, what must stay) | Before changing/refactoring anything non-trivial |
 | `<COMPONENT_A>/CLAUDE.md` | <COMPONENT_A> architecture and key files | Working in <COMPONENT_A>/ |
 | `<COMPONENT_B>/CLAUDE.md` | <COMPONENT_B> architecture and key files | Working in <COMPONENT_B>/ |
@@ -606,13 +606,16 @@ never silently log one (I own prioritization).
 
 Bundle multiple findings that emerge together into one prompt. **On `yes`:**
 1. Read `.salvor/DEFERRED_TODOS.md` first and **deduplicate by subject** — if the finding (or a close relative) already
-   exists, surface it and ask whether to augment rather than add a duplicate.
+   exists, surface it and ask whether to augment rather than add a duplicate. A match with a `closed` entry is reopened
+   (`Status: live`) rather than re-added.
 2. If new, append an entry headed by a self-allocating slug ID — `### deferred:<kebab-slug> — <short title>` (never a
    sequential number; §10.1) — with: **Subject** (tags), **Where** (file/location), **What**, **Severity** (Low /
-   Medium / High — judged as "impact if left ~6 months," not "broken today"), and **Suggested fix**.
+   Medium / High — judged as "impact if left ~6 months," not "broken today"), **Suggested fix**, **Why deferred**, and
+   **Status** (`live`).
 3. Do not derail the current task to fix it — capture and continue.
 
-When one is later fixed: delete its entry, and reference the stable ID in the fixing commit (`closes deferred:<slug>`).
+When one is later fixed, never delete its entry (§10.1): set its `Status` to `closed <date>` and reference the stable ID
+in the fixing commit (`closes deferred:<slug>`).
 
 ## 8. Memory layers & canonical ownership [CORE]
 - **Shared and Git-tracked does not mean co-canonical. Every durable fact has one canonical owner. Other shared files
@@ -672,7 +675,8 @@ the brain single-truth with no central ID authority.
   (Deferred Finding). **Never a sequential number** — no ID allocation may read shared state.
 - Every artifact opens with the **structured header** (the semantic-dedupe key):
   **ID** · **Subject** (tags: the system/vendor/component the claim is about) · **Claim** (one-line invariant) ·
-  **Evidence date** · **Status** (`live` | `superseded-by: <id>`).
+  **Evidence date** · **Status** (`live` | `superseded-by: <id>` | `archived` (§10.6) | `closed <date>` (deferred
+  findings only, when fixed — §7)).
 - IDs are immutable once merged to the integration branch; renaming before merge (on the owning branch) is fine.
 - Registries/indexes enforce slug uniqueness per class. A slug collision found at reconcile time is a probable
   duplicate (§10.4), not an error. Superseded artifacts keep their ID with `Status: superseded-by: <id>` — never
@@ -696,7 +700,7 @@ per-surface resolution. Every merge/augment/supersede of durable knowledge is op
 | `.salvor/DOMAIN_REF.md` | Single current truth — contradictions resolve to ONE `Status: live` entry; loser marked superseded with date + why. |
 | L1 (`active_state.md`) | NEVER textually merged — re-synthesize from both sides' L2 + artifacts after resolution (≤50 lines). |
 | L2 (`active_state_verbose.md`) | Union both sides, normalize to chronological order, collapse duplicate sections. |
-| Index READMEs + `DEFERRED_TODOS.md` | Union rows, re-sort, dedupe. (Optional `.gitattributes` `merge=union` convenience — reconcile normalizes regardless.) |
+| Index READMEs + `DEFERRED_TODOS.md` | Union rows, re-sort, dedupe. For `DEFERRED_TODOS.md` and `archive/DEFERRED_TODOS.md`, dedupe by ID; when both sides hold the same ID, `closed` or `archived` wins over `live`. (Optional `.gitattributes` `merge=union` convenience — reconcile normalizes regardless.) |
 | `RULES.md` | Governance — conflicting edits to Salvor-managed sections are ALWAYS operator-decided; never auto-merged. |
 | `.serena/memories/` | Derived views — re-derive from the reconciled canonical artifacts; never merge textually. |
 | Spoke `CLAUDE.md` | Update knowledge references to the reconciled IDs; [STRICT] build lines per §3 integration bump. |
@@ -711,8 +715,9 @@ Reconcile only sees what a merge brings in; duplicates also accrete on a single 
   overdue, ask verbatim:
   > "Brain audit is due (last run N days ago) — run it now? (yes/no)"
 - **Sweep:** the §10.4 comparison run all-pairs across the whole brain, plus: contradiction check against DOMAIN_REF
-  current truth; missing/empty Subject/Claim headers; stale L1 lines; dangling or superseded cross-links; aging
-  deferred findings; L1 ≤50-line and L2 rotation checks.
+  current truth; missing/empty Subject/Claim headers; stale L1 lines, including L1 references to `deferred:` IDs
+  that are `closed`, `archived`, or missing from the ledger; dangling or superseded cross-links; aging
+  `live` deferred findings; L1 ≤50-line and L2 rotation checks.
 - Findings route through the same classification + operator gates as §10.2. Update the L1 audit line and land the run
   as an ordinary commit.
 
@@ -762,7 +767,9 @@ When the operator sets `provisional`:
 Unreviewed knowledge is parked, never silently discarded — the same principle as deferred findings, one tier down.
 - **Layout:** mirrors the live folder structure (`archive/domain-learnings/`, `archive/decisions/`,
   `archive/postmortems/`). An archived artifact keeps its ID and full content; the live registry keeps a one-line
-  `Status: archived` pointer (never delete an ID — §10.1).
+  `Status: archived` pointer (never delete an ID — §10.1). Deferred findings are entries, not files: an archived one
+  moves in full to `archive/DEFERRED_TODOS.md`, and the live ledger keeps its heading with the `Status: archived`
+  pointer.
 - **Aging:** `ARCHIVE_AFTER_DAYS = 90` (operator-tunable). The Brain Audit surfaces unreviewed contributions older
   than the window with the verbatim gate:
   > "Archive N stale unreviewed contributions? (yes/no)"
@@ -855,7 +862,7 @@ Salvor-Protocol: v1.0.0-beta
 | `active_state_verbose.md` | **L2** — curated deep archive (rotated past ~1,500 lines): reasoning, rejected hypotheses |
 | `DOMAIN_REF.md` | Authoritative current truth + the `LF:` learned-failure registry |
 | `INFRA.md` | Running, env vars, deployment, external APIs |
-| `DEFERRED_TODOS.md` | Deferred findings parked (out-of-scope, not yet fixed) |
+| `DEFERRED_TODOS.md` | Deferred findings parked (out-of-scope; `live` until fixed, then `closed`) |
 | `domain-learnings/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
 | `decisions/` | Design decisions + load-bearing invariants (why it's this way; what must stay; what depends on it) |
 | `postmortems/` | Incident write-ups feeding `LF:` entries + deferred findings |
@@ -974,10 +981,14 @@ were found in. Captured here so they don't slip into "I'll remember." Severity r
 - **Severity**: <Low | Medium | High>
 - **Suggested fix**: <actionable suggestion>
 - **Why deferred**: <why it was safe to skip now>
+- **Status**: live
 -->
 
 ## How this file is maintained
-1. When you fix one: delete its entry, and reference the stable slug ID in the fixing commit (`closes deferred:<slug>`).
+1. When you fix one: never delete it (RULES §10.1). Set `- **Status**: closed <date>` under its heading and reference
+   the stable slug ID in the fixing commit (`closes deferred:<slug>`).
+   An archived entry (§10.5/§10.6) moves in full to `archive/DEFERRED_TODOS.md` and keeps a `Status: archived`
+   pointer here.
 2. When you discover a NEW out-of-scope risk during related work: prompt me (RULES §7), and if I agree, add it here —
    don't let it slip into chat.
 3. When something here becomes urgent (impact observed): promote it to a real ticket and link back.
@@ -1080,7 +1091,8 @@ touches an adjacent component that quietly depends on this one.
 
 Parked knowledge: agent contributions that were rejected or aged out unreviewed
 (`ARCHIVE_AFTER_DAYS`, RULES §10.6), kept in full rather than discarded. Layout
-mirrors the live folders (`domain-learnings/`, `decisions/`, `postmortems/`).
+mirrors the live folders (`domain-learnings/`, `decisions/`, `postmortems/`),
+plus `DEFERRED_TODOS.md` for archived deferred findings.
 Archived artifacts keep their IDs; the live registries keep `Status: archived`
 pointers, so references never dangle. Late ratification moves an artifact back.
 

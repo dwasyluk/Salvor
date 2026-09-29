@@ -14,7 +14,7 @@ Salvor-Protocol: v1.0.0-beta
 | `active_state_verbose.md` | **L2** — detailed but curated archive: reasoning, rejected hypotheses (rotated per `RULES.md` §0.3) |
 | `DOMAIN_REF.md` | Authoritative current truth + the `LF:` learned-failure registry |
 | `INFRA.md` | Running, env vars, deployment, external APIs |
-| `DEFERRED_TODOS.md` | Out-of-scope findings parked (not yet fixed) |
+| `DEFERRED_TODOS.md` | Out-of-scope findings parked (`live` until fixed, then `closed`) |
 | `domain-learnings/` | Dated, frozen empirical findings (probes, bakeoffs — the receipts) |
 | `decisions/` | Design decisions + load-bearing invariants (why it's this way; what must stay; what depends on it) |
 | `postmortems/` | Incident write-ups feeding `LF:` + deferred TODOs |

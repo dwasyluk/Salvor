@@ -873,3 +873,62 @@ public version remains v1.0.0-beta. L1 RELEASE GATE re-synthesized to the
 promoted state; `dev` retained as the persistent integration branch. Full main
 source-tree validation and clean-extracted release-ZIP verification recorded in
 the promotion merge commit.
+
+## 2026-09-29 — Deferred-finding lifecycle (#32)
+
+Branch `fix/32_deferred-lifecycle` from `dev` (`9140ea9`), PR back to `dev`.
+`VERSION.md` records `CORE:pending` per §3.
+
+**Problem.** Issue #32 reported it from a field-trial repo, and @alituzun agreed
+with the diagnosis on the issue. There were three contradictions:
+- §7 said to delete a fixed deferred entry, but §10.1 says never to delete an
+  ID from a registry.
+- §10.6 had archive layouts only for folder-based artifacts.
+- §10.6's `Status: archived` pointer was not one of the §10.1 Status values.
+
+The issue also showed the practical cost. A commit closed
+`deferred:hosting-outage-…` and deleted the entry per §7, and the L1 line that
+named the ID survived a day with nothing left to check it against.
+
+**Change.** Kept narrow and mechanical:
+- §7: a fixed entry keeps its heading and body with `Status: closed <date>`.
+  Dedupe reopens a matching `closed` entry (`Status: live`) instead of adding a
+  new slug.
+- §10.1: Status gains `archived` (§10.6) and `closed <date>` (deferred
+  findings only).
+- §10.2: the reconcile row for the ledgers dedupes by ID, and `closed` or
+  `archived` wins over `live` for the same ID.
+- §10.6: archived deferred findings move in full to
+  `archive/DEFERRED_TODOS.md`, and the live ledger keeps the heading with the
+  `Status: archived` pointer.
+- §10.3: the stale-L1 sweep explicitly covers L1 references to `closed`,
+  `archived` or missing `deferred:` IDs, and aging applies only to `live`
+  entries.
+- The hub and README table rows no longer describe the ledger as "not yet
+  fixed".
+- The deferred templates, and the example's live entry, gain `Status: live`.
+
+**Mirrored in:** `SETUP_PROMPT.md` (§7, §10.1, §10.3, §10.6, the
+DEFERRED_TODOS template and the archive README template), `RULES.md`,
+`example-project/RULES.md`, both `DEFERRED_TODOS.md` ledgers and both
+`archive/README.md` files.
+
+**Tests.** A new contract test, "deferred findings are closed or archived,
+never deleted", in `tests/reconcile-contract.test.mjs`. It fails on the `dev`
+text (9/10 in that file) and passes after the change.
+
+**Not changed:**
+- the plugin branch's bundled `init/SETUP_PROMPT.md` copy. It must be re-synced
+  by running `scripts/sync-plugin-prompt.sh` on the plugin branch; that step is
+  manual and not CI-gated, and the copy is already stale against `dev`.
+- `docs/UPGRADING.md`. Existing knowledge needs no migration: already deleted
+  entries stay deleted, and new closures follow the new rule. The
+  `Protocol version` stamp is unchanged, though, so existing v1.0.0-beta
+  installs are not offered this §7 change as an upgrade delta. Their installed
+  RULES and ledger text must be updated by hand, or the maintainer can bump the
+  stamp.
+
+An independent pre-PR review found these gaps in the first draft, all fixed
+here: the body-shrink allowance, which conflicted with Subject-based dedupe and
+the header sweep, so it was dropped; the reconcile row; closed entries counting
+as aging; the "not yet fixed" table rows; and the untested SETUP templates.
