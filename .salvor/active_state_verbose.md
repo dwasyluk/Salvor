@@ -1,3 +1,24 @@
+## 2026-09-25 — Optional HEAD-refresh hooks doc (#6)
+
+On `docs/6_head-refresh-hooks`, based on upstream `dev` at `9140ea9`. Adds `docs/HEAD_REFRESH_HOOKS.md` as an optional,
+opt-in integration for the mid-session HEAD refresh gap in #6. Docs only: there is no protocol, template, example,
+site, plugin, or benchmark change, and Core still installs no hooks.
+
+- One POSIX sh script, installed under five hook names, appends to `<git-dir>/salvor-head-moved`. `post-checkout`
+  ignores file checkouts (`$3=0`), and `post-merge`/`post-rewrite` mark every time. `reference-transaction`
+  (committed phase, checked-out ref only, old≠new) catches `reset --hard`, and `post-commit` removes the entry
+  for an ordinary commit. The `reference-transaction` + `post-commit` split was proposed by @alituzun in #6.
+- Verified with git 2.53 in a disposable repo. Marked: reset --hard to another commit, branch switch (including to
+  the same OID), amend, fast-forward merge, merge commit, rebase. Clean: normal commit, cherry-pick,
+  reset --hard HEAD, file checkout, fetch. The doc's install, adapter and uninstall blocks were extracted verbatim
+  and run in a second disposable repo.
+- Claude Code adapter: a `UserPromptSubmit` command prints a refresh note and deletes the marker. A live `claude -p`
+  run received the note after a branch switch, and the next prompt received nothing.
+- Other agents get a one-line instruction. The hookless (HEAD OID + branch) fingerprint rule and its contract tests
+  are tracked separately in #6 (@alituzun). This doc complements that rule and does not replace it.
+
+VERSION records `DOCS:pending`; real counters are unchanged.
+
 ## 2026-09-20 — Canonical `$SALVOR` authenticity identity
 
 The operator supplied the exact post-launch identity for Salvor's supporting
@@ -873,3 +894,9 @@ public version remains v1.0.0-beta. L1 RELEASE GATE re-synthesized to the
 promoted state; `dev` retained as the persistent integration branch. Full main
 source-tree validation and clean-extracted release-ZIP verification recorded in
 the promotion merge commit.
+- 2026-09-29 follow-up: the reconcile trigger in both the prose and the adapter
+  note now names every §10.2 brain surface (`.salvor/`, `VERSION.md`,
+  `RULES.md`, `.serena/memories/`), not just `.salvor/`. This matches the §10.2
+  post-pull trigger and the surface list @alituzun proposed for the Core
+  fingerprint rule in #6. I re-ran the adapter live: the note arrived with the
+  new wording and the marker was deleted.

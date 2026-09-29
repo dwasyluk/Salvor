@@ -7,6 +7,7 @@ Markdown documentation comprising root `README.md` and the complete `docs/` dire
 - `ARCHITECTURE.md` — Salvor's design and memory model
 - `VENDOR_ADAPTERS.md` — cross-vendor adapter support and constraints
 - `FAQ.md` — positioning, trust, and operational questions
+- `HEAD_REFRESH_HOOKS.md` — optional, opt-in git-hook signal for mid-session HEAD moves (#6); never installed by setup
 - `../assets/brand/BRAND_ASSETS.md` — canonical authored-SVG brand ownership and regeneration contract
 
 ## Architecture Notes

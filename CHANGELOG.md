@@ -11,6 +11,11 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- Optional, opt-in integration doc `docs/HEAD_REFRESH_HOOKS.md` (#6): git hooks
+  that mark mid-session HEAD moves, a Claude Code `UserPromptSubmit` adapter, and
+  a one-line rule for other agents. Core still installs no hooks.
+
 ### Changed
 - Published the canonical `$SALVOR` Solana mint, Bags page, and Solscan page as
   understated authenticity notices in README Community and the site footer;
